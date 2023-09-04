@@ -10,12 +10,45 @@ parameters:
     default: "3.10"
 
 workflows:
-  python-checks:
+  pre-merge-checks:
     jobs:
-      - aineko/python-checks:
-          black: true
-          isort: true
-          pre-commit: true
-          pydocstyle: true
-          pylint: true
-          yamllint: true
+      - python-checks:
+          prj_dir: aineko
+          python_version: << pipeline.parameters.python_version >>
+
+jobs:
+  python-checks:
+    parameters:
+      python_version:
+        type: string
+        default: "3.9"
+        description: Version of python to use
+      prj_dir:
+        type: string
+        default: $CIRCLE_PROJECT_REPONAME
+        description: Directory of codebase to execute checks
+      test_dir:
+        type: string
+        default: tests
+        description: Test directory
+
+    docker:
+      - image: cimg/python:<< parameters.python_version >>
+
+    steps:
+      - checkout
+      - run: poetry install
+      - run: isort << parameters.prj_dir >>
+      - run: black << parameters.prj_dir >> --check
+      - run: pydocstyle << parameters.prj_dir >>
+      - run: pylint << parameters.prj_dir >>
+      - run: yamllint -d relaxed << parameters.prj_dir >>
+      - run: |
+          pre-commit install
+          pre-commit run --all
+      - run: pytest --cov=<< parameters.prj_dir >> << parameters.test_dir >>
+      - run:
+          name: mypy
+          command: |
+            mypy --install-types --non-interactive << parameters.prj_dir >>
+            mypy << parameters.prj_dir >>
