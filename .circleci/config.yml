@@ -1,0 +1,21 @@
+version: 2.1
+
+orbs:
+  aineko: convex-labs/aineko@1.5.8
+
+parameters:
+  python_version:
+    description: Version to python to use
+    type: string
+    default: "3.10"
+
+workflows:
+  python-checks:
+    jobs:
+      - aineko/python-checks:
+          black: true
+          isort: true
+          pre-commit: true
+          pydocstyle: true
+          pylint: true
+          yamllint: true

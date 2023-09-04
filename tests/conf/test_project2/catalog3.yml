@@ -1,0 +1,9 @@
+integer_sequence:
+  type: kafka_stream
+  params:
+    retention.ms: 86400000
+
+integer_doubles:
+  type: kafka_stream
+  params:
+    retention.ms: 86400000

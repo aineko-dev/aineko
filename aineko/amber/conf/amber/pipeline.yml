@@ -1,0 +1,35 @@
+monitoring_pipeline:
+
+  machine_config:
+    type: ec2
+    mem: 16
+    vcpu: 4
+
+  nodes:
+    node_heartbeat:
+      class: aineko.amber.metrics.NodeHeartbeatInterval
+      inputs:
+        - reporting
+      outputs:
+        - metrics
+
+    pipeline_heartbeat:
+      class: aineko.amber.metrics.PipelineHeartbeatInterval
+      inputs:
+        - reporting
+      outputs:
+        - metrics
+
+    log_level_counts:
+      class: aineko.amber.metrics.LoggingLevelCounts
+      inputs:
+        - logging
+      outputs:
+        - metrics
+
+    alerts:
+      class: aineko.amber.alerts.Alerts
+      inputs:
+        - metrics
+      outputs:
+        - alerts
