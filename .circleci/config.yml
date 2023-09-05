@@ -47,8 +47,8 @@ jobs:
           poetry shell
           pre-commit install
           pre-commit run --all
-      - run: poetry run pytest --cov=<< parameters.prj_dir >> << parameters.test_dir
-          >>
+      - run: |
+          poetry run pytest --cov=<< parameters.prj_dir >> << parameters.test_dir >>
       - run:
           name: mypy
           command: |
