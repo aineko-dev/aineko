@@ -12,6 +12,7 @@ from aineko.config import AINEKO_CONFIG
 
 # Global variables.
 
+
 @pytest.fixture(scope="module")
 def conf_directory():
     """Config directory fixture.
@@ -20,6 +21,7 @@ def conf_directory():
         str: Path to config directory
     """
     return os.path.join(os.path.dirname(__file__), "conf")
+
 
 # Aineko test fixtures.
 
@@ -91,9 +93,11 @@ def dummy_node():
 
 # Test nodes.
 
+
 @pytest.fixture(scope="module")
 def test_sequencer_node():
     """Returns a sample sequencer node."""
+
     @ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
     class TestSequencer(AbstractNode):
         """Test sequencer node."""
@@ -123,12 +127,14 @@ def test_sequencer_node():
             # Increment integer and sleep
             self.cur_integer += 1
             time.sleep(params.get("sleep_time", 1))
-    
+
     return TestSequencer
+
 
 @pytest.fixture(scope="module")
 def test_doubler_node():
     """Returns a sample doubler node."""
+
     @ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
     class TestDoubler(AbstractNode):
         """Test doubler node."""
@@ -181,5 +187,5 @@ def test_doubler_node():
             # Write message to producer
             self.producers["integer_doubles"].produce(cur_integer * 2)
             self.log(f"Produced {cur_integer * 2}", level="info")
-    
+
     return TestDoubler

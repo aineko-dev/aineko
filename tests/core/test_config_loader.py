@@ -453,9 +453,7 @@ def test_get_datasets_for_code(config_loader: type[ConfigLoader]):
     Args:
         config_loader: test fixture for ConfigLoader
     """
-    result = config_loader.get_datasets_for_code(
-        "tests/test/pipeline_test.py"
-    )
+    result = config_loader.get_datasets_for_code("tests/test/pipeline_test.py")
     expected = {
         "producer_datasets": ["integer_sequence"],
         "consumer_datasets": ["integer_doubles"],
