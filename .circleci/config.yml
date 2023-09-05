@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - checkout
-      - run: poetry install --with dev,test -n
+      - run: poetry install --with dev,test -n -quiet
       - run: poetry run isort << parameters.prj_dir >>
       - run: poetry run black << parameters.prj_dir >> --check
       - run: poetry run pydocstyle << parameters.prj_dir >>
