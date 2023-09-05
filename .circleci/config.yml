@@ -44,14 +44,12 @@ jobs:
       - run: poetry run pylint << parameters.prj_dir >>
       - run: poetry run yamllint -d relaxed << parameters.prj_dir >>
       - run: |
-          poetry shell
-          pre-commit install
-          pre-commit run --all
+          poetry run pre-commit install
+          poetry run pre-commit run --all
       - run: |
           poetry run pytest --cov=<< parameters.prj_dir >> << parameters.test_dir >>
       - run:
           name: mypy
           command: |
-            poetry shell
-            mypy --install-types --non-interactive << parameters.prj_dir >>
-            mypy << parameters.prj_dir >>
+            poetry run mypy --install-types --non-interactive << parameters.prj_dir >>
+            poetry run mypy << parameters.prj_dir >>
