@@ -1,0 +1,33 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+test_pipeline_runs:
+  runs:
+    test_run_1:
+      start_int: "0"
+      duration: "300"
+    test_run_2:
+      start_int: "1"
+      duration: "300"
+
+  nodes:
+    # Test actor with no input, single output, and params
+    sequencer:
+      class: aineko.tests.conftest.TestSequencer
+      outputs:
+        - integer_sequence
+        - env_var
+      params:
+        start_int: $start_int
+        num_messages: 25
+        sleep_time: 1
+
+    # Test actor with single input and single output
+    doubler:
+      class: aineko.tests.conftest.TestDoubler
+      inputs:
+        - integer_sequence
+      outputs:
+        - integer_doubles
+        - extra_fake_output
+      params:
+        duration: 40

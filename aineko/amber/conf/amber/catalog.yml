@@ -1,0 +1,7 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+metrics:
+  type: kafka_stream
+
+alerts:
+  type: kafka_stream
