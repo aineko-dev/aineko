@@ -1,0 +1,10 @@
+develop:
+  active_projects:
+    - test_1:
+        - test_pipeline_1
+    - test_2
+
+production:
+  active_projects:
+    - test_1
+    - test_2
