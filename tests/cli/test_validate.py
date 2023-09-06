@@ -19,15 +19,15 @@ def test_validate_datasets_between_pipeline_catalog(conf_directory):
 
 
 def test_validate_datasets_between_code_catalog(conf_directory):
-    result1 = validate.validate_datasets_between_code_catalog(
+    validate_pass = validate.validate_datasets_between_code_catalog(
         project="test_project",
         conf_source=conf_directory,
-        project_dir="tests/test",
+        project_dir="tests/artifacts/sample_nodes",
     )
-    result2 = validate.validate_datasets_between_code_catalog(
+    validate_fail = validate.validate_datasets_between_code_catalog(
         project="test_project",
         conf_source=conf_directory,
-        project_dir="tests/test_artifacts/test_fail_catalog_code",
+        project_dir="tests/artifacts/sample_nodes_fail",
     )
-    assert result1 is True
-    assert result2 is False
+    assert validate_pass is True
+    assert validate_fail is False

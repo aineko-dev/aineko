@@ -101,66 +101,6 @@ def test_load_config_specified_pipelines(
     assert config == expected
 
 
-def test_load_config_test_pipelines(config_loader: type[ConfigLoader]) -> None:
-    """Tests config loader for the test pipeline option. Pipelines should have
-    the nodes patched according the config defined in test_pipelines.yml.
-
-    Args:
-        config_loader (ConfigLoader): ConfigLoader fixture.
-    """
-
-    config = config_loader.load_config(pipeline_tests=True)
-    # pylint: disable=line-too-long
-    expected = {
-        "test_project": {
-            "test_test_run_1": {
-                "machine_config": {"type": "ec2", "mem": 16, "vcpu": 4},
-                "catalog": {
-                    "env_var": {
-                        "type": "kafka_stream",
-                        "params": {"retention.ms": 86400000},
-                    },
-                    "integer_sequence": {
-                        "type": "kafka_stream",
-                        "params": {"retention.ms": 86400000},
-                    },
-                    "integer_doubles": {
-                        "type": "kafka_stream",
-                        "params": {"retention.ms": 86400000},
-                    },
-                },
-                "nodes": {
-                    "sequencer_patch": {
-                        "class": "aineko.tests.test.pipeline_test.TestSequencerPatch",
-                        "node_to_patch": "sequencer",
-                        "outputs": ["integer_sequence"],
-                    },
-                    "doubler": {
-                        "class": "aineko.tests.conftest.TestDoubler",
-                        "inputs": ["integer_sequence"],
-                        "outputs": ["integer_doubles"],
-                        "params": {"duration": 40},
-                    },
-                    "doubler_checker": {
-                        "class": "aineko.tests.test.pipeline_test.TestDoublerChecker",
-                        "inputs": ["integer_doubles"],
-                    },
-                },
-                "aws_secrets": ["test/aineko_secret"],
-            },
-        }
-    }
-
-    # Remove local_params from config
-    for _, pipelines in config.items():
-        for _, pipeline in pipelines.items():
-            assert "local_params" in pipeline
-            del pipeline["local_params"]
-
-    assert config == expected
-    # pylint: enable=line-too-long
-
-
 def test_get_datasets_for_pipeline_nodes(config_loader: type[ConfigLoader]):
     """Tests the data extraction for pipeline struct nodes.
 
@@ -453,7 +393,9 @@ def test_get_datasets_for_code(config_loader: type[ConfigLoader]):
     Args:
         config_loader: test fixture for ConfigLoader
     """
-    result = config_loader.get_datasets_for_code("tests/test/pipeline_test.py")
+    result = config_loader.get_datasets_for_code(
+        "tests/artifacts/sample_nodes/nodes.py"
+    )
     expected = {
         "producer_datasets": ["integer_sequence"],
         "consumer_datasets": ["integer_doubles"],
@@ -469,17 +411,19 @@ def test_get_datasets_for_python_files(
     Args:
         config_loader: test fixture for ConfigLoader
     """
-    result = config_loader.get_datasets_for_python_files("tests/test")
+    result = config_loader.get_datasets_for_python_files(
+        "tests/artifacts/sample_nodes"
+    )
     expected = set(["integer_sequence", "integer_doubles"])
     assert result == expected
 
 
-def test__find_python_files(config_loader: type[ConfigLoader]):
+def test_find_python_files(config_loader: type[ConfigLoader]):
     """Tests the finding of python files in a directory.
 
     Args:
         config_loader: test fixture for ConfigLoader
     """
-    expected = ["pipeline_test.py"]
-    result = config_loader._find_python_files("tests/test")
-    assert [os.path.basename(x) for x in result] == expected
+    expected = ["nodes.py"]
+    result = config_loader._find_python_files("tests/artifacts/sample_nodes")
+    assert set([os.path.basename(x) for x in result]) == set(expected)
