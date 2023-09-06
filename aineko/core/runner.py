@@ -1,5 +1,4 @@
 """Module to run a pipeline."""
-import sys
 import time
 from typing import Optional
 
@@ -46,7 +45,7 @@ class Runner:
         self.local_config = local_config
         self.amber_config = amber_config
 
-    def run(self, test_mode: bool = False) -> None:
+    def run(self) -> None:
         """Runs the pipeline.
 
         Step 1: Load config for pipeline
@@ -54,42 +53,25 @@ class Runner:
         Step 2: Set up dataset for each edge
 
         Step 3: Set up nodes (including Node Manager) and run
-
-        Args:
-            test_mode: If True, runs the pipeline in test mode
         """
         # Step 1: load pipeline config
-        pipeline_config = self.load_pipeline_config(test_mode)
+        pipeline_config = self.load_pipeline_config()
 
         # Step 2: Create the necessary datasets
         self.prepare_datasets(pipeline_config=pipeline_config)
 
         # Step 3: Create and execute each node
-        if test_mode:
-            try:
-                self.run_nodes(
-                    pipeline_config=pipeline_config, test_mode=test_mode
-                )
-            except ray.exceptions.RayActorError:
-                print("Pipeline test completed.")
-                sys.exit(0)
-        else:
-            self.run_nodes(pipeline_config=pipeline_config)
+        self.run_nodes(pipeline_config=pipeline_config)
 
-    def load_pipeline_config(self, test_mode: bool = False) -> dict:
+    def load_pipeline_config(self) -> dict:
         """Loads the config for a given pipeline and project.
-
-        Args:
-            test_mode: If True, loads the test config
 
         Returns:
             pipeline config
         """
         config = ConfigLoader(
             project=self.project, conf_source=self.conf_source
-        ).load_config(test_mode)
-        if test_mode:
-            return config[self.project][f"test_{self.pipeline}"]
+        ).load_config()
         return config[self.project][self.pipeline]
 
     def prepare_datasets(self, pipeline_config: dict) -> bool:
@@ -205,12 +187,11 @@ class Runner:
 
         return datasets
 
-    def run_nodes(self, pipeline_config: dict, test_mode: bool = False) -> list:
+    def run_nodes(self, pipeline_config: dict) -> list:
         """Runs the nodes for a given pipeline using Ray.
 
         Args:
             pipeline_config: pipeline configuration
-            test_mode: Whether the pipeline is running in test mode
 
         Returns:
             list: list of ray objects

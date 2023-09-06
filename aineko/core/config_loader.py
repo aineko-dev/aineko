@@ -2,7 +2,6 @@
 import ast
 import glob
 import os
-from copy import deepcopy
 from typing import Optional, Set, Union
 
 from schema import Optional as optional
@@ -184,7 +183,7 @@ class ConfigLoader:
             all_consumers.extend(consumers)
         return set(all_producers).union(set(all_consumers))
 
-    def load_config(self, pipeline_tests: bool = False) -> dict:
+    def load_config(self) -> dict:
         """Load config for project(s) from yaml files.
 
         Steps for loading config:
@@ -196,9 +195,7 @@ class ConfigLoader:
         3. Load all config files into a single config dict (catalog,
            pipelines, and local params)
 
-        4a. Generate config for all pipelines in project
-
-        4b. Generate config for test pipelines in project
+        4. Generate config for all pipelines in project
 
         5. Filter config to only specified pipelines
 
@@ -215,9 +212,6 @@ class ConfigLoader:
                         "pipeline_2": {...},
                     },
                 }
-
-        Args:
-            pipeline_tests: load only pipeline test configs
 
         Raises:
             ValueError: If project is not a string or list of strings
@@ -251,14 +245,7 @@ class ConfigLoader:
                         base_config_file_pattern,
                         project_config_file_pattern,
                     ],
-                    "except_names": ["catalog", "test_"],
-                },
-                "pipeline_test_config": {
-                    "dirs": [
-                        base_config_file_pattern,
-                        project_config_file_pattern,
-                    ],
-                    "only_names": ["test_"],
+                    "except_names": ["catalog"],
                 },
                 "local_params": {
                     "dirs": [f"{self.conf_source}/local/*.yml"],
@@ -276,15 +263,8 @@ class ConfigLoader:
                 conf: load_yamls(files) for conf, files in config_files.items()
             }
 
-            # 4a. Generate config for all project pipelines
+            # 4. Generate config for all project pipelines
             project_config = self._gen_project_config(agg_config)
-
-            if pipeline_tests:
-                # 4b. Generate config for test pipelines in project
-                project_config = self._gen_test_pipeline_config(
-                    project_config=project_config,
-                    agg_config=agg_config,
-                )
 
             # 5. Filter pipelines if specified
             filtered_project_config = self._filter_pipelines(
@@ -418,46 +398,6 @@ class ConfigLoader:
                 }
 
         return config
-
-    def _gen_test_pipeline_config(
-        self, project_config: dict, agg_config: dict
-    ) -> dict:
-        """Generate config for test pipelines detailed in test config.
-
-        Args:
-            project_config (dict): output of _gen_project_config
-            agg_config (dict): config aggregated from all config files
-
-        Returns:
-            dict: pipeline config for test pipelines
-        """
-        test_config = {}
-
-        for pipeline, pipeline_test_config in agg_config[
-            "pipeline_test_config"
-        ].items():
-            pipeline_config = deepcopy(project_config[pipeline])
-            # Patch nodes
-            for node, node_config in pipeline_test_config.get(
-                "patch_nodes", {}
-            ).items():
-                node_to_patch = node_config["node_to_patch"]
-                if pipeline_config["nodes"].pop(node_to_patch) is None:
-                    raise KeyError(
-                        f"Node {node_to_patch} specified in {pipeline_config} "
-                        "not found in pipeline {pipeline}"
-                    )
-                pipeline_config["nodes"][node] = node_config
-
-            # Add checker nodes
-            for node, node_config in pipeline_test_config.get(
-                "checker_nodes", {}
-            ).items():
-                pipeline_config["nodes"][node] = node_config
-
-            test_config[f"test_{pipeline}"] = pipeline_config
-
-        return test_config
 
     @staticmethod
     def get_datasets_for_pipeline_nodes(pipeline_config: dict) -> set:

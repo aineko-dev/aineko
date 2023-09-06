@@ -42,9 +42,6 @@ def _cli() -> None:
         default=None,
         nargs="?",
     )
-    run_parser.add_argument(
-        "-t", "--test", help="Only run test pipelines", action="store_true"
-    )
 
     visualize_parser = subparsers.add_parser(
         "visualize", help="Visualize Aineko pipelines as a Mermaid graph."
@@ -121,7 +118,6 @@ def _cli() -> None:
             project=args.project_name,
             pipeline=args.pipeline_name,
             conf_source=args.conf_source,
-            test_mode=args.test,
         )
     elif args.command == "visualize":
         graph = build_mermaid_from_yaml(

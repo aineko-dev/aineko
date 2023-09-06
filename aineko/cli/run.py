@@ -9,7 +9,6 @@ def main(
     project: str,
     pipeline: str,
     conf_source: Optional[str] = None,
-    test_mode: bool = False,
 ) -> None:
     """Main function to run a pipeline from the command line.
 
@@ -24,4 +23,4 @@ def main(
         conf_source = AINEKO_CONFIG.get("AMBER_CONF_SOURCE")
 
     runner = Runner(project=project, pipeline=pipeline, conf_source=conf_source)
-    runner.run(test_mode=test_mode)
+    runner.run()
