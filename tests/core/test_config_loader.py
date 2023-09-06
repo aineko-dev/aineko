@@ -8,8 +8,6 @@ import pytest
 from aineko.core.config_loader import ConfigLoader
 
 EXPECTED_TEST_RUN_1 = {
-    "machine_config": {"type": "ec2", "mem": 16, "vcpu": 4},
-    "aws_secrets": ["test/aineko_secret"],
     "catalog": {
         "integer_sequence": {
             "type": "kafka_stream",

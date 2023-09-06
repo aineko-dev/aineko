@@ -53,12 +53,7 @@ class ConfigLoader:
             {
                 # Pipeline config
                 str: {
-                    # Machine config
-                    "machine_config": dict,
-                    # Environment variables
                     optional("env_vars"): dict,
-                    # Secrets
-                    optional("aws_secrets"): list,
                     # Node config
                     "nodes": {
                         str: {
@@ -66,7 +61,6 @@ class ConfigLoader:
                             optional("params"): dict,
                             optional("inputs"): list,
                             optional("outputs"): list,
-                            optional("node_to_patch"): str,
                         },
                     },
                     # Catalog config
@@ -377,8 +371,6 @@ class ConfigLoader:
                 # Add pipeline config for each run to the project config
                 for run_name, run_params in pipeline_conf["runs"].items():
                     config[run_name] = {
-                        "machine_config": pipeline_conf["machine_config"],
-                        "aws_secrets": pipeline_conf.get("aws_secrets", [""]),
                         "catalog": self._update_params(
                             trimmed_catalog, run_params
                         ),
@@ -390,9 +382,7 @@ class ConfigLoader:
             else:
                 # Add pipeline config for the pipeline to the project config
                 config[pipeline_name] = {
-                    "machine_config": pipeline_conf["machine_config"],
                     "catalog": trimmed_catalog,
-                    "aws_secrets": pipeline_conf.get("aws_secrets", [""]),
                     "nodes": pipeline_conf["nodes"],
                     "local_params": agg_config["local_params"],
                 }
