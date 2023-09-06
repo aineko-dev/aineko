@@ -7,7 +7,7 @@ from typing import Optional
 import pytest
 import ray
 
-from aineko import AbstractNode, ConfigLoader, Provisioner, Runner
+from aineko import AbstractNode, ConfigLoader, Runner
 from aineko.config import AINEKO_CONFIG
 
 # Global variables.
@@ -48,19 +48,6 @@ def config_loader_single_pipeline(conf_directory):
     """
     return ConfigLoader(
         project=[{"test_project": ["test_run_1"]}],
-        conf_source=conf_directory,
-    )
-
-
-@pytest.fixture(scope="module")
-def provisioner(conf_directory):
-    """Provisioner fixture.
-
-    Returns:
-        Provisioner: Test provisioner
-    """
-    return Provisioner(
-        project="test_project",
         conf_source=conf_directory,
     )
 

@@ -1,7 +1,6 @@
 """Aineko command line interface."""
 import argparse
 
-from aineko.cli.provision import main as provision_main
 from aineko.cli.run import main as run_main
 from aineko.cli.validate import main as validate_main
 from aineko.cli.visualize import (
@@ -79,33 +78,6 @@ def _cli() -> None:
         help="Open the graph in the default browser.",
     )
 
-    provision_parser = subparsers.add_parser(
-        "provision", help="Provision a project."
-    )
-
-    provision_parser.add_argument(
-        "-e",
-        "--env",
-        help="Environment to provision",
-        default="develop",
-        nargs="?",
-    )
-
-    provision_parser.add_argument(
-        "-c",
-        "--conf_source",
-        help="Path to the directory containing the configuration files.",
-        type=str,
-        default=None,
-        nargs="?",
-    )
-    provision_parser.add_argument(
-        "-d",
-        "--destroy",
-        help="Destroy pipeline resources.",
-        action="store_true",
-    )
-
     validate_parser = subparsers.add_parser(
         "validate",
         help="Validate Aineko pipeline datasets to ensure "
@@ -161,13 +133,6 @@ def _cli() -> None:
             render_graph_in_browser(mermaid_graph=graph)
         else:
             print(graph)
-
-    elif args.command == "provision":
-        provision_main(
-            env=args.env,
-            conf_source=args.conf_source,
-            destroy=args.destroy,
-        )
 
     elif args.command == "validate":
         validate_main(

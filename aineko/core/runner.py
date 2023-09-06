@@ -8,7 +8,6 @@ from confluent_kafka.admin import AdminClient, NewTopic
 
 from aineko.config import AINEKO_CONFIG, AMBER_KAFKA_CONFIG, LOCAL_KAFKA_CONFIG
 from aineko.core.config_loader import ConfigLoader
-from aineko.core.internal_nodes import NodeManager
 from aineko.utils import imports
 
 
@@ -261,22 +260,5 @@ class Runner:
                     params=node_config.get("params", None)
                 )
             )
-
-        # Add node manager
-        node_manager = NodeManager.options(  # type: ignore # pylint: disable=no-member
-            name="manager", namespace=self.pipeline
-        ).remote(
-            actors, test_mode
-        )
-        node_manager.setup_datasets.remote(
-            inputs=AMBER_KAFKA_CONFIG.get("DATASETS")
-            + LOCAL_KAFKA_CONFIG.get("DATASETS"),
-            outputs=AMBER_KAFKA_CONFIG.get("DATASETS")
-            + LOCAL_KAFKA_CONFIG.get("DATASETS"),
-            catalog=pipeline_config["catalog"],
-            pipeline=self.pipeline,
-            project=self.project,
-        )
-        results.append(node_manager.execute.remote())
 
         return ray.get(results)
