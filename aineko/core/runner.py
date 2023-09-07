@@ -243,6 +243,7 @@ class Runner:
                 inputs=node_config.get("inputs", None),
                 outputs=outputs,
                 catalog=pipeline_config["catalog"],
+                node=node_name,
                 pipeline=self.pipeline,
                 project=self.project,
             )
