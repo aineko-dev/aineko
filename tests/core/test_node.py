@@ -30,10 +30,12 @@ def test_node_unit_test(test_sequencer_node, test_doubler_node) -> None:
 
     sequencer = test_sequencer_node.__ray_actor_class__()
     sequencer.enable_test_mode()
-    sequencer.setup_test(inputs=None, outputs=["integer_sequence"])
-    outputs = sequencer.run_test(
-        params={"sleep_time": 0.1, "num_messages": NUM_MESSAGES}
+    sequencer.setup_test(
+        inputs=None,
+        outputs=["integer_sequence"],
+        params={"sleep_time": 0.1, "num_messages": NUM_MESSAGES},
     )
+    outputs = sequencer.run_test()
     assert outputs["integer_sequence"] == list(range(NUM_MESSAGES))
 
     doubler = test_doubler_node.__ray_actor_class__()
