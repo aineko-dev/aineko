@@ -217,10 +217,11 @@ class Runner:
                 **default_node_config,
                 **node_config.get("node_params", {}),
             }
+
+            wrapped_class = ray.remote(target_class)
+
             if actor_params:
-                wrapped_class = ray.remote(**actor_params)(target_class)
-            else:
-                wrapped_class = ray.remote(target_class)
+                wrapped_class = wrapped_class.options(**actor_params)
 
             # 1. Initalize actor
             wrapped_class.options(
