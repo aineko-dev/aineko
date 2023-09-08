@@ -57,6 +57,7 @@ class AbstractNode(ABC):
     def setup_datasets(
         self,
         catalog: Dict[str, dict],
+        node: str,
         pipeline: str,
         project: str,
         inputs: Optional[List[str]] = None,
@@ -66,6 +67,7 @@ class AbstractNode(ABC):
 
         Args:
             catalog: dataset catalog configuration
+            node: name of the node
             pipeline: name of the pipeline
             project: name of the project
             inputs: list of dataset names for the inputs to the node
@@ -75,7 +77,7 @@ class AbstractNode(ABC):
         self.consumers = {
             dataset_name: DatasetConsumer(
                 dataset_name=dataset_name,
-                node_name=self.__class__.__name__,
+                node_name=node,
                 dataset_config=catalog.get(dataset_name, {}),
                 pipeline_name=pipeline,
             )
@@ -86,7 +88,7 @@ class AbstractNode(ABC):
         self.producers = {
             dataset_name: DatasetProducer(
                 dataset_name=dataset_name,
-                node_name=self.__class__.__name__,
+                node_name=node,
                 dataset_config=catalog.get(dataset_name, {}),
                 pipeline_name=pipeline,
                 project_name=project,
