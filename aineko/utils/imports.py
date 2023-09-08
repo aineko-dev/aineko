@@ -58,14 +58,9 @@ def import_from_string(  # type: ignore[no-untyped-def]
             )
 
     elif kind == "class":
-        try:
-            imported_class = imported_attr.__ray_actor_class__
-        except AttributeError:
-            imported_class = imported_attr
-
-        if not inspect.isclass(imported_class):
+        if not inspect.isclass(imported_attr):
             raise ValueError(
-                f"Attribute {imported_class} is {type(imported_class)}. "
+                f"Attribute {imported_attr} is {type(imported_attr)}. "
                 "Expected a class."
             )
 

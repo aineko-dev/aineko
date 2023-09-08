@@ -5,14 +5,11 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Optional
 
-import ray
-
 from aineko.config import AINEKO_CONFIG
 from aineko.core.node import AbstractNode
 from aineko.utils import imports
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class Alerts(AbstractNode):
     """Alerts.
 

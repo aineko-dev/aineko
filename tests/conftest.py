@@ -68,7 +68,6 @@ def runner():
 def dummy_node():
     """Creates dummy node."""
 
-    @ray.remote(num_cpus=0.2)
     class DummyNode(AbstractNode):
         """Dummy node that passes through messages."""
 
@@ -87,7 +86,6 @@ def dummy_node():
 def test_sequencer_node():
     """Returns a sample sequencer node."""
 
-    @ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
     class TestSequencer(AbstractNode):
         """Test sequencer node."""
 
@@ -124,7 +122,6 @@ def test_sequencer_node():
 def test_doubler_node():
     """Returns a sample doubler node."""
 
-    @ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
     class TestDoubler(AbstractNode):
         """Test doubler node."""
 

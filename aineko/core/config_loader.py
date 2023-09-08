@@ -56,11 +56,13 @@ class ConfigLoader:
                 # Pipeline config
                 str: {
                     optional("env_vars"): dict,
+                    optional("default_node_params"): dict,
                     # Node config
                     "nodes": {
                         str: {
                             "class": str,
-                            optional("params"): dict,
+                            optional("class_params"): dict,
+                            optional("node_params"): dict,
                             optional("inputs"): list,
                             optional("outputs"): list,
                         },

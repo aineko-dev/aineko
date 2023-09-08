@@ -16,7 +16,7 @@ test_pipeline_runs:
       outputs:
         - integer_sequence
         - env_var
-      params:
+      node_params:
         start_int: $start_int
         num_messages: 25
         sleep_time: 1
@@ -29,5 +29,5 @@ test_pipeline_runs:
       outputs:
         - integer_doubles
         - extra_fake_output
-      params:
+      node_params:
         duration: 40
