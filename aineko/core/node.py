@@ -41,12 +41,13 @@ class AbstractNode(ABC):
         _execute: execute the node, to be implemented by subclasses
     """
 
-    def __init__(self) -> None:
+    def __init__(self, test: bool = False) -> None:
         """Initialize the node."""
         self.last_heartbeat = time.time()
         self.consumers: Dict = {}
         self.producers: Dict = {}
-        self.test = False
+        self.params: Dict = {}
+        self.test = test
         self.log_levels = ("info", "debug", "warning", "error", "critical")
 
     def enable_test_mode(self) -> None:
@@ -97,6 +98,7 @@ class AbstractNode(ABC):
         self,
         inputs: Optional[dict] = None,
         outputs: Optional[list] = None,
+        params: Optional[dict] = None,
     ) -> None:
         """Setup the node for testing.
 
@@ -104,6 +106,7 @@ class AbstractNode(ABC):
             inputs: inputs to the node, format should be {"dataset": [1, 2, 3]}
             outputs: outputs of the node, format should be
                 ["dataset_1", "dataset_2", ...]
+            params: dictionary of parameters to make accessible to _execute
 
         Raises:
             RuntimeError: if node is not in test mode
@@ -132,6 +135,7 @@ class AbstractNode(ABC):
             )
             for dataset_name in outputs
         }
+        self.params = params or {}
 
     def log(self, message: str, level: str = "info") -> None:
         """Log a message to the logging dataset.
@@ -218,16 +222,13 @@ class AbstractNode(ABC):
         """
         raise NotImplementedError("_execute method not implemented")
 
-    def run_test(
-        self, params: Optional[dict] = None, runtime: Optional[int] = None
-    ) -> dict:
+    def run_test(self, runtime: Optional[int] = None) -> dict:
         """Execute the node in testing mode.
 
         Runs the steps in execute that involves the user defined methods.
         Includes pre_loop_hook, _execute, and post_loop_hook.
 
         Args:
-            params: Parameters to use to execute the node.
             runtime: Number of seconds to run the execute loop for.
 
         Returns:
@@ -238,13 +239,12 @@ class AbstractNode(ABC):
                 "Node is not in test mode. "
                 "Please initialize with `enable_test_mode()`."
             )
-        params = params or {}
         run_loop = True
         start_time = time.time()
 
-        self._pre_loop_hook(params)
+        self._pre_loop_hook(self.params)
         while run_loop is not False:
-            run_loop = self._execute(params)  # type: ignore
+            run_loop = self._execute(self.params)  # type: ignore
 
             # Do not end loop if runtime not exceeded
             if runtime is not None:
@@ -257,7 +257,7 @@ class AbstractNode(ABC):
             ):
                 run_loop = False
 
-        self._post_loop_hook(params)
+        self._post_loop_hook(self.params)
 
         return {
             dataset_name: producer.values

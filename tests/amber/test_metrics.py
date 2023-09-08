@@ -25,18 +25,17 @@ def test_node_heartbeat_node():
         }
     ] * NUM_MESSAGES
 
-    heartbeat_node = NodeHeartbeatInterval.__ray_actor_class__()
-    heartbeat_node.enable_test_mode()
+    heartbeat_node = NodeHeartbeatInterval(test=True)
     heartbeat_node.setup_test(
-        inputs={"heartbeats": heartbeats_in}, outputs=["metrics"]
-    )
-    outputs = heartbeat_node.run_test(
+        inputs={"heartbeats": heartbeats_in},
+        outputs=["metrics"],
         params={
             "interval": interval,
             "source_pipeline": "test_pipieline",
             "source_node": "NodeHeartbeatInterval",
-        }
+        },
     )
+    outputs = heartbeat_node.run_test()
     for alert in outputs["metrics"]:
         for metric in metric_out:
             for key, value in metric.items():
@@ -57,17 +56,16 @@ def test_pipeline_heartbeat_node():
         }
     ] * NUM_MESSAGES
 
-    heartbeat_node = PipelineHeartbeatInterval.__ray_actor_class__()
-    heartbeat_node.enable_test_mode()
+    heartbeat_node = PipelineHeartbeatInterval(test=True)
     heartbeat_node.setup_test(
-        inputs={"heartbeats": heartbeats_in}, outputs=["metrics"]
-    )
-    outputs = heartbeat_node.run_test(
+        inputs={"heartbeats": heartbeats_in},
+        outputs=["metrics"],
         params={
             "interval": interval,
             "source_pipeline": "test",
-        }
+        },
     )
+    outputs = heartbeat_node.run_test()
     for alert in outputs["metrics"]:
         for metric in metric_out:
             for key, value in metric.items():
@@ -112,13 +110,12 @@ def test_logging_level_counts_node():
         },
     ]
 
-    log_level_node = LoggingLevelCounts.__ray_actor_class__()
-    log_level_node.enable_test_mode()
-    log_level_node.setup_test(inputs={"logs": logs_in}, outputs=["metrics"])
-    outputs = log_level_node.run_test(
-        params={
-            "interval": interval,
-        }
+    log_level_node = LoggingLevelCounts(test=True)
+    log_level_node.setup_test(
+        inputs={"logs": logs_in},
+        outputs=["metrics"],
+        params={"interval": interval},
     )
+    outputs = log_level_node.run_test()
     for metric in metric_out:
         assert metric in outputs["metrics"]

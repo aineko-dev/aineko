@@ -26,7 +26,7 @@ EXPECTED_TEST_RUN_1 = {
         "sequencer": {
             "class": "aineko.tests.conftest.TestSequencer",
             "outputs": ["integer_sequence", "env_var"],
-            "params": {
+            "node_params": {
                 "start_int": "0",
                 "num_messages": 25,
                 "sleep_time": 1,
@@ -36,7 +36,7 @@ EXPECTED_TEST_RUN_1 = {
             "class": "aineko.tests.conftest.TestDoubler",
             "inputs": ["integer_sequence"],
             "outputs": ["integer_doubles"],
-            "params": {"duration": 40},
+            "node_params": {"duration": 40},
         },
     },
 }
@@ -64,7 +64,7 @@ def test_load_config(config_loader: type[ConfigLoader]) -> None:
             del pipeline["local_params"]
 
     expected_test_run_2 = copy.deepcopy(EXPECTED_TEST_RUN_1)
-    expected_test_run_2["nodes"]["sequencer"]["params"]["start_int"] = "1"
+    expected_test_run_2["nodes"]["sequencer"]["node_params"]["start_int"] = "1"
 
     expected = {
         "test_project": {

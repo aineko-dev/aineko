@@ -205,17 +205,29 @@ class Runner:
         # Run each node and collect result futures
         results = []
         actors = []
+
+        default_node_config = pipeline_config.get("default_node_params", {})
+
         for node_name, node_config in pipeline_config["nodes"].items():
             # Extract the target class for a given node
             target_class = imports.import_from_string(
                 attr=node_config["class"], kind="class"
             )
+            actor_params = {
+                **default_node_config,
+                **node_config.get("node_params", {}),
+            }
+
+            wrapped_class = ray.remote(target_class)
+
+            if actor_params:
+                wrapped_class = wrapped_class.options(**actor_params)
 
             # 1. Initalize actor
-            target_class.options(
+            wrapped_class.options(
                 name=node_name, namespace=self.pipeline
             ).remote()
-            running_class = target_class.remote()
+            running_class = wrapped_class.remote()
             actors.append(running_class)
 
             # 2. Setup input and output datasets, incl logging and reporting
@@ -238,7 +250,7 @@ class Runner:
             # 3. Execute the node
             results.append(
                 running_class.execute.remote(
-                    params=node_config.get("params", None)
+                    params=node_config.get("class_params", None)
                 )
             )
 
