@@ -6,10 +6,9 @@ NUM_MESSAGES = 10
 
 def test_node_setup_and_run_test(dummy_node) -> None:
     """Tests the setup_test and run_test methods."""
-    node = dummy_node.__ray_actor_class__()
+    node = dummy_node(test=True)
     inputs = {"input": [1, 2, 3]}
     outputs = ["output"]
-    node.enable_test_mode()
     node.setup_test(inputs=inputs, outputs=outputs)
 
     start_time = time.time()
@@ -28,8 +27,7 @@ def test_node_setup_and_run_test(dummy_node) -> None:
 def test_node_unit_test(test_sequencer_node, test_doubler_node) -> None:
     """Test sequencer and doubler nodes."""
 
-    sequencer = test_sequencer_node.__ray_actor_class__()
-    sequencer.enable_test_mode()
+    sequencer = test_sequencer_node(test=True)
     sequencer.setup_test(
         inputs=None,
         outputs=["integer_sequence"],
@@ -38,8 +36,7 @@ def test_node_unit_test(test_sequencer_node, test_doubler_node) -> None:
     outputs = sequencer.run_test()
     assert outputs["integer_sequence"] == list(range(NUM_MESSAGES))
 
-    doubler = test_doubler_node.__ray_actor_class__()
-    doubler.enable_test_mode()
+    doubler = test_doubler_node(test=True)
     doubler.setup_test(
         inputs={"integer_sequence": list(range(NUM_MESSAGES))},
         outputs=["integer_doubles"],

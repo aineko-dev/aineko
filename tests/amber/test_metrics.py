@@ -25,8 +25,7 @@ def test_node_heartbeat_node():
         }
     ] * NUM_MESSAGES
 
-    heartbeat_node = NodeHeartbeatInterval.__ray_actor_class__()
-    heartbeat_node.enable_test_mode()
+    heartbeat_node = NodeHeartbeatInterval(test=True)
     heartbeat_node.setup_test(
         inputs={"heartbeats": heartbeats_in},
         outputs=["metrics"],
@@ -57,8 +56,7 @@ def test_pipeline_heartbeat_node():
         }
     ] * NUM_MESSAGES
 
-    heartbeat_node = PipelineHeartbeatInterval.__ray_actor_class__()
-    heartbeat_node.enable_test_mode()
+    heartbeat_node = PipelineHeartbeatInterval(test=True)
     heartbeat_node.setup_test(
         inputs={"heartbeats": heartbeats_in},
         outputs=["metrics"],
@@ -112,8 +110,7 @@ def test_logging_level_counts_node():
         },
     ]
 
-    log_level_node = LoggingLevelCounts.__ray_actor_class__()
-    log_level_node.enable_test_mode()
+    log_level_node = LoggingLevelCounts(test=True)
     log_level_node.setup_test(
         inputs={"logs": logs_in},
         outputs=["metrics"],

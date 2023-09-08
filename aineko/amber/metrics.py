@@ -142,7 +142,6 @@ class Metrics(AbstractNode):
         )
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class NodeHeartbeatInterval(Metrics):
     """Node heartbeat interval metric.
 
@@ -189,7 +188,6 @@ class NodeHeartbeatInterval(Metrics):
         return None
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class PipelineHeartbeatInterval(Metrics):
     """Pipeline heartbeat metric.
 
@@ -236,7 +234,6 @@ class PipelineHeartbeatInterval(Metrics):
         return None
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class LoggingLevelCounts(Metrics):
     """Logging level counts metrics.
 
