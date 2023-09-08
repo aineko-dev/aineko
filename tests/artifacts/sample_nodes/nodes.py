@@ -3,8 +3,6 @@
 import time
 from typing import Optional
 
-import ray
-
 from aineko import AbstractNode
 from aineko.config import AINEKO_CONFIG
 
