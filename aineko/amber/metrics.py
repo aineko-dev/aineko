@@ -4,8 +4,6 @@ from datetime import datetime
 from itertools import cycle
 from typing import Optional, Union
 
-import ray
-
 from aineko.config import AINEKO_CONFIG
 from aineko.core.node import AbstractNode
 
@@ -142,7 +140,6 @@ class Metrics(AbstractNode):
         )
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class NodeHeartbeatInterval(Metrics):
     """Node heartbeat interval metric.
 
@@ -189,7 +186,6 @@ class NodeHeartbeatInterval(Metrics):
         return None
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class PipelineHeartbeatInterval(Metrics):
     """Pipeline heartbeat metric.
 
@@ -236,7 +232,6 @@ class PipelineHeartbeatInterval(Metrics):
         return None
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class LoggingLevelCounts(Metrics):
     """Logging level counts metrics.
 

@@ -8,15 +8,11 @@ validation check between catalog and code.
 import time
 from typing import Optional
 
-import ray
-
 from aineko import AbstractNode
-from aineko.config import AINEKO_CONFIG
 
 TEST_INPUT = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class TestSequencerPatch(AbstractNode):
     """Node to patch sequencer node, emits a message per second.
 
@@ -55,7 +51,6 @@ class TestSequencerPatch(AbstractNode):
         time.sleep(1)
 
 
-@ray.remote(num_cpus=AINEKO_CONFIG.get("DEFAULT_NUM_CPUS"))
 class TestDoublerChecker(AbstractNode):
     """Node to check that the sequence of integers is correct.
 

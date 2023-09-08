@@ -36,8 +36,7 @@ def test_alerts_node():
         "greater_than alert triggered for metric PipelineHeartbeatInterval",
     ]
 
-    alerts = Alerts.__ray_actor_class__()
-    alerts.enable_test_mode()
+    alerts = Alerts(test=True)
     alerts.setup_test(inputs={"metrics": metrics_in}, outputs=["alerts"])
     outputs = alerts.run_test()
 
