@@ -61,6 +61,7 @@ filterwarnings = [
     # Ignore this depracation warning because of the way virtualenvs is implemented
     "ignore:.*pkg_resources.*:DeprecationWarning",
 ]
+pythonpath = ["."]
 
 [tool.poetry.scripts]
 aineko = "aineko.__main__:_cli"
