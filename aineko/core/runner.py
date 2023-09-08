@@ -209,6 +209,7 @@ class Runner:
         default_node_config = pipeline_config.get("default_node_params", {})
 
         for node_name, node_config in pipeline_config["nodes"].items():
+            # 1. Initalize actor
             # Extract the target class for a given node
             target_class = imports.import_from_string(
                 attr=node_config["class"], kind="class"
@@ -216,17 +217,12 @@ class Runner:
             actor_params = {
                 **default_node_config,
                 **node_config.get("node_params", {}),
+                "name": node_name,
+                "namespace": self.pipeline,
             }
 
             wrapped_class = ray.remote(target_class)
-
-            if actor_params:
-                wrapped_class = wrapped_class.options(**actor_params)
-
-            # 1. Initalize actor
-            wrapped_class.options(
-                name=node_name, namespace=self.pipeline
-            ).remote()
+            wrapped_class.options(**actor_params).remote()
             running_class = wrapped_class.remote()
             actors.append(running_class)
 
