@@ -4,8 +4,6 @@ from datetime import datetime
 from itertools import cycle
 from typing import Optional, Union
 
-import ray
-
 from aineko.config import AINEKO_CONFIG
 from aineko.core.node import AbstractNode
 
