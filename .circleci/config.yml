@@ -18,8 +18,8 @@ workflows:
       - integration-tests:
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
-          test_dir: integration_tests
-          
+          test_dir: tests/integration
+
 jobs:
   integration-tests:
     parameters:
@@ -88,8 +88,10 @@ jobs:
       - run: |
           poetry run pre-commit install
           poetry run pre-commit run --all
-      - run: |
-          poetry run pytest --cov=<< parameters.prj_dir >> << parameters.test_dir >>
+      - run: >
+          poetry run pytest 
+          --cov=<< parameters.prj_dir >> << parameters.test_dir >> 
+          --ignore=tests/integration
       - run:
           name: mypy
           command: |

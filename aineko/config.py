@@ -98,3 +98,8 @@ class AINEKO_CONFIG(BaseConfig):
 
     # Default cpu for each node
     DEFAULT_NUM_CPUS = 0.5
+
+
+class NODE_MANAGER_CONFIG(BaseConfig):
+    # Defaults for NodeManager
+    NUM_CPUS = 0.1
