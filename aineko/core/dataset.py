@@ -22,7 +22,7 @@ from typing import Any, Dict, Optional, Union
 
 from confluent_kafka import Consumer, Message, Producer
 
-from aineko.config import AINEKO_CONFIG, AMBER_KAFKA_CONFIG, LOCAL_KAFKA_CONFIG
+from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 
 
 # pylint: disable=too-few-public-methods
@@ -71,11 +71,7 @@ class DatasetConsumer:
         self.pipeline_name = pipeline_name
 
         # Assign kafka config
-        self.kafka_config = (
-            AMBER_KAFKA_CONFIG
-            if dataset_config.get("remote", False)
-            else LOCAL_KAFKA_CONFIG
-        )
+        self.kafka_config = DEFAULT_KAFKA_CONFIG
 
         # Set consumer parameters
         consumer_config = self.kafka_config.get("CONSUMER_CONFIG")
@@ -183,11 +179,7 @@ class DatasetProducer:
         self.project_name = project_name
 
         # Assign kafka config
-        self.kafka_config = (
-            AMBER_KAFKA_CONFIG
-            if dataset_config.get("remote", False)
-            else LOCAL_KAFKA_CONFIG
-        )
+        self.kafka_config = DEFAULT_KAFKA_CONFIG
 
         # Set producer parameters
         producer_config = self.kafka_config.get("PRODUCER_CONFIG")

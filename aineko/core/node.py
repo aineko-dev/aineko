@@ -5,9 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional
 
 from aineko.config import (
-    AINEKO_CONFIG,
-    AMBER_KAFKA_CONFIG,
-    LOCAL_KAFKA_CONFIG,
+    DEFAULT_KAFKA_CONFIG,
     TESTING_NODE_CONFIG,
 )
 from aineko.core.dataset import (
@@ -155,21 +153,8 @@ class AbstractNode(ABC):
                 f'{", ".join(self.log_levels)}'
             )
         out_msg = {"log": message, "level": level}
-        self.producers[AMBER_KAFKA_CONFIG.get("LOGGING_DATASET")].produce(
+        self.producers[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].produce(
             out_msg
-        )
-
-    def report(self, message: str) -> None:
-        """Report a message to the reporting dataset.
-
-        Args:
-            message: Message to report
-        """
-        self.producers[AMBER_KAFKA_CONFIG.get("REPORTING_DATASET")].produce(
-            message
-        )
-        self.producers[LOCAL_KAFKA_CONFIG.get("REPORTING_DATASET")].produce(
-            message
         )
 
     def catch_exception(self) -> None:
@@ -287,14 +272,3 @@ class AbstractNode(ABC):
             Method (optional) to be implemented by subclasses.
         """
         pass
-
-    def _send_heartbeat(self) -> None:
-        """Send a heartbeat to the reporting dataset.
-
-        Only sends if time exceeds heartbeat interval.
-        """
-        if time.time() - self.last_heartbeat > AINEKO_CONFIG.get(
-            "HEARTBEAT_INTERVAL"
-        ):
-            self.report("heartbeat")
-            self.last_heartbeat = time.time()

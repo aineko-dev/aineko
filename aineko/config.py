@@ -67,59 +67,15 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     # Empty list means no overridable settings
     PRODUCER_OVERRIDABLES = []  # type: ignore
 
-
-class LOCAL_KAFKA_CONFIG(DEFAULT_KAFKA_CONFIG):
-    """Kafka configuration."""
-
-    REPORTING_DATASET = "reporting_local"
-    DATASETS = [REPORTING_DATASET]
-
-
-class AMBER_KAFKA_CONFIG(DEFAULT_KAFKA_CONFIG):
-    """Kafka configuration."""
-
-    # Amber Kafka broker settings
-    # Amber broker server
-    BROKER_SERVER = os.environ.get(
-        "KAFKA_CONFIG_AMBER_BROKER", "localhost:9092"
-    )
-    # Config for amber kafka broker (remote logging / monitoring)
-    BROKER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
-    }
-    # Config for amber kafka consumer
-    CONSUMER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
-        "auto.offset.reset": "earliest",
-    }
-    # Config for amber kafka producer
-    PRODUCER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
-    }
-    # Amber dataset config
-    DATASET_PARAMS = {
-        # One single partition for each dataset
-        "num_partitions": 1,
-        # No replication
-        "replication_factor": 1,
-        "config": {
-            # Keep messages for 1 day
-            "retention.ms": 1000
-            * 60
-            * 60
-            * 24
-            * 1,
-        },
-    }
+    # Default datasets to create for every pipeline
     LOGGING_DATASET = "logging"
-    REPORTING_DATASET = "reporting"
-    DATASETS = [LOGGING_DATASET, REPORTING_DATASET]
+    DATASETS = [LOGGING_DATASET]
 
 
 class TESTING_NODE_CONFIG(BaseConfig):
     """Testing node configuration."""
 
-    DATASETS = AMBER_KAFKA_CONFIG.get("DATASETS")
+    DATASETS = DEFAULT_KAFKA_CONFIG.get("DATASETS")
 
 
 class AINEKO_CONFIG(BaseConfig):
@@ -142,53 +98,3 @@ class AINEKO_CONFIG(BaseConfig):
 
     # Default cpu for each node
     DEFAULT_NUM_CPUS = 0.5
-
-    # Amber project dir name
-    AMBER_PROJECT_DIR = "amber"
-
-    # Amber conf dir path
-    AMBER_CONF_SOURCE = os.path.abspath(
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "amber/conf")
-    )
-
-    # Default Amber alert triggers
-    AMBER_ALERT_TRIGGERS = {
-        "log_errors": {
-            "metric": "LoggingLevelCounts",
-            "func": "aineko.amber.comparisons.greater_than",
-            "params": {"threshold": 1},
-            "metadata_filter": {
-                "level": "error",
-            },
-        },
-        "log_warnings": {
-            "metric": "LoggingLevelCounts",
-            "func": "aineko.amber.comparisons.greater_than",
-            "params": {"threshold": 3},
-            "metadata_filter": {
-                "level": "warning",
-            },
-        },
-        "node_heartbeat": {
-            "metric": "NodeHeartbeatInteval",
-            "func": "aineko.amber.comparisons.greater_than",
-            "params": {"threshold": 60},
-        },
-        "pipeline_heartbeat": {
-            "metric": "PipelineHeartbeatInterval",
-            "func": "aineko.amber.comparisons.greater_than",
-            "params": {"threshold": 60},
-        },
-    }
-
-
-class AWS_CONFIG(BaseConfig):
-    """AWS configuration."""
-
-    # Needs to be in descending order of preference (cost)
-    EC2_SPEC = {
-        "m5.large": {"mem": 8, "vcpu": 2},
-        "m5.xlarge": {"mem": 16, "vcpu": 4},
-        "m5.2xlarge": {"mem": 32, "vcpu": 8},
-        "m5.4xlarge": {"mem": 64, "vcpu": 16},
-    }
