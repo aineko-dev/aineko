@@ -1,7 +1,6 @@
 """Module to run a pipeline from the command line."""
 from typing import Optional
 
-from aineko.config import AINEKO_CONFIG
 from aineko.core.runner import Runner
 
 

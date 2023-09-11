@@ -107,23 +107,11 @@ class Runner:
             print(f"Creating dataset: {dataset_name}: {dataset_config}")
             # Create dataset for kafka streams
             if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
-                # Set dataset parameters, replacing defaults with user-defined config
+                # User defined
                 dataset_params = {
                     **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
                     **dataset_config.get("params", {}),
                 }
-                dataset_params = dataset_config.get(
-                    "params", DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS")
-                )
-                for param in [
-                    "num_partitions",
-                    "replication_factor",
-                    "config",
-                ]:
-                    if param not in dataset_params:
-                        dataset_params[param] = DEFAULT_KAFKA_CONFIG.get(
-                            "DATASET_PARAMS"
-                        ).get(param)
 
                 # Configure dataset
                 new_dataset = NewTopic(

@@ -5,7 +5,6 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional
 
 from aineko.config import (
-    AINEKO_CONFIG,
     DEFAULT_KAFKA_CONFIG,
     TESTING_NODE_CONFIG,
 )
