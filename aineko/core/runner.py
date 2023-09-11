@@ -5,7 +5,7 @@ from typing import Optional
 import ray
 from confluent_kafka.admin import AdminClient, NewTopic
 
-from aineko.config import AINEKO_CONFIG, AMBER_KAFKA_CONFIG, LOCAL_KAFKA_CONFIG
+from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 from aineko.core.config_loader import ConfigLoader
 from aineko.utils import imports
 
@@ -19,15 +19,13 @@ class Runner:
         project (str): Name of the project
         pipeline (str): Name of the pipeline
         conf_source (str): Path to conf directory
-        local_config (dict): Config for local kafka broker
-        amber_config (dict): Config for Amber kafka broker
+        kafka_config (dict): Config for kafka broker
 
     Attributes:
         project (str): Name of the project
         pipeline (str): Name of the pipeline
         conf_source (str): Path to conf directory
-        local_config (dict): Config for local kafka broker
-        amber_config (dict): Config for Amber kafka broker
+        kafka_config (dict): Config for kafka broker
     """
 
     def __init__(
@@ -35,15 +33,13 @@ class Runner:
         project: str,
         pipeline: str,
         conf_source: Optional[str] = None,
-        local_config: dict = LOCAL_KAFKA_CONFIG.get("BROKER_CONFIG"),
-        amber_config: dict = AMBER_KAFKA_CONFIG.get("BROKER_CONFIG"),
+        kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
     ):
         """Initializes the runner class."""
         self.project = project
         self.pipeline = pipeline
         self.conf_source = conf_source
-        self.local_config = local_config
-        self.amber_config = amber_config
+        self.kafka_config = kafka_config
 
     def run(self) -> None:
         """Runs the pipeline.
@@ -87,52 +83,37 @@ class Runner:
             ValueError: if dataset "logging" is defined in the catalog
         """
         # Connect to kafka cluster
-        local_kafka_client = AdminClient(self.local_config)
-        amber_kafka_client = AdminClient(self.amber_config)
+        kafka_client = AdminClient(self.kafka_config)
 
-        # Fail if reserved amber dataset names are defined in catalog
-        for reserved_dataset in AMBER_KAFKA_CONFIG.get("DATASETS"):
+        # Fail if reserved dataset names are defined in catalog
+        for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
             if reserved_dataset in pipeline_config["catalog"]:
                 raise ValueError(
-                    f"Dataset {reserved_dataset} is reserved for Amber "
-                    "(remote logging / monitoring service)."
+                    f"Dataset {reserved_dataset} is reserved for internal use."
                 )
 
-        # Add Amber logging dataset to catalog
+        # Add logging dataset to catalog
         pipeline_config["catalog"][
-            AMBER_KAFKA_CONFIG.get("LOGGING_DATASET")
+            DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
         ] = {
             "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
-            "params": AMBER_KAFKA_CONFIG.get("DATASET_PARAMS"),
+            "params": DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
             "remote": True,
-        }
-        # Add Amber reporting dataset to catalog
-        pipeline_config["catalog"][
-            AMBER_KAFKA_CONFIG.get("REPORTING_DATASET")
-        ] = {
-            "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
-            "params": AMBER_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            "remote": True,
-        }
-        # Add local reporting dataset to catalog
-        pipeline_config["catalog"][
-            LOCAL_KAFKA_CONFIG.get("REPORTING_DATASET")
-        ] = {
-            "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
-            "params": LOCAL_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            "remote": False,
         }
 
         # Create all dataset defined in the catalog
-        local_dataset_list = []
-        amber_dataset_list = []
+        dataset_list = []
         for dataset_name, dataset_config in pipeline_config["catalog"].items():
             print(f"Creating dataset: {dataset_name}: {dataset_config}")
             # Create dataset for kafka streams
             if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
-                # Set dataset parameters
+                # Set dataset parameters, replacing defaults with user-defined config
+                dataset_params = {
+                    **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
+                    **dataset_config.get("params", {}),
+                }
                 dataset_params = dataset_config.get(
-                    "params", LOCAL_KAFKA_CONFIG.get("DATASET_PARAMS")
+                    "params", DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS")
                 )
                 for param in [
                     "num_partitions",
@@ -140,7 +121,7 @@ class Runner:
                     "config",
                 ]:
                     if param not in dataset_params:
-                        dataset_params[param] = LOCAL_KAFKA_CONFIG.get(
+                        dataset_params[param] = DEFAULT_KAFKA_CONFIG.get(
                             "DATASET_PARAMS"
                         ).get(param)
 
@@ -153,10 +134,7 @@ class Runner:
                 )
 
                 # Add dataset to appropriate list
-                if dataset_config.get("remote", False):
-                    amber_dataset_list.append(new_dataset)
-                else:
-                    local_dataset_list.append(new_dataset)
+                dataset_list.append(new_dataset)
 
             else:
                 raise ValueError(
@@ -165,11 +143,7 @@ class Runner:
                 )
 
         # Create all configured datasets
-        datasets = amber_kafka_client.create_topics(amber_dataset_list)
-        if local_dataset_list:
-            datasets.update(
-                local_kafka_client.create_topics(local_dataset_list)
-            )
+        datasets = kafka_client.create_topics(dataset_list)
 
         # Block until all datasets finish creation
         cur_time = time.time()
@@ -228,8 +202,7 @@ class Runner:
 
             # 2. Setup input and output datasets, incl logging and reporting
             outputs = node_config.get("outputs", [])
-            outputs.extend(AMBER_KAFKA_CONFIG.get("DATASETS"))
-            outputs.extend(LOCAL_KAFKA_CONFIG.get("DATASETS"))
+            outputs.extend(DEFAULT_KAFKA_CONFIG.get("DATASETS"))
             print(
                 f"Running {node_name} node on {self.pipeline} pipeline: "
                 f"inputs={node_config.get('inputs', None)}, "

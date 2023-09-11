@@ -18,9 +18,6 @@ def main(
         conf_source: Path to the directory containing the configuration files.
         test_mode: Whether to run in test mode. (default: False)
     """
-    # Use local conf source for Amber
-    if project == "amber":
-        conf_source = AINEKO_CONFIG.get("AMBER_CONF_SOURCE")
 
     runner = Runner(project=project, pipeline=pipeline, conf_source=conf_source)
     runner.run()

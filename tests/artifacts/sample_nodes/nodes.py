@@ -61,7 +61,7 @@ class TestDoublerChecker(AbstractNode):
         """
         self.start_time = time.time()
         self.expected_messages = [4 * i for i in TEST_INPUT]
-        self.report(f"expected messages: {self.expected_messages}")
+        self.log(f"expected messages: {self.expected_messages}")
 
     # pylint: disable=unused-argument
     def _execute(self, params: Optional[dict] = None) -> bool:
@@ -80,7 +80,7 @@ class TestDoublerChecker(AbstractNode):
             return False
         if len(self.expected_messages) == 0:
             self.log("All messages received")
-            self.report("Checker node completed successfully")
+            self.log("Checker node completed successfully")
             return False
 
         # Read message from consumer

@@ -1,5 +1,0 @@
-metrics:
-  type: kafka_stream
-
-alerts:
-  type: kafka_stream
