@@ -184,9 +184,9 @@ class Runner:
             }
 
             wrapped_class = ray.remote(target_class)
-            wrapped_class.options(**actor_params).remote()
-            running_class = wrapped_class.remote()
-            actors.append(running_class)
+            wrapped_class.options(**actor_params)
+            actor_handle = wrapped_class.remote()
+            actors.append(actor_handle)
 
             # 2. Setup input and output datasets, incl logging and reporting
             outputs = node_config.get("outputs", [])

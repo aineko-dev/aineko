@@ -8,8 +8,6 @@ import pytest
 
 from aineko import AbstractNode, ConfigLoader, Runner
 
-# Global variables.
-
 
 @pytest.fixture(scope="module")
 def conf_directory():

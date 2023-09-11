@@ -1,0 +1,11 @@
+integration_test:
+
+  default_node_params:
+    num_cpus: 0.5
+
+  nodes:
+    sequence:
+      class: tests.integration.test_runner_with_kafka.Counter
+      outputs:
+        - count
+
