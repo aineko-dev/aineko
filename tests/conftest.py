@@ -7,10 +7,8 @@ import time
 from typing import Optional
 
 import pytest
-import ray
 
 from aineko import AbstractNode, ConfigLoader, Runner
-from aineko.config import AINEKO_CONFIG
 
 # Global variables.
 
