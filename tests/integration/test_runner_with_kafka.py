@@ -21,15 +21,14 @@ class Counter(AbstractNode):
         if self.counter < self.limit:
             self.producers["count"].produce(self.counter)
             self.counter += 1
-            time.sleep(0.2)
+            time.sleep(0.1)
         else:
             self.producers["count"].produce("END")
             return False
         
     def _post_loop_hook(self, params: Optional[dict] = None) -> None:
-        time.sleep(2)
+        time.sleep(1)
         self.activate_poison_pill()
-        print("Poison pill activated")
 
 def test_integation_pipeline():
     runner = Runner(

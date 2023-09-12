@@ -21,21 +21,13 @@ class NodeManager(AbstractNode):
     def _execute(self, params: Optional[dict] = None) -> None:
         """Kills all other nodes."""
         # Sleep to prevent high CPU usage
-        time.sleep(1)
+        time.sleep(0.1)
         # Explicitly accept True to prevent accidents
         if ray.get(self.poison_pill.get_state.remote()) is True:
-            print("Killing nodes")
-            self.kill_all_nodes()
+            self.log("Poison pill activated, killing all nodes.")
+            ray.shutdown()
 
     def add_actor(self, actor_name: str, actor_handle: ray.actor.ActorHandle) -> None:
         """Add actor to actors attribute."""
         self.actors[actor_name] = actor_handle
 
-    def kill_all_nodes(self):
-        """Poison pill method to kill all nodes in pipeline."""
-        for node_name, node in self.actors.items():
-            ray.kill(node)
-            self.log(f"Killed node {node_name}", level="critical")
-            print(f"Killed node {node_name}")
-            self.actors.pop(node_name)
-        ray.shutdown()

@@ -75,10 +75,6 @@ class Runner:
         # Create each node (actor)
         nodes, results = self.prepare_nodes(pipeline_config=pipeline_config, poison_pill=poison_pill)
 
-        # Add all actor handles to Node Manager
-        for node_name, actor_handle in nodes.items():
-            nodes[NODE_MANAGER_CONFIG.get("NAME")].add_actor.remote(node_name, actor_handle)
-
         ray.get(results)
 
     def load_pipeline_config(self) -> dict:
