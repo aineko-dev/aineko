@@ -5,15 +5,20 @@ pipeline and is responsible for the following tasks:
  - Killing the ray instance when the poison pill is activated
 """
 
-from typing import Optional
-import ray
 import time
+from typing import Optional
+
+import ray
+
 from aineko.core.node import AbstractNode
+
 
 class NodeManager(AbstractNode):
     """Manages all other nodes in pipeline."""
 
-    def __init__(self, poison_pill: ray.actor.ActorHandle, test: bool = False) -> None:
+    def __init__(
+        self, poison_pill: ray.actor.ActorHandle, test: bool = False
+    ) -> None:
         """Initialize dict of actor handles."""
         super().__init__(poison_pill, test)
         self.actors = {}
@@ -27,7 +32,8 @@ class NodeManager(AbstractNode):
             self.log("Poison pill activated, killing all nodes.")
             ray.shutdown()
 
-    def add_actor(self, actor_name: str, actor_handle: ray.actor.ActorHandle) -> None:
+    def add_actor(
+        self, actor_name: str, actor_handle: ray.actor.ActorHandle
+    ) -> None:
         """Add actor to actors attribute."""
         self.actors[actor_name] = actor_handle
-

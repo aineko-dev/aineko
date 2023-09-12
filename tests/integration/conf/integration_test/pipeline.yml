@@ -5,6 +5,6 @@ integration_test:
 
   nodes:
     sequence:
-      class: tests.integration.test_runner_with_kafka.Counter        
+      class: tests.integration.test_runner_with_kafka.IntegerWriter
       outputs:
         - count

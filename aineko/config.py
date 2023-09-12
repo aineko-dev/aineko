@@ -104,6 +104,8 @@ class AINEKO_CONFIG(BaseConfig):
 
 
 class NODE_MANAGER_CONFIG(BaseConfig):
+    """Node Manager configuration."""
+
     # Name to call node
     NAME = "node_manager"
 
@@ -116,4 +118,3 @@ class NODE_MANAGER_CONFIG(BaseConfig):
     NODE_CONFIG = {
         "class": "aineko.core.node_manager.NodeManager",
     }
-

@@ -1,7 +1,8 @@
 """Node base class and poison pill global actor.
 
 Global variables that can be accessed by multiple nodes
-should be stored in an actor instance (see https://stackoverflow.com/questions/67457237/share-object-between-actors-in-ray).
+should be stored in an actor instance (see 
+https://stackoverflow.com/questions/67457237/share-object-between-actors-in-ray).
 The PoisonPill actor stores the boolean value that represents
 if it should be activated or not. Upon activation, the Node Manager
 will kill the entire pipeline. All nodes have access to this variable,
@@ -14,13 +15,14 @@ that users should override with their own implementation.
 import time
 import traceback
 from abc import ABC, abstractmethod
-import ray
 from typing import Dict, List, Optional
 
+import ray
+
 from aineko.config import (
+    AINEKO_CONFIG,
     DEFAULT_KAFKA_CONFIG,
     TESTING_NODE_CONFIG,
-    AINEKO_CONFIG
 )
 from aineko.core.dataset import (
     DatasetConsumer,
@@ -33,17 +35,21 @@ from aineko.core.dataset import (
 @ray.remote
 class PoisonPill:
     """Global variable accessible to every node in pipeline.
-    
+
     This is the recommended approach to share objects between
-    Ray Actors. See: 
+    Ray Actors. See:
     """
+
     def __init__(self):
+        """Poison pill initializes with unactivated state."""
         self.state = False
 
     def activate(self):
+        """Activate poison pill by setting state as True."""
         self.state = True
 
     def get_state(self):
+        """Gets poison pill state."""
         return self.state
 
 
@@ -72,7 +78,9 @@ class AbstractNode(ABC):
         _execute: execute the node, to be implemented by subclasses
     """
 
-    def __init__(self, poison_pill: ray.actor.ActorHandle, test: bool = False) -> None:
+    def __init__(
+        self, poison_pill: ray.actor.ActorHandle, test: bool = False
+    ) -> None:
         """Initialize the node."""
         self.last_heartbeat = time.time()
         self.consumers: Dict = {}
@@ -227,7 +235,6 @@ class AbstractNode(ABC):
 
         self.log(f"Execution loop complete for node: {self.__class__.__name__}")
         self._post_loop_hook(params)
-
 
     def activate_poison_pill(self) -> None:
         """Activates poison pill, shutting down entire pipeline."""

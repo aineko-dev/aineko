@@ -53,7 +53,7 @@ class DatasetConsumer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: Optional[Dict[str, Any]] = {},
+        dataset_config: Dict[str, Any],
         broker: Optional[str] = None,
     ):
         """Initialize the consumer.
@@ -143,7 +143,7 @@ class DatasetConsumer:
             raise ValueError(f"Invalid how: {how}. Expecected 'next'.")
 
         return message
-    
+
     def consume_all(self, end_message: str | bool = False) -> list:
         """Reads all messages from the dataset until a specific one is found.
 

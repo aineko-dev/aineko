@@ -5,10 +5,14 @@ from typing import Optional
 import ray
 from confluent_kafka.admin import AdminClient, NewTopic
 
-from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG, NODE_MANAGER_CONFIG
+from aineko.config import (
+    AINEKO_CONFIG,
+    DEFAULT_KAFKA_CONFIG,
+    NODE_MANAGER_CONFIG,
+)
 from aineko.core.config_loader import ConfigLoader
-from aineko.utils import imports
 from aineko.core.node import PoisonPill
+from aineko.utils import imports
 
 
 class Runner:
@@ -68,10 +72,14 @@ class Runner:
         poison_pill = PoisonPill.remote()
 
         # Add Node Manager to pipeline config
-        pipeline_config["nodes"][NODE_MANAGER_CONFIG.get("NAME")] = NODE_MANAGER_CONFIG.get("NODE_CONFIG")
+        pipeline_config["nodes"][
+            NODE_MANAGER_CONFIG.get("NAME")
+        ] = NODE_MANAGER_CONFIG.get("NODE_CONFIG")
 
         # Create each node (actor)
-        nodes, results = self.prepare_nodes(pipeline_config=pipeline_config, poison_pill=poison_pill)
+        results = self.prepare_nodes(
+            pipeline_config=pipeline_config, poison_pill=poison_pill
+        )
 
         ray.get(results)
 
@@ -164,8 +172,10 @@ class Runner:
 
         return datasets
 
-    def prepare_nodes(self, pipeline_config: dict, poison_pill: ray.actor.ActorHandle) -> list:
-        """Prepare actor handles for all nodes
+    def prepare_nodes(
+        self, pipeline_config: dict, poison_pill: ray.actor.ActorHandle
+    ) -> list:
+        """Prepare actor handles for all nodes.
 
         Args:
             pipeline_config: pipeline configuration
@@ -174,8 +184,7 @@ class Runner:
             dict: mapping of node names to actor handles
             list: list of ray objects
         """
-        # Collect all actor handles and actor futures
-        nodes = {}
+        # Collect all  actor futures
         results = []
 
         default_node_config = pipeline_config.get("default_node_params", {})
@@ -219,6 +228,5 @@ class Runner:
                     params=node_config.get("class_params", None)
                 )
             )
-            nodes[node_name] = actor_handle
 
-        return nodes, results
+        return results

@@ -89,11 +89,12 @@ jobs:
           poetry run pre-commit install
           poetry run pre-commit run --all
       - run: >
-          poetry run pytest 
-          --cov=<< parameters.prj_dir >> << parameters.test_dir >> 
+          poetry run pytest
+          --cov=<< parameters.prj_dir >> << parameters.test_dir >>
           --ignore=tests/integration
       - run:
           name: mypy
           command: |
-            poetry run mypy --install-types --non-interactive << parameters.prj_dir >>
+            poetry run mypy --install-types \
+            --non-interactive << parameters.prj_dir >>
             poetry run mypy << parameters.prj_dir >>
