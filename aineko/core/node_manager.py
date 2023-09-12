@@ -2,7 +2,7 @@
 
 The Node Manager is a special node that exists in every
 pipeline and is responsible for the following tasks:
- - Killing all other nodes
+ - Killing the ray instance when the poison pill is activated
 """
 
 from typing import Optional

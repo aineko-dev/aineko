@@ -1,4 +1,16 @@
-"""Node base class."""
+"""Node base class and poison pill global actor.
+
+Global variables that can be accessed by multiple nodes
+should be stored in an actor instance (see https://stackoverflow.com/questions/67457237/share-object-between-actors-in-ray).
+The PoisonPill actor stores the boolean value that represents
+if it should be activated or not. Upon activation, the Node Manager
+will kill the entire pipeline. All nodes have access to this variable,
+and can activate it by calling the `activate_poison_pill` method.
+
+The AbstractNode class is the parent class for all Aineko pipeline nodes.
+It contains  helper methods for setup, util methods, and dummy methods
+that users should override with their own implementation.
+"""
 import time
 import traceback
 from abc import ABC, abstractmethod
@@ -24,7 +36,6 @@ class PoisonPill:
     
     This is the recommended approach to share objects between
     Ray Actors. See: 
-    https://stackoverflow.com/questions/67457237/share-object-between-actors-in-ray
     """
     def __init__(self):
         self.state = False

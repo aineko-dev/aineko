@@ -1,5 +1,5 @@
 """Tests that runner is able to generate a pipeline that works
-with a kafka service running in the background.
+with a kafka zookeeper and broker service available.
 """
 
 from aineko.core.node import AbstractNode
@@ -27,10 +27,20 @@ class Counter(AbstractNode):
             return False
         
     def _post_loop_hook(self, params: Optional[dict] = None) -> None:
+        """Activate the poison pill upon execute completion."""
         time.sleep(1)
         self.activate_poison_pill()
 
 def test_integation_pipeline():
+    """Integration test to check that nodes can write to kafka.
+    
+    First set up the integration test pipeline run it, making use
+    of the poison pill function take down the pipeline once
+    all messages are sent.
+
+    Next, create a consumer to read all messages directly from the
+    kafka topic and check that the messages match what was sent.
+    """
     runner = Runner(
         project = "integration_test",
         pipeline = "integration_test",

@@ -1,4 +1,4 @@
-"""Module to run a pipeline."""
+"""Submodule that handles the running of a pipeline from config."""
 import time
 from typing import Optional
 
@@ -12,9 +12,7 @@ from aineko.core.node import PoisonPill
 
 
 class Runner:
-    """Runner class orchestrates the loading of config.
-
-    Creates the datasets and starts the Ray nodes.
+    """Runs the pipeline described in the config.
 
     Args:
         project (str): Name of the project
@@ -49,7 +47,7 @@ class Runner:
 
         Step 2: Set up datasets
 
-        Step 3: Set up PoisonPill node that is shared to all other nodes
+        Step 3: Set up PoisonPill node that is available to all nodes
 
         Step 4: Set up nodes (including Node Manager)
         """
@@ -116,7 +114,6 @@ class Runner:
         ] = {
             "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
             "params": DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            "remote": True,
         }
 
         # Create all dataset defined in the catalog
@@ -168,7 +165,7 @@ class Runner:
         return datasets
 
     def prepare_nodes(self, pipeline_config: dict, poison_pill: ray.actor.ActorHandle) -> list:
-        """Runs the nodes for a given pipeline using Ray.
+        """Prepare actor handles for all nodes
 
         Args:
             pipeline_config: pipeline configuration
@@ -184,8 +181,7 @@ class Runner:
         default_node_config = pipeline_config.get("default_node_params", {})
 
         for node_name, node_config in pipeline_config["nodes"].items():
-            # 1. Initalize actor
-            # Extract the target class for a given node
+            # Initalize actor from specified class in config
             target_class = imports.import_from_string(
                 attr=node_config["class"], kind="class"
             )
@@ -200,7 +196,7 @@ class Runner:
             wrapped_class.options(**actor_params)
             actor_handle = wrapped_class.remote(poison_pill=poison_pill)
 
-            # 2. Setup input and output datasets, incl logging and reporting
+            # Setup input and output datasets, incl logging
             outputs = node_config.get("outputs", [])
             outputs.extend(DEFAULT_KAFKA_CONFIG.get("DATASETS"))
             print(
@@ -217,7 +213,7 @@ class Runner:
                 project=self.project,
             )
 
-            # 3. Create execute future
+            # Create actor future (for execute method)
             results.append(
                 actor_handle.execute.remote(
                     params=node_config.get("class_params", None)
