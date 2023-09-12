@@ -2,11 +2,13 @@
 import time
 import traceback
 from abc import ABC, abstractmethod
+import ray
 from typing import Dict, List, Optional
 
 from aineko.config import (
     DEFAULT_KAFKA_CONFIG,
     TESTING_NODE_CONFIG,
+    AINEKO_CONFIG
 )
 from aineko.core.dataset import (
     DatasetConsumer,
@@ -14,6 +16,24 @@ from aineko.core.dataset import (
     FakeDatasetConsumer,
     FakeDatasetProducer,
 )
+
+
+@ray.remote
+class PoisonPill:
+    """Global variable accessible to every node in pipeline.
+    
+    This is the recommended approach to share objects between
+    Ray Actors. See: 
+    https://stackoverflow.com/questions/67457237/share-object-between-actors-in-ray
+    """
+    def __init__(self):
+        self.state = False
+
+    def activate(self):
+        self.state = True
+
+    def get_state(self):
+        return self.state
 
 
 class AbstractNode(ABC):
@@ -31,7 +51,9 @@ class AbstractNode(ABC):
         producers (dict): dict of DatasetProducer objects for outputs of node
         last_hearbeat (float): timestamp of the last heartbeat
         test (bool): True if node is in test mode else False
-        log_levels (tuple): tuple of log levels
+        log_levels (tuple): tuple of allowed log levels
+        local_state (dict): shared local state between nodes. Used for intra-
+            pipeline communication without dataset dependency.
 
     Methods:
         setup_datasets: setup the consumers and producers for a node
@@ -39,14 +61,15 @@ class AbstractNode(ABC):
         _execute: execute the node, to be implemented by subclasses
     """
 
-    def __init__(self, test: bool = False) -> None:
+    def __init__(self, poison_pill: ray.actor.ActorHandle, test: bool = False) -> None:
         """Initialize the node."""
         self.last_heartbeat = time.time()
         self.consumers: Dict = {}
         self.producers: Dict = {}
         self.params: Dict = {}
         self.test = test
-        self.log_levels = ("info", "debug", "warning", "error", "critical")
+        self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")
+        self.poison_pill = poison_pill
 
     def enable_test_mode(self) -> None:
         """Enable test mode."""
@@ -193,6 +216,11 @@ class AbstractNode(ABC):
 
         self.log(f"Execution loop complete for node: {self.__class__.__name__}")
         self._post_loop_hook(params)
+
+
+    def activate_poison_pill(self) -> None:
+        """Activates poison pill, shutting down entire pipeline."""
+        ray.get(self.poison_pill.activate.remote())
 
     @abstractmethod
     def _execute(self, params: dict) -> Optional[bool]:

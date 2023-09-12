@@ -53,7 +53,7 @@ class DatasetConsumer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: Dict[str, Any],
+        dataset_config: Optional[Dict[str, Any]] = {},
         broker: Optional[str] = None,
     ):
         """Initialize the consumer.
@@ -81,10 +81,9 @@ class DatasetConsumer:
             consumer_config["bootstrap.servers"] = broker
 
         # Override default config with dataset specific config
-        if "params" in dataset_config:
-            for param in self.kafka_config.get("CONSUMER_OVERRIDABLES"):
-                if param in dataset_config["params"]:
-                    consumer_config[param] = dataset_config["params"][param]
+        for param, value in dataset_config.get("params", {}).items():
+            if param in self.kafka_config.get("CONSUMER_OVERRIDABLES"):
+                consumer_config[param] = dataset_config["params"][value]
 
         # Add consumer group id based on node name
         consumer_config["group.id"] = f"{self.pipeline_name}.{node_name}"
@@ -144,6 +143,25 @@ class DatasetConsumer:
             raise ValueError(f"Invalid how: {how}. Expecected 'next'.")
 
         return message
+    
+    def consume_all(self, end_message: str | bool = False) -> list:
+        """Reads all messages from the dataset until a specific one is found.
+
+        Args:
+            end_message: Message to trigger the completion of consumption
+
+        Returns:
+            list: list of messages from the dataset
+        """
+        messages = []
+        while True:
+            message = self.consume()
+            if message is None:
+                continue
+            if message["message"] == end_message:
+                break
+            messages.append(message)
+        return messages
 
 
 class DatasetProducer:

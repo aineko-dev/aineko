@@ -5,9 +5,10 @@ from typing import Optional
 import ray
 from confluent_kafka.admin import AdminClient, NewTopic
 
-from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
+from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG, NODE_MANAGER_CONFIG
 from aineko.core.config_loader import ConfigLoader
 from aineko.utils import imports
+from aineko.core.node import PoisonPill
 
 
 class Runner:
@@ -46,18 +47,39 @@ class Runner:
 
         Step 1: Load config for pipeline
 
-        Step 2: Set up dataset for each edge
+        Step 2: Set up datasets
 
-        Step 3: Set up nodes (including Node Manager) and run
+        Step 3: Set up PoisonPill node that is shared to all other nodes
+
+        Step 4: Set up nodes (including Node Manager)
         """
-        # Step 1: load pipeline config
+        # Load pipeline config
         pipeline_config = self.load_pipeline_config()
 
-        # Step 2: Create the necessary datasets
+        # Create the necessary datasets
         self.prepare_datasets(pipeline_config=pipeline_config)
 
-        # Step 3: Create and execute each node
-        self.run_nodes(pipeline_config=pipeline_config)
+        # Initialize ray cluster
+        ray.shutdown()
+        ray.init(
+            namespace=self.pipeline,
+            _metrics_export_port=AINEKO_CONFIG.get("RAY_METRICS_PORT"),
+        )
+
+        # Create poison pill actor
+        poison_pill = PoisonPill.remote()
+
+        # Add Node Manager to pipeline config
+        pipeline_config["nodes"][NODE_MANAGER_CONFIG.get("NAME")] = NODE_MANAGER_CONFIG.get("NODE_CONFIG")
+
+        # Create each node (actor)
+        nodes, results = self.prepare_nodes(pipeline_config=pipeline_config, poison_pill=poison_pill)
+
+        # Add all actor handles to Node Manager
+        for node_name, actor_handle in nodes.items():
+            nodes[NODE_MANAGER_CONFIG.get("NAME")].add_actor.remote(node_name, actor_handle)
+
+        ray.get(results)
 
     def load_pipeline_config(self) -> dict:
         """Loads the config for a given pipeline and project.
@@ -149,24 +171,19 @@ class Runner:
 
         return datasets
 
-    def run_nodes(self, pipeline_config: dict) -> list:
+    def prepare_nodes(self, pipeline_config: dict, poison_pill: ray.actor.ActorHandle) -> list:
         """Runs the nodes for a given pipeline using Ray.
 
         Args:
             pipeline_config: pipeline configuration
 
         Returns:
+            dict: mapping of node names to actor handles
             list: list of ray objects
         """
-        # Initialize ray cluster
-        ray.init(
-            namespace=self.pipeline,
-            _metrics_export_port=AINEKO_CONFIG.get("RAY_METRICS_PORT"),
-        )
-
-        # Run each node and collect result futures
+        # Collect all actor handles and actor futures
+        nodes = {}
         results = []
-        actors = {}
 
         default_node_config = pipeline_config.get("default_node_params", {})
 
@@ -185,8 +202,7 @@ class Runner:
 
             wrapped_class = ray.remote(target_class)
             wrapped_class.options(**actor_params)
-            actor_handle = wrapped_class.remote()
-            actors[node_name] = actor_handle
+            actor_handle = wrapped_class.remote(poison_pill=poison_pill)
 
             # 2. Setup input and output datasets, incl logging and reporting
             outputs = node_config.get("outputs", [])
@@ -205,11 +221,12 @@ class Runner:
                 project=self.project,
             )
 
-            # 3. Execute the node
+            # 3. Create execute future
             results.append(
                 actor_handle.execute.remote(
                     params=node_config.get("class_params", None)
                 )
             )
+            nodes[node_name] = actor_handle
 
-        return ray.get(results)
+        return nodes, results
