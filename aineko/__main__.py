@@ -1,6 +1,7 @@
 """Aineko command line interface."""
 import argparse
 
+from aineko import __version__
 from aineko.cli.run import main as run_main
 from aineko.cli.validate import main as validate_main
 from aineko.cli.visualize import (
@@ -15,6 +16,9 @@ def _cli() -> None:
         prog="aineko",
         description="Aineko is a framework for building data intensive "
         "applications.",
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
     )
 
     subparsers = parser.add_subparsers(dest="command")
