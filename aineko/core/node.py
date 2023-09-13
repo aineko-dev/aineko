@@ -1,7 +1,7 @@
 """Node base class and poison pill global actor.
 
 Global variables that can be accessed by multiple nodes
-should be stored in an actor instance (see 
+should be stored in an actor instance (see
 https://stackoverflow.com/questions/67457237/share-object-between-actors-in-ray).
 The PoisonPill actor stores the boolean value that represents
 if it should be activated or not. Upon activation, the Node Manager
