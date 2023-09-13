@@ -57,6 +57,7 @@ def test_write_to_kafka():
             dataset_name="count",
             node_name="consumer",
             pipeline_name="integration_test",
+            dataset_config={},
         )
         count_messages = consumer.consume_all(end_message="END")
         count_values = [msg["message"] for msg in count_messages]
