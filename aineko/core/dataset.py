@@ -18,7 +18,7 @@ e.g. message:
 """
 import ast
 import datetime
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 from confluent_kafka import Consumer, Message, Producer
 
