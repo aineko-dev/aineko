@@ -69,7 +69,7 @@ class Runner:
         )
 
         # Create poison pill actor
-        poison_pill = PoisonPill.remote()
+        poison_pill = ray.remote(PoisonPill).remote()
 
         # Add Node Manager to pipeline config
         pipeline_config["nodes"][
@@ -78,7 +78,8 @@ class Runner:
 
         # Create each node (actor)
         results = self.prepare_nodes(
-            pipeline_config=pipeline_config, poison_pill=poison_pill
+            pipeline_config=pipeline_config,
+            poison_pill=poison_pill,  # type: ignore
         )
 
         ray.get(results)

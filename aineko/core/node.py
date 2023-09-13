@@ -32,7 +32,6 @@ from aineko.core.dataset import (
 )
 
 
-@ray.remote
 class PoisonPill:
     """Global variable accessible to every node in pipeline.
 
@@ -40,15 +39,15 @@ class PoisonPill:
     Ray Actors. See:
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Poison pill initializes with unactivated state."""
         self.state = False
 
-    def activate(self):
+    def activate(self) -> None:
         """Activate poison pill by setting state as True."""
         self.state = True
 
-    def get_state(self):
+    def get_state(self) -> bool:
         """Gets poison pill state."""
         return self.state
 

@@ -123,7 +123,7 @@ class DatasetConsumer:
         self,
         how: str = "next",
         timeout: Optional[int] = None,
-    ) -> Optional[Union[dict, list]]:
+    ) -> Optional[dict]:
         """Reads a message from the dataset.
 
         Args:
