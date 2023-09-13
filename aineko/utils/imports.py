@@ -9,7 +9,7 @@ def import_from_string(  # type: ignore[no-untyped-def]
     kind: str,
     reqd_params: Optional[list] = None,
     ret_type: Optional[Any] = None,
-):
+):  
     """Get a function from a string.
 
     Args:
@@ -44,6 +44,8 @@ def import_from_string(  # type: ignore[no-untyped-def]
 
     # Import attribute from module
     module_name, attr_name = attr.rsplit(".", 1)
+    print("ATTR: ", attr)
+
     module = importlib.import_module(module_name)
     imported_attr = getattr(module, attr_name)
 

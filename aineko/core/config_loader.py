@@ -31,22 +31,26 @@ class ConfigLoader:
 
     def __init__(
         self,
+        pipeline_path: str = "",
+        catalog_path: str = "", 
         project: Optional[Union[str, list]] = None,
         conf_source: Optional[str] = None,
     ):
         """Initialize ConfigLoader."""
+        self.pipeline_path = pipeline_path
+        self.catalog_path = catalog_path 
         self.conf_source = conf_source or AINEKO_CONFIG.get("CONF_SOURCE")
-
-        # Enforce self.project is a list of project strings
-        if isinstance(project, str):
-            self.project = [project]
-        elif not isinstance(project, list):
-            raise ValueError(
-                f"Project must be a string or list of strings/dicts. "
-                f"Got {type(project)}"
-            )
-        else:
-            self.project = project
+        # print("SELF.CONF_SOURCE: ", self.conf_source)
+        # # Enforce self.project is a list of project strings
+        # if isinstance(project, str):
+        #     self.project = [project]
+        # elif not isinstance(project, list):
+        #     raise ValueError(
+        #         f"Project must be a string or list of strings/dicts. "
+        #         f"Got {type(project)}"
+        #     )
+        # else:
+        #     self.project = project
 
         # Setup config schema
         self.config_schema = Schema(
@@ -72,8 +76,6 @@ class ConfigLoader:
                             optional("params"): dict,
                         },
                     },
-                    # Local params
-                    "local_params": dict,
                 },
             },
         )
@@ -217,71 +219,41 @@ class ConfigLoader:
         """
         # Load config for each project
         config = {}
-        for project in self.project:
-            if isinstance(project, dict):
-                project, pipelines = (
-                    list(project.keys())[0],
-                    list(project.values())[0],  # type: ignore
-                )
-            else:
-                pipelines = None
-            # 1. Setup config file search parameters based on project
-            base_config_file_pattern = f"{self.conf_source}/base/*.yml"
-            project_config_file_pattern = f"{self.conf_source}/{project}/*.yml"
-            config_search_params = {
-                "catalog": {
-                    "dirs": [
-                        base_config_file_pattern,
-                        project_config_file_pattern,
-                    ],
-                    "only_names": ["catalog"],
-                },
-                "pipeline": {
-                    "dirs": [
-                        base_config_file_pattern,
-                        project_config_file_pattern,
-                    ],
-                    "except_names": ["catalog"],
-                },
-                "local_params": {
-                    "dirs": [f"{self.conf_source}/local/*.yml"],
-                },
-            }
 
-            # 2. Fetch locations for all necessary config files for project
-            config_files = {
-                conf: self._find_config_files(**params)
-                for conf, params in config_search_params.items()
-            }
+        config_files = {
+            'catalog': [self.catalog_path], 'pipeline': [self.pipeline_path]  
+        }
 
-            # 3. Load all config files into an aggregated dictionary
-            agg_config = {
-                conf: load_yamls(files) for conf, files in config_files.items()
-            }
+        print("CONFIG FILES: ", config_files)
 
-            # 4. Generate config for all project pipelines
-            project_config = self._gen_project_config(agg_config)
+        # 3. Load all config files into an aggregated dictionary
+        agg_config = {
+            conf: load_yamls(files) for conf, files in config_files.items()
+        }
 
-            # 5. Filter pipelines if specified
-            filtered_project_config = self._filter_pipelines(
-                project_config, pipelines
+        print("AGG_CONFIG: ", agg_config)
+
+        # 4. Generate config for all project pipelines
+        project_config = self._gen_project_config(agg_config)
+
+        print("PROJECT_CONFIG: ", project_config)
+
+        # 6. Validate config against schema
+        try:
+            self._validate_config_schema(
+                project_config=project_config
             )
-            # 6. Validate config against schema
-            try:
-                self._validate_config_schema(
-                    project_config=filtered_project_config
-                )
-            except SchemaError as e:
-                raise SchemaError(
-                    f"Schema validation failed for project `{project}`."
-                    f"Config files loaded from {project_config_file_pattern} "
-                    f"returned {filtered_project_config}."
-                ) from e
+        except SchemaError as e:
+        
+            raise SchemaError(
+                f"Exception: {str(e)}\n"
+                f"Schema validation failed for project `{project}`."
+                f"Config files loaded from {self.pipeline_path} and {self.catalog_path} "
+                f"returned {project_config}."
+            ) from e
 
-            # Add project config to config
-            config.update({project: filtered_project_config})
-
-        return config
+        # Add project config to config
+        return project_config
 
     def _find_config_files(
         self,
@@ -379,14 +351,12 @@ class ConfigLoader:
                         "nodes": self._update_params(
                             pipeline_conf["nodes"], run_params
                         ),
-                        "local_params": agg_config["local_params"],
                     }
             else:
                 # Add pipeline config for the pipeline to the project config
                 config[pipeline_name] = {
                     "catalog": trimmed_catalog,
                     "nodes": pipeline_conf["nodes"],
-                    "local_params": agg_config["local_params"],
                 }
 
         return config
@@ -491,6 +461,7 @@ class ConfigLoader:
         Returns:
             True if config is valid
         """
+        print("PROJECT_CONFIG: ", project_config)
         self.config_schema.validate(project_config)
         return True
 

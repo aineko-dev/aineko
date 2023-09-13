@@ -9,7 +9,6 @@ from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 from aineko.core.config_loader import ConfigLoader
 from aineko.utils import imports
 
-
 class Runner:
     """Runner class orchestrates the loading of config.
 
@@ -30,15 +29,15 @@ class Runner:
 
     def __init__(
         self,
-        project: str,
         pipeline: str,
-        conf_source: Optional[str] = None,
+        pipline_config_path: str, 
+        catalog_config_path: str, 
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
     ):
         """Initializes the runner class."""
-        self.project = project
         self.pipeline = pipeline
-        self.conf_source = conf_source
+        self.pipeline_config_path = pipline_config_path, 
+        self.catalog_config_path = catalog_config_path,
         self.kafka_config = kafka_config
 
     def run(self) -> None:
@@ -52,6 +51,7 @@ class Runner:
         """
         # Step 1: load pipeline config
         pipeline_config = self.load_pipeline_config()
+        print("PIPELINE_CONFIG: ", pipeline_config)
 
         # Step 2: Create the necessary datasets
         self.prepare_datasets(pipeline_config=pipeline_config)
@@ -66,9 +66,10 @@ class Runner:
             pipeline config
         """
         config = ConfigLoader(
-            project=self.project, conf_source=self.conf_source
+            pipeline_path=self.pipeline_config_path, 
+            catalog_path=self.catalog_config_path,
         ).load_config()
-        return config[self.project][self.pipeline]
+        return config[self.pipeline]
 
     def prepare_datasets(self, pipeline_config: dict) -> bool:
         """Creates the required datasets for a given pipeline.
