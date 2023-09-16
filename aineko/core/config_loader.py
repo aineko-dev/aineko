@@ -70,6 +70,54 @@ class ConfigLoader:
             },
         )
 
+    def load_config(self) -> dict:
+        """Load config for project(s) from yaml files.
+
+        Load the config from the specified pipeline config. If runs detected,
+        create all runs and filter out the selected one. Will only return config
+        for a single pipeline.
+
+        Example:
+                {
+                    "pipeline": {
+                        "name": ...,
+                        "nodes": {...},
+                        "datasets": {...}
+                    },
+                }
+
+        Raises:
+            ValueError: If project is not a string or list of strings
+
+        Returns:
+            Config for each project (dict keys are project names)
+        """
+        config = load_yamls(self.pipeline_config_file)
+
+        if "runs" in config["pipeline"]:
+            configs = {}
+            for run_name, run_params in config["pipeline"]["runs"].items():
+                configs[run_name] = self._update_params(config, run_params)
+                configs[run_name]["pipeline"]["name"] = run_name
+            try:
+                config = configs[self.pipeline]
+            except KeyError:
+                raise KeyError(
+                    f"Specified pipeline `{self.pipeline}` not in pipelines "
+                    f"found in config: {list(configs)}."
+                )
+            config["pipeline"].pop("runs")
+
+        try:
+            self._validate_config_schema(project_config=config)
+        except SchemaError as e:
+            raise SchemaError(
+                f"Schema validation failed for pipeline `{config['pipeline']['name']}`."
+                f"Config files loaded from {self.pipeline_config_file} "
+                f"returned {config}."
+            ) from e
+        return config
+
     def compare_data_code_and_catalog(
         self, catalog_datasets: Set[str], code_datasets: Set[str]
     ) -> dict:
@@ -171,58 +219,6 @@ class ConfigLoader:
             all_consumers.extend(consumers)
         return set(all_producers).union(set(all_consumers))
 
-    def load_config(self) -> dict:
-        """Load config for project(s) from yaml files.
-
-        Load the config from the specified pipeline config. If runs detected,
-        create all runs and filter out the selected one. Will only return config
-        for a single pipeline.
-
-        Example:
-                {
-                    "pipeline": {
-                        "name": ...,
-                        "nodes": {...},
-                        "datasets": {...}
-                    },
-                }
-
-        Raises:
-            ValueError: If project is not a string or list of strings
-
-        Returns:
-            Config for each project (dict keys are project names)
-        """
-        config = load_yamls(self.pipeline_config_file)
-
-        if "runs" in config:
-            configs = {}
-            for run_name, run_params in config["runs"].items():
-                configs[run_name] = self._update_params(config, run_params)
-                configs[run_name]["pipeline"]["name"] = run_name
-
-            try:
-                config = configs[self.pipeline]
-            except KeyError:
-                raise KeyError(
-                    f"Specified pipeline `{self.pipeline}` not in pipelines "
-                    f"found in config: {list(configs)}."
-                )
-            # Replace pipeline name with run name
-            config["pipeline"]["name"] = run_name
-            config.pop("runs")
-
-        try:
-            self._validate_config_schema(project_config=config)
-        except SchemaError as e:
-            raise SchemaError(
-                f"Schema validation failed for pipeline `{config['pipeline']['name']}`."
-                f"Config files loaded from {self.pipeline_config_file} "
-                f"returned {config}."
-            ) from e
-
-        return config
-
     def _find_config_files(
         self,
         dirs: list,
@@ -290,46 +286,6 @@ class ConfigLoader:
         """
         dirs = [os.path.join(project_dir, "*.py")]
         return self._find_config_files(dirs, only_names, except_names)
-
-    def _gen_project_config(self, agg_config: dict) -> dict:
-        """Generate config for each pipeline in the project.
-
-        If pipeline has runs, create a config for each run.
-
-        Args:
-            agg_config: Aggregated project config
-            project: Project name
-
-        Returns:
-            project config
-        """
-        config = {}
-        for pipeline_name, pipeline_conf in agg_config["pipeline"].items():
-            # Reduce list of datasets to only include datasets used in the pipeline
-            trimmed_datasets = self._trim_catalog(
-                agg_config["datasets"], pipeline_conf["nodes"]
-            )
-            if "runs" in pipeline_conf:
-                # Add pipeline config for each run to the project config
-                for run_name, run_params in pipeline_conf["runs"].items():
-                    config[run_name] = {
-                        "datasets": self._update_params(
-                            trimmed_catalog, run_params
-                        ),
-                        "nodes": self._update_params(
-                            pipeline_conf["nodes"], run_params
-                        ),
-                        "local_params": agg_config["local_params"],
-                    }
-            else:
-                # Add pipeline config for the pipeline to the project config
-                config[pipeline_name] = {
-                    "catalog": trimmed_catalog,
-                    "nodes": pipeline_conf["nodes"],
-                    "local_params": agg_config["local_params"],
-                }
-
-        return config
 
     @staticmethod
     def get_datasets_for_pipeline_nodes(pipeline_config: dict) -> set:
