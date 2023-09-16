@@ -25,23 +25,16 @@ def _cli() -> None:
 
     run_parser = subparsers.add_parser("run", help="Run a pipeline")
     run_parser.add_argument(
-        "-p",
-        "--project_name",
-        help="Name of the project",
+        "-c",
+        "--pipeline_config_file",
+        help="Path to the config file containing pipeline config.",
         type=str,
         required=True,
     )
     run_parser.add_argument(
-        "-pi",
+        "-p",
         "--pipeline_name",
         help="Name of the pipeline",
-        type=str,
-        required=True,
-    )
-    run_parser.add_argument(
-        "-c",
-        "--conf_source",
-        help="Path to the directory containing the configuration files.",
         type=str,
         default=None,
         nargs="?",
@@ -119,9 +112,8 @@ def _cli() -> None:
 
     if args.command == "run":
         run_main(
-            project=args.project_name,
+            pipeline_config_file=args.pipeline_config_file,
             pipeline=args.pipeline_name,
-            conf_source=args.conf_source,
         )
     elif args.command == "visualize":
         graph = build_mermaid_from_yaml(

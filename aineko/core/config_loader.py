@@ -15,13 +15,13 @@ class ConfigLoader:
     """Class to read yaml config files.
 
     Args:
-            project: project name(s) to load config for
-            conf_source: path of configuration files. Defaults
+            pipeline: pipeline name to load config for
+            pipeline_config_file: path of pipeline config file. Defaults
             to DEFAULT_CONF_SOURCE.
 
     Attributes:
-            project (Union[str,list]): project name(s) to load config for
-            conf_source (Union[str,None]): path of configuration files.
+            pipeline (Union[str,list]): pipeline name to load config for
+            pipeline_config_file (Union[str,None]): path to pipeline configuration file.
             config_schema (Schema): schema to validate config against
 
     Methods:
@@ -31,29 +31,23 @@ class ConfigLoader:
 
     def __init__(
         self,
-        project: Optional[Union[str, list]] = None,
-        conf_source: Optional[str] = None,
+        pipeline_config_file: str,
+        pipeline: Optional[str] = None,
     ):
         """Initialize ConfigLoader."""
-        self.conf_source = conf_source or AINEKO_CONFIG.get("CONF_SOURCE")
-
-        # Enforce self.project is a list of project strings
-        if isinstance(project, str):
-            self.project = [project]
-        elif not isinstance(project, list):
-            raise ValueError(
-                f"Project must be a string or list of strings/dicts. "
-                f"Got {type(project)}"
-            )
-        else:
-            self.project = project
+        self.pipeline_config_file = pipeline_config_file or AINEKO_CONFIG.get(
+            "DEFAULT_PIPELINE_CONFIG"
+        )
+        self.pipeline = pipeline
 
         # Setup config schema
         self.config_schema = Schema(
             {
+                # Runs
+                optional("runs"): dict,
                 # Pipeline config
-                str: {
-                    optional("env_vars"): dict,
+                "pipeline": {
+                    "name": str,
                     optional("default_node_params"): dict,
                     # Node config
                     "nodes": {
@@ -65,15 +59,13 @@ class ConfigLoader:
                             optional("outputs"): list,
                         },
                     },
-                    # Catalog config
-                    "catalog": {
+                    # Datasets config
+                    "datasets": {
                         str: {
                             "type": str,
                             optional("params"): dict,
                         },
                     },
-                    # Local params
-                    "local_params": dict,
                 },
             },
         )
@@ -182,30 +174,16 @@ class ConfigLoader:
     def load_config(self) -> dict:
         """Load config for project(s) from yaml files.
 
-        Steps for loading config:
-
-        1. Setup config search params based on project
-
-        2. Search for config files in conf_source
-
-        3. Load all config files into a single config dict (catalog,
-           pipelines, and local params)
-
-        4. Generate config for all pipelines in project
-
-        5. Filter config to only specified pipelines
-
-        6. Validate project config against schema
+        Load the config from the specified pipeline config. If runs detected,
+        create all runs and filter out the selected one. Will only return config
+        for a single pipeline.
 
         Example:
                 {
-                    "project_1": {
-                        "pipeline_1": {...},
-                        "pipeline_2": {...},
-                    },
-                    "project_2": {
-                        "pipeline_1": {...},
-                        "pipeline_2": {...},
+                    "pipeline": {
+                        "name": ...,
+                        "nodes": {...},
+                        "datasets": {...}
                     },
                 }
 
@@ -215,71 +193,33 @@ class ConfigLoader:
         Returns:
             Config for each project (dict keys are project names)
         """
-        # Load config for each project
-        config = {}
-        for project in self.project:
-            if isinstance(project, dict):
-                project, pipelines = (
-                    list(project.keys())[0],
-                    list(project.values())[0],  # type: ignore
-                )
-            else:
-                pipelines = None
-            # 1. Setup config file search parameters based on project
-            base_config_file_pattern = f"{self.conf_source}/base/*.yml"
-            project_config_file_pattern = f"{self.conf_source}/{project}/*.yml"
-            config_search_params = {
-                "catalog": {
-                    "dirs": [
-                        base_config_file_pattern,
-                        project_config_file_pattern,
-                    ],
-                    "only_names": ["catalog"],
-                },
-                "pipeline": {
-                    "dirs": [
-                        base_config_file_pattern,
-                        project_config_file_pattern,
-                    ],
-                    "except_names": ["catalog"],
-                },
-                "local_params": {
-                    "dirs": [f"{self.conf_source}/local/*.yml"],
-                },
-            }
+        config = load_yamls(self.pipeline_config_file)
 
-            # 2. Fetch locations for all necessary config files for project
-            config_files = {
-                conf: self._find_config_files(**params)
-                for conf, params in config_search_params.items()
-            }
+        if "runs" in config:
+            configs = {}
+            for run_name, run_params in config["runs"].items():
+                configs[run_name] = self._update_params(config, run_params)
+                configs[run_name]["pipeline"]["name"] = run_name
 
-            # 3. Load all config files into an aggregated dictionary
-            agg_config = {
-                conf: load_yamls(files) for conf, files in config_files.items()
-            }
-
-            # 4. Generate config for all project pipelines
-            project_config = self._gen_project_config(agg_config)
-
-            # 5. Filter pipelines if specified
-            filtered_project_config = self._filter_pipelines(
-                project_config, pipelines
-            )
-            # 6. Validate config against schema
             try:
-                self._validate_config_schema(
-                    project_config=filtered_project_config
+                config = configs[self.pipeline]
+            except KeyError:
+                raise KeyError(
+                    f"Specified pipeline `{self.pipeline}` not in pipelines "
+                    f"found in config: {list(configs)}."
                 )
-            except SchemaError as e:
-                raise SchemaError(
-                    f"Schema validation failed for project `{project}`."
-                    f"Config files loaded from {project_config_file_pattern} "
-                    f"returned {filtered_project_config}."
-                ) from e
+            # Replace pipeline name with run name
+            config["pipeline"]["name"] = run_name
+            config.pop("runs")
 
-            # Add project config to config
-            config.update({project: filtered_project_config})
+        try:
+            self._validate_config_schema(project_config=config)
+        except SchemaError as e:
+            raise SchemaError(
+                f"Schema validation failed for pipeline `{config['pipeline']['name']}`."
+                f"Config files loaded from {self.pipeline_config_file} "
+                f"returned {config}."
+            ) from e
 
         return config
 
@@ -365,15 +305,15 @@ class ConfigLoader:
         """
         config = {}
         for pipeline_name, pipeline_conf in agg_config["pipeline"].items():
-            # Reduce catalog to only include datasets used in the pipeline
-            trimmed_catalog = self._trim_catalog(
-                agg_config["catalog"], pipeline_conf["nodes"]
+            # Reduce list of datasets to only include datasets used in the pipeline
+            trimmed_datasets = self._trim_catalog(
+                agg_config["datasets"], pipeline_conf["nodes"]
             )
             if "runs" in pipeline_conf:
                 # Add pipeline config for each run to the project config
                 for run_name, run_params in pipeline_conf["runs"].items():
                     config[run_name] = {
-                        "catalog": self._update_params(
+                        "datasets": self._update_params(
                             trimmed_catalog, run_params
                         ),
                         "nodes": self._update_params(
@@ -493,25 +433,6 @@ class ConfigLoader:
         """
         self.config_schema.validate(project_config)
         return True
-
-    @staticmethod
-    def _trim_catalog(catalog: dict, nodes: dict) -> dict:
-        """Trim catalog to only include datasets used in pipeline.
-
-        Args:
-            catalog: catalog to trim
-            nodes: nodes in pipeline
-
-        Returns:
-            trimmed catalog
-        """
-        datasets = set()
-        for node in nodes.values():
-            if "inputs" in node:
-                datasets.update(node["inputs"])
-            if "outputs" in node:
-                datasets.update(node["outputs"])
-        return {k: v for k, v in catalog.items() if k in datasets}
 
     def validate_config_datasets_pipeline_catalog(
         self, pipeline_config: dict

@@ -19,29 +19,25 @@ class Runner:
     """Runs the pipeline described in the config.
 
     Args:
-        project (str): Name of the project
+        pipeline_config_file (str): Path to pipeline config file
         pipeline (str): Name of the pipeline
-        conf_source (str): Path to conf directory
         kafka_config (dict): Config for kafka broker
 
     Attributes:
-        project (str): Name of the project
         pipeline (str): Name of the pipeline
-        conf_source (str): Path to conf directory
+        pipeline_config_file (str): Path to pipeline config file
         kafka_config (dict): Config for kafka broker
     """
 
     def __init__(
         self,
-        project: str,
-        pipeline: str,
-        conf_source: Optional[str] = None,
+        pipeline_config_file: str,
+        pipeline: Optional[str] = None,
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
     ):
         """Initializes the runner class."""
-        self.project = project
         self.pipeline = pipeline
-        self.conf_source = conf_source
+        self.pipeline_config_file = pipeline_config_file
         self.kafka_config = kafka_config
 
     def run(self) -> None:
@@ -85,15 +81,17 @@ class Runner:
         ray.get(results)
 
     def load_pipeline_config(self) -> dict:
-        """Loads the config for a given pipeline and project.
+        """Loads the config for a given pipeline.
 
         Returns:
             pipeline config
         """
         config = ConfigLoader(
-            project=self.project, conf_source=self.conf_source
+            pipeline_config_file=self.pipeline_config_file,
+            pipeline=self.pipeline,
         ).load_config()
-        return config[self.project][self.pipeline]
+
+        return config["pipeline"]
 
     def prepare_datasets(self, pipeline_config: dict) -> bool:
         """Creates the required datasets for a given pipeline.
@@ -112,13 +110,13 @@ class Runner:
 
         # Fail if reserved dataset names are defined in catalog
         for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
-            if reserved_dataset in pipeline_config["catalog"]:
+            if reserved_dataset in pipeline_config["datasets"]:
                 raise ValueError(
                     f"Dataset {reserved_dataset} is reserved for internal use."
                 )
 
         # Add logging dataset to catalog
-        pipeline_config["catalog"][
+        pipeline_config["datasets"][
             DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
         ] = {
             "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
@@ -127,7 +125,7 @@ class Runner:
 
         # Create all dataset defined in the catalog
         dataset_list = []
-        for dataset_name, dataset_config in pipeline_config["catalog"].items():
+        for dataset_name, dataset_config in pipeline_config["datasets"].items():
             print(f"Creating dataset: {dataset_name}: {dataset_config}")
             # Create dataset for kafka streams
             if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
@@ -217,10 +215,9 @@ class Runner:
             actor_handle.setup_datasets.remote(
                 inputs=node_config.get("inputs", None),
                 outputs=outputs,
-                catalog=pipeline_config["catalog"],
+                datasets=pipeline_config["datasets"],
                 node=node_name,
                 pipeline=self.pipeline,
-                project=self.project,
             )
 
             # Create actor future (for execute method)
