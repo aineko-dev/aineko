@@ -5,6 +5,23 @@ import webbrowser
 import yaml
 
 
+def render_mermaid_graph(
+    config_path: str,
+    direction: str = "LR",
+    legend: bool = False,
+    render_in_browser: bool = False,
+):
+    graph = build_mermaid_from_yaml(
+        config_path=config_path, direction=direction, legend=legend
+    )
+    if render_graph_in_browser is True:
+        render_graph_in_browser(graph)
+
+    else:
+        print(graph)
+        print("Pass in `--browser` flag to see it in a more user-friendly format")
+
+
 def build_mermaid_from_yaml(
     config_path: str, direction: str = "LR", legend: bool = False
 ) -> str:
