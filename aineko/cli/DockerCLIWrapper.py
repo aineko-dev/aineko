@@ -26,6 +26,7 @@ class DockerCLIWrapper(object):
             print(output)
         except subprocess.CalledProcessError as e:
             print(f"Error: {e}")
+            print(f"Command Output: {e.output}")
 
     @classmethod
     def stop_service(cls, path: Optional[str]) -> None:
@@ -43,6 +44,7 @@ class DockerCLIWrapper(object):
             print(output)
         except subprocess.CalledProcessError as e:
             print(f"Error: {e}")
+            print(f"Command Output: {e.output}")
 
     @classmethod
     def restart_service(cls, path: Optional[str]) -> None:
@@ -60,6 +62,7 @@ class DockerCLIWrapper(object):
             print(output)
         except subprocess.CalledProcessError as e:
             print(f"Error: {e}")
+            print(f"Command Output: {e.output}")
 
 
     @classmethod

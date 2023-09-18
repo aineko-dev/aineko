@@ -1,25 +1,31 @@
 import subprocess
-from typing import Optional 
-import os 
+from typing import Optional
+import os
 
 
-class KafkaCLIWrapper(object): 
+class KafkaCLIWrapper(object):
     @classmethod
-    def view_dataset(cls, dataset_name: str) -> None:
-
-        command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {dataset_name} --from-beginning"
+    def consume_kafka_topic(cls, topic_name: str, from_beginning: bool) -> None:
+        if from_beginning:
+            command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {topic_name} --from-beginning"
+        else: 
+            command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {topic_name}"
         try:
-            output = subprocess.check_output(command, shell=True, text=True, stderr=subprocess.STDOUT)
-            print(output)
-        except subprocess.CalledProcessError as e:
-            print(f"Error: {e}")
+            process = subprocess.Popen(
+                command,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,  # Line-buffered
+                universal_newlines=True,
+            )
+            for line in process.stdout:
+                print(line.strip())
 
-    @classmethod
-    def stream_dataset(cls, dataset_name: str) -> None:
-
-        command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {dataset_name}"
-        try:
-            output = subprocess.check_output(command, shell=True, text=True, stderr=subprocess.STDOUT)
-            print(output)
+            process.wait()
         except subprocess.CalledProcessError as e:
-            print(f"Error: {e}")
+            print(f"Error running Kafka viewer: {e}")
+            print(f"Command output: {e.output}")
+
+    

@@ -100,7 +100,8 @@ def _cli() -> None:
         help= "Name of dataset",
         required=True
     )
-    view_dataset_parser.set_defaults(func=lambda args: KafkaCLIWrapper.view_dataset(args.dataset))
+    # consume from beginning
+    view_dataset_parser.set_defaults(func=lambda args: KafkaCLIWrapper.consume_kafka_topic(args.dataset, from_beginning=True))
 
     stream_dataset_parser = dataset_subparser.add_parser("stream", help="Stream new messages for the dataset")
     stream_dataset_parser.add_argument(
@@ -109,7 +110,7 @@ def _cli() -> None:
         help="Name of dataset",
         required=True,
     )
-    stream_dataset_parser.set_defaults(func=lambda args: KafkaCLIWrapper.stream_dataset(args.dataset))
+    view_dataset_parser.set_defaults(func=lambda args: KafkaCLIWrapper.consume_kafka_topic(args.dataset, from_beginning=False))
 
     args = parser.parse_args()
     args.func(args)
