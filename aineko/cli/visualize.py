@@ -19,7 +19,9 @@ def render_mermaid_graph(
 
     else:
         print(graph)
-        print("Pass in `--browser` flag to see it in a more user-friendly format")
+        print(
+            "Pass in `--browser` flag to see it in a more user-friendly format"
+        )
 
 
 def build_mermaid_from_yaml(

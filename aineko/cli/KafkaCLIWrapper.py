@@ -8,7 +8,7 @@ class KafkaCLIWrapper(object):
     def consume_kafka_topic(cls, topic_name: str, from_beginning: bool) -> None:
         if from_beginning:
             command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {topic_name} --from-beginning"
-        else: 
+        else:
             command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {topic_name}"
         try:
             process = subprocess.Popen(
@@ -27,5 +27,3 @@ class KafkaCLIWrapper(object):
         except subprocess.CalledProcessError as e:
             print(f"Error running Kafka viewer: {e}")
             print(f"Command output: {e.output}")
-
-    
