@@ -37,12 +37,14 @@ class Runner:
         pipeline: str,
         conf_source: Optional[str] = None,
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
+        metrics_export_port=AINEKO_CONFIG.get("RAY_METRICS_PORT"),
     ):
         """Initializes the runner class."""
         self.project = project
         self.pipeline = pipeline
         self.conf_source = conf_source
         self.kafka_config = kafka_config
+        self.metrics_export_port = metrics_export_port
 
     def run(self) -> None:
         """Runs the pipeline.
@@ -65,7 +67,7 @@ class Runner:
         ray.shutdown()
         ray.init(
             namespace=self.pipeline,
-            _metrics_export_port=AINEKO_CONFIG.get("RAY_METRICS_PORT"),
+            _metrics_export_port=self.metrics_export_port,
         )
 
         # Create poison pill actor
