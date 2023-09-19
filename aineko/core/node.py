@@ -36,7 +36,7 @@ class PoisonPill:
     """Global variable accessible to every node in pipeline.
 
     This is the recommended approach to share objects between
-    Ray Actors. See:
+    Ray Actors.
     """
 
     def __init__(self) -> None:

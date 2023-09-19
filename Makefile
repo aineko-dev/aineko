@@ -10,4 +10,5 @@ unit-test:
 	poetry run pytest --cov aineko --ignore tests/integration tests/
 
 integration-test:
+	docker-compose up -d
 	poetry run pytest tests/integration
