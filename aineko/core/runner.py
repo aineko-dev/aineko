@@ -37,7 +37,7 @@ class Runner:
         pipeline: str,
         conf_source: Optional[str] = None,
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
-        metrics_export_port=AINEKO_CONFIG.get("RAY_METRICS_PORT"),
+        metrics_export_port: int = AINEKO_CONFIG.get("RAY_METRICS_PORT"),
     ):
         """Initializes the runner class."""
         self.project = project
