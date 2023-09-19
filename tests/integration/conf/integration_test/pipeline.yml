@@ -1,0 +1,12 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+integration_test:
+
+  default_node_params:
+    num_cpus: 0.5
+
+  nodes:
+    sequence:
+      class: tests.integration.test_runner_with_kafka.IntegerWriter
+      outputs:
+        - count
