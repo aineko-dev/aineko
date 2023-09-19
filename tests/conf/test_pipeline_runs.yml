@@ -3,10 +3,8 @@ pipeline:
   runs:
     test_run_1:
       start_int: "0"
-      duration: "300"
     test_run_2:
       start_int: "1"
-      duration: "300"
 
   nodes:
     # Test actor with no input, single output, and params
