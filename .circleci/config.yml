@@ -15,8 +15,49 @@ workflows:
       - python-checks:
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
+      - integration-tests:
+          prj_dir: aineko
+          python_version: << pipeline.parameters.python_version >>
+          test_dir: tests/integration
 
 jobs:
+  integration-tests:
+    parameters:
+      python_version:
+        type: string
+        default: "3.10"
+        description: Version of python to use
+      prj_dir:
+        type: string
+        default: $CIRCLE_PROJECT_REPONAME
+        description: Directory of codebase to execute checks
+      test_dir:
+        type: string
+        default: tests
+        description: Test directory
+
+    docker:
+      - image: cimg/python:<< parameters.python_version >>
+      - image: confluentinc/cp-zookeeper:7.3.0
+        name: zookeeper
+        environment:
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
+      - image: confluentinc/cp-kafka:7.3.0
+        environment:
+          KAFKA_BROKER_ID: 1
+          KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+    steps:
+      - checkout
+      - run: poetry install --with test --no-interaction --quiet
+      - run: poetry run pytest << parameters.test_dir >>
+
   python-checks:
     parameters:
       python_version:
@@ -37,7 +78,7 @@ jobs:
 
     steps:
       - checkout
-      - run: poetry install --with dev,test -n -q
+      - run: poetry install --with dev,test --no-interaction --quiet
       - run: poetry run isort << parameters.prj_dir >>
       - run: poetry run black << parameters.prj_dir >> --check
       - run: poetry run pydocstyle << parameters.prj_dir >>
@@ -46,10 +87,13 @@ jobs:
       - run: |
           poetry run pre-commit install
           poetry run pre-commit run --all
-      - run: |
-          poetry run pytest --cov=<< parameters.prj_dir >> << parameters.test_dir >>
+      - run: >
+          poetry run pytest
+          --cov=<< parameters.prj_dir >> << parameters.test_dir >>
+          --ignore=tests/integration
       - run:
           name: mypy
           command: |
-            poetry run mypy --install-types --non-interactive << parameters.prj_dir >>
+            poetry run mypy --install-types \
+            --non-interactive << parameters.prj_dir >>
             poetry run mypy << parameters.prj_dir >>
