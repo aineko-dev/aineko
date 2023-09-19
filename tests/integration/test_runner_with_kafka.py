@@ -47,7 +47,7 @@ def test_write_to_kafka():
     """
     runner = Runner(
         pipeline="integration_test",
-        pipeline_config_file="tests/integration/conf/integration_test.yml",
+        pipeline_config_file="tests/conf/integration_test.yml",
     )
     try:
         runner.run()

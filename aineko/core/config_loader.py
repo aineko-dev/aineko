@@ -1,8 +1,5 @@
 """Module to load config files."""
-import ast
-import glob
-import os
-from typing import Optional, Set, Union
+from typing import Optional, Union, overload
 
 from schema import Optional as optional
 from schema import Schema, SchemaError
@@ -15,18 +12,18 @@ class ConfigLoader:
     """Class to read yaml config files.
 
     Args:
-            pipeline: pipeline name to load config for
-            pipeline_config_file: path of pipeline config file. Defaults
-            to DEFAULT_CONF_SOURCE.
+        pipeline: pipeline name to load config for
+        pipeline_config_file: path of pipeline config file. Defaults
+        to DEFAULT_CONF_SOURCE.
 
     Attributes:
-            pipeline (Union[str,list]): pipeline name to load config for
-            pipeline_config_file (Union[str,None]): path to pipeline configuration file.
-            config_schema (Schema): schema to validate config against
+        pipeline_config_file (str): path to pipeline configuration file
+        pipeline (Union[str,list]): pipeline name to load config for
+        config_schema (Schema): schema to validate config against
 
     Methods:
-            load_config: load config for project(s) from yaml files
-            validate_config: validate config against config_schema
+        load_config: load config for project(s) from yaml files
+        validate_config: validate config against config_schema
     """
 
     def __init__(
@@ -101,262 +98,31 @@ class ConfigLoader:
                 configs[run_name]["pipeline"]["name"] = run_name
             try:
                 config = configs[self.pipeline]
-            except KeyError:
+            except KeyError as exc:
                 raise KeyError(
                     f"Specified pipeline `{self.pipeline}` not in pipelines "
                     f"found in config: {list(configs)}."
-                )
+                ) from exc
             config["pipeline"].pop("runs")
 
         try:
             self._validate_config_schema(project_config=config)
         except SchemaError as e:
             raise SchemaError(
-                f"Schema validation failed for pipeline `{config['pipeline']['name']}`."
+                f"Schema validation failed for pipeline "
+                f"`{config['pipeline']['name']}`."
                 f"Config files loaded from {self.pipeline_config_file} "
                 f"returned {config}."
             ) from e
+
+        # If pipeline name specified, check against config pipeline name
+        if self.pipeline and config["pipeline"]["name"] != self.pipeline:
+            raise KeyError(
+                f"Specified pipeline `{self.pipeline}` not found in config "
+                f"file: `{self.pipeline_config_file}`"
+            )
+
         return config
-
-    def compare_data_code_and_catalog(
-        self, catalog_datasets: Set[str], code_datasets: Set[str]
-    ) -> dict:
-        """Compares datasets in code and catalog yaml files.
-
-        Args:
-            catalog_datasets: set of all catalog datasets
-            code_datasets: set of all dataset names in code
-
-        Returns:
-            dict of datasets only in catalog and datasets only in code
-        """
-        catalog_only = catalog_datasets.difference(code_datasets)
-        code_only = code_datasets.difference(catalog_datasets)
-        return {"catalog_only": catalog_only, "code_only": code_only}
-
-    def compare_data_pipeline_and_catalog(
-        self, catalog_datasets: Set[str], pipeline_datasets: Set[str]
-    ) -> dict:
-        """Compares datasets in pipeline config and catalog yaml files.
-
-        Args:
-            catalog_datasets: set of all pipeline catalog datasets
-            pipeline_datasets: set of all pipeline node datasets
-
-        Returns:
-            dict of datasets only in catalog and datasets only in pipeline
-        """
-        catalog_only = catalog_datasets.difference(pipeline_datasets)
-        pipeline_only = pipeline_datasets.difference(catalog_datasets)
-        return {"catalog_only": catalog_only, "pipeline_only": pipeline_only}
-
-    def get_datasets_for_code(self, file_path: str) -> dict:
-        """Parses python code to extract dataset names.
-
-        Args:
-            file_path: file path to python file
-
-        Returns:
-            dict of lists of producer and consumer dataset names
-        """
-        with open(file_path, "r", encoding="utf-8") as file:
-            python_code = file.read()
-
-        # Parse the code into an abstract syntax tree
-        tree = ast.parse(python_code)
-
-        # Initialize lists to store extracted strings
-        producer_datasets = []
-        consumer_datasets = []
-
-        # Function to traverse the AST and extract dataset names
-        def traverse_ast(node: ast.AST) -> None:
-            if (
-                isinstance(node, ast.Call)
-                and isinstance(node.func, ast.Attribute)
-                and isinstance(node.func.value, ast.Subscript)
-                and isinstance(node.func.value.value, ast.Attribute)
-                and isinstance(node.func.value.value.value, ast.Name)
-                and node.func.value.value.value.id == "self"
-                and isinstance(node.func.value.value.attr, str)
-            ):
-                if node.func.value.value.attr == "producers":
-                    val = node.func.value.slice.value  # type: ignore
-                    producer_datasets.append(val)
-                elif node.func.value.value.attr == "consumers":
-                    val = node.func.value.slice.value  # type: ignore
-                    consumer_datasets.append(val)
-
-            for child_node in ast.iter_child_nodes(node):
-                traverse_ast(child_node)
-
-        # Traverse the AST using the function
-        traverse_ast(tree)
-        producer_datasets = sorted(list(set(producer_datasets)))
-        consumer_datasets = sorted(list(set(consumer_datasets)))
-        return {
-            "producer_datasets": producer_datasets,
-            "consumer_datasets": consumer_datasets,
-        }
-
-    def get_datasets_for_python_files(self, project_dir: str) -> set:
-        """Generates list of aineko datasets from python file in project_dir.
-
-        Args:
-            project_dir: directory containing python files
-
-        Returns:
-            all datasets in all reference python files
-        """
-        python_files = self._find_python_files(project_dir)
-        all_producers = []
-        all_consumers = []
-        for python_file in python_files:
-            dataset_dict = self.get_datasets_for_code(python_file)
-            producers = dataset_dict["producer_datasets"]
-            consumers = dataset_dict["consumer_datasets"]
-            all_producers.extend(producers)
-            all_consumers.extend(consumers)
-        return set(all_producers).union(set(all_consumers))
-
-    def _find_config_files(
-        self,
-        dirs: list,
-        only_names: Optional[list] = None,
-        except_names: Optional[list] = None,
-    ) -> list:
-        """Get config files from a list of directories.
-
-        Args:
-            dirs: list of directories to search for config files
-            only_names: only return files where any of these strings
-                is contained in the file name
-            except_names: exclude files where any of these strings
-                is contained in the file name
-
-        Returns:
-            list of config files
-        """
-        # Search for all files in the relevant directories
-        conf_files = []
-        for cur_dir in dirs:
-            conf_files.extend(glob.glob(cur_dir, recursive=True))
-
-        # Restrict to only files with specific name, if specified
-        if only_names:
-            conf_files = [
-                conf_file
-                for conf_file in conf_files
-                if any(
-                    only_name in os.path.basename(conf_file)
-                    for only_name in only_names
-                )
-            ]
-
-        # Exclude files with specific name, if specified
-        if except_names:
-            conf_files = [
-                conf_file
-                for conf_file in conf_files
-                if not any(
-                    except_name in os.path.basename(conf_file)
-                    for except_name in except_names
-                )
-            ]
-
-        return conf_files
-
-    def _find_python_files(
-        self,
-        project_dir: str,
-        only_names: Optional[list] = None,
-        except_names: Optional[list] = None,
-    ) -> list:
-        """Get python files from a directory.
-
-        Args:
-            project_dir: directory to search for python files
-            only_names: only return files where any of these strings
-                is contained in the file name
-            except_names: exclude files where any of these strings
-                is contained in the file name
-
-        Returns:
-            list of python files
-        """
-        dirs = [os.path.join(project_dir, "*.py")]
-        return self._find_config_files(dirs, only_names, except_names)
-
-    @staticmethod
-    def get_datasets_for_pipeline_nodes(pipeline_config: dict) -> set:
-        """Get datasets for pipeline nodes.
-
-        Args:
-            pipeline_config: pipeline config derived from project config
-
-        Returns:
-            set of datasets
-        """
-        datasets = set()
-        for node in pipeline_config["nodes"].values():
-            if "inputs" in node:
-                datasets.update(node["inputs"])
-            if "outputs" in node:
-                datasets.update(node["outputs"])
-        return datasets
-
-    @staticmethod
-    def get_datasets_for_pipeline_catalog(pipeline_config: dict) -> set:
-        """Get datasets for pipeline catalog.
-
-        Args:
-            pipeline_config: pipeline config derived from project config
-
-        Returns:
-            set of datasets
-        """
-        return set(pipeline_config["catalog"].keys())
-
-    def _filter_pipelines(self, project_config: dict, pipelines: list) -> dict:
-        """Filter pipelines in project config.
-
-        Args:
-            project_config: project config
-            pipelines: list of pipelines to filter
-
-        Returns:
-            filtered project config
-        """
-        if pipelines:
-            return {
-                pipeline: pipeline_config
-                for pipeline, pipeline_config in project_config.items()
-                if pipeline in pipelines
-            }
-        else:
-            return project_config
-
-    def validate_config(self, project_config: dict) -> bool:
-        """Validate config datasets and schema.
-
-        Args:
-            project_config: config to validate
-
-        Raises:
-            ValueError: if datasets in pipeline config are not in catalog
-            SchemaError: if config is invalid
-
-        Returns:
-            True if config is valid
-        """
-        # Validate config against schema
-        self._validate_config_schema(project_config)
-
-        # Validate that all datasets in pipeline config are in catalog
-        for pipeline_config in project_config.values():
-            self.validate_config_datasets_pipeline_catalog(pipeline_config)
-
-        return True
 
     def _validate_config_schema(self, project_config: dict) -> bool:
         """Validate config.
@@ -390,35 +156,24 @@ class ConfigLoader:
         self.config_schema.validate(project_config)
         return True
 
-    def validate_config_datasets_pipeline_catalog(
-        self, pipeline_config: dict
-    ) -> bool:
-        """Validate that all datasets in pipeline config are in catalog.
+    @overload
+    def _update_params(self, value: dict, params: dict) -> dict:
+        ...
 
-        Args:
-            pipeline_config: pipeline config derived from project config
+    @overload
+    def _update_params(self, value: list, params: dict) -> list:
+        ...
 
-        Raises:
-            ValueError: if datasets in pipeline config are not in catalog
+    @overload
+    def _update_params(self, value: str, params: dict) -> str:
+        ...
 
-        Returns:
-            True if all datasets in pipeline config are in catalog
-        """
-        set_differences = self.compare_data_pipeline_and_catalog(
-            self.get_datasets_for_pipeline_catalog(pipeline_config),
-            self.get_datasets_for_pipeline_nodes(pipeline_config),
-        )
-        pipeline_only = set_differences["pipeline_only"]
-        if pipeline_only:
-            raise ValueError(
-                "The following datasets in the pipeline config "
-                "yaml are not defined in the catalog yaml: "
-                f"{pipeline_only}"
-            )
-        return True
+    @overload
+    def _update_params(self, value: int, params: dict) -> int:
+        ...
 
     def _update_params(
-        self, value: Union[dict, list, str, int], params: dict
+        self, value: dict | list | str | int, params: dict
     ) -> Union[dict, list, str, int]:
         """Update value with params.
 

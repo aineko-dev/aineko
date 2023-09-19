@@ -3,7 +3,6 @@ import argparse
 
 from aineko import __version__
 from aineko.cli.run import main as run_main
-from aineko.cli.validate import main as validate_main
 from aineko.cli.visualize import (
     build_mermaid_from_yaml,
     render_graph_in_browser,
@@ -126,13 +125,6 @@ def _cli() -> None:
         else:
             print(graph)
 
-    elif args.command == "validate":
-        validate_main(
-            project_names=args.project_names,
-            conf_source=args.conf_source,
-            project_dir=args.project_dir,
-            fix_catalog=args.fix_catalog,
-        )
     else:
         parser.print_help()
 

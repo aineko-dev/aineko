@@ -104,7 +104,7 @@ class AbstractNode(ABC):
         """Setup the consumer and producer for a node.
 
         Args:
-            catalog: dataset catalog configuration
+            datasets: dataset configuration
             node: name of the node
             pipeline: name of the pipeline
             inputs: list of dataset names for the inputs to the node
