@@ -25,7 +25,7 @@ def _cli() -> None:
     run_parser = subparsers.add_parser("run", help="Run a pipeline")
     run_parser.add_argument(
         "-c",
-        "--pipeline_config_file",
+        "--config_file",
         help="Path to the config file containing pipeline config.",
         type=str,
         required=True,
@@ -71,47 +71,11 @@ def _cli() -> None:
         help="Open the graph in the default browser.",
     )
 
-    validate_parser = subparsers.add_parser(
-        "validate",
-        help="Validate Aineko pipeline datasets to ensure "
-        "consistency between catalog and pipeline yaml files.",
-    )
-
-    validate_parser.add_argument(
-        "-c",
-        "--conf_source",
-        help="Path to the directory containing the configuration files.",
-        type=str,
-        default=None,
-        nargs="?",
-    )
-    validate_parser.add_argument(
-        "-p",
-        "--project_names",
-        nargs="+",
-        required=True,
-        help="Project name(s) to load config for.",
-    )
-
-    validate_parser.add_argument(
-        "-d",
-        "--project_dir",
-        type=str,
-        help="Path to project directory containing python code.",
-    )
-
-    validate_parser.add_argument(
-        "-f",
-        "--fix_catalog",
-        action="store_true",
-        help="Flag to fix catalog yaml file by adding datasets",
-    )
-
     args = parser.parse_args()
 
     if args.command == "run":
         run_main(
-            pipeline_config_file=args.pipeline_config_file,
+            pipeline_config_file=args.config_file,
             pipeline=args.pipeline_name,
         )
     elif args.command == "visualize":

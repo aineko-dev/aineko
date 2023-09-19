@@ -130,14 +130,10 @@ class ConfigLoader:
         Note:
         e.g. schema -
         {
-            "project_name": {
-                "pipeline_name": {
-                    "machine_config": dict,
-                    "aws_secrets": list,
-                    "catalog": dict,
-                    "nodes": dict,
-                    "local_params": dict,
-                }
+            "pipeline": {
+                "name": str,
+                "nodes": dict,
+                "datasets": dict,
             }
         }
 

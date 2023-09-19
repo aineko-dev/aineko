@@ -33,11 +33,9 @@ EXPECTED_TEST_PIPELINE = {
             },
             "integer_doubles": {
                 "type": "kafka_stream",
-                "params": {"retention.ms": 86400000},
             },
             "env_var": {
                 "type": "kafka_stream",
-                "params": {"retention.ms": 86400000},
             },
         },
     }
