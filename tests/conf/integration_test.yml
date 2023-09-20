@@ -1,4 +1,5 @@
-integration_test:
+pipeline:
+  name: integration_test
 
   default_node_settings:
     num_cpus: 0.5
@@ -8,3 +9,7 @@ integration_test:
       class: tests.integration.test_runner_with_kafka.IntegerWriter
       outputs:
         - count
+
+  datasets:
+    count:
+      type: kafka_stream
