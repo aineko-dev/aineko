@@ -58,17 +58,7 @@ class DatasetConsumer:
         dataset_config: Dict[str, Any],
         broker: Optional[str] = None,
     ):
-        """Initialize the consumer.
-
-        Note: we added project_name to the constructor of the DatasetProducer
-        class, but are not using it here. This was done to prohibit name
-        collisions between different projects when filtering messages
-        downstream. Not adding the project_name to the DatasetConsumer
-        constructor could lead to a situation multiple projects are using
-        the same pipeline_name and node_name, and try to consume from the same
-        dataset. This would lead to an error when trying to consume from the
-        same dataset.
-        """
+        """Initialize the consumer."""
         # Assign dataset name
         self.pipeline_name = pipeline_name
 
@@ -173,7 +163,6 @@ class DatasetProducer:
         dataset_name: dataset name
         node_name: name of the node that is producing the message
         pipeline_name: name of the pipeline
-        project_name: name of the project
         dataset_config: dataset config
 
     Attributes:
@@ -188,7 +177,6 @@ class DatasetProducer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        project_name: str,
         dataset_config: Dict[str, Any],
     ):
         """Initialize the producer."""
@@ -196,7 +184,6 @@ class DatasetProducer:
         self.source_pipeline = pipeline_name
         self.dataset = dataset_name
         self.source_node = node_name
-        self.project_name = project_name
 
         # Assign kafka config
         self.kafka_config = DEFAULT_KAFKA_CONFIG
@@ -238,7 +225,6 @@ class DatasetProducer:
                 AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
             ),
             "dataset": self.dataset,
-            "source_project": self.project_name,
             "source_pipeline": self.source_pipeline,
             "source_node": self.source_node,
             "message": message,

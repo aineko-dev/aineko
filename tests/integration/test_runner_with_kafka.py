@@ -48,9 +48,8 @@ def test_write_to_kafka():
     kafka topic and check that the messages match what was sent.
     """
     runner = Runner(
-        project="integration_test",
         pipeline="integration_test",
-        conf_source="tests/integration/conf",
+        pipeline_config_file="tests/conf/integration_test.yml",
     )
     try:
         runner.run()
