@@ -45,13 +45,13 @@ class ConfigLoader:
                 # Pipeline config
                 "pipeline": {
                     "name": str,
-                    optional("default_node_params"): dict,
+                    optional("default_node_settings"): dict,
                     # Node config
                     "nodes": {
                         str: {
                             "class": str,
-                            optional("class_params"): dict,
                             optional("node_params"): dict,
+                            optional("node_settings"): dict,
                             optional("inputs"): list,
                             optional("outputs"): list,
                         },
@@ -106,7 +106,7 @@ class ConfigLoader:
             config["pipeline"].pop("runs")
 
         try:
-            self._validate_config_schema(project_config=config)
+            self._validate_config_schema(pipeline_config=config)
         except SchemaError as e:
             raise SchemaError(
                 f"Schema validation failed for pipeline "
@@ -124,7 +124,7 @@ class ConfigLoader:
 
         return config
 
-    def _validate_config_schema(self, project_config: dict) -> bool:
+    def _validate_config_schema(self, pipeline_config: dict) -> bool:
         """Validate config.
 
         Note:
@@ -141,7 +141,7 @@ class ConfigLoader:
         see: https://github.com/keleshev/schema
 
         Args:
-            project_config: config to validate
+            pipeline_config: config to validate
 
         Raises:
             SchemaError: if config is invalid
@@ -149,7 +149,7 @@ class ConfigLoader:
         Returns:
             True if config is valid
         """
-        self.config_schema.validate(project_config)
+        self.config_schema.validate(pipeline_config)
         return True
 
     @overload
@@ -169,7 +169,7 @@ class ConfigLoader:
         ...
 
     def _update_params(
-        self, value: dict | list | str | int, params: dict
+        self, value: Union[dict, list, str, int], params: dict
     ) -> Union[dict, list, str, int]:
         """Update value with params.
 

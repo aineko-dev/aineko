@@ -1,7 +1,7 @@
 pipeline:
   name: integration_test
 
-  default_node_params:
+  default_node_settings:
     num_cpus: 0.5
 
   nodes:

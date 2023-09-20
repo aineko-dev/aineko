@@ -7,7 +7,7 @@ pipeline:
       outputs:
         - integer_sequence
         - env_var
-      class_params:
+      node_params:
         start_int: 0
         num_messages: 25
         sleep_time: 1
@@ -19,7 +19,7 @@ pipeline:
         - integer_sequence
       outputs:
         - integer_doubles
-      class_params:
+      node_params:
         duration: 40
 
   datasets:

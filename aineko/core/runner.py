@@ -188,7 +188,7 @@ class Runner:
         # Collect all  actor futures
         results = []
 
-        default_node_config = pipeline_config.get("default_node_params", {})
+        default_node_config = pipeline_config.get("default_node_settings", {})
 
         for node_name, node_config in pipeline_config["nodes"].items():
             # Initalize actor from specified class in config
@@ -197,7 +197,7 @@ class Runner:
             )
             actor_params = {
                 **default_node_config,
-                **node_config.get("node_params", {}),
+                **node_config.get("node_settings", {}),
                 "name": node_name,
                 "namespace": self.pipeline,
             }
@@ -225,7 +225,7 @@ class Runner:
             # Create actor future (for execute method)
             results.append(
                 actor_handle.execute.remote(
-                    params=node_config.get("class_params", None)
+                    params=node_config.get("node_params", None)
                 )
             )
 

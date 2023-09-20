@@ -13,7 +13,7 @@ EXPECTED_TEST_PIPELINE = {
             "sequencer": {
                 "class": "aineko.tests.conftest.TestSequencer",
                 "outputs": ["integer_sequence", "env_var"],
-                "class_params": {
+                "node_params": {
                     "start_int": 0,
                     "num_messages": 25,
                     "sleep_time": 1,
@@ -23,7 +23,7 @@ EXPECTED_TEST_PIPELINE = {
                 "class": "aineko.tests.conftest.TestDoubler",
                 "inputs": ["integer_sequence"],
                 "outputs": ["integer_doubles"],
-                "class_params": {"duration": 40},
+                "node_params": {"duration": 40},
             },
         },
         "datasets": {
@@ -43,7 +43,7 @@ EXPECTED_TEST_PIPELINE = {
 
 EXPECTED_TEST_PIPELINE_RUNS = copy.deepcopy(EXPECTED_TEST_PIPELINE)
 EXPECTED_TEST_PIPELINE_RUNS["pipeline"]["name"] = "test_run_1"
-EXPECTED_TEST_PIPELINE_RUNS["pipeline"]["nodes"]["sequencer"]["class_params"][
+EXPECTED_TEST_PIPELINE_RUNS["pipeline"]["nodes"]["sequencer"]["node_params"][
     "start_int"
 ] = "0"
 
