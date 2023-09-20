@@ -223,6 +223,7 @@ class ConfigLoaderValidator:
     """
 
     def __init__(self, config_loader: ConfigLoader):
+        """Creates ConfigLoaderValidator instance."""
         self.config_loader = config_loader
         self.config = None
         self.validation_struct = None
@@ -482,7 +483,8 @@ class ConfigLoaderValidator:
 
         Takes each node defined in the pipeline config file, and compares its
         inputs/outputs datasets against the inputs/outputs datasets defined in
-        the corresponding python code class."""
+        the corresponding python code class.
+        """
         if self.validation_struct is None:
             self.build_validation_struct()
         nodes_config = self.validation_struct["nodes_config"]["nodes"]
