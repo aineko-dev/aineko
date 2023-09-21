@@ -9,6 +9,9 @@ from aineko.core.config_loader import ConfigLoader
 EXPECTED_TEST_PIPELINE = {
     "pipeline": {
         "name": "test_pipeline",
+        "default_node_settings": {
+            "num_cpus": 0.5,
+        },
         "nodes": {
             "sequencer": {
                 "class": "aineko.tests.conftest.TestSequencer",
