@@ -5,7 +5,6 @@ from aineko import __version__
 from aineko.cli.docker_cli_wrapper import DockerCLIWrapper
 from aineko.cli.kafka_cli_wrapper import KafkaCLIWrapper
 from aineko.cli.run import main as run_main
-from aineko.cli.validate import main as validate_main
 from aineko.cli.visualize import render_mermaid_graph
 
 
@@ -162,54 +161,6 @@ def _cli() -> None:
             direction=args.direction,
             legend=args.legend,
             render_in_browser=args.browser,
-        )
-    )
-
-    # `aineko validate *`
-    validate_parser = subparsers.add_parser(
-        "validate",
-        help=(
-            "Validate Aineko pipeline datasets to ensure "
-            "consistency between catalog and pipeline yaml files."
-        ),
-    )
-
-    validate_parser.add_argument(
-        "-c",
-        "--conf_source",
-        help="Path to the directory containing the configuration files.",
-        type=str,
-        default=None,
-        nargs="?",
-    )
-    validate_parser.add_argument(
-        "-p",
-        "--project_names",
-        nargs="+",
-        required=True,
-        help="Project name(s) to load config for.",
-    )
-
-    validate_parser.add_argument(
-        "-d",
-        "--project_dir",
-        type=str,
-        help="Path to project directory containing python code.",
-    )
-
-    validate_parser.add_argument(
-        "-f",
-        "--fix_catalog",
-        action="store_true",
-        help="Flag to fix catalog yaml file by adding datasets",
-    )
-
-    validate_parser.set_defaults(
-        func=lambda args: validate_main(
-            project_names=args.project_names,
-            conf_source=args.conf_source,
-            project_dir=args.project_dir,
-            fix_catalog=args.fix_catalog,
         )
     )
 
