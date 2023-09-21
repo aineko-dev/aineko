@@ -24,6 +24,9 @@ logs/**
 out/
 .idea_modules/
 
+# VSCode
+.vscode/*
+
 ### macOS
 *.DS_Store
 .AppleDouble
@@ -166,9 +169,6 @@ venv.bak/
 
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
-.pyre/
 
 # Terraform
 .terraform.lock.hcl
