@@ -1,6 +1,6 @@
 """Module to load config files."""
 import ast
-from typing import Optional, Union, overload
+from typing import Any, List, Optional, Union, overload
 
 from schema import Optional as optional
 from schema import Schema, SchemaError
@@ -224,9 +224,9 @@ class ConfigLoaderValidator:
 
     def __init__(self, config_loader: ConfigLoader):
         """Creates ConfigLoaderValidator instance."""
-        self.config_loader = config_loader
-        self.config = None
-        self.validation_struct = None
+        self.config_loader: Optional[ConfigLoader] = config_loader
+        self.config = self.config_loader.load_config()
+        self.validation_struct: Any = None
 
     def build_validation_struct(self) -> None:
         """Create data structure to be used in dataset validation.
@@ -285,8 +285,6 @@ class ConfigLoaderValidator:
             }
         }
         """
-        if self.config is None:
-            self.config = self.config_loader.load_config()
         validation_struct = {
             "datasets": self._get_config_datasets(self.config),
             "nodes_config": self._get_nodes_config(self.config),
@@ -335,16 +333,17 @@ class ConfigLoaderValidator:
             }
         """
         nodes = config["pipeline"].get("nodes", {})
-        nodes_config = {
+        nodes_config: dict[str, Any] = {
             "nodes": {
                 v["class"]: {
                     "inputs": set(v.get("inputs", [])),
                     "outputs": set(v.get("outputs", [])),
                 }
                 for _, v in nodes.items()
-            }
+            },
+            "all_datasets": set([]),
         }
-        all_datasets = []
+        all_datasets: List[str] = []
         for _, vals in nodes_config["nodes"].items():
             all_datasets.extend(vals["inputs"])
             all_datasets.extend(vals["outputs"])
@@ -385,6 +384,11 @@ class ConfigLoaderValidator:
             if isinstance(node, ast.ClassDef) and node.name == class_name:
                 class_node = node
                 break
+        if class_node is None:
+            raise ValueError(
+                f"Class {class_name} not found in file {file_path}"
+            )
+
         inputs = []
         outputs = []
 
@@ -409,7 +413,8 @@ class ConfigLoaderValidator:
             for child_node in ast.iter_child_nodes(node):
                 traverse_ast(child_node)
 
-        traverse_ast(class_node)
+        print(type(class_node))
+        traverse_ast(class_node)  # arg-type: ignore
         node_code = {
             class_path: {"inputs": set(inputs), "outputs": set(outputs)}
         }
@@ -449,8 +454,8 @@ class ConfigLoaderValidator:
 
         """
         nodes = config["pipeline"].get("nodes", {})
-        nodes_code = {"nodes": {}}
-        all_datasets = []
+        nodes_code: Any = {"nodes": {}}
+        all_datasets: List[str] = []
         for _, node_data in nodes.items():
             class_path = node_data["class"]
             node_code = self._get_node_code(class_path)
@@ -474,8 +479,10 @@ class ConfigLoaderValidator:
         """
         if self.validation_struct is None:
             self.build_validation_struct()
-        return self.validation_struct["nodes_config"]["all_datasets"].issubset(
-            self.validation_struct["datasets"]
+        return self.validation_struct["nodes_config"][  # type:ignore
+            "all_datasets"
+        ].issubset(  # type:ignore
+            self.validation_struct["datasets"]  # type: ignore
         )
 
     def validate_nodes_config_nodes_code(self) -> bool:
@@ -487,8 +494,10 @@ class ConfigLoaderValidator:
         """
         if self.validation_struct is None:
             self.build_validation_struct()
-        nodes_config = self.validation_struct["nodes_config"]["nodes"]
-        nodes_code = self.validation_struct["nodes_code"]["nodes"]
+        top_node_config = self.validation_struct["nodes_config"]  # type: ignore
+        nodes_config = top_node_config["nodes"]  # type: ignore
+        top_nodes_code = self.validation_struct["nodes_code"]  # type: ignore
+        nodes_code = top_nodes_code["nodes"]  # type: ignore
         for node, node_config_data in nodes_config.items():
             nodes_code_data = nodes_code[node]
             if nodes_code_data != node_config_data:

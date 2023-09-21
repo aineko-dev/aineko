@@ -148,7 +148,9 @@ def test_validate_nodes_config_datasets_extra_datasets(
     """
     config_loader = ConfigLoader(test_pipeline_config_file)
     config_loader_validator = ConfigLoaderValidator(config_loader)
-    config_loader_validator.config = config_loader_validator.config_loader.load_config()
+    config_loader_validator.config = (
+        config_loader_validator.config_loader.load_config()
+    )
     # add an extra dataset to the 'datasets' section of config file.
     print(config_loader_validator.config)
     config_loader_validator.config["pipeline"]["datasets"]["extra_var"] = {
@@ -179,12 +181,15 @@ def test_validate_nodes_config_datasets_extra_nodes_inputs(
     """
     config_loader = ConfigLoader(test_pipeline_config_file)
     config_loader_validator = ConfigLoaderValidator(config_loader)
-    config_loader_validator.config = config_loader_validator.config_loader.load_config()
+    config_loader_validator.config = (
+        config_loader_validator.config_loader.load_config()
+    )
     # add an extra dataset to the 'datasets' section of config file.
     config_loader_validator.config["pipeline"]["nodes"]["doubler"][
         "inputs"
     ].append("extra_var")
     assert config_loader_validator.validate_nodes_config_datasets() is False
+
 
 def test_validate_nodes_config_datasets_extra_nodes_outputs(
     test_pipeline_config_file: str,
@@ -208,12 +213,15 @@ def test_validate_nodes_config_datasets_extra_nodes_outputs(
     """
     config_loader = ConfigLoader(test_pipeline_config_file)
     config_loader_validator = ConfigLoaderValidator(config_loader)
-    config_loader_validator.config = config_loader_validator.config_loader.load_config()
+    config_loader_validator.config = (
+        config_loader_validator.config_loader.load_config()
+    )
     # add an extra dataset to the 'datasets' section of config file.
     config_loader_validator.config["pipeline"]["nodes"]["doubler"][
         "outputs"
     ].append("extra_var")
     assert config_loader_validator.validate_nodes_config_datasets() is False
+
 
 def test_validate_nodes_config_node_code_extra_node_inputs(
     test_pipeline_config_file: str,
@@ -244,9 +252,14 @@ def test_validate_nodes_config_node_code_extra_node_inputs(
     """
     config_loader = ConfigLoader(test_pipeline_config_file)
     config_loader_validator = ConfigLoaderValidator(config_loader)
-    config_loader_validator.config = config_loader_validator.config_loader.load_config()
-    config_loader_validator.config["pipeline"]["nodes"]["doubler"]["inputs"].append("extra_var")
+    config_loader_validator.config = (
+        config_loader_validator.config_loader.load_config()
+    )
+    config_loader_validator.config["pipeline"]["nodes"]["doubler"][
+        "inputs"
+    ].append("extra_var")
     assert config_loader_validator.validate_nodes_config_nodes_code() is False
+
 
 def test_validate_nodes_config_node_code_extra_node_outputs(
     test_pipeline_config_file: str,
@@ -277,6 +290,10 @@ def test_validate_nodes_config_node_code_extra_node_outputs(
     """
     config_loader = ConfigLoader(test_pipeline_config_file)
     config_loader_validator = ConfigLoaderValidator(config_loader)
-    config_loader_validator.config = config_loader_validator.config_loader.load_config()
-    config_loader_validator.config["pipeline"]["nodes"]["doubler"]["outputs"].append("extra_var")
+    config_loader_validator.config = (
+        config_loader_validator.config_loader.load_config()
+    )
+    config_loader_validator.config["pipeline"]["nodes"]["doubler"][
+        "outputs"
+    ].append("extra_var")
     assert config_loader_validator.validate_nodes_config_nodes_code() is False
