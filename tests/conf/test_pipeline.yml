@@ -3,10 +3,9 @@ pipeline:
   nodes:
     # Test actor with no input, single output, and params
     sequencer:
-      class: aineko.tests.conftest.TestSequencer
+      class: tests.conftest.TestSequencer
       outputs:
         - integer_sequence
-        - env_var
       node_params:
         start_int: 0
         num_messages: 25
@@ -14,14 +13,13 @@ pipeline:
 
     # Test actor with single input and single output
     doubler:
-      class: aineko.tests.conftest.TestDoubler
+      class: tests.conftest.TestDoubler
       inputs:
         - integer_sequence
       outputs:
         - integer_doubles
       node_params:
         duration: 40
-
   datasets:
     integer_sequence:
       type: kafka_stream

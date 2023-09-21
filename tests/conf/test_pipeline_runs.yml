@@ -9,10 +9,9 @@ pipeline:
   nodes:
     # Test actor with no input, single output, and params
     sequencer:
-      class: aineko.tests.conftest.TestSequencer
+      class: tests.conftest.TestSequencer
       outputs:
         - integer_sequence
-        - env_var
       node_params:
         start_int: $start_int
         num_messages: 25
@@ -20,7 +19,7 @@ pipeline:
 
     # Test actor with single input and single output
     doubler:
-      class: aineko.tests.conftest.TestDoubler
+      class: tests.conftest.TestDoubler
       inputs:
         - integer_sequence
       outputs:
