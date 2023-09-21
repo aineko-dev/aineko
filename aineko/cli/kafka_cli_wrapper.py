@@ -45,7 +45,7 @@ class KafkaCLIWrapper:
                 f" --bootstrap-server localhost:9092 --topic {topic_name}"
             )
         try:
-            process = subprocess.Popen(
+            with subprocess.Popen(
                 command,
                 shell=True,
                 stdout=subprocess.PIPE,
@@ -53,9 +53,9 @@ class KafkaCLIWrapper:
                 text=True,
                 bufsize=1,  # Line-buffered
                 universal_newlines=True,
-            )
-            for line in process.stdout:
-                print(line.strip())
+            ) as process:
+                for line in process.stdout:
+                    print(line.strip())
 
             process.wait()
         except subprocess.CalledProcessError as ex:

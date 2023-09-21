@@ -2,7 +2,6 @@
 import argparse
 
 from aineko import __version__
-
 from aineko.cli.docker_cli_wrapper import DockerCLIWrapper
 from aineko.cli.kafka_cli_wrapper import KafkaCLIWrapper
 from aineko.cli.run import main as run_main
