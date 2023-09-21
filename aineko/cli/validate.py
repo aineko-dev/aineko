@@ -60,7 +60,9 @@ def validate_datasets_between_pipeline_catalog(
                         conf_source, proj_name, "catalog_fix.yml"
                     )
                     if os.path.isfile(fix_catalog_file):
-                        with open(fix_catalog_file, "r", encoding="utf-8") as f:
+                        with open(
+                            fix_catalog_file, "r", encoding="utf-8"
+                        ) as f:
                             fix_catalog_struct = yaml.safe_load(f)
                     else:
                         fix_catalog_struct = {}
@@ -125,7 +127,9 @@ def validate_datasets_between_code_catalog(
                         conf_source, proj_name, "catalog_fix.yml"
                     )
                     if os.path.isfile(fix_catalog_file):
-                        with open(fix_catalog_file, "r", encoding="utf-8") as f:
+                        with open(
+                            fix_catalog_file, "r", encoding="utf-8"
+                        ) as f:
                             fix_catalog_struct = yaml.safe_load(f)
                     else:
                         fix_catalog_struct = {}

@@ -3,11 +3,12 @@ import subprocess
 from typing import Optional
 import os
 
-class DockerCLIWrapper(object):
+
+class DockerCLIWrapper:
     """A wrapper class that executes Docker CLI commands via subprocess.
 
-    This class provides methods to start, stop, and restart Docker services using
-    docker-compose.
+    This class provides methods to start, stop, and restart Docker services 
+    using docker-compose.
 
     Methods:
         start_service(cls, path: Optional[str]) -> None:
@@ -17,7 +18,8 @@ class DockerCLIWrapper(object):
             Stop a running Docker service specified in the Docker Compose file.
 
         restart_service(cls, path: Optional[str]) -> None:
-            Restart a running Docker service specified in the Docker Compose file.
+            Restart a running Docker service specified in the Docker 
+            Compose file.
 
     """
 
@@ -28,8 +30,8 @@ class DockerCLIWrapper(object):
         """Start a Docker service using the specified Docker Compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file. If not provided,
-                the default path is used.
+            path (Optional[str]): The path to the Docker Compose file. 
+            If not provided, the default path is used.
 
         Returns:
             None
@@ -57,8 +59,8 @@ class DockerCLIWrapper(object):
         """Stop a running Docker service specified in the Docker Compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file. If not provided,
-                the default path is used.
+            path (Optional[str]): The path to the Docker Compose file. 
+            If not provided, the default path is used.
 
         Returns:
             None
@@ -83,11 +85,12 @@ class DockerCLIWrapper(object):
 
     @classmethod
     def restart_service(cls, path: Optional[str]) -> None:
-        """Restart a running Docker service specified in the Docker Compose file.
+        """Restart a running Docker service specified in the Docker 
+        Compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file. If not provided,
-                the default path is used.
+            path (Optional[str]): The path to the Docker Compose file. 
+            If not provided, the default path is used.
 
         Returns:
             None
@@ -108,7 +111,7 @@ class DockerCLIWrapper(object):
             print(output)
         except subprocess.CalledProcessError as ex:
             print(f"Error: {ex}")
-            print(f"Command Output: {e.output}")
+            print(f"Command Output: {ex.output}")
 
     @classmethod
     def _resolve_optional_relative_path(cls, path: Optional[str]) -> str:
@@ -133,11 +136,13 @@ class DockerCLIWrapper(object):
 
         return absolute_docker_file_path
 
+    @staticmethod
     def _validate_docker_compose_file(absolute_docker_file_path: str) -> None:
         """Validate if the specified file is a valid Docker Compose file.
 
         Args:
-            absolute_docker_file_path (str): The absolute path to the Docker Compose file.
+            absolute_docker_file_path (str): The absolute path to
+            the Docker Compose file.
 
         Raises:
             FileNotFoundError: If the file does not exist or if it is not a
@@ -154,5 +159,6 @@ class DockerCLIWrapper(object):
 
         if not absolute_docker_file_path.endswith("docker-compose.yml"):
             raise FileNotFoundError(
-                f"File {absolute_docker_file_path} must be a docker-compose.yml file"
+                f"File {absolute_docker_file_path} must be a"
+                " docker-compose.yml file"
             )

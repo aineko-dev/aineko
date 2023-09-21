@@ -1,39 +1,51 @@
 """A wrapper class that executes Docker CLI commands via subprocess."""
 import subprocess
-from typing import Optional
 
 
-class KafkaCLIWrapper(object):
+class KafkaCLIWrapper:
     """A utility class for interacting with Kafka using command-line tools.
 
-    This class provides methods to consume messages from a Kafka topic using the Kafka
-    console consumer.
+    This class provides methods to consume messages from a 
+    Kafka topic using the Kafka console consumer.
     """
 
     @classmethod
-    def consume_kafka_topic(cls, topic_name: str, from_beginning: bool) -> None:
+    def consume_kafka_topic(
+        cls, topic_name: str, from_beginning: bool
+    ) -> None:
         """Consume messages from a Kafka topic using the Kafka console consumer.
 
         Args:
-            topic_name (str): The name of the Kafka topic to consume messages from.
-            from_beginning (bool): If True, start consuming from the beginning of the topic.
-                                    If False, start consuming from the current offset.
+            topic_name (str): The name of the Kafka topic to consume 
+            messages from.
+            
+            from_beginning (bool): If True, start consuming from the 
+            beginning of the topic. If False, start consuming from 
+            the current offset.
 
         Returns:
             None
 
         Raises:
-            subprocess.CalledProcessError: If there is an error running the Kafka viewer.
+            subprocess.CalledProcessError: If there is an error running 
+            the Kafka viewer.
 
         Example:
-            To consume messages from a Kafka topic 'my-topic' from the beginning:
+            To consume messages from a Kafka topic 'my-topic' from the beginning
 
             >>> KafkaCLIWrapper.consume_kafka_topic('my-topic', True)
         """
         if from_beginning:
-            command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {topic_name} --from-beginning"
+            command = (
+                "docker exec -it broker kafka-console-consumer"
+                " --bootstrap-server localhost:9092 --topic"
+                f" {topic_name} --from-beginning"
+            )
         else:
-            command = f"docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic {topic_name}"
+            command = (
+                "docker exec -it broker kafka-console-consumer"
+                f" --bootstrap-server localhost:9092 --topic {topic_name}"
+            )
         try:
             process = subprocess.Popen(
                 command,

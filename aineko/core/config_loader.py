@@ -42,7 +42,7 @@ class ConfigLoader:
             self.project = [project]
         elif not isinstance(project, list):
             raise ValueError(
-                f"Project must be a string or list of strings/dicts. "
+                "Project must be a string or list of strings/dicts. "
                 f"Got {type(project)}"
             )
         else:

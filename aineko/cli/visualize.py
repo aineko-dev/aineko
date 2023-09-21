@@ -17,7 +17,8 @@ def render_mermaid_graph(
         config_path: file path to pipeline yaml file
         direction: direction of the graph.
         legend: include a legend in the graph.
-        render_in_browser: Whether to render graph in browser. Prints graph to stdout otherwise.
+        render_in_browser: Whether to render graph in browser. Prints 
+        graph to stdout otherwise.
 
     Returns:
         Nothing. Either prints graph to stdout or opens a browser.
@@ -66,9 +67,8 @@ def build_mermaid_from_yaml(
 
     for transition in transitions:
         if "input" in transition.keys():
-            src_node = (
-                f"T_{transition['input']}[{transition['input']}]:::datasetClass"
-            )
+            src_node = f"T_{transition['input']}[{transition['input']}]"\
+            ":::datasetClass"
             tgt_node = (
                 f"N_{transition['node']}(({transition['node']})):::nodeClass"
             )
@@ -78,7 +78,7 @@ def build_mermaid_from_yaml(
             )
             tgt_node = (
                 f"T_{transition['output']}[{transition['output']}]"
-                f":::datasetClass"
+                ":::datasetClass"
             )
 
         mermaid_transitions.append(f"{src_node} -->  {tgt_node}")

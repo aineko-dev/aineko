@@ -17,5 +17,7 @@ def main(
         conf_source: Path to the directory containing the configuration files.
         test_mode: Whether to run in test mode. (default: False)
     """
-    runner = Runner(project=project, pipeline=pipeline, conf_source=conf_source)
+    runner = Runner(
+        project=project, pipeline=pipeline, conf_source=conf_source
+    )
     runner.run()

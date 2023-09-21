@@ -14,8 +14,9 @@ def _cli() -> None:
     """Command line interface for Aineko."""
     parser = argparse.ArgumentParser(
         prog="aineko",
-        description="Aineko is a framework for building data intensive "
-        "applications.",
+        description=(
+            "Aineko is a framework for building data intensive applications."
+        ),
     )
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {__version__}"
@@ -64,7 +65,10 @@ def _cli() -> None:
     start_service_parser.add_argument(
         "-f",
         "--file",
-        help="Specify a relative path to a docker-compose file (optional) for the 'start' command",
+        help=(
+            "Specify a relative path to a docker-compose file (optional) for"
+            " the 'start' command"
+        ),
     )
     start_service_parser.set_defaults(
         func=lambda args: DockerCLIWrapper.start_service(args.file)
@@ -74,7 +78,10 @@ def _cli() -> None:
     stop_service_parser.add_argument(
         "-f",
         "--file",
-        help="Specify a relative path to a docker-compose file (optional) for the 'stop' command",
+        help=(
+            "Specify a relative path to a docker-compose file (optional) for"
+            " the 'stop' command"
+        ),
     )
     stop_service_parser.set_defaults(
         func=lambda args: DockerCLIWrapper.stop_service(args.file)
@@ -84,7 +91,10 @@ def _cli() -> None:
     restart_service_parser.add_argument(
         "-f",
         "--file",
-        help="Specify a relative path to a docker-compose file (optional) for the 'restart' command",
+        help=(
+            "Specify a relative path to a docker-compose file (optional) for"
+            " the 'restart' command"
+        ),
     )
     restart_service_parser.set_defaults(
         func=lambda args: DockerCLIWrapper.restart_service(args.file)
@@ -166,8 +176,10 @@ def _cli() -> None:
     # `aineko validate *`
     validate_parser = subparsers.add_parser(
         "validate",
-        help="Validate Aineko pipeline datasets to ensure "
-        "consistency between catalog and pipeline yaml files.",
+        help=(
+            "Validate Aineko pipeline datasets to ensure "
+            "consistency between catalog and pipeline yaml files."
+        ),
     )
 
     validate_parser.add_argument(

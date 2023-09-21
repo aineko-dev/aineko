@@ -106,7 +106,9 @@ class Runner:
         for dataset_name, dataset_config in pipeline_config["catalog"].items():
             print(f"Creating dataset: {dataset_name}: {dataset_config}")
             # Create dataset for kafka streams
-            if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
+            if dataset_config["type"] == AINEKO_CONFIG.get(
+                "KAFKA_STREAM_TYPE"
+            ):
                 # User defined
                 dataset_params = {
                     **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
@@ -117,7 +119,9 @@ class Runner:
                 new_dataset = NewTopic(
                     topic=dataset_name,
                     num_partitions=dataset_params.get("num_partitions"),
-                    replication_factor=dataset_params.get("replication_factor"),
+                    replication_factor=dataset_params.get(
+                        "replication_factor"
+                    ),
                     config=dataset_params.get("config"),
                 )
 
