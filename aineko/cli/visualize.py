@@ -10,18 +10,26 @@ def render_mermaid_graph(
     direction: str = "LR",
     legend: bool = False,
     render_in_browser: bool = False,
-):
+) -> None:
+    """Builds mermaid graph from an Aineko pipeline config.
+
+    Args:
+        config_path: file path to pipeline yaml file
+        direction: direction of the graph.
+        legend: include a legend in the graph.
+        render_in_browser: Whether to render graph in browser. Prints graph to stdout otherwise.
+
+    Returns:
+        Nothing. Either prints graph to stdout or opens a browser.
+    """
     graph = build_mermaid_from_yaml(
         config_path=config_path, direction=direction, legend=legend
     )
-    if render_graph_in_browser is True:
+    if render_in_browser is True:
         render_graph_in_browser(graph)
 
     else:
         print(graph)
-        print(
-            "Pass in `--browser` flag to see it in a more user-friendly format"
-        )
 
 
 def build_mermaid_from_yaml(

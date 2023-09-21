@@ -3,8 +3,8 @@ import argparse
 
 from aineko import __version__
 
-from aineko.cli.DockerCLIWrapper import DockerCLIWrapper
-from aineko.cli.KafkaCLIWrapper import KafkaCLIWrapper
+from aineko.cli.docker_cli_wrapper import DockerCLIWrapper
+from aineko.cli.kafka_cli_wrapper import KafkaCLIWrapper
 from aineko.cli.run import main as run_main
 from aineko.cli.validate import main as validate_main
 from aineko.cli.visualize import render_mermaid_graph
@@ -24,7 +24,6 @@ def _cli() -> None:
     subparsers = parser.add_subparsers()
 
     # `aineko run *`
-    service_parser = subparsers.add_parser("run", help="Runs a pipeline")
     run_parser = subparsers.add_parser("run", help="Run a pipeline")
     run_parser.add_argument(
         "-p",
