@@ -90,11 +90,33 @@ class AINEKO_CONFIG(BaseConfig):
     # Timeout in seconds for dataset creation
     DATASET_CREATION_TIMEOUT = 300
 
-    CONF_SOURCE = os.path.abspath(
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "conf")
+    DEFAULT_PIPELINE_CONFIG = os.path.abspath(
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "conf/pipeline.yml"
+        )
     )
     MSG_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
     KAFKA_STREAM_TYPE = "kafka_stream"
 
     # Default cpu for each node
     DEFAULT_NUM_CPUS = 0.5
+
+    # Valid log levels
+    LOG_LEVELS = ("info", "debug", "warning", "error", "critical")
+
+
+class NODE_MANAGER_CONFIG(BaseConfig):
+    """Node Manager configuration."""
+
+    # Name to call node
+    NAME = "node_manager"
+
+    # Ray options for NodeManager
+    RAY_OPTIONS = {
+        "num_cpus": 0.1,
+    }
+
+    # Node config
+    NODE_CONFIG = {
+        "class": "aineko.core.node_manager.NodeManager",
+    }

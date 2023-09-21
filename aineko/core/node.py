@@ -1,16 +1,55 @@
-"""Node base class."""
+"""Node base class and poison pill global actor.
+
+Global variables that can be accessed by multiple nodes
+should be stored in an actor instance (see
+https://stackoverflow.com/questions/67457237/share-object-between-actors-in-ray).
+The PoisonPill actor stores the boolean value that represents
+if it should be activated or not. Upon activation, the Node Manager
+will kill the entire pipeline. All nodes have access to this variable,
+and can activate it by calling the `activate_poison_pill` method.
+
+The AbstractNode class is the parent class for all Aineko pipeline nodes.
+It contains  helper methods for setup, util methods, and dummy methods
+that users should override with their own implementation.
+"""
 import time
 import traceback
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional
 
-from aineko.config import DEFAULT_KAFKA_CONFIG, TESTING_NODE_CONFIG
+import ray
+
+from aineko.config import (
+    AINEKO_CONFIG,
+    DEFAULT_KAFKA_CONFIG,
+    TESTING_NODE_CONFIG,
+)
 from aineko.core.dataset import (
     DatasetConsumer,
     DatasetProducer,
     FakeDatasetConsumer,
     FakeDatasetProducer,
 )
+
+
+class PoisonPill:
+    """Global variable accessible to every node in pipeline.
+
+    This is the recommended approach to share objects between
+    Ray Actors.
+    """
+
+    def __init__(self) -> None:
+        """Poison pill initializes with unactivated state."""
+        self.state = False
+
+    def activate(self) -> None:
+        """Activate poison pill by setting state as True."""
+        self.state = True
+
+    def get_state(self) -> bool:
+        """Gets poison pill state."""
+        return self.state
 
 
 class AbstractNode(ABC):
@@ -28,7 +67,9 @@ class AbstractNode(ABC):
         producers (dict): dict of DatasetProducer objects for outputs of node
         last_hearbeat (float): timestamp of the last heartbeat
         test (bool): True if node is in test mode else False
-        log_levels (tuple): tuple of log levels
+        log_levels (tuple): tuple of allowed log levels
+        local_state (dict): shared local state between nodes. Used for intra-
+            pipeline communication without dataset dependency.
 
     Methods:
         setup_datasets: setup the consumers and producers for a node
@@ -36,14 +77,17 @@ class AbstractNode(ABC):
         _execute: execute the node, to be implemented by subclasses
     """
 
-    def __init__(self, test: bool = False) -> None:
+    def __init__(
+        self, poison_pill: ray.actor.ActorHandle, test: bool = False
+    ) -> None:
         """Initialize the node."""
         self.last_heartbeat = time.time()
         self.consumers: Dict = {}
         self.producers: Dict = {}
         self.params: Dict = {}
         self.test = test
-        self.log_levels = ("info", "debug", "warning", "error", "critical")
+        self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")
+        self.poison_pill = poison_pill
 
     def enable_test_mode(self) -> None:
         """Enable test mode."""
@@ -51,20 +95,18 @@ class AbstractNode(ABC):
 
     def setup_datasets(
         self,
-        catalog: Dict[str, dict],
+        datasets: Dict[str, dict],
         node: str,
         pipeline: str,
-        project: str,
         inputs: Optional[List[str]] = None,
         outputs: Optional[List[str]] = None,
     ) -> None:
         """Setup the consumer and producer for a node.
 
         Args:
-            catalog: dataset catalog configuration
+            datasets: dataset configuration
             node: name of the node
             pipeline: name of the pipeline
-            project: name of the project
             inputs: list of dataset names for the inputs to the node
             outputs: list of dataset names for the outputs of the node
         """
@@ -73,7 +115,7 @@ class AbstractNode(ABC):
             dataset_name: DatasetConsumer(
                 dataset_name=dataset_name,
                 node_name=node,
-                dataset_config=catalog.get(dataset_name, {}),
+                dataset_config=datasets.get(dataset_name, {}),
                 pipeline_name=pipeline,
             )
             for dataset_name in inputs
@@ -84,9 +126,8 @@ class AbstractNode(ABC):
             dataset_name: DatasetProducer(
                 dataset_name=dataset_name,
                 node_name=node,
-                dataset_config=catalog.get(dataset_name, {}),
+                dataset_config=datasets.get(dataset_name, {}),
                 pipeline_name=pipeline,
-                project_name=project,
             )
             for dataset_name in outputs
         }
@@ -190,6 +231,10 @@ class AbstractNode(ABC):
 
         self.log(f"Execution loop complete for node: {self.__class__.__name__}")
         self._post_loop_hook(params)
+
+    def activate_poison_pill(self) -> None:
+        """Activates poison pill, shutting down entire pipeline."""
+        ray.get(self.poison_pill.activate.remote())
 
     @abstractmethod
     def _execute(self, params: dict) -> Optional[bool]:

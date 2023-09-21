@@ -18,7 +18,7 @@ e.g. message:
 """
 import ast
 import datetime
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 from confluent_kafka import Consumer, Message, Producer
 
@@ -56,17 +56,7 @@ class DatasetConsumer:
         dataset_config: Dict[str, Any],
         broker: Optional[str] = None,
     ):
-        """Initialize the consumer.
-
-        Note: we added project_name to the constructor of the DatasetProducer
-        class, but are not using it here. This was done to prohibit name
-        collisions between different projects when filtering messages
-        downstream. Not adding the project_name to the DatasetConsumer
-        constructor could lead to a situation multiple projects are using
-        the same pipeline_name and node_name, and try to consume from the same
-        dataset. This would lead to an error when trying to consume from the
-        same dataset.
-        """
+        """Initialize the consumer."""
         # Assign dataset name
         self.pipeline_name = pipeline_name
 
@@ -81,10 +71,9 @@ class DatasetConsumer:
             consumer_config["bootstrap.servers"] = broker
 
         # Override default config with dataset specific config
-        if "params" in dataset_config:
-            for param in self.kafka_config.get("CONSUMER_OVERRIDABLES"):
-                if param in dataset_config["params"]:
-                    consumer_config[param] = dataset_config["params"][param]
+        for param, value in dataset_config.get("params", {}).items():
+            if param in self.kafka_config.get("CONSUMER_OVERRIDABLES"):
+                consumer_config[param] = dataset_config["params"][value]
 
         # Add consumer group id based on node name
         consumer_config["group.id"] = f"{self.pipeline_name}.{node_name}"
@@ -124,7 +113,7 @@ class DatasetConsumer:
         self,
         how: str = "next",
         timeout: Optional[int] = None,
-    ) -> Optional[Union[dict, list]]:
+    ) -> Optional[dict]:
         """Reads a message from the dataset.
 
         Args:
@@ -145,6 +134,25 @@ class DatasetConsumer:
 
         return message
 
+    def consume_all(self, end_message: str | bool = False) -> list:
+        """Reads all messages from the dataset until a specific one is found.
+
+        Args:
+            end_message: Message to trigger the completion of consumption
+
+        Returns:
+            list: list of messages from the dataset
+        """
+        messages = []
+        while True:
+            message = self.consume()
+            if message is None:
+                continue
+            if message["message"] == end_message:
+                break
+            messages.append(message)
+        return messages
+
 
 class DatasetProducer:
     """Wrapper class for Kafka producer object.
@@ -153,7 +161,6 @@ class DatasetProducer:
         dataset_name: dataset name
         node_name: name of the node that is producing the message
         pipeline_name: name of the pipeline
-        project_name: name of the project
         dataset_config: dataset config
 
     Attributes:
@@ -168,7 +175,6 @@ class DatasetProducer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        project_name: str,
         dataset_config: Dict[str, Any],
     ):
         """Initialize the producer."""
@@ -176,7 +182,6 @@ class DatasetProducer:
         self.source_pipeline = pipeline_name
         self.dataset = dataset_name
         self.source_node = node_name
-        self.project_name = project_name
 
         # Assign kafka config
         self.kafka_config = DEFAULT_KAFKA_CONFIG
@@ -218,7 +223,6 @@ class DatasetProducer:
                 AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
             ),
             "dataset": self.dataset,
-            "source_project": self.project_name,
             "source_pipeline": self.source_pipeline,
             "source_node": self.source_node,
             "message": message,

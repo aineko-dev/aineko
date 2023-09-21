@@ -1,12 +1,5 @@
-test_pipeline_runs:
-  runs:
-    test_run_1:
-      start_int: "0"
-      duration: "300"
-    test_run_2:
-      start_int: "1"
-      duration: "300"
-
+pipeline:
+  name: test_pipeline
   nodes:
     # Test actor with no input, single output, and params
     sequencer:
@@ -15,7 +8,7 @@ test_pipeline_runs:
         - integer_sequence
         - env_var
       node_params:
-        start_int: $start_int
+        start_int: 0
         num_messages: 25
         sleep_time: 1
 
@@ -28,3 +21,15 @@ test_pipeline_runs:
         - integer_doubles
       node_params:
         duration: 40
+
+  datasets:
+    integer_sequence:
+      type: kafka_stream
+      params:
+        retention.ms: 86400000
+
+    integer_doubles:
+      type: kafka_stream
+
+    env_var:
+      type: kafka_stream

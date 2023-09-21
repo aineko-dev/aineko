@@ -1,0 +1,10 @@
+integration_test:
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    sequence:
+      class: tests.integration.test_runner_with_kafka.IntegerWriter
+      outputs:
+        - count
