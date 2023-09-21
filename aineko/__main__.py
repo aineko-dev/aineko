@@ -37,14 +37,12 @@ def _cli() -> None:
         help="Name of the pipeline",
         type=str,
         default=None,
-        nargs="?",
     )
 
     run_parser.set_defaults(
         func=lambda args: run_main(
-            project=args.project_name,
+            pipeline_config_file=args.config_file,
             pipeline=args.pipeline_name,
-            conf_source=args.conf_source,
         )
     )
 
