@@ -1,13 +1,13 @@
 """A wrapper class that executes Docker CLI commands via subprocess."""
+import os
 import subprocess
 from typing import Optional
-import os
 
 
 class DockerCLIWrapper:
     """A wrapper class that executes Docker CLI commands via subprocess.
 
-    This class provides methods to start, stop, and restart Docker services 
+    This class provides methods to start, stop, and restart Docker services
     using docker-compose.
 
     Methods:
@@ -18,7 +18,7 @@ class DockerCLIWrapper:
             Stop a running Docker service specified in the Docker Compose file.
 
         restart_service(cls, path: Optional[str]) -> None:
-            Restart a running Docker service specified in the Docker 
+            Restart a running Docker service specified in the Docker
             Compose file.
 
     """
@@ -30,7 +30,7 @@ class DockerCLIWrapper:
         """Start a Docker service using the specified Docker Compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file. 
+            path (Optional[str]): The path to the Docker Compose file.
             If not provided, the default path is used.
 
         Returns:
@@ -59,7 +59,7 @@ class DockerCLIWrapper:
         """Stop a running Docker service specified in the Docker Compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file. 
+            path (Optional[str]): The path to the Docker Compose file.
             If not provided, the default path is used.
 
         Returns:
@@ -85,11 +85,10 @@ class DockerCLIWrapper:
 
     @classmethod
     def restart_service(cls, path: Optional[str]) -> None:
-        """Restart a running Docker service specified in the Docker 
-        Compose file.
+        """Restart a running Docker service specified in docker-compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file. 
+            path (Optional[str]): The path to the Docker Compose file.
             If not provided, the default path is used.
 
         Returns:

@@ -5,29 +5,27 @@ import subprocess
 class KafkaCLIWrapper:
     """A utility class for interacting with Kafka using command-line tools.
 
-    This class provides methods to consume messages from a 
+    This class provides methods to consume messages from a
     Kafka topic using the Kafka console consumer.
     """
 
     @classmethod
-    def consume_kafka_topic(
-        cls, topic_name: str, from_beginning: bool
-    ) -> None:
+    def consume_kafka_topic(cls, topic_name: str, from_beginning: bool) -> None:
         """Consume messages from a Kafka topic using the Kafka console consumer.
 
         Args:
-            topic_name (str): The name of the Kafka topic to consume 
+            topic_name (str): The name of the Kafka topic to consume
             messages from.
-            
-            from_beginning (bool): If True, start consuming from the 
-            beginning of the topic. If False, start consuming from 
+
+            from_beginning (bool): If True, start consuming from the
+            beginning of the topic. If False, start consuming from
             the current offset.
 
         Returns:
             None
 
         Raises:
-            subprocess.CalledProcessError: If there is an error running 
+            subprocess.CalledProcessError: If there is an error running
             the Kafka viewer.
 
         Example:
@@ -60,6 +58,6 @@ class KafkaCLIWrapper:
                 print(line.strip())
 
             process.wait()
-        except subprocess.CalledProcessError as e:
-            print(f"Error running Kafka viewer: {e}")
-            print(f"Command output: {e.output}")
+        except subprocess.CalledProcessError as ex:
+            print(f"Error running Kafka viewer: {ex}")
+            print(f"Command output: {ex.output}")

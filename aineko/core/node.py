@@ -4,10 +4,7 @@ import traceback
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional
 
-from aineko.config import (
-    DEFAULT_KAFKA_CONFIG,
-    TESTING_NODE_CONFIG,
-)
+from aineko.config import DEFAULT_KAFKA_CONFIG, TESTING_NODE_CONFIG
 from aineko.core.dataset import (
     DatasetConsumer,
     DatasetProducer,
@@ -191,9 +188,7 @@ class AbstractNode(ABC):
                 self.catch_exception()
                 raise
 
-        self.log(
-            f"Execution loop complete for node: {self.__class__.__name__}"
-        )
+        self.log(f"Execution loop complete for node: {self.__class__.__name__}")
         self._post_loop_hook(params)
 
     @abstractmethod
