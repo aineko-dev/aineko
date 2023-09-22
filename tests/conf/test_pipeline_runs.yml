@@ -6,6 +6,9 @@ pipeline:
     test_run_2:
       start_int: "1"
 
+  default_node_settings:
+    num_cpus: 0.5
+
   nodes:
     # Test actor with no input, single output, and params
     sequencer:

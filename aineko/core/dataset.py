@@ -18,6 +18,7 @@ e.g. message:
 """
 import ast
 import datetime
+import json
 from typing import Any, Dict, Optional
 
 from confluent_kafka import Consumer, Message, Producer
@@ -234,7 +235,7 @@ class DatasetProducer:
         self.producer.produce(
             topic=self.dataset,
             key=key_bytes,
-            value=str(message).encode("utf-8"),
+            value=json.dumps(message).encode("utf-8"),
             callback=self._delivery_report,
         )
         self.producer.flush()
