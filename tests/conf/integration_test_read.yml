@@ -1,0 +1,19 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: integration_test_read
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    sequence:
+      class: tests.integration.test_runner_with_kafka.MessageReader
+      inputs:
+        - messages
+      outputs:
+        - test_result
+
+  datasets:
+    messages:
+      type: kafka_stream
