@@ -19,9 +19,6 @@ def render_mermaid_graph(
         legend: include a legend in the graph.
         render_in_browser: Whether to render graph in browser. Prints
         graph to stdout otherwise.
-
-    Returns:
-        Nothing. Either prints graph to stdout or opens a browser.
     """
     graph = build_mermaid_from_yaml(
         config_path=config_path, direction=direction, legend=legend

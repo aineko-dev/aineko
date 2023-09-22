@@ -20,7 +20,6 @@ class DockerCLIWrapper:
         restart_service(cls, path: Optional[str]) -> None:
             Restart a running Docker service specified in the Docker
             Compose file.
-
     """
 
     DEFAULT_RELATIVE_PATH: str = "kafka/docker-compose.yml"
@@ -30,12 +29,8 @@ class DockerCLIWrapper:
         """Start a Docker service using the specified Docker Compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file.
+            path: The path to the Docker Compose file.
             If not provided, the default path is used.
-
-        Returns:
-            None
-
         """
         absolute_docker_file_path = cls._resolve_optional_relative_path(path)
         try:
@@ -59,12 +54,8 @@ class DockerCLIWrapper:
         """Stop a running Docker service specified in the Docker Compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file.
+            path: The path to the Docker Compose file.
             If not provided, the default path is used.
-
-        Returns:
-            None
-
         """
         absolute_docker_file_path = cls._resolve_optional_relative_path(path)
         try:
@@ -88,12 +79,8 @@ class DockerCLIWrapper:
         """Restart a running Docker service specified in docker-compose file.
 
         Args:
-            path (Optional[str]): The path to the Docker Compose file.
+            path: The path to the Docker Compose file.
             If not provided, the default path is used.
-
-        Returns:
-            None
-
         """
         absolute_docker_file_path = cls._resolve_optional_relative_path(path)
         try:
@@ -117,11 +104,10 @@ class DockerCLIWrapper:
         """Resolve the optional relative path to an absolute path.
 
         Args:
-            path (Optional[str]): The optional relative path.
+            path: The optional relative path.
 
         Returns:
-            str: The absolute path to the Docker Compose file.
-
+            The absolute path to the Docker Compose file.
         """
         if path is None:
             print(
@@ -140,16 +126,12 @@ class DockerCLIWrapper:
         """Validate if the specified file is a valid Docker Compose file.
 
         Args:
-            absolute_docker_file_path (str): The absolute path to
+            absolute_docker_file_path: The absolute path to
             the Docker Compose file.
 
         Raises:
             FileNotFoundError: If the file does not exist or if it is not a
                 docker-compose.yml file.
-
-        Returns:
-            None
-
         """
         if not os.path.isfile(absolute_docker_file_path):
             raise FileNotFoundError(

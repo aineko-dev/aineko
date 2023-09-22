@@ -14,15 +14,12 @@ class KafkaCLIWrapper:
         """Consume messages from a Kafka topic using the Kafka console consumer.
 
         Args:
-            topic_name (str): The name of the Kafka topic to consume
+            topic_name: The name of the Kafka topic to consume
             messages from.
 
-            from_beginning (bool): If True, start consuming from the
+            from_beginning: If True, start consuming from the
             beginning of the topic. If False, start consuming from
             the current offset.
-
-        Returns:
-            None
 
         Raises:
             subprocess.CalledProcessError: If there is an error running
