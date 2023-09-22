@@ -89,35 +89,22 @@ def _cli() -> None:
         func=lambda args: DockerCLIWrapper.restart_service(args.file)
     )
 
-    # `aineko dataset *`
-    dataset_parser = subparsers.add_parser("dataset")
-    dataset_subparser = dataset_parser.add_subparsers()
+    # `aineko stream *`
+    stream_parser = subparsers.add_parser("stream")
 
-    view_dataset_parser = dataset_subparser.add_parser(
-        "view", help="View all previous messages and new ones for the dataset"
-    )
-    view_dataset_parser.add_argument(
+    stream_parser.add_argument(
         "-d", "--dataset", help="Name of dataset", required=True
     )
-    # consume from beginning
-    view_dataset_parser.set_defaults(
-        func=lambda args: KafkaCLIWrapper.consume_kafka_topic(
-            args.dataset, from_beginning=True
-        )
+    stream_parser.add_argument(
+        "--from-beginning",
+        help="If we should stream messages from" "beginning or not",
+        action="store_true",
     )
 
-    stream_dataset_parser = dataset_subparser.add_parser(
-        "stream", help="Stream new messages for the dataset"
-    )
-    stream_dataset_parser.add_argument(
-        "-d",
-        "--dataset",
-        help="Name of dataset",
-        required=True,
-    )
-    stream_dataset_parser.set_defaults(
+    # consume from beginning
+    stream_parser.set_defaults(
         func=lambda args: KafkaCLIWrapper.consume_kafka_topic(
-            args.dataset, from_beginning=False
+            args.dataset, from_beginning=args.from_beginning
         )
     )
 
