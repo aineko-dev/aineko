@@ -11,19 +11,27 @@ from aineko.core.dataset import DatasetConsumer
 from aineko.core.node import AbstractNode
 from aineko.core.runner import Runner
 
+MESSAGES = [
+    0,
+    1,
+    2,
+    3,  # int
+    "test_1",
+    "test_2",  # str
+    {"test_1": 1, "test_2": 2},  # dict
+]
+
 
 class IntegerWriter(AbstractNode):
     """Node that counts integers every second."""
 
     def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
-        self.limit = 10
-        self.counter = 0
+        self.messages = MESSAGES
 
     def _execute(self, params: Optional[dict] = None) -> None:
         """Counts integers every second."""
-        if self.counter < self.limit:
-            self.producers["count"].produce(self.counter)
-            self.counter += 1
+        if len(self.messages) > 0:
+            self.producers["count"].produce(self.messages.pop(0))
             time.sleep(0.1)
         else:
             self.producers["count"].produce("END")
@@ -60,4 +68,4 @@ def test_write_to_kafka():
         )
         count_messages = consumer.consume_all(end_message="END")
         count_values = [msg["message"] for msg in count_messages]
-        assert count_values == list(range(10))
+        assert count_values == MESSAGES

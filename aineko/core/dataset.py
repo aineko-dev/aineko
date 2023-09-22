@@ -16,7 +16,6 @@ e.g. message:
     "message": {...},
 }
 """
-import ast
 import datetime
 import json
 from typing import Any, Dict, Optional
@@ -108,7 +107,7 @@ class DatasetConsumer:
         message = message.value()
         if isinstance(message, bytes):
             message = message.decode("utf-8")
-        return ast.literal_eval(message)
+        return json.loads(message)
 
     def consume(
         self,
