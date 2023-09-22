@@ -1,0 +1,15 @@
+pipeline:
+  name: integration_test_write
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    sequence:
+      class: tests.integration.test_runner_with_kafka.MessageWriter
+      outputs:
+        - messages
+
+  datasets:
+    messages:
+      type: kafka_stream
