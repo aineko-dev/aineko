@@ -11,22 +11,30 @@ from aineko.core.dataset import DatasetConsumer
 from aineko.core.node import AbstractNode
 from aineko.core.runner import Runner
 
+MESSAGES = [
+    0,
+    1,
+    2,
+    3,  # int
+    "test_1",
+    "test_2",  # str
+    {"test_1": 1, "test_2": 2},  # dict
+]
 
-class IntegerWriter(AbstractNode):
-    """Node that counts integers every second."""
+
+class MessageWriter(AbstractNode):
+    """Node that produces messages every 0.1 second."""
 
     def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
-        self.limit = 10
-        self.counter = 0
+        self.messages = MESSAGES
 
     def _execute(self, params: Optional[dict] = None) -> None:
-        """Counts integers every second."""
-        if self.counter < self.limit:
-            self.producers["count"].produce(self.counter)
-            self.counter += 1
+        """Sends message."""
+        if len(self.messages) > 0:
+            self.producers["messages"].produce(self.messages.pop(0))
             time.sleep(0.1)
         else:
-            self.producers["count"].produce("END")
+            self.producers["messages"].produce("END")
             return False
 
     def _post_loop_hook(self, params: Optional[dict] = None) -> None:
@@ -35,7 +43,42 @@ class IntegerWriter(AbstractNode):
         self.activate_poison_pill()
 
 
-def test_write_to_kafka():
+class MessageReader(AbstractNode):
+    """Node that reads messages and logs them."""
+
+    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+        self.messages = MESSAGES
+        self.received = []
+        self.timeout = 20  # seconds to wait for before terminating
+        self.last_updated = time.time()
+
+    def _execute(self, params: Optional[dict] = None) -> None:
+        """Read message"""
+        msg = self.consumers["messages"].consume()
+        if time.time() - self.last_updated > self.timeout:
+            raise TimeoutError("Timed out waiting for messages.")
+
+        if not msg:
+            return
+
+        if msg["message"] == "END":
+            return False
+
+        self.received.append(msg["message"])
+        self.last_updated = time.time()
+
+    def _post_loop_hook(self, params: dict | None = None) -> None:
+        if self.messages != self.received:
+            raise ValueError(
+                "Failed to read expected messages."
+                f"Expected: {self.messages}, Received: {self.received}"
+            )
+        self.producers["test_result"].produce("TEST PASSED")
+        self.producers["test_result"].produce("END")
+        self.activate_poison_pill()
+
+
+def test_write_read_to_kafka():
     """Integration test to check that nodes can write to kafka.
 
     First set up the integration test pipeline run it, making use
@@ -44,20 +87,41 @@ def test_write_to_kafka():
 
     Next, create a consumer to read all messages directly from the
     kafka topic and check that the messages match what was sent.
+
+    Then test node reading functinality by setting up a new pipeline
+    that reads from the created dataset and checks that the messages
+    are as expected.
     """
     runner = Runner(
-        pipeline="integration_test",
-        pipeline_config_file="tests/conf/integration_test.yml",
+        pipeline="integration_test_write",
+        pipeline_config_file="tests/conf/integration_test_write.yml",
     )
     try:
         runner.run()
     except ray.exceptions.RayActorError:
         consumer = DatasetConsumer(
-            dataset_name="count",
+            dataset_name="messages",
             node_name="consumer",
-            pipeline_name="integration_test",
+            pipeline_name="integration_test_write",
             dataset_config={},
         )
         count_messages = consumer.consume_all(end_message="END")
         count_values = [msg["message"] for msg in count_messages]
-        assert count_values == list(range(10))
+        assert count_values == MESSAGES
+
+    runner = Runner(
+        pipeline="integration_test_read",
+        pipeline_config_file="tests/conf/integration_test_read.yml",
+    )
+    try:
+        runner.run()
+    except ray.exceptions.RayActorError:
+        consumer = DatasetConsumer(
+            dataset_name="test_result",
+            node_name="consumer",
+            pipeline_name="integration_test_read",
+            dataset_config={},
+        )
+        count_messages = consumer.consume_all(end_message="END")
+        assert count_messages[0]["source_pipeline"] == "integration_test_read"
+        assert count_messages[0]["message"] == "TEST PASSED"
