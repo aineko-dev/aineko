@@ -96,15 +96,15 @@ def _cli() -> None:
         "-d", "--dataset", help="Name of dataset", required=True
     )
     stream_parser.add_argument(
-        "--from-beginning",
-        help="If we should stream messages from" "beginning or not",
+        "--from-start",
+        help="If we should stream messages from the start or not",
         action="store_true",
     )
 
     # consume from beginning
     stream_parser.set_defaults(
         func=lambda args: KafkaCLIWrapper.consume_kafka_topic(
-            args.dataset, from_beginning=args.from_beginning
+            args.dataset, from_beginning=args.from_start
         )
     )
 
