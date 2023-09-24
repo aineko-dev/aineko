@@ -141,10 +141,10 @@ def test_doubler_node():
         """Test doubler node."""
 
         def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
-            """Initialises node with current time.
+            """Initializes node with current time.
 
             Args:
-                params: _description_. Defaults to None.
+                params: Defaults to None.
             """
             self.cur_time = time.time()
 

@@ -90,7 +90,7 @@ def test_write_read_to_kafka():
     Next, create a consumer to read all messages directly from the
     kafka topic and check that the messages match what was sent.
 
-    Then test node reading functinality by setting up a new pipeline
+    Then test node reading functionality by setting up a new pipeline
     that reads from the created dataset and checks that the messages
     are as expected.
     """
