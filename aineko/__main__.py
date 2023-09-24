@@ -4,26 +4,27 @@
 import argparse
 
 from aineko import __version__
+from aineko.cli.docker_cli_wrapper import DockerCLIWrapper
+from aineko.cli.kafka_cli_wrapper import KafkaCLIWrapper
 from aineko.cli.run import main as run_main
-from aineko.cli.visualize import (
-    build_mermaid_from_yaml,
-    render_graph_in_browser,
-)
+from aineko.cli.visualize import render_mermaid_graph
 
 
 def _cli() -> None:
     """Command line interface for Aineko."""
     parser = argparse.ArgumentParser(
         prog="aineko",
-        description="Aineko is a framework for building data intensive "
-        "applications.",
+        description=(
+            "Aineko is a framework for building data intensive applications."
+        ),
     )
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {__version__}"
     )
 
-    subparsers = parser.add_subparsers(dest="command")
+    subparsers = parser.add_subparsers()
 
+    # `aineko run *`
     run_parser = subparsers.add_parser("run", help="Run a pipeline")
     run_parser.add_argument(
         "-c",
@@ -38,9 +39,78 @@ def _cli() -> None:
         help="Name of the pipeline",
         type=str,
         default=None,
-        nargs="?",
     )
 
+    run_parser.set_defaults(
+        func=lambda args: run_main(
+            pipeline_config_file=args.config_file,
+            pipeline=args.pipeline_name,
+        )
+    )
+
+    # `aineko service *`
+    service_parser = subparsers.add_parser("service")
+    service_subparsers = service_parser.add_subparsers()
+
+    start_service_parser = service_subparsers.add_parser("start")
+    start_service_parser.add_argument(
+        "-f",
+        "--file",
+        help=(
+            "Specify a relative path to a docker-compose file (optional) for"
+            " the 'start' command"
+        ),
+    )
+    start_service_parser.set_defaults(
+        func=lambda args: DockerCLIWrapper.start_service(args.file)
+    )
+
+    stop_service_parser = service_subparsers.add_parser("stop")
+    stop_service_parser.add_argument(
+        "-f",
+        "--file",
+        help=(
+            "Specify a relative path to a docker-compose file (optional) for"
+            " the 'stop' command"
+        ),
+    )
+    stop_service_parser.set_defaults(
+        func=lambda args: DockerCLIWrapper.stop_service(args.file)
+    )
+
+    restart_service_parser = service_subparsers.add_parser("restart")
+    restart_service_parser.add_argument(
+        "-f",
+        "--file",
+        help=(
+            "Specify a relative path to a docker-compose file (optional) for"
+            " the 'restart' command"
+        ),
+    )
+    restart_service_parser.set_defaults(
+        func=lambda args: DockerCLIWrapper.restart_service(args.file)
+    )
+
+    # `aineko stream *`
+    stream_parser = subparsers.add_parser("stream")
+
+    stream_parser.add_argument(
+        "-d", "--dataset", help="Name of dataset", required=True
+    )
+    stream_parser.add_argument(
+        "--from-start",
+        help="If we should stream messages from the start or not",
+        action="store_true",
+    )
+
+    # consume from beginning
+    stream_parser.set_defaults(
+        func=lambda args: KafkaCLIWrapper.consume_kafka_topic(
+            args.dataset, from_beginning=args.from_start
+        )
+    )
+
+    # `aineko visualize *`
     visualize_parser = subparsers.add_parser(
         "visualize", help="Visualize Aineko pipelines as a Mermaid graph."
     )
@@ -72,27 +142,17 @@ def _cli() -> None:
         action="store_true",
         help="Open the graph in the default browser.",
     )
-
-    args = parser.parse_args()
-
-    if args.command == "run":
-        run_main(
-            pipeline_config_file=args.config_file,
-            pipeline=args.pipeline_name,
-        )
-    elif args.command == "visualize":
-        graph = build_mermaid_from_yaml(
+    visualize_parser.set_defaults(
+        func=lambda args: render_mermaid_graph(
             config_path=args.config_path,
             direction=args.direction,
             legend=args.legend,
+            render_in_browser=args.browser,
         )
-        if args.browser:
-            render_graph_in_browser(mermaid_graph=graph)
-        else:
-            print(graph)
+    )
 
-    else:
-        parser.print_help()
+    args = parser.parse_args()
+    args.func(args)
 
 
 if __name__ == "__main__":

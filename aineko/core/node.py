@@ -190,7 +190,7 @@ class AbstractNode(ABC):
         if level not in self.log_levels:
             raise ValueError(
                 f"Invalid logging level {level}. Valid options are: "
-                f'{", ".join(self.log_levels)}'
+                f"{', '.join(self.log_levels)}"
             )
         out_msg = {"log": message, "level": level}
         self.producers[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].produce(

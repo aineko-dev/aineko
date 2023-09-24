@@ -7,6 +7,31 @@ import webbrowser
 import yaml
 
 
+def render_mermaid_graph(
+    config_path: str,
+    direction: str = "LR",
+    legend: bool = False,
+    render_in_browser: bool = False,
+) -> None:
+    """Builds mermaid graph from an Aineko pipeline config.
+
+    Args:
+        config_path: file path to pipeline yaml file
+        direction: direction of the graph.
+        legend: include a legend in the graph.
+        render_in_browser: Whether to render graph in browser. Prints
+        graph to stdout otherwise.
+    """
+    graph = build_mermaid_from_yaml(
+        config_path=config_path, direction=direction, legend=legend
+    )
+    if render_in_browser is True:
+        render_graph_in_browser(graph)
+
+    else:
+        print(graph)
+
+
 def build_mermaid_from_yaml(
     config_path: str, direction: str = "LR", legend: bool = False
 ) -> str:
@@ -42,7 +67,8 @@ def build_mermaid_from_yaml(
     for transition in transitions:
         if "input" in transition.keys():
             src_node = (
-                f"T_{transition['input']}[{transition['input']}]:::datasetClass"
+                f"T_{transition['input']}[{transition['input']}]"
+                ":::datasetClass"
             )
             tgt_node = (
                 f"N_{transition['node']}(({transition['node']})):::nodeClass"
@@ -53,7 +79,7 @@ def build_mermaid_from_yaml(
             )
             tgt_node = (
                 f"T_{transition['output']}[{transition['output']}]"
-                f":::datasetClass"
+                ":::datasetClass"
             )
 
         mermaid_transitions.append(f"{src_node} -->  {tgt_node}")
