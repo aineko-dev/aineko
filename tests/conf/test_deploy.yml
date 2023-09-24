@@ -1,0 +1,45 @@
+project: aineko_test
+version: 0.1.0
+
+defaults:
+  machine_config:
+    type: ec2
+    mem: 16Gib
+    vcpu: 4
+  env_vars:
+    project: aineko_test
+
+environments:
+  develop:
+    pipelines:
+      - example_pipeline:
+          env_vars:
+            env: develop
+          load_balancers:
+            - hostname: dev-api.aineko.dev
+              port: 8000
+
+      - test_run_1
+
+  production:
+    pipelines:
+      - large_tx_all:
+          machine_config:
+            type: ec2
+            mem: 32Gib
+            vcpu: 8
+
+pipelines:
+  example_pipeline:
+    source: ./tests/conf/test_pipeline.yml
+    machine_config:
+      type: ec2
+      mem: 8Gib
+      vcpu: 2
+
+  test_run_1:
+    source: ./tests/conf/test_pipeline_runs.yml
+    name: test_run_1
+
+  large_tx_all:
+    source: ./tests/conf/test_pipeline_runs.yml

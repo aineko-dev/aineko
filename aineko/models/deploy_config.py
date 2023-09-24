@@ -1,6 +1,6 @@
 """Models for deployment configuration."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, validator
 
@@ -33,18 +33,36 @@ class MachineConfig(BaseModel):
         return value
 
 
-class Pipeline(BaseModel, extra="forbid"):
-    """Configuration for a pipeline."""
+class GenericPipeline(BaseModel, extra="forbid"):
+    """Configuration for a pipeline defined under top-level pipelines key."""
 
     source: str
     name: Optional[str]
     machine_config: Optional[MachineConfig]
+    env_vars: Optional[Dict[str, str]]
+
+
+class LoadBalancer(BaseModel, extra="forbid"):
+    """Configuration for a load balancer."""
+
+    hostname: str
+    port: int
+
+
+class SpecificPipeline(BaseModel, extra="forbid"):
+    """Configuration for a pipeline defined under the top-level environments key."""
+
+    source: Optional[str]
+    name: Optional[str]
+    machine_config: Optional[MachineConfig]
+    env_vars: Optional[Dict[str, str]]
+    load_balancers: Optional[List[LoadBalancer]]
 
 
 class Pipelines(BaseModel, extra="forbid"):
-    """Configuration for list of pipelines."""
+    """Configuration for list of pipelines, under the top-level environments key."""
 
-    pipelines: List[Dict[str, Pipeline]]
+    pipelines: List[Union[str, Dict[str, SpecificPipeline]]]
 
 
 class DeploymentConfig(BaseModel, extra="forbid"):
@@ -53,7 +71,7 @@ class DeploymentConfig(BaseModel, extra="forbid"):
     project: str
     version: str
     defaults: Optional[Dict]
-    pipelines: Dict[str, Pipeline]
+    pipelines: Dict[str, GenericPipeline]
     environments: Dict[str, Pipelines]
 
     @validator("version")
