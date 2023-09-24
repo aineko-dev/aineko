@@ -130,7 +130,7 @@ class DatasetConsumer:
                 self.consumer.poll(timeout=timeout)
             )
         else:
-            raise ValueError(f"Invalid how: {how}. Expecected 'next'.")
+            raise ValueError(f"Invalid how: {how}. Expected 'next'.")
 
         return message
 
@@ -299,7 +299,7 @@ class FakeDatasetConsumer:
                 }
             else:
                 return None
-        raise ValueError(f"Invalid how: {how}. Expecected 'next'.")
+        raise ValueError(f"Invalid how: {how}. Expected 'next'.")
 
 
 class FakeDatasetProducer:

@@ -191,7 +191,7 @@ class Runner:
         default_node_config = pipeline_config.get("default_node_settings", {})
 
         for node_name, node_config in pipeline_config["nodes"].items():
-            # Initalize actor from specified class in config
+            # Initialize actor from specified class in config
             target_class = imports.import_from_string(
                 attr=node_config["class"], kind="class"
             )
