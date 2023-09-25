@@ -42,3 +42,5 @@ repos:
           "scan_folded_as_literal=true", # !yamlfmt!:ignore
         ]
         files: \.(yml|yaml)$
+        # exclude all pipeline.(yaml|yml) files in template due to double brace {{}}
+        exclude: ^aineko/templates/.*pipeline\.(yaml|yml)$

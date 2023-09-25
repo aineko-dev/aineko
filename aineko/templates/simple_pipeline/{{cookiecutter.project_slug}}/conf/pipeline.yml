@@ -1,12 +1,12 @@
 pipeline:
-  name: {? {cookiecutter.pipeline_slug: ''} : ''}
+  name: {{cookiecutter.pipeline_slug}}
 
   default_node_settings:
     num_cpus: 0.5
 
   nodes:
     sequence:
-      class: x.nodes.MySequencerNode
+      class: {{cookiecutter.project_slug}}.nodes.MySequencerNode
       outputs:
         - test_sequence
       node_params:
@@ -20,7 +20,7 @@ pipeline:
         - test_sequence
       outputs:
         - test_sum
-      class: x.nodes.MySumNode
+      class: {{cookiecutter.project_slug}}.nodes.MySumNode
       node_params:
         increment: 1
 
