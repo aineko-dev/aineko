@@ -2,7 +2,7 @@
 
 import os
 
-from cookiecutter.main import cookiecutter
+from cookiecutter.main import cookiecutter  # type: ignore
 
 
 def create_pipeline_directory() -> None:
