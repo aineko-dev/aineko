@@ -3,7 +3,7 @@ lint:
 	poetry run black .
 	poetry run pydocstyle aineko
 	poetry run pylint aineko
-	poetry run yamllint -d "{extends: relaxed, ignore-from-file: .gitignore}" .
+	poetry run yamllint -c yamllint.yaml .
 	poetry run mypy aineko
 	poetry run pre-commit run --all
 

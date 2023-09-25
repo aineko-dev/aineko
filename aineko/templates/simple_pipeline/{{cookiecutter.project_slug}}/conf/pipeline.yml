@@ -1,0 +1,32 @@
+pipeline:
+  name: {? {cookiecutter.pipeline_slug: ''} : ''}
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    sequence:
+      class: x.nodes.MySequencerNode
+      outputs:
+        - test_sequence
+      node_params:
+        initial_state: 0
+        increment: 1
+
+    sum:
+      node_settings:
+        num_cpus: 1
+      inputs:
+        - test_sequence
+      outputs:
+        - test_sum
+      class: x.nodes.MySumNode
+      node_params:
+        increment: 1
+
+  datasets:
+    test_sequence:
+      type: kafka_stream
+
+    test_sum:
+      type: kafka_stream
