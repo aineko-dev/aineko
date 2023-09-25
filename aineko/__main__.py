@@ -4,6 +4,7 @@
 import argparse
 
 from aineko import __version__
+from aineko.cli.create_pipeline import create_pipeline_directory
 from aineko.cli.docker_cli_wrapper import DockerCLIWrapper
 from aineko.cli.kafka_cli_wrapper import KafkaCLIWrapper
 from aineko.cli.run import main as run_main
@@ -23,6 +24,14 @@ def _cli() -> None:
     )
 
     subparsers = parser.add_subparsers()
+
+    # `aineko create *`
+    create_parser = subparsers.add_parser(
+        "create",
+        help="Create a directory containing pipeline config and \
+            code from a template to get started",
+    )
+    create_parser.set_defaults(func=lambda args: create_pipeline_directory())
 
     # `aineko run *`
     run_parser = subparsers.add_parser("run", help="Run a pipeline")

@@ -1,4 +1,4 @@
-project: {? {cookiecutter.project_name: ''} : ''}
+project: {{cookiecutter.project_name}}
 version: 0.1.0
 
 defaults:
@@ -7,7 +7,7 @@ defaults:
     mem: 16Gib
     vcpu: 4
   env_vars:
-    project: {? {cookiecutter.project_name: ''} : ''}
+    project: {{cookiecutter.project_name}}
 
 environments:
   develop:
