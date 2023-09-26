@@ -33,12 +33,12 @@ def _cli() -> None:
     )
     create_parser.add_argument(
         "-d",
-        "--with-deploy",
+        "--deployment-config",
         action="store_true",
         help="Include deploy.yml that facilitates deployment of pipelines",
     )
     create_parser.set_defaults(
-        func=lambda args: create_pipeline_directory(args.with_deploy)
+        func=lambda args: create_pipeline_directory(args.deployment_config)
     )
 
     # `aineko run *`

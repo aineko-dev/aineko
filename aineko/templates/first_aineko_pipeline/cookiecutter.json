@@ -5,5 +5,5 @@
     "authors": "John Doe <johndoe@gmail.com>",
     "pipeline_slug": "test-aineko-pipeline",
     "_aineko_core_directory": "/Users/lionellloh/Projects/convex-labs/aineko-core",
-    "_with_deploy": false
+    "_deployment_config": false
 }

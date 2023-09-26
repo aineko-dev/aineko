@@ -13,7 +13,7 @@ TERMINATOR = "\x1b[0m"
 
 
 project_slug = "{{cookiecutter.project_slug}}"
-with_deploy_str = "{{ cookiecutter._with_deploy }}"
+with_deploy_str = "{{ cookiecutter._deployment_config }}"
 
 # Cast string to boolean
 if with_deploy_str.lower() == "true":
@@ -23,7 +23,7 @@ elif with_deploy_str.lower() == "false":
 else:
     print(
         ERROR
-        + f"Invalid value for cookiecutter._with_deploy: {with_deploy_str}"
+        + f"Invalid value for cookiecutter._deployment_config: {with_deploy_str}"
         + TERMINATOR
     )
     sys.exit(1)
