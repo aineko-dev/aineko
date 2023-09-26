@@ -1,4 +1,4 @@
-"""A series of cookiecutter post-codegen hooks to validate user input.
+"""A series of cookiecutter pre-codegen hooks to validate user input.
 
 These code will run after user-input is provided and before files are
 generated.
@@ -17,7 +17,7 @@ MODULE_REGEX = r"^[_a-zA-Z][_a-zA-Z0-9]+$"
 
 project_slug = "{{ cookiecutter.project_slug }}"
 pipeline_slug = "{{ cookiecutter.pipeline_slug }}"
-aineko_core_directory = "{{ cookiecutter.aineko_core_directory }}"
+aineko_core_directory = "{{ cookiecutter._aineko_core_directory }}"
 
 
 class AinekoPathValidationException(Exception):

@@ -5,8 +5,13 @@ import os
 from cookiecutter.main import cookiecutter  # type: ignore
 
 
-def create_pipeline_directory() -> None:
-    """Creates boilerplate code and config required for an Aineko pipeline."""
+def create_pipeline_directory(with_deploy: bool) -> None:
+    """Creates boilerplate code and config required for an Aineko pipeline.
+
+    Args:
+        with_deploy: If True, include a deploy file when generating, else
+        do not include.
+    """
     script_directory = os.path.dirname(os.path.abspath(__file__))
     # Assumes that aineko_core is always 2-levels above this file
     # While this assumption is somewhat fragile, we most likely
@@ -17,5 +22,8 @@ def create_pipeline_directory() -> None:
     # Only one type of pipeline, hence this argument is no-arg
     cookiecutter(
         f"{templates_directory}/simple_pipeline",
-        extra_context={"aineko_core_dir": aineko_core_directory},
+        extra_context={
+            "aineko_core_dir": aineko_core_directory,
+            "_with_deploy": with_deploy,
+        },
     )

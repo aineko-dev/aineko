@@ -31,7 +31,15 @@ def _cli() -> None:
         help="Create a directory containing pipeline config and \
             code from a template to get started",
     )
-    create_parser.set_defaults(func=lambda args: create_pipeline_directory())
+    create_parser.add_argument(
+        "-d",
+        "--with-deploy",
+        action="store_true",
+        help="Include deploy.yml that facilitates deployment of pipelines",
+    )
+    create_parser.set_defaults(
+        func=lambda args: create_pipeline_directory(args.with_deploy)
+    )
 
     # `aineko run *`
     run_parser = subparsers.add_parser("run", help="Run a pipeline")
