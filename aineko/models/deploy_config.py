@@ -77,7 +77,7 @@ class FullPipeline(BaseModel, extra="forbid"):
 
     source: str
     name: Optional[str]
-    machine_config: Optional[MachineConfig]
+    machine_config: MachineConfig
     env_vars: Optional[Dict[str, str]]
     load_balancers: Optional[List[LoadBalancer]]
 

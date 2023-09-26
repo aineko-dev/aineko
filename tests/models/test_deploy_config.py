@@ -6,8 +6,8 @@ from pydantic import ValidationError
 from aineko.models.deploy_config import (
     DeploymentConfig,
     MachineConfig,
-    Pipeline,
     Pipelines,
+    SpecificPipeline,
 )
 
 
@@ -51,16 +51,18 @@ def test_machine_config(machine_config):
 def test_pipeline(pipeline_config, machine_config):
     """Test Pipeline model."""
     # Only source
-    assert Pipeline(source="./conf/pipeline.yml")
+    assert SpecificPipeline(source="./conf/pipeline.yml")
     # Source and name
-    assert Pipeline(**pipeline_config)
+    assert SpecificPipeline(**pipeline_config)
     # Source, name, and machine_config
-    assert Pipeline(**pipeline_config, **{"machine_config": machine_config})
+    assert SpecificPipeline(
+        **pipeline_config, **{"machine_config": machine_config}
+    )
 
     # Fail if extra keys are added
     pipeline_config["extra"] = "extra"
     with pytest.raises(ValidationError):
-        Pipeline(**pipeline_config)
+        SpecificPipeline(**pipeline_config)
 
 
 def test_pipelines(pipelines_config):
