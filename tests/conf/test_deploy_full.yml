@@ -7,7 +7,7 @@ environments:
       - example_pipeline:
           machine_config:
             type: ec2
-            mem: 8
+            mem_gib: 8
             vcpu: 2
           env_vars:
             project: aineko_test
@@ -20,7 +20,7 @@ environments:
       - test_run_1:
           machine_config:
             type: ec2
-            mem: 16
+            mem_gib: 16
             vcpu: 4
           env_vars:
             project: aineko_test
@@ -35,5 +35,5 @@ environments:
           source: ./tests/conf/test_pipeline_runs.yml
           machine_config:
             type: ec2
-            mem: 32
+            mem_gib: 32
             vcpu: 8
