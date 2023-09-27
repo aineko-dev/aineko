@@ -24,6 +24,7 @@ classifiers = [
 python = ">=3.10,<3.11"
 pydantic = "<2"
 PyYAML = "^6.0.1"
+types-PyYAML = "^6.0.1"
 schema = "^0.7.5"
 confluent-kafka = "^2.2.0"
 ray = {extras = ["default"], version = "^2.6.3"}
