@@ -8,7 +8,7 @@
 [tool.poetry]
 name = "aineko"
 version = "0.1.0"
-description = "Aineko, a data integration framework"
+description = "Aineko, a data integration framework."
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
 license = "Apache-2.0"
