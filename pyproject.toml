@@ -8,13 +8,20 @@
 [tool.poetry]
 name = "aineko"
 version = "0.1.0"
-description = "Aineko, a data integration framework"
+description = "Aineko, a data integration framework."
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
 license = "Apache-2.0"
+homepage = "https://aineko.dev/"
+repository = "https://github.com/aineko-dev/aineko"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Natural Language :: English",
+  "Typing :: Typed",
+]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.11"
 pydantic = "<2"
 PyYAML = "^6.0.1"
 types-PyYAML = "^6.0.1"
