@@ -7,7 +7,7 @@
 
 [tool.poetry]
 name = "aineko"
-version = "0.1.0"
+version = "0.1.1"
 description = "Aineko, a data integration framework."
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
@@ -27,7 +27,7 @@ PyYAML = "^6.0.1"
 types-PyYAML = "^6.0.1"
 schema = "^0.7.5"
 confluent-kafka = "^2.2.0"
-ray = {extras = ["default"], version = "^2.6.3"}
+ray = { extras = ["default"], version = "^2.6.3" }
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.17.5"
@@ -68,8 +68,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 filterwarnings = [
-    # Ignore this depracation warning because of the way virtualenvs is implemented
-    "ignore:.*pkg_resources.*:DeprecationWarning",
+  # Ignore this depracation warning because of the way virtualenvs is implemented
+  "ignore:.*pkg_resources.*:DeprecationWarning",
 ]
 pythonpath = ["."]
 
