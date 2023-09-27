@@ -2,9 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 version: 2.1
 
-orbs:
-  aineko: convex-labs/aineko@1.5.8
-
 parameters:
   python_version:
     description: Version to python to use
