@@ -1,7 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 project: aineko_test
-version: 0.1.0
+version: 0.1.1
 
 environments:
   develop:
