@@ -12,6 +12,7 @@ description = "Aineko, a data integration framework"
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
 license = "Apache-2.0"
+repository = "https://github.com/aineko-dev/aineko"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
