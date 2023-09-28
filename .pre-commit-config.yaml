@@ -48,4 +48,6 @@ repos:
         name: Check License Snippet
         entry: python .internals/check_license.py
         language: python
-        types: [python] # you can specify other file types if needed
+        files: \.(py|yml|yaml)$
+        exclude: ".pre-commit-config.yaml"
+        args: ["--fix"]
