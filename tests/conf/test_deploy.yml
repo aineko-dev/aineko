@@ -20,16 +20,6 @@ environments:
             - hostname: dev-api.aineko.dev
               port: 8000
 
-      - test_run_1
-
-  production:
-    pipelines:
-      - large_tx_all:
-          machine_config:
-            type: ec2
-            mem_gib: 32
-            vcpu: 8
-
 pipelines:
   example_pipeline:
     source: ./tests/conf/test_pipeline.yml
@@ -37,10 +27,3 @@ pipelines:
       type: ec2
       mem_gib: 8
       vcpu: 2
-
-  test_run_1:
-    source: ./tests/conf/test_pipeline_runs.yml
-    name: test_run_1
-
-  large_tx_all:
-    source: ./tests/conf/test_pipeline_runs.yml

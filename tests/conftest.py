@@ -32,19 +32,6 @@ def test_pipeline_config_file(conf_directory: str):
 
 
 @pytest.fixture(scope="module")
-def test_pipeline_config_file_runs(conf_directory: str):
-    """Pipeline config file with runs fixture.
-
-    Returns:
-        str: Path to pipeline config with runs file
-    """
-    return os.path.join(conf_directory, "test_pipeline_runs.yml")
-
-
-# Aineko test fixtures.
-
-
-@pytest.fixture(scope="module")
 def config_loader(test_pipeline_config_file: str):
     """Config loader fixture.
 
@@ -53,19 +40,6 @@ def config_loader(test_pipeline_config_file: str):
     """
     return ConfigLoader(
         pipeline_config_file=test_pipeline_config_file,
-    )
-
-
-@pytest.fixture(scope="module")
-def config_loader_runs(test_pipeline_config_file_runs: str):
-    """Config loader fixture for pipeline config with runs.
-
-    Returns:
-        ConfigLoader: Test config loader
-    """
-    return ConfigLoader(
-        pipeline_config_file=test_pipeline_config_file_runs,
-        pipeline="test_run_1",
     )
 
 
