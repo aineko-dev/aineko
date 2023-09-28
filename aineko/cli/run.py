@@ -1,8 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Module to run a pipeline from the command line."""
-from typing import Optional
-
 from aineko.core.runner import Runner
 
 
