@@ -1,3 +1,5 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
 """Example file showing unit testing."""
 
 from lib.nodes import MySumNode

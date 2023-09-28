@@ -1,3 +1,5 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
 """Example file setting default configs for project."""
 
 from aineko.config import BaseConfig

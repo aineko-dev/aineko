@@ -1,3 +1,5 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
 """A series of cookiecutter pre-codegen hooks to validate user input.
 
 These code will run after user-input is provided and before files are
