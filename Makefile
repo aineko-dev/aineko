@@ -1,3 +1,8 @@
+help:
+	@echo "lint - lint code"
+	@echo "unit-test - run unit tests suite"
+	@echo "integration-test - run integration tests suite"
+
 lint:
 	poetry run isort .
 	poetry run black .
