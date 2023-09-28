@@ -28,7 +28,6 @@ from aineko.models.deploy_config_schema_internal import (
 class DeploymentConfig(BaseModel, extra="forbid"):
     """User deployment configuration (Schema for deploy.yml)."""
 
-    project: str
     version: str
     defaults: Optional[ParameterizableDefaults]
     pipelines: Dict[str, GenericPipeline]
@@ -45,7 +44,6 @@ class DeploymentConfig(BaseModel, extra="forbid"):
 class FullDeploymentConfig(BaseModel):
     """Full deployment configuration (Schema for deploy.yml)."""
 
-    project: str
     version: str
     environments: Dict[str, FullPipelines]
 
