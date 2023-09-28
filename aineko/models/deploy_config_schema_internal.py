@@ -46,7 +46,7 @@ class GenericPipeline(BaseModel, extra="forbid"):
 class LoadBalancer(BaseModel, extra="forbid"):
     """Configuration for a load balancer."""
 
-    hostname: str
+    pipeline: str
     port: int
 
 
@@ -67,13 +67,18 @@ class FullPipeline(BaseModel, extra="forbid"):
     name: Optional[str]
     machine_config: MachineConfig
     env_vars: Optional[Dict[str, str]]
-    load_balancers: Optional[List[LoadBalancer]]
 
 
 class Pipelines(BaseModel, extra="forbid"):
     """List of pipelines, under the top-level environments key."""
 
     pipelines: List[Union[str, Dict[str, SpecificPipeline]]]
+
+
+class LoadBalancers(BaseModel, extra="forbid"):
+    """List of load balancers, under the top-level environments key."""
+
+    load_balancers: Dict[str, List[LoadBalancer]]
 
 
 class FullPipelines(BaseModel, extra="forbid"):

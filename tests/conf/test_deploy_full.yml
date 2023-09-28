@@ -17,3 +17,8 @@ environments:
             - hostname: dev-api.aineko.dev
               port: 8000
           source: ./tests/conf/test_pipeline.yml
+
+    load_balancers:
+      dev-api.aineko.dev:
+        - pipeline: example_pipeline
+          port: 8000
