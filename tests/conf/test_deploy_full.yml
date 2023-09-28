@@ -11,7 +11,7 @@ environments:
             mem_gib: 8
             vcpu: 2
           env_vars:
-            project: aineko_test
+            var_1: aineko_test
             env: develop
           load_balancers:
             - hostname: dev-api.aineko.dev
@@ -24,7 +24,7 @@ environments:
             mem_gib: 16
             vcpu: 4
           env_vars:
-            project: aineko_test
+            var_1: aineko_test
           source: ./tests/conf/test_pipeline_runs.yml
           name: test_run_1
 
@@ -32,7 +32,7 @@ environments:
     pipelines:
       - large_tx_all:
           env_vars:
-            project: aineko_test
+            var_1: aineko_test
           source: ./tests/conf/test_pipeline_runs.yml
           machine_config:
             type: ec2
