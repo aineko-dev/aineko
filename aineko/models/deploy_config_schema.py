@@ -13,16 +13,14 @@ This config represents the source of truth for all deployments of aineko
 pipelines.
 """
 
-from typing import Dict, Optional, Union
+from typing import Dict, Optional
 
 from pydantic import BaseModel, validator
 
 from aineko.models.deploy_config_schema_internal import (
-    FullPipelines,
+    Environment,
     GenericPipeline,
-    LoadBalancers,
     ParameterizableDefaults,
-    Pipelines,
 )
 
 
@@ -32,7 +30,7 @@ class DeploymentConfig(BaseModel, extra="forbid"):
     version: str
     defaults: Optional[ParameterizableDefaults]
     pipelines: Dict[str, GenericPipeline]
-    environments: Dict[str, Union[Pipelines, LoadBalancers]]
+    environments: Dict[str, Environment]
 
     @validator("version")
     def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
@@ -46,7 +44,7 @@ class FullDeploymentConfig(BaseModel):
     """Full deployment configuration (Schema for deploy.yml)."""
 
     version: str
-    environments: Dict[str, Union[FullPipelines, LoadBalancers]]
+    environments: Dict[str, Environment]
 
     @validator("version")
     def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument

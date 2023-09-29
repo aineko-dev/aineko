@@ -69,19 +69,15 @@ class FullPipeline(BaseModel, extra="forbid"):
     env_vars: Optional[Dict[str, str]]
 
 
-class Pipelines(BaseModel, extra="forbid"):
-    """List of pipelines, under the top-level environments key."""
+class Environment(BaseModel, extra="forbid"):
+    """Environment defined under the top-level environments key."""
 
     pipelines: List[Union[str, Dict[str, SpecificPipeline]]]
+    load_balancers: Optional[Dict[str, List[LoadBalancer]]]
 
 
-class LoadBalancers(BaseModel, extra="forbid"):
-    """List of load balancers, under the top-level environments key."""
+class FullEnvironment(BaseModel, extra="forbid"):
+    """Environment defined under the top-level environments key."""
 
-    load_balancers: Dict[str, List[LoadBalancer]]
-
-
-class FullPipelines(BaseModel, extra="forbid"):
-    """List of complete pipelines, under the top-level environments key."""
-
-    pipelines: List[Dict[str, FullPipeline]]
+    pipelines: List[Union[Dict[str, FullPipeline], str]]
+    load_balancers: Optional[Dict[str, List[LoadBalancer]]]
