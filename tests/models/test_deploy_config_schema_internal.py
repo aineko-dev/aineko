@@ -6,8 +6,8 @@ import pytest
 from pydantic import ValidationError
 
 from aineko.models.deploy_config_schema_internal import (
+    Environment,
     MachineConfig,
-    Pipelines,
     SpecificPipeline,
 )
 
@@ -38,6 +38,6 @@ def test_pipeline(pipeline_config, machine_config):
         SpecificPipeline(**pipeline_config)
 
 
-def test_pipelines(pipelines_config):
+def test_environments(pipelines_config):
     """Test Pipelines model."""
-    assert Pipelines(**pipelines_config)
+    assert Environment(**pipelines_config)
