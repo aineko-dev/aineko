@@ -6,9 +6,8 @@ authors = ["{{cookiecutter.authors}}"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-# TODO: Need to change this when aineko becomes a public pkg
-aineko = { path = "{{cookiecutter._aineko_core_directory}}", develop=true}
+python = ">=3.10,<3.11"
+aineko = "^0.1.1"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.17.5"

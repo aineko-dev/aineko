@@ -35,7 +35,7 @@ def validate_deploy_file_path(deploy_file_path: str) -> None:
     """Validates that path to deploy.yaml points to a file.
 
     Args:
-        deploy_file_path (str): The path to deploy.yml file
+        deploy_file_path: The path to deploy.yml file
 
     Raises:
         FileNotFoundError: If the 'deploy.yml' file does not exist.

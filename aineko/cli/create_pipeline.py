@@ -15,17 +15,12 @@ def create_pipeline_directory(deployment_config: bool) -> None:
         do not include.
     """
     script_directory = os.path.dirname(os.path.abspath(__file__))
-    # Assumes that aineko_core is always 2-levels above this file
-    # While this assumption is somewhat fragile, we most likely
-    # will not have to pass this path for long after aineko pkg goes public
-    aineko_core_directory = os.path.dirname(os.path.dirname(script_directory))
     # assumes templates is a folder that is one-level up
     templates_directory = f"{os.path.dirname(script_directory)}/templates"
     # Only one type of pipeline, hence this argument is no-arg
     cookiecutter(
         f"{templates_directory}/first_aineko_pipeline",
         extra_context={
-            "aineko_core_dir": aineko_core_directory,
             "_deployment_config": deployment_config,
         },
     )
