@@ -20,6 +20,7 @@ MODULE_REGEX = r"^[_a-zA-Z][_a-zA-Z0-9]+$"
 project_slug = "{{ cookiecutter.project_slug }}"
 pipeline_slug = "{{ cookiecutter.pipeline_slug }}"
 
+
 class AinekoPathValidationException(Exception):
     """Exception when validation of user-provided path does not point to valid aineko-core repo."""
 
