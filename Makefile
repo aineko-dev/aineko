@@ -4,13 +4,15 @@ help:
 	@echo "integration-test - run integration tests suite"
 
 lint:
-	poetry run isort .
-	poetry run black .
-	poetry run pydocstyle aineko
-	poetry run pylint aineko
-	poetry run yamllint -d "{extends: relaxed, ignore-from-file: .gitignore}" .
-	poetry run mypy aineko
-	poetry run pre-commit run --all
+	@ERROR=0; \
+	poetry run isort . || ERROR=1; \
+	poetry run black . || ERROR=1; \
+	poetry run pydocstyle aineko || ERROR=1; \
+	poetry run pylint aineko || ERROR=1; \
+	poetry run yamllint -d "{extends: relaxed, ignore-from-file: .gitignore}" . || ERROR=1; \
+	poetry run mypy aineko || ERROR=1; \
+	poetry run pre-commit run --all || ERROR=1; \
+	exit $$ERROR
 
 unit-test:
 	poetry run pytest --cov aineko --ignore tests/integration tests/
