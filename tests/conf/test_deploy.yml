@@ -16,6 +16,7 @@ environments:
       - example_pipeline:
           env_vars:
             env: develop
+      - simple_example
 
     load_balancers:
       dev-api.aineko.dev:
@@ -29,3 +30,6 @@ pipelines:
       type: ec2
       mem_gib: 8
       vcpu: 2
+
+  simple_example:
+    source: ./tests/conf/test_pipeline.yml
