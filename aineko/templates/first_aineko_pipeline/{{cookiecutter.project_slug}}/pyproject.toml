@@ -9,19 +9,9 @@ readme = "README.md"
 python = ">=3.10,<3.11"
 aineko = "^0.1.1"
 
-[tool.poetry.group.dev.dependencies]
-pylint = "^2.17.5"
-black = "^23.7.0"
-yamllint = "^1.32.0"
-pre-commit = "^3.4.0"
-isort = "^5.12.0"
-pydocstyle = "^6.3.0"
-cookiecutter = "^2.3.0"
-
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.1"
 pytest-cov = "^4.1.0"
-mypy = "^1.5.1"
 
 [tool.poetry.scripts]
 aineko = "aineko.__main__:_cli"
