@@ -4,6 +4,5 @@
     "project_description": "Behold my awesome pipeline!",
     "authors": "John Doe <johndoe@gmail.com>",
     "pipeline_slug": "test-aineko-pipeline",
-    "_aineko_core_directory": "/Users/lionellloh/Projects/convex-labs/aineko-core",
     "_deployment_config": false
 }
