@@ -24,9 +24,8 @@ elif with_deploy_str.lower() == "false":
     with_deploy = False
 else:
     print(
-        ERROR
-        + f"Invalid value for cookiecutter._deployment_config: {with_deploy_str}"
-        + TERMINATOR
+        ERROR + f"Invalid value for cookiecutter._deployment_config:"
+        f" {with_deploy_str}" + TERMINATOR
     )
     sys.exit(1)
 

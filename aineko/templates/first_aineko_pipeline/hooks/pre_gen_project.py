@@ -22,23 +22,26 @@ pipeline_slug = "{{ cookiecutter.pipeline_slug }}"
 
 
 class AinekoPathValidationException(Exception):
-    """Exception when validation of user-provided path does not point to valid aineko-core repo."""
+    """Exception raised for invalid aineko-core repo paths.
 
-    pass
+    This exception is thrown when the user-provided path does not point
+    to a valid aineko-core repository.
+    """
 
 
 def validate_slug(slug: str) -> None:
-    """Validate a slug to ensure it only contains lowercase letters, dashes, and underscores.
+    """Validate a slug to ensure compliance with specified rules.
 
     Args:
-        slug: The slug to be validated.
+        slug (str): The slug to be validated.
 
     Raises:
-        ValueError: If the slug contains invalid characters.
+        ValueError: Raised if the slug contains invalid characters.
     """
     if not re.match(r"^[a-z_-]+$", slug):
         raise ValueError(
-            f"[{slug}] Slug can only contain lowercase letters, dashes, and underscores."
+            f"[{slug}] Slug can only contain lowercase letters, dashes,"
+            " and underscores."
         )
 
 
