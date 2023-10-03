@@ -32,7 +32,7 @@ def validate_slug(slug: str) -> None:
     """Validate a slug to ensure compliance with specified rules.
 
     Args:
-        slug (str): The slug to be validated.
+        slug: The slug to be validated.
 
     Raises:
         ValueError: Raised if the slug contains invalid characters.
