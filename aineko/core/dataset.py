@@ -22,7 +22,7 @@ import datetime
 import json
 from typing import Any, Dict, Optional
 
-from confluent_kafka import Consumer, Message, Producer
+from confluent_kafka import Consumer, Message, Producer  # type: ignore
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 

@@ -5,7 +5,7 @@ import time
 from typing import Optional
 
 import ray
-from confluent_kafka.admin import AdminClient, NewTopic
+from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
 
 from aineko.config import (
     AINEKO_CONFIG,

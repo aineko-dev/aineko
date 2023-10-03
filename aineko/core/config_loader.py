@@ -3,8 +3,8 @@
 """Module to load config files."""
 from typing import Optional, Union, overload
 
-from schema import Optional as optional
-from schema import Schema, SchemaError
+from schema import Optional as optional  # type: ignore
+from schema import Schema, SchemaError  # type: ignore
 
 from aineko.config import AINEKO_CONFIG
 from aineko.utils.io import load_yamls
