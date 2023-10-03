@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Internal models for deployment configuration."""
 
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, validator
 
@@ -71,12 +71,12 @@ class FullPipeline(BaseModel, extra="forbid"):
 
 
 class Pipelines(BaseModel, extra="forbid"):
-    """List of pipelines, under the top-level environments key."""
+    """Dict of pipelines, under the top-level environments key."""
 
-    pipelines: List[Union[str, Dict[str, SpecificPipeline]]]
+    pipelines: Dict[str, SpecificPipeline]
 
 
 class FullPipelines(BaseModel, extra="forbid"):
-    """List of complete pipelines, under the top-level environments key."""
+    """Dict of complete pipelines, under the top-level environments key."""
 
-    pipelines: List[Dict[str, FullPipeline]]
+    pipelines: Dict[str, FullPipeline]

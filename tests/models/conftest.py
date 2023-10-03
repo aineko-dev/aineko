@@ -21,13 +21,11 @@ def pipeline_config():
 @pytest.fixture(scope="function")
 def pipelines_config(pipeline_config, machine_config):
     return {
-        "pipelines": [
-            {"test_pipeline_1": pipeline_config},
-            {
-                "test_pipeline_2": {
-                    **pipeline_config,
-                    **{"machine_config": machine_config},
-                }
+        "pipelines": {
+            "test_pipeline_1": pipeline_config,
+            "test_pipeline_2": {
+                **pipeline_config,
+                **{"machine_config": machine_config},
             },
-        ]
+        },
     }

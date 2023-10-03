@@ -11,7 +11,6 @@ The full deployment config is a comprehensive mapping between
 every pipeline and its deployment configuration. It is the source
 of truth in which infrastructure should be deployed from.
 """
-
 from collections import defaultdict
 from typing import Optional
 
@@ -86,18 +85,17 @@ def _generate_full_config(
     user_config = user_config or user_config
     if not user_config:
         raise ValueError("User config has not been loaded nor defined.")
+
     full_config: dict = {
         "version": user_config.version,
-        "environments": defaultdict(lambda: {"pipelines": []}),
+        "environments": defaultdict(lambda: {"pipelines": {}}),
     }
-    for env, env_pipelines in user_config.environments.items():
-        for pipeline in env_pipelines.pipelines:
-            if isinstance(pipeline, str):
-                pipeline_name = pipeline
-            else:
-                # Get first key in dict
-                pipeline_name = next(iter(pipeline))
 
+    for env_name, env_pipelines in user_config.environments.items():
+        for (
+            pipeline_name,
+            pipeline_values,
+        ) in env_pipelines.pipelines.items():
             defaults = (
                 user_config.defaults.dict() if user_config.defaults else {}
             )
@@ -108,21 +106,17 @@ def _generate_full_config(
             }
 
             # Env specific config may not be defined
-            if isinstance(pipeline, dict):
-                env_specific_config = {
-                    k: v for k, v in pipeline[pipeline_name].dict().items() if v
-                }
-            else:
-                env_specific_config = {}
+            env_specific_config = {
+                k: v for k, v in pipeline_values.dict().items() if v
+            }
 
             # Env-specific overwrites pipeline-specific overwrites defaults
-            full_config["environments"][env]["pipelines"].append(
-                {
-                    pipeline_name: deep_update(
-                        defaults,
-                        pipeline_specific_config,
-                        env_specific_config,
-                    )
-                }
+            full_config["environments"][env_name]["pipelines"][
+                pipeline_name
+            ] = deep_update(
+                defaults,
+                pipeline_specific_config,
+                env_specific_config,
             )
+
     return FullDeploymentConfig(**full_config)
