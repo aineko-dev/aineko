@@ -19,6 +19,7 @@ environments:
           load_balancers:
             - hostname: dev-api.aineko.dev
               port: 8000
+      - simple_example
 
 pipelines:
   example_pipeline:
@@ -27,3 +28,6 @@ pipelines:
       type: ec2
       mem_gib: 8
       vcpu: 2
+
+  simple_example:
+    source: ./tests/conf/test_pipeline.yml
