@@ -30,27 +30,25 @@ else:
     sys.exit(1)
 
 
-def validate_deploy_file_path(deploy_file_path: str) -> None:
+def validate_deploy_file_path(file_path: str) -> None:
     """Validates that path to deploy.yaml points to a file.
 
     Args:
-        deploy_file_path: The path to deploy.yml file
+        file_path: The path to deploy.yml file
 
     Raises:
         FileNotFoundError: If the 'deploy.yml' file does not exist.
     """
     # Check if the file exists
-    if not os.path.isfile(deploy_file_path):
-        raise FileNotFoundError(
-            f"The file '{deploy_file_path}' does not exist."
-        )
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"The file '{file_path}' does not exist.")
 
 
 def _get_deploy_file_path(project_slug: str) -> str:
     # The hook runs in the newly created project
     # Running os.getcwd() brings us directly into {{cookiecutter.project_slug}}
-    deploy_file_path = os.path.join(os.getcwd(), "deploy.yml")
-    return deploy_file_path
+    file_path = os.path.join(os.getcwd(), "deploy.yml")
+    return file_path
 
 
 try:
