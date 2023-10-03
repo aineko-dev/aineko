@@ -7,7 +7,6 @@ generated.
 
 See: https://cookiecutter.readthedocs.io/en/1.7.2/advanced/hooks.html
 """
-import os
 import re
 import sys
 
