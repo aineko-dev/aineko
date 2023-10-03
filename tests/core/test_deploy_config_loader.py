@@ -28,3 +28,19 @@ def test_load_deployment_config_invalid_type(deploy_config_path):
         generate_deploy_config_from_file(
             deploy_config_path, config_type="invalid"
         )
+
+
+def test_load_multiple_deployment_config(
+    deploy_multiple_config_path, full_multiple_deploy_config_path
+):
+    """Test deployment config loader with multiple pipelines."""
+    user_config = generate_deploy_config_from_file(
+        deploy_multiple_config_path, config_type="user"
+    )
+
+    assert user_config
+
+    full_config = generate_deploy_config_from_file(deploy_multiple_config_path)
+    expected_full_config = load_yaml(full_multiple_deploy_config_path)
+    expected_full_config = FullDeploymentConfig(**expected_full_config).dict()
+    assert full_config == expected_full_config

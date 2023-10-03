@@ -1,0 +1,28 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+version: 0.1.1
+
+environments:
+  develop:
+    pipelines:
+      example_pipeline:
+        machine_config:
+          type: ec2
+          mem_gib: 8
+          vcpu: 2
+        env_vars:
+          var_1: aineko_test
+          env: develop
+        load_balancers:
+          - hostname: dev-api.aineko.dev
+            port: 8000
+        source: ./tests/conf/test_pipeline.yml
+      another_pipeline:
+        machine_config:
+          type: ec2
+          mem_gib: 16
+          vcpu: 4
+        env_vars:
+          var_1: aineko_test
+          foo: bar
+        source: ./tests/conf/test_pipeline.yml
