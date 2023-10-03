@@ -125,4 +125,9 @@ def _generate_full_config(
                     )
                 }
             )
+
+        # Add any defined load balancers
+        full_config["environments"][env][
+            "load_balancers"
+        ] = env_pipelines.load_balancers
     return FullDeploymentConfig(**full_config)

@@ -1,8 +1,8 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
+"""Module for checking and fixing license headers in files."""
 import argparse
 import sys
-from typing import List, Optional
 
 LICENSE_SNIPPET = """# Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
@@ -18,7 +18,7 @@ def check_license(filename: str) -> bool:
     Returns:
         True if the license snippet is present and correct, False otherwise.
     """
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         lines = [f.readline().strip() for _ in range(2)]
         return "\n".join(lines) == LICENSE_SNIPPET.strip()
 
@@ -32,11 +32,11 @@ def fix_license(filename: str) -> None:
     if not check_license(filename):
         try:
             print(f"Fixing license in {filename}")
-            with open(filename, "r+") as file:
+            with open(filename, "r+", encoding="utf-8") as file:
                 content = file.read()
                 file.seek(0, 0)
                 file.write(LICENSE_SNIPPET + content)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             print(f"ERROR: Could not fix license in {filename}: {e}")
 
 

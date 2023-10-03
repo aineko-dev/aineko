@@ -42,6 +42,8 @@ repos:
             "scan_folded_as_literal=true", # !yamlfmt!:ignore
           ]
         files: \.(yml|yaml)$
+        # exclude all pipeline/deploy files in template due to double brace {{}}
+        exclude: ^aineko/templates/.*(pipeline|deploy)\.(yaml|yml)$
   - repo: local
     hooks:
       - id: check-license
@@ -49,5 +51,5 @@ repos:
         entry: python .internals/check_license.py
         language: python
         files: \.(py|yml|yaml)$
-        exclude: ".pre-commit-config.yaml"
+        exclude: ".pre-commit-config.yaml|yamllint.yaml"
         args: ["--fix"]

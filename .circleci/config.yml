@@ -82,7 +82,7 @@ jobs:
       - run: poetry run black << parameters.prj_dir >> --check
       - run: poetry run pydocstyle << parameters.prj_dir >>
       - run: poetry run pylint << parameters.prj_dir >>
-      - run: poetry run yamllint -d relaxed << parameters.prj_dir >>
+      - run: poetry run yamllint -c yamllint.yaml << parameters.prj_dir >>
       - run: |
           poetry run pre-commit install
           poetry run pre-commit run --all

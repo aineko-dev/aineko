@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "{{cookiecutter.project_slug}}"
+version = "0.0.0"
+description = "{{cookiecutter.project_description}}"
+authors = ["{{cookiecutter.authors}}"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+aineko = "^0.1.1"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.1"
+pytest-cov = "^4.1.0"
+
+[tool.poetry.scripts]
+aineko = "aineko.__main__:_cli"
