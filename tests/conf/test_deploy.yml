@@ -16,9 +16,11 @@ environments:
       - example_pipeline:
           env_vars:
             env: develop
-          load_balancers:
-            - hostname: dev-api.aineko.dev
-              port: 8000
+
+    load_balancers:
+      dev-api.aineko.dev:
+        - pipeline: example_pipeline
+          port: 8000
 
 pipelines:
   example_pipeline:
