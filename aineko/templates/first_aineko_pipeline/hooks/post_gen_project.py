@@ -44,15 +44,14 @@ def validate_deploy_file_path(file_path: str) -> None:
         raise FileNotFoundError(f"The file '{file_path}' does not exist.")
 
 
-def _get_deploy_file_path(project_slug: str) -> str:
+def _get_deploy_file_path() -> str:
     # The hook runs in the newly created project
-    # Running os.getcwd() brings us directly into {{cookiecutter.project_slug}}
     file_path = os.path.join(os.getcwd(), "deploy.yml")
     return file_path
 
 
 try:
-    deploy_file_path = _get_deploy_file_path(project_slug)
+    deploy_file_path = _get_deploy_file_path()
     validate_deploy_file_path(deploy_file_path)
     if not with_deploy:
         os.remove(deploy_file_path)
