@@ -23,6 +23,7 @@ if with_deploy_str.lower() == "true":
 elif with_deploy_str.lower() == "false":
     with_deploy = False
 else:
+    with_deploy = False
     print(
         ERROR + f"Invalid value for cookiecutter._deployment_config:"
         f" {with_deploy_str}" + TERMINATOR
