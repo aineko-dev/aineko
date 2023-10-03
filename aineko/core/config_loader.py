@@ -42,8 +42,6 @@ class ConfigLoader:
         # Setup config schema
         self.config_schema = Schema(
             {
-                # Runs
-                optional("runs"): dict,
                 # Pipeline config
                 "pipeline": {
                     "name": str,
@@ -72,10 +70,7 @@ class ConfigLoader:
     def load_config(self) -> dict:
         """Load config for project(s) from yaml files.
 
-        Load the config from the specified pipeline config. If runs detected,
-        create all runs and filter out the selected one. Will only return config
-        for a single pipeline.
-
+        Load the config from the specified pipeline config.
         Example:
                 {
                     "pipeline": {
@@ -92,20 +87,6 @@ class ConfigLoader:
             Config for each project (dict keys are project names)
         """
         config = load_yamls(self.pipeline_config_file)
-
-        if "runs" in config["pipeline"]:
-            configs = {}
-            for run_name, run_params in config["pipeline"]["runs"].items():
-                configs[run_name] = self._update_params(config, run_params)
-                configs[run_name]["pipeline"]["name"] = run_name
-            try:
-                config = configs[self.pipeline]
-            except KeyError as exc:
-                raise KeyError(
-                    f"Specified pipeline `{self.pipeline}` not in pipelines "
-                    f"found in config: {list(configs)}."
-                ) from exc
-            config["pipeline"].pop("runs")
 
         try:
             self._validate_config_schema(pipeline_config=config)

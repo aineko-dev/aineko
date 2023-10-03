@@ -50,18 +50,10 @@ def _cli() -> None:
         type=str,
         required=True,
     )
-    run_parser.add_argument(
-        "-p",
-        "--pipeline_name",
-        help="Name of the pipeline",
-        type=str,
-        default=None,
-    )
 
     run_parser.set_defaults(
         func=lambda args: run_main(
             pipeline_config_file=args.config_file,
-            pipeline=args.pipeline_name,
         )
     )
 

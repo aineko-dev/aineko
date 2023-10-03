@@ -46,16 +46,9 @@ EXPECTED_TEST_PIPELINE = {
     }
 }
 
-EXPECTED_TEST_PIPELINE_RUNS = copy.deepcopy(EXPECTED_TEST_PIPELINE)
-EXPECTED_TEST_PIPELINE_RUNS["pipeline"]["name"] = "test_run_1"
-EXPECTED_TEST_PIPELINE_RUNS["pipeline"]["nodes"]["sequencer"]["node_params"][
-    "start_int"
-] = "0"
-
 
 def test_load_config(
     test_pipeline_config_file: str,
-    test_pipeline_config_file_runs: str,
 ) -> None:
     """Tests the loading of config.
 
@@ -76,13 +69,3 @@ def test_load_config(
         config = ConfigLoader(
             test_pipeline_config_file, pipeline="wrong_name"
         ).load_config()
-
-    # Test config loader for pipeline config with runs
-    config_runs = ConfigLoader(
-        test_pipeline_config_file_runs, pipeline="test_run_1"
-    ).load_config()
-    assert config_runs == EXPECTED_TEST_PIPELINE_RUNS
-
-    # Ensures error if attempt to load pipeline config with run without specifying run
-    with pytest.raises(KeyError):
-        config_runs = ConfigLoader(test_pipeline_config_file_runs).load_config()
