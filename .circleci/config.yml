@@ -10,6 +10,10 @@ parameters:
 
 workflows:
   pre-merge-checks:
+    when:
+      and:
+        - not:
+            equal: [<< pipeline.git.branch >>, develop]
     jobs:
       - python-checks:
           prj_dir: aineko
