@@ -3,7 +3,7 @@
 """Package information for the Aineko package."""
 
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = "Convex Labs Engineering"
 
 from aineko.core.config_loader import ConfigLoader
