@@ -1,48 +1,32 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-project: {{cookiecutter.project_name}}
 version: 0.1.0
 
 defaults:
   machine_config:
     type: ec2
-    mem: 16Gib
+    mem_gib: 16
     vcpu: 4
   env_vars:
-    project: {{cookiecutter.project_name}}
+    project: aineko_test
 
 environments:
   develop:
     pipelines:
-      - example_pipeline:
+      - my_first_pipeline:
           env_vars:
             env: develop
-          network_settings:
-            api_hostname: dev-api.aineko.dev
-            port: 8000
 
-      - large_tx_1
-
-  production:
-    pipelines:
-      - large_tx_all:
-          machine_config:
-            type: ec2
-            mem: 32Gib
-            vcpu: 8
+    load_balancers:
+      my-first-pipeline:
+        - pipeline: my_first_pipeline
+          port: 8000
 
 
 pipelines:
-  example_pipeline:
+  my_first_pipeline:
     source: ./conf/pipeline.yml
     machine_config:
       type: ec2
-      mem: 8Gib
+      mem_gib: 8
       vcpu: 2
-
-  large_tx_1:
-    source: ./conf/pipeline_runs.yml
-    name: large_tx_1
-
-  large_tx_all:
-    source: ./conf/pipeline_runs.yml
