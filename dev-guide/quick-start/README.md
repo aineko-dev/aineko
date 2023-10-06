@@ -71,7 +71,7 @@ Running node_manager node on my_awesome_pipeline pipeline: inputs=None, outputs=
 **What does the above output mean?**&#x20;
 
 An aineko pipeline is made up of **Dataset(s)** and **Node(s).**  \
-A Dataset is an abstraction for a buffer for data that we can define producers and consumers for. Producers write data to a dataset, while consumers read data from the dataset. It is analogous to a **pub-sub topic or channel**.&#x20;
+A Dataset is an abstraction for a buffer for data that we can define producers and consumers for. Producers write data to a dataset, while consumers read data from the dataset. It is analogous to a **pub-sub topic or channel**. In the current version of aineko, it is a **Kafka Topic,** but in future, other implementations of message channels could be pluggable too.&#x20;
 
 A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**.
 
@@ -88,7 +88,7 @@ So below is the pipeline we just ran, using the aineko cli, you can also see thi
 poetry run aineko visualize -b ./conf/pipeline.yml
 ```
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
 
 
 

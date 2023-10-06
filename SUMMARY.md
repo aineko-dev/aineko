@@ -2,7 +2,8 @@
 
 * [Aineko](README.md)
 * [Dev Guide](dev-guide/README.md)
-  * [Quick Start](dev-guide/quick-start.md)
+  * [Quick Start](dev-guide/quick-start/README.md)
+    * [Deeper dive](dev-guide/quick-start/deeper-dive.md)
   * [Tutorial: Writing a pipeline to do x](dev-guide/tutorial-writing-a-pipeline-to-do-x.md)
   * [Concepts](dev-guide/concepts.md)
   * [Aineko CLI](dev-guide/aineko-cli.md)
