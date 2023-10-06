@@ -71,16 +71,14 @@ Running node_manager node on my_awesome_pipeline pipeline: inputs=None, outputs=
 **What does the above output mean?**&#x20;
 
 An aineko pipeline is made up of **Dataset(s)** and **Node(s).**  \
-A Dataset is an abstraction for a buffer for data that we can define producers and consumers for. Producers write data to a dataset, while consumers read data from the dataset. It is analogous to a **pub-sub topic or channel**. In the current version of aineko, it is a **Kafka Topic,** but in future, other implementations of message channels could be pluggable too.&#x20;
+A Dataset can be thought of as a mailbox. Nodes pass messages to this mailbox, that can be read by many other Nodes.&#x20;
 
-A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**.
+A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**. (mailbox)&#x20;
 
-This means that we created three datasets - **test\_sequence,** **test\_sum** and **logging**. logging is a default dataset we create for all aineko pipelines to log messages to.&#x20;
-
-We also created two nodes - `sum` and `sequence`&#x20;
-
-The output of sequence **`node`** feeds into **`sum`** via **`test_sequence`**, which passes the data to **`test_sum`**
+The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging and** two nodes - **sum** and **sequence**.
 {% endhint %}
+
+To learn more about Pipeline, Datasets and Nodes, you can visit this page. &#x20;
 
 So below is the pipeline we just ran, using the aineko cli, you can also see this pipeline rendered in the browser:&#x20;
 
