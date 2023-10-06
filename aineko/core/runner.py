@@ -217,7 +217,7 @@ class Runner:
             outputs = node_config.get("outputs", [])
             outputs.extend(DEFAULT_KAFKA_CONFIG.get("DATASETS"))
             print(
-                f"Running {node_name} node on {self.pipeline_name} pipeline: "
+                f"Running node [{node_name}] on pipeline pipeline[{self.pipeline_name}]: "
                 f"inputs={node_config.get('inputs', None)}, "
                 f"outputs={outputs}"
             )
