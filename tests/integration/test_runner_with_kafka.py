@@ -95,7 +95,6 @@ def test_write_read_to_kafka():
     are as expected.
     """
     runner = Runner(
-        pipeline="integration_test_write",
         pipeline_config_file="tests/conf/integration_test_write.yml",
     )
     try:
@@ -112,7 +111,6 @@ def test_write_read_to_kafka():
         assert count_values == MESSAGES
 
     runner = Runner(
-        pipeline="integration_test_read",
         pipeline_config_file="tests/conf/integration_test_read.yml",
     )
     try:

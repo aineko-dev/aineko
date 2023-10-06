@@ -26,23 +26,22 @@ class Runner:
         kafka_config (dict): Config for kafka broker
 
     Attributes:
-        pipeline (str): Name of the pipeline
         pipeline_config_file (str): Path to pipeline config file
         kafka_config (dict): Config for kafka broker
+        pipeline_name (Optional[str]): Name of the pipeline, loaded from config
     """
 
     def __init__(
         self,
         pipeline_config_file: str,
-        pipeline: Optional[str] = None,
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
         metrics_export_port: int = AINEKO_CONFIG.get("RAY_METRICS_PORT"),
     ):
         """Initializes the runner class."""
-        self.pipeline = pipeline
         self.pipeline_config_file = pipeline_config_file
         self.kafka_config = kafka_config
         self.metrics_export_port = metrics_export_port
+        self.pipeline_name: Optional[str] = None
 
     def run(self) -> None:
         """Runs the pipeline.
@@ -57,6 +56,13 @@ class Runner:
         """
         # Load pipeline config
         pipeline_config = self.load_pipeline_config()
+        print(pipeline_config)
+        try:
+            self.pipeline_name = pipeline_config["name"]
+        except KeyError as e:
+            print(
+                f"[Warning] Failed to load pipeline name from config. {str(e)}"
+            )
 
         # Create the necessary datasets
         self.prepare_datasets(pipeline_config=pipeline_config)
@@ -64,7 +70,7 @@ class Runner:
         # Initialize ray cluster
         ray.shutdown()
         ray.init(
-            namespace=self.pipeline,
+            namespace=self.pipeline_name,
             _metrics_export_port=self.metrics_export_port,
         )
 
@@ -92,7 +98,6 @@ class Runner:
         """
         config = ConfigLoader(
             pipeline_config_file=self.pipeline_config_file,
-            pipeline=self.pipeline,
         ).load_config()
 
         return config["pipeline"]
@@ -201,7 +206,7 @@ class Runner:
                 **default_node_config,
                 **node_config.get("node_settings", {}),
                 "name": node_name,
-                "namespace": self.pipeline,
+                "namespace": self.pipeline_name,
             }
 
             wrapped_class = ray.remote(target_class)
@@ -212,7 +217,7 @@ class Runner:
             outputs = node_config.get("outputs", [])
             outputs.extend(DEFAULT_KAFKA_CONFIG.get("DATASETS"))
             print(
-                f"Running {node_name} node on {self.pipeline} pipeline: "
+                f"Running {node_name} node on {self.pipeline_name} pipeline: "
                 f"inputs={node_config.get('inputs', None)}, "
                 f"outputs={outputs}"
             )
@@ -221,7 +226,7 @@ class Runner:
                 outputs=outputs,
                 datasets=pipeline_config["datasets"],
                 node=node_name,
-                pipeline=self.pipeline,
+                pipeline=self.pipeline_name,
             )
 
             # Create actor future (for execute method)

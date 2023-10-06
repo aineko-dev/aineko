@@ -9,7 +9,7 @@ lint:
 	poetry run black . || ERROR=1; \
 	poetry run pydocstyle aineko || ERROR=1; \
 	poetry run pylint aineko || ERROR=1; \
-	poetry run yamllint -d "{extends: relaxed, ignore-from-file: .gitignore}" . || ERROR=1; \
+	poetry run yamllint -c yamllint.yaml . || ERROR=1; \
 	poetry run mypy aineko || ERROR=1; \
 	poetry run pre-commit run --all || ERROR=1; \
 	exit $$ERROR
