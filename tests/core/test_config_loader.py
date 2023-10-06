@@ -57,5 +57,3 @@ def test_load_config(
     # Test pipeline config containing single pipeline
     config = ConfigLoader(test_pipeline_config_file).load_config()
     assert config == EXPECTED_TEST_PIPELINE
-
-
