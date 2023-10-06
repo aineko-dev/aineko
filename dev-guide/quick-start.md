@@ -49,7 +49,7 @@ poetry install
 **Step 4: Start the template pipeline**&#x20;
 
 ```
-poetry run aineko run -c ./conf/pipeline.yml
+aineko run -c ./conf/pipeline.yml
 ```
 
 You will see the following output:&#x20;
@@ -82,5 +82,13 @@ We also created two nodes - `sum` and `sequence`&#x20;
 The output of sequence **`node`** feeds into **`sum`** via **`test_sequence`**, which passes the data to **`test_sum`**
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran</p></figcaption></figure>
+So below is the pipeline we just ran, using the aineko cli, you can also see this pipeline rendered in the browser:&#x20;
+
+```
+poetry run aineko visualize -b ./conf/pipeline.yml
+```
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
+
+
 
