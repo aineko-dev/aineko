@@ -1,0 +1,2 @@
+# Aineko CLI
+
