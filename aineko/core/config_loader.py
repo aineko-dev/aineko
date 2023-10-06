@@ -1,7 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Module to load config files."""
-from typing import Optional, Union, overload
+from typing import Union, overload
 
 from schema import Optional as optional  # type: ignore
 from schema import Schema, SchemaError  # type: ignore
