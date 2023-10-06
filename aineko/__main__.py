@@ -44,16 +44,14 @@ def _cli() -> None:
     # `aineko run *`
     run_parser = subparsers.add_parser("run", help="Run a pipeline")
     run_parser.add_argument(
-        "-c",
-        "--config_file",
-        help="Path to the config file containing pipeline config.",
+        "config_path",
+        help="Path to the config file containing the pipeline config.",
         type=str,
-        required=True,
     )
 
     run_parser.set_defaults(
         func=lambda args: run_main(
-            pipeline_config_file=args.config_file,
+            pipeline_config_file=args.config_path,
         )
     )
 
@@ -126,7 +124,7 @@ def _cli() -> None:
     visualize_parser.add_argument(
         "config_path",
         type=str,
-        help="Path to pipeline yaml file.",
+        help="Path to the config file containing the pipeline config.",
     )
     visualize_parser.add_argument(
         "-d",
