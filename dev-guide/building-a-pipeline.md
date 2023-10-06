@@ -13,8 +13,6 @@ class TestSequencer(AbstractNode):
     ...
 ```
 
-~~See the~~ [~~Ray docs~~](https://docs.ray.io/en/latest/ray-core/actors.html#specifying-required-resources) ~~to configure the `ray.remote` decorator. Your decision for `num_cpus` should be based on how many resources you expect your node to consume. If you expect your node to process messages in bursts or otherwise not be processing messages constantly, we recommend setting `num_cpus`<1 (0.5 works well in many cases). Note, the total `num_cpus` across all nodes in a pipeline must be less than or equal to the `vcpu` setting you define in your pipeline config, otherwise your pipeline will only run as many nodes as it has resources available to run.~~
-
 **Pre-Loop Hook**
 
 You can optionally define a `_pre_loop_hook` method in your node class to intialize the state of your node with class variables. The `_pre_loop_hook` method consumes params that are provided in the pipeline configuration, so you can define the initial state of your node via your pipeline config.
