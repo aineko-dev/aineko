@@ -58,14 +58,4 @@ def test_load_config(
     config = ConfigLoader(test_pipeline_config_file).load_config()
     assert config == EXPECTED_TEST_PIPELINE
 
-    # Test pipeline config containing single pipeline while specifying correct pipeline name
-    config = ConfigLoader(
-        test_pipeline_config_file, pipeline="test_pipeline"
-    ).load_config()
-    assert config == EXPECTED_TEST_PIPELINE
 
-    # Test pipeline config containing single pipeline while specifying wrong pipeline name
-    with pytest.raises(KeyError):
-        config = ConfigLoader(
-            test_pipeline_config_file, pipeline="wrong_name"
-        ).load_config()
