@@ -88,7 +88,7 @@ So below is the pipeline we just ran, using the aineko cli, you can also see thi
 poetry run aineko visualize -b ./conf/pipeline.yml
 ```
 
-<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
 
 
 
