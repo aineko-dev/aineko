@@ -31,7 +31,7 @@ ray = { extras = ["default"], version = "^2.6.3" }
 cookiecutter = "^2.4.0"
 
 [tool.poetry.group.dev.dependencies]
-convex_style = "^0.0.1"
+aineko_style = "^0.0.1"
 pylint = "^2.17.5"
 black = "^23.7.0"
 yamllint = "^1.32.0"
@@ -105,7 +105,7 @@ jobs = 4
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins = ["convex_style.checker"]
+load-plugins = ["aineko_style.checker"]
 
 # Pickle collected data for later comparisons.
 persistent = false
@@ -518,7 +518,8 @@ disallow_untyped_defs = true
 # warn_return_any = true
 warn_unreachable = true
 
-exclude = ["build", "tests", "venv"]
+exclude = ["build", "tests", "venv", "^aineko/templates/"]
+
 
 [[tool.mypy.overrides]]
 module = ["confluent_kafka", "confluent_kafka.*", "schema"]
