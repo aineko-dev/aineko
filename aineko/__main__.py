@@ -11,22 +11,13 @@ from aineko.cli.run import main as run_main
 from aineko.cli.visualize import render_mermaid_graph
 
 
-def _cli() -> None:
-    """Command line interface for Aineko."""
-    parser = argparse.ArgumentParser(
-        prog="aineko",
-        description=(
-            "Aineko is a framework for building data intensive applications."
-        ),
-    )
-    parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {__version__}"
-    )
+def _create_parser(subparser: argparse._SubParsersAction) -> None:
+    """Subparser for the `aineko create` command.
 
-    subparsers = parser.add_subparsers()
-
-    # `aineko create *`
-    create_parser = subparsers.add_parser(
+    Args:
+        subparser: Subparser for the `aineko` command.
+    """
+    create_parser = subparser.add_parser(
         "create",
         help="Create a directory containing pipeline config and \
             code from a template to get started",
@@ -41,8 +32,14 @@ def _cli() -> None:
         func=lambda args: create_pipeline_directory(args.deployment_config)
     )
 
-    # `aineko run *`
-    run_parser = subparsers.add_parser("run", help="Run a pipeline")
+
+def _run_parser(subparser: argparse._SubParsersAction) -> None:
+    """Subparser for the `aineko run` command.
+
+    Args:
+        subparser: Subparser for the `aineko` command.
+    """
+    run_parser = subparser.add_parser("run", help="Run a pipeline")
     run_parser.add_argument(
         "-c",
         "--config_file",
@@ -50,15 +47,16 @@ def _cli() -> None:
         type=str,
         required=True,
     )
-
     run_parser.set_defaults(
         func=lambda args: run_main(
             pipeline_config_file=args.config_file,
         )
     )
 
-    # `aineko service *`
-    service_parser = subparsers.add_parser(
+
+def _service_parser(parser: argparse._SubParsersAction) -> None:
+    """Subparser for the `aineko service` command."""
+    service_parser = parser.add_parser(
         "service", help="Manage Aineko related services"
     )
     service_subparsers = service_parser.add_subparsers()
@@ -108,8 +106,14 @@ def _cli() -> None:
         func=lambda args: DockerCLIWrapper.restart_service(args.file)
     )
 
-    # `aineko stream *`
-    stream_parser = subparsers.add_parser(
+
+def _stream_parser(subparser: argparse._SubParsersAction) -> None:
+    """Subparser for the `aineko stream` command.
+
+    Args:
+        subparser: Subparser for the `aineko` command.
+    """
+    stream_parser = subparser.add_parser(
         "stream", help="Stream messages from a dataset"
     )
 
@@ -129,8 +133,14 @@ def _cli() -> None:
         )
     )
 
-    # `aineko visualize *`
-    visualize_parser = subparsers.add_parser(
+
+def _visualize_parser(subparser: argparse._SubParsersAction) -> None:
+    """Subparser for the `aineko visualize` command.
+
+    Args:
+        subparser: Subparser for the `aineko` command.
+    """
+    visualize_parser = subparser.add_parser(
         "visualize", help="Visualize Aineko pipelines as a Mermaid graph."
     )
     visualize_parser.add_argument(
@@ -169,6 +179,26 @@ def _cli() -> None:
             render_in_browser=args.browser,
         )
     )
+
+
+def _cli() -> None:
+    """Command line interface for Aineko."""
+    parser = argparse.ArgumentParser(
+        prog="aineko",
+        description=(
+            "Aineko is a framework for building data intensive applications."
+        ),
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
+
+    subparsers = parser.add_subparsers()
+    _create_parser(subparsers)
+    _run_parser(subparsers)
+    _service_parser(subparsers)
+    _stream_parser(subparsers)
+    _visualize_parser(subparsers)
 
     args = parser.parse_args()
     if hasattr(args, "func"):
