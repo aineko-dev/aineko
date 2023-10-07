@@ -58,10 +58,14 @@ def _cli() -> None:
     )
 
     # `aineko service *`
-    service_parser = subparsers.add_parser("service")
+    service_parser = subparsers.add_parser(
+        "service", help="Manage Aineko related services"
+    )
     service_subparsers = service_parser.add_subparsers()
 
-    start_service_parser = service_subparsers.add_parser("start")
+    start_service_parser = service_subparsers.add_parser(
+        "start", help="Start Aineko related services"
+    )
     start_service_parser.add_argument(
         "-f",
         "--file",
@@ -74,7 +78,9 @@ def _cli() -> None:
         func=lambda args: DockerCLIWrapper.start_service(args.file)
     )
 
-    stop_service_parser = service_subparsers.add_parser("stop")
+    stop_service_parser = service_subparsers.add_parser(
+        "stop", help="Stop Aineko related services"
+    )
     stop_service_parser.add_argument(
         "-f",
         "--file",
@@ -87,7 +93,9 @@ def _cli() -> None:
         func=lambda args: DockerCLIWrapper.stop_service(args.file)
     )
 
-    restart_service_parser = service_subparsers.add_parser("restart")
+    restart_service_parser = service_subparsers.add_parser(
+        "restart", help="Restart Aineko related services"
+    )
     restart_service_parser.add_argument(
         "-f",
         "--file",
@@ -101,7 +109,9 @@ def _cli() -> None:
     )
 
     # `aineko stream *`
-    stream_parser = subparsers.add_parser("stream")
+    stream_parser = subparsers.add_parser(
+        "stream", help="Stream messages from a dataset"
+    )
 
     stream_parser.add_argument(
         "-d", "--dataset", help="Name of dataset", required=True
