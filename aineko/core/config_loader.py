@@ -1,7 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Module to load config files."""
-from typing import Optional, Union, overload
+from typing import Union, overload
 
 from schema import Optional as optional  # type: ignore
 from schema import Schema, SchemaError  # type: ignore
@@ -14,13 +14,11 @@ class ConfigLoader:
     """Class to read yaml config files.
 
     Args:
-        pipeline: pipeline name to load config for
         pipeline_config_file: path of pipeline config file. Defaults
         to DEFAULT_CONF_SOURCE.
 
     Attributes:
         pipeline_config_file (str): path to pipeline configuration file
-        pipeline (Union[str,list]): pipeline name to load config for
         config_schema (Schema): schema to validate config against
 
     Methods:
@@ -31,13 +29,11 @@ class ConfigLoader:
     def __init__(
         self,
         pipeline_config_file: str,
-        pipeline: Optional[str] = None,
     ):
         """Initialize ConfigLoader."""
         self.pipeline_config_file = pipeline_config_file or AINEKO_CONFIG.get(
             "DEFAULT_PIPELINE_CONFIG"
         )
-        self.pipeline = pipeline
 
         # Setup config schema
         self.config_schema = Schema(
@@ -97,13 +93,6 @@ class ConfigLoader:
                 f"Config files loaded from {self.pipeline_config_file} "
                 f"returned {config}."
             ) from e
-
-        # If pipeline name specified, check against config pipeline name
-        if self.pipeline and config["pipeline"]["name"] != self.pipeline:
-            raise KeyError(
-                f"Specified pipeline `{self.pipeline}` not found in config "
-                f"file: `{self.pipeline_config_file}`"
-            )
 
         return config
 
