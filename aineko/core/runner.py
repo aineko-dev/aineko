@@ -56,7 +56,6 @@ class Runner:
         """
         # Load pipeline config
         pipeline_config = self.load_pipeline_config()
-        print(pipeline_config)
         try:
             self.pipeline_name = pipeline_config["name"]
         except KeyError as e:
