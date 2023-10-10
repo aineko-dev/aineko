@@ -14,13 +14,13 @@ Focus on transformations and business logic, leave the rest to Aineko.
 
 ## Main Features
 
-#### **Flexible Nodes**
+### **Flexible Nodes**
 
 * **Transformations & Business Logic** - Nodes can represent any logic that can be built in Python.
 * **State Management** - Nodes can maintain internal state and share it with other nodes.
 * **Connectors** - Aineko comes with pre-built nodes that serve as connectors for popular data sources and endpoints such as WebSocket and REST.
 
-#### **Powerful Datasets**
+### **Powerful Datasets**
 
 * **Streaming Data -** Datasets simplify processing of streaming data.
 * **Data Broadcasting -** Share data across any node or between pipelines.
@@ -29,25 +29,12 @@ Focus on transformations and business logic, leave the rest to Aineko.
 * **High Throughput -** Process billions or records per day with ease.
 * **Data Testing -** Run tests on production or synthetic data without impacting live applications.
 
-#### **Convenient Pipelines**
+### **Convenient Pipelines**
 
 * **Declarative -** Represent the complete topology of your system in a short YAML file.
 * **Long-Living -** Pipelines remain active and process new data as soon as it is generated.
 * **Cyclic Graphs -** Build use-cases that require cycles between data processing nodes.
 * **Replicas -** Generate replicas of pipelines with different variables without writing new code.
-
-## Technical Requirements
-
-#### **Familiarity With the Following Concepts**
-
-1. Object-oriented programming in Python
-2. Basics of message queues
-3. Managing configuration with YAML
-
-#### **Development Requirements**
-
-1. Python 3.10
-2. Docker
 
 ## Join our Community
 
