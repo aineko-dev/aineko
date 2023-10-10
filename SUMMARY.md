@@ -8,5 +8,6 @@
   * [Concepts](dev-guide/concepts.md)
   * [Aineko CLI](dev-guide/aineko-cli.md)
 * [Contributing to Aineko](contributing-to-aineko.md)
-* [Case Studies](case-studies.md)
+* [Examples](examples/README.md)
+  * [Code Generation using ChatGPT with Real-time QA](examples/code-generation-using-chatgpt-with-real-time-qa.md)
 * [FAQ](faq.md)
