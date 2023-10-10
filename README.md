@@ -6,9 +6,9 @@ description: What is Aineko?
 
 Aineko is a Python framework for building data applications.
 
-With Aineko, you can seamlessly bring data into any product and iterate quickly. Whether you're an individual developer or part of a larger team, Aineko can help you rapidly build scalable, maintainable, and fast data applications.
+With Aineko, you seamlessly bring data into any product and iterate quickly. Whether you're an individual developer or part of a larger team, Aineko helps you rapidly build scalable, maintainable, and fast data applications.
 
-Under the hood, Aineko abstracts and automatically configures tooling needed for production-ready data apps, like messages brokers, distributed compute, and more. This allows you to focus on building your application instead of spending time with configuration and infrastructure.
+Under the hood, Aineko automatically configures tooling needed for production-ready data apps, like message brokers, distributed compute, and more. This allows you to focus on building your application instead of spending time with configuration and infrastructure.
 
 Focus on transformations and business logic, leave the rest to Aineko.
 
@@ -46,7 +46,7 @@ Focus on transformations and business logic, leave the rest to Aineko.
 
 #### **Development Requirements**
 
-1. Python 3.9
+1. Python 3.10
 2. Docker
 
 ## Join our Community
