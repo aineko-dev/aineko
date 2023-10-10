@@ -8,7 +8,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 1. [Docker](https://www.docker.com/get-started/)&#x20;
 2. [Poetry](https://python-poetry.org/docs/#installation) (a python dependency manager)&#x20;
-3. [Python](https://www.python.org/downloads/) (version >= 3.10)&#x20;
+3. [Python](https://www.python.org/downloads/) (version 3.10)&#x20;
 
 ### Steps
 
@@ -20,7 +20,6 @@ Install virtual environment. Optional step, but a best practice to isolate depen
 python -m venv venv 
 source venv/bin/activate 
 pip install aineko
-
 ```
 
 **Step 2: Create a template pipeline with aineko cli**&#x20;
