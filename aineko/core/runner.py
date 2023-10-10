@@ -56,7 +56,6 @@ class Runner:
         """
         # Load pipeline config
         pipeline_config = self.load_pipeline_config()
-        print(pipeline_config)
         try:
             self.pipeline_name = pipeline_config["name"]
         except KeyError as e:
@@ -217,7 +216,8 @@ class Runner:
             outputs = node_config.get("outputs", [])
             outputs.extend(DEFAULT_KAFKA_CONFIG.get("DATASETS"))
             print(
-                f"Running {node_name} node on {self.pipeline_name} pipeline: "
+                f"Running node [{node_name}] on"
+                f"pipeline[{self.pipeline_name}]: "
                 f"inputs={node_config.get('inputs', None)}, "
                 f"outputs={outputs}"
             )
