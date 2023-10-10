@@ -38,4 +38,4 @@ Focus on transformations and business logic, leave the rest to Aineko.
 
 ## Join our Community
 
-If you have questions about anything related to Aineko, you're always welcome to ask our community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).
+If you have questions about anything related to [Aineko](https://www.aineko.dev/), you're always welcome to ask our community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).

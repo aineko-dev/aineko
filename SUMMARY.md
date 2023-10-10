@@ -9,5 +9,5 @@
   * [Aineko CLI](dev-guide/aineko-cli.md)
 * [Contributing to Aineko](contributing-to-aineko.md)
 * [Examples](examples/README.md)
-  * [Code Generation using ChatGPT with Real-time QA](examples/code-generation-using-chatgpt-with-real-time-qa.md)
+  * [Aineko Dream: Code Generation using ChatGPT with Real-time QA](examples/aineko-dream-code-generation-using-chatgpt-with-real-time-qa.md)
 * [FAQ](faq.md)

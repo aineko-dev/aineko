@@ -7,11 +7,11 @@ cover: >-
 coverY: 189
 ---
 
-# Code Generation using ChatGPT with Real-time QA
+# Aineko Dream: Code Generation using ChatGPT with Real-time QA
 
 <table data-view="cards"><thead><tr><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td>View On GitHub</td><td><a href="https://github.com/aineko-dev/aineko-dream">https://github.com/aineko-dev/aineko-dream</a></td><td><a href="../.gitbook/assets/github-mark.jpg">github-mark.jpg</a></td></tr><tr><td>Try on Slack</td><td><a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ">https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ</a></td><td><a href="../.gitbook/assets/Slack-mark-RGB.png">Slack-mark-RGB.png</a></td></tr></tbody></table>
 
-We built an app called [Aineko Dream](https://github.com/aineko-dev/aineko-dream) to test-drive Aineko's ability to enable generative AI features. Aineko Dream uses the [OpenAI API](https://platform.openai.com/overview) and the [Aineko docs](https://docs.aineko.dev/) to generate template code for an Aineko pipeline based on a prompt. The pipeline automatically checks the LLM response to ensure it passes some tests and either generates a prompt to fix the errors or passes the response back to the user.
+We built an app called [Aineko Dream](https://github.com/aineko-dev/aineko-dream) to test-drive [Aineko's](https://www.aineko.dev/) ability to enable generative AI features. Aineko Dream uses the [OpenAI API](https://platform.openai.com/overview) and the [Aineko docs](https://docs.aineko.dev/) to generate template code for an Aineko pipeline based on a prompt. The pipeline automatically checks the LLM response to ensure it passes some tests and either generates a prompt to fix the errors or passes the response back to the user.
 
 This app demonstrates how you can rapidly prototype features that use foundation models by leveraging Aineko features, such as REST client connectors, stateful feedback loops, and API endpoints. Real-time QA allows us to ensure the quality of LLM responses while maintaining an interactive experience for users.
 
@@ -332,4 +332,4 @@ When the pipeline is live, you can visit [http://127.0.0.1:8000/docs](http://127
 
 ## Join our Community
 
-If you have questions about anything related to Aineko, you're always welcome to ask our community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).
+If you have questions about anything related to [Aineko](https://www.aineko.dev/), you're always welcome to ask our community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).
