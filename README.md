@@ -65,3 +65,7 @@ To see some examples of Aineko in action visit: https://docs.aineko.dev/examples
 
 - [Aineko Dream](https://github.com/aineko-dev/aineko-dream)
 - More coming soon...
+
+## Contributing
+
+If you're interested in contributing to Aineko, follow this guide: https://docs.aineko.dev/contributing-to-aineko
