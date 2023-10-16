@@ -1,9 +1,19 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Configuration file for Aineko modules."""
+"""Configuration file for Aineko modules.
+
+Kafka configuration can be set using the following environment variables:
+- KAFKA_CONFIG: JSON string with kafka configuration
+  (see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+  for all options)
+- BOOTSTRAP_SERVERS: Comma-separated list of kafka brokers .
+  (e.g. localhost:9092,localhost:9093)
+  Will replace bootstrap.servers in KAFKA_CONFIG if set.
+"""
 import copy
+import json
 import os
-from typing import Any
+from typing import Any, Dict
 
 
 # pylint: disable=too-few-public-methods
@@ -23,21 +33,23 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     """Kafka configuration."""
 
     # Default Kafka broker settings
-    # Default broker server
-    BROKER_SERVER = os.environ.get("KAFKA_CONFIG_BROKER", "localhost:9092")
-    # Config for default kafka broker
-    BROKER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
-    }
+    kafka_config = os.environ.get("KAFKA_CONFIG", "{}")
+    BROKER_CONFIG: Dict[str, str] = json.loads(kafka_config)
+
+    # Override bootstrap.servers if set, otherwise default to localhost:9092
+    BROKER_SERVER = os.environ.get("BOOTSTRAP_SERVERS")
+    if "bootstrap.servers" not in BROKER_CONFIG or BROKER_SERVER:
+        BROKER_CONFIG["bootstrap.servers"] = BROKER_SERVER or "localhost:9092"
+
     # Config for default kafka consumer
-    CONSUMER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
+    CONSUMER_CONFIG: Dict[str, str] = {
+        **BROKER_CONFIG,
         "auto.offset.reset": "earliest",
     }
+
     # Config for default kafka producer
-    PRODUCER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
-    }
+    PRODUCER_CONFIG: Dict[str, str] = {**BROKER_CONFIG}
+
     # Default dataset config
     DATASET_PARAMS = {
         # One single partition for each dataset
