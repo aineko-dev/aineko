@@ -35,8 +35,7 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
 
     # Default Kafka broker settings
     kafka_config = os.environ.get("KAFKA_CONFIG", "{}")
-    print(kafka_config)
-    BROKER_CONFIG: Dict[str, str] = json.loads(kafka_config.replace("'", '"'))
+    BROKER_CONFIG: Dict[str, str] = json.loads(kafka_config)
 
     # Override bootstrap.servers if set, otherwise default to localhost:9092
     BROKER_SERVER = os.environ.get("BOOTSTRAP_SERVERS")
@@ -47,6 +46,8 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     OVERRIDABLES = {
         "KAFKA_CONFIG_SASL_USERNAME": "sasl.username",
         "KAFKA_CONFIG_SASL_PASSWORD": "sasl.password",
+        "KAFKA_CONFIG_SECURITY_PROTOCOL": "security.protocol",
+        "KAFKA_CONFIG_SECURITY_MECHANISM": "sasl.mechanism",
     }
     for env, config in OVERRIDABLES.items():
         value = os.environ.get(env)
