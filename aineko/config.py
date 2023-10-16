@@ -6,9 +6,10 @@ Kafka configuration can be set using the following environment variables:
 - KAFKA_CONFIG: JSON string with kafka configuration
   (see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
   for all options)
-- BOOTSTRAP_SERVERS: Comma-separated list of kafka brokers .
+- BOOTSTRAP_SERVERS: Will replace bootstrap.servers in KAFKA_CONFIG if set.
   (e.g. localhost:9092,localhost:9093)
-  Will replace bootstrap.servers in KAFKA_CONFIG if set.
+- KAFKA_CONFIG_SASL_USERNAME: Will replace sasl.username in KAFKA_CONFIG if set.
+- KAFKA_CONFIG_SASL_PASSWORD: Will replace sasl.password in KAFKA_CONFIG if set.
 """
 import copy
 import json
@@ -40,6 +41,15 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     BROKER_SERVER = os.environ.get("BOOTSTRAP_SERVERS")
     if "bootstrap.servers" not in BROKER_CONFIG or BROKER_SERVER:
         BROKER_CONFIG["bootstrap.servers"] = BROKER_SERVER or "localhost:9092"
+
+    # Override these fields if set
+    OVERRIDABLES = {
+        "KAFKA_CONFIG_SASL_USERNAME": "sasl.username",
+        "KAFKA_CONFIG_SASL_PASSWORD": "sasl.password",
+    }
+    for env, config in OVERRIDABLES.items():
+        if os.environ.get(env):
+            BROKER_CONFIG[config] = os.environ.get(env)
 
     # Config for default kafka consumer
     CONSUMER_CONFIG: Dict[str, str] = {
