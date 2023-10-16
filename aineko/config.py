@@ -36,7 +36,7 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     # Default Kafka broker settings
     kafka_config = os.environ.get("KAFKA_CONFIG", "{}")
     print(kafka_config)
-    BROKER_CONFIG: Dict[str, str] = json.loads(kafka_config)
+    BROKER_CONFIG: Dict[str, str] = json.loads(kafka_config.replace("'", '"'))
 
     # Override bootstrap.servers if set, otherwise default to localhost:9092
     BROKER_SERVER = os.environ.get("BOOTSTRAP_SERVERS")
