@@ -48,8 +48,9 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
         "KAFKA_CONFIG_SASL_PASSWORD": "sasl.password",
     }
     for env, config in OVERRIDABLES.items():
-        if os.environ.get(env):
-            BROKER_CONFIG[config] = os.environ.get(env)
+        value = os.environ.get(env)
+        if value:
+            BROKER_CONFIG[config] = value
 
     # Config for default kafka consumer
     CONSUMER_CONFIG: Dict[str, str] = {
