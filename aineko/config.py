@@ -3,13 +3,21 @@
 """Configuration file for Aineko modules.
 
 Kafka configuration can be set using the following environment variables:
-- KAFKA_CONFIG: JSON string with kafka configuration
-  (see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
-  for all options)
-- KAFKA_CONFIG_BOOTSTRAP_SERVERS: Replaces bootstrap.servers in KAFKA_CONFIG.
-  (e.g. localhost:9092,localhost:9093)
-- KAFKA_CONFIG_SASL_USERNAME: Will replace sasl.username in KAFKA_CONFIG if set.
-- KAFKA_CONFIG_SASL_PASSWORD: Will replace sasl.password in KAFKA_CONFIG if set.
+
+KAFKA_CONFIG: JSON string with kafka configuration
+(see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+for all options)
+
+Additionally, the following environment variables can be used to specify certain
+configuration values. They correspond to configuration keys found in the above
+link, but with a prefix. For example, `KAFKA_CONFIG_BOOTSTRAP_SERVERS`
+corresponds to `bootstrap.servers`.
+
+- KAFKA_CONFIG_BOOTSTRAP_SERVERS (e.g. localhost:9092,localhost:9093)
+- KAFKA_CONFIG_SASL_USERNAME
+- KAFKA_CONFIG_SASL_PASSWORD
+- KAFKA_CONFIG_SECURITY_PROTOCOL
+- KAFKA_CONFIG_SASL_MECHANISM
 """
 import copy
 import json
