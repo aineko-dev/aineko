@@ -6,7 +6,7 @@ Kafka configuration can be set using the following environment variables:
 - KAFKA_CONFIG: JSON string with kafka configuration
   (see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
   for all options)
-- BOOTSTRAP_SERVERS: Will replace bootstrap.servers in KAFKA_CONFIG if set.
+- KAFKA_CONFIG_BOOTSTRAP_SERVERS: Replaces bootstrap.servers in KAFKA_CONFIG.
   (e.g. localhost:9092,localhost:9093)
 - KAFKA_CONFIG_SASL_USERNAME: Will replace sasl.username in KAFKA_CONFIG if set.
 - KAFKA_CONFIG_SASL_PASSWORD: Will replace sasl.password in KAFKA_CONFIG if set.
@@ -34,20 +34,20 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     """Kafka configuration."""
 
     # Default Kafka broker settings
-    kafka_config = os.environ.get("KAFKA_CONFIG", "{}")
-    BROKER_CONFIG: Dict[str, str] = json.loads(kafka_config)
+    BROKER_CONFIG = {
+        "bootstrap.servers": "localhost:9092",
+    }
 
-    # Override bootstrap.servers if set, otherwise default to localhost:9092
-    BROKER_SERVER = os.environ.get("BOOTSTRAP_SERVERS")
-    if "bootstrap.servers" not in BROKER_CONFIG or BROKER_SERVER:
-        BROKER_CONFIG["bootstrap.servers"] = BROKER_SERVER or "localhost:9092"
+    kafka_config = os.environ.get("KAFKA_CONFIG", "{}")
+    BROKER_CONFIG.update(json.loads(kafka_config))
 
     # Override these fields if set
     OVERRIDABLES = {
+        "KAFKA_CONFIG_BOOTSTRAP_SERVERS": "bootstrap.servers",
         "KAFKA_CONFIG_SASL_USERNAME": "sasl.username",
         "KAFKA_CONFIG_SASL_PASSWORD": "sasl.password",
         "KAFKA_CONFIG_SECURITY_PROTOCOL": "security.protocol",
-        "KAFKA_CONFIG_SECURITY_MECHANISM": "sasl.mechanism",
+        "KAFKA_CONFIG_SASL_MECHANISM": "sasl.mechanism",
     }
     for env, config in OVERRIDABLES.items():
         value = os.environ.get(env)
