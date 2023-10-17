@@ -1,9 +1,28 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Configuration file for Aineko modules."""
+"""Configuration file for Aineko modules.
+
+Kafka configuration can be set using the following environment variables:
+
+KAFKA_CONFIG: JSON string with kafka configuration
+(see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+for all options)
+
+Additionally, the following environment variables can be used to specify certain
+configuration values. They correspond to configuration keys found in the above
+link, but with a prefix. For example, `KAFKA_CONFIG_BOOTSTRAP_SERVERS`
+corresponds to `bootstrap.servers`.
+
+- KAFKA_CONFIG_BOOTSTRAP_SERVERS (e.g. localhost:9092,localhost:9093)
+- KAFKA_CONFIG_SASL_USERNAME
+- KAFKA_CONFIG_SASL_PASSWORD
+- KAFKA_CONFIG_SECURITY_PROTOCOL
+- KAFKA_CONFIG_SASL_MECHANISM
+"""
 import copy
+import json
 import os
-from typing import Any
+from typing import Any, Dict
 
 
 # pylint: disable=too-few-public-methods
@@ -23,21 +42,35 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     """Kafka configuration."""
 
     # Default Kafka broker settings
-    # Default broker server
-    BROKER_SERVER = os.environ.get("KAFKA_CONFIG_BROKER", "localhost:9092")
-    # Config for default kafka broker
     BROKER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
+        "bootstrap.servers": "localhost:9092",
     }
+
+    kafka_config = os.environ.get("KAFKA_CONFIG", "{}")
+    BROKER_CONFIG.update(json.loads(kafka_config))
+
+    # Override these fields if set
+    OVERRIDABLES = {
+        "KAFKA_CONFIG_BOOTSTRAP_SERVERS": "bootstrap.servers",
+        "KAFKA_CONFIG_SASL_USERNAME": "sasl.username",
+        "KAFKA_CONFIG_SASL_PASSWORD": "sasl.password",
+        "KAFKA_CONFIG_SECURITY_PROTOCOL": "security.protocol",
+        "KAFKA_CONFIG_SASL_MECHANISM": "sasl.mechanism",
+    }
+    for env, config in OVERRIDABLES.items():
+        value = os.environ.get(env)
+        if value:
+            BROKER_CONFIG[config] = value
+
     # Config for default kafka consumer
-    CONSUMER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
+    CONSUMER_CONFIG: Dict[str, str] = {
+        **BROKER_CONFIG,
         "auto.offset.reset": "earliest",
     }
+
     # Config for default kafka producer
-    PRODUCER_CONFIG = {
-        "bootstrap.servers": BROKER_SERVER,
-    }
+    PRODUCER_CONFIG: Dict[str, str] = {**BROKER_CONFIG}
+
     # Default dataset config
     DATASET_PARAMS = {
         # One single partition for each dataset
