@@ -96,6 +96,8 @@ class DatasetConsumer:
             self.consumer = Consumer(consumer_config)
             self.consumer.subscribe([topic_name])
 
+        self.topic_name = topic_name
+
     @staticmethod
     def _validate_message(
         message: Optional[Message] = None,

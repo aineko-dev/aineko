@@ -58,6 +58,8 @@ class MessageReader(AbstractNode):
         """Read message"""
         msg = self.consumers["messages"].consume()
         if time.time() - self.last_updated > self.timeout:
+            print(f"Received messages: {self.received}")
+            print(self.consumers["messages"].topic_name)
             raise TimeoutError("Timed out waiting for messages.")
 
         if not msg:
