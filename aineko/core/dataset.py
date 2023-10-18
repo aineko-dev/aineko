@@ -89,7 +89,7 @@ class DatasetConsumer:
                 "group.id"
             ] = f"{prefix}.{pipeline_name}.{node_name}"
             self.consumer = Consumer(consumer_config)
-            self.consumer.subscribe([f"{prefix}.topic_name"])
+            self.consumer.subscribe([f"{prefix}.{topic_name}"])
 
         else:
             consumer_config["group.id"] = f"{pipeline_name}.{node_name}"
