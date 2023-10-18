@@ -105,6 +105,7 @@ def test_write_read_to_kafka():
             node_name="consumer",
             pipeline_name="integration_test_write",
             dataset_config={},
+            has_pipeline_prefix=True,
         )
         count_messages = consumer.consume_all(end_message="END")
         count_values = [msg["message"] for msg in count_messages]
@@ -121,6 +122,7 @@ def test_write_read_to_kafka():
             node_name="consumer",
             pipeline_name="integration_test_read",
             dataset_config={},
+            has_pipeline_prefix=True,
         )
         count_messages = consumer.consume_all(end_message="END")
         assert count_messages[0]["source_pipeline"] == "integration_test_read"

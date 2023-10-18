@@ -102,6 +102,8 @@ class AbstractNode(ABC):
         pipeline: str,
         inputs: Optional[List[str]] = None,
         outputs: Optional[List[str]] = None,
+        prefix: Optional[str] = None,
+        has_pipeline_prefix: bool = False,
     ) -> None:
         """Setup the consumer and producer for a node.
 
@@ -111,28 +113,39 @@ class AbstractNode(ABC):
             pipeline: name of the pipeline
             inputs: list of dataset names for the inputs to the node
             outputs: list of dataset names for the outputs of the node
+            prefix: prefix for topic name (<prefix>.<dataset_name>)
+            has_pipeline_prefix: whether the dataset name has pipeline name
+            prefix
         """
         inputs = inputs or []
-        self.consumers = {
-            dataset_name: DatasetConsumer(
-                dataset_name=dataset_name,
-                node_name=node,
-                dataset_config=datasets.get(dataset_name, {}),
-                pipeline_name=pipeline,
-            )
-            for dataset_name in inputs
-        }
+        self.consumers.update(
+            {
+                dataset_name: DatasetConsumer(
+                    dataset_name=dataset_name,
+                    node_name=node,
+                    pipeline_name=pipeline,
+                    dataset_config=datasets.get(dataset_name, {}),
+                    prefix=prefix,
+                    has_pipeline_prefix=has_pipeline_prefix,
+                )
+                for dataset_name in inputs
+            }
+        )
 
         outputs = outputs or []
-        self.producers = {
-            dataset_name: DatasetProducer(
-                dataset_name=dataset_name,
-                node_name=node,
-                dataset_config=datasets.get(dataset_name, {}),
-                pipeline_name=pipeline,
-            )
-            for dataset_name in outputs
-        }
+        self.producers.update(
+            {
+                dataset_name: DatasetProducer(
+                    dataset_name=dataset_name,
+                    node_name=node,
+                    pipeline_name=pipeline,
+                    dataset_config=datasets.get(dataset_name, {}),
+                    prefix=prefix,
+                    has_pipeline_prefix=has_pipeline_prefix,
+                )
+                for dataset_name in outputs
+            }
+        )
 
     def setup_test(
         self,

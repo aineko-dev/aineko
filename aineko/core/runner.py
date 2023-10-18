@@ -24,11 +24,14 @@ class Runner:
         pipeline_config_file (str): Path to pipeline config file
         pipeline (str): Name of the pipeline
         kafka_config (dict): Config for kafka broker
+        dataset_prefix (Optional[str]): Prefix for dataset names.
+        Kafka topics will be called <prefix>.<pipeline>.<dataset_name>.
 
     Attributes:
         pipeline_config_file (str): Path to pipeline config file
         kafka_config (dict): Config for kafka broker
-        pipeline_name (Optional[str]): Name of the pipeline, loaded from config
+        pipeline_name (str): Name of the pipeline, loaded from config
+        dataset_prefix (Optional[str]): Prefix for dataset names
     """
 
     def __init__(
@@ -36,12 +39,14 @@ class Runner:
         pipeline_config_file: str,
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
         metrics_export_port: int = AINEKO_CONFIG.get("RAY_METRICS_PORT"),
+        dataset_prefix: Optional[str] = None,
     ):
         """Initializes the runner class."""
         self.pipeline_config_file = pipeline_config_file
         self.kafka_config = kafka_config
         self.metrics_export_port = metrics_export_port
-        self.pipeline_name: Optional[str] = None
+        self.pipeline_name: str
+        self.dataset_prefix = dataset_prefix or ""
 
     def run(self) -> None:
         """Runs the pipeline.
@@ -64,7 +69,10 @@ class Runner:
             )
 
         # Create the necessary datasets
-        self.prepare_datasets(pipeline_config=pipeline_config)
+        self.prepare_datasets(
+            config=pipeline_config["datasets"],
+            user_dataset_prefix=self.pipeline_name,
+        )
 
         # Initialize ray cluster
         ray.shutdown()
@@ -101,11 +109,24 @@ class Runner:
 
         return config["pipeline"]
 
-    def prepare_datasets(self, pipeline_config: dict) -> bool:
+    def prepare_datasets(
+        self, config: dict, user_dataset_prefix: Optional[str] = None
+    ) -> bool:
         """Creates the required datasets for a given pipeline.
 
+        Datasets can be configured using the `params` key, using config keys
+        found in: https://kafka.apache.org/documentation.html#topicconfigs
+
         Args:
-            config: pipeline_config configuration
+            config: dataset configuration found in pipeline config
+            Should follow the schema
+                {
+                    "dataset_name": {
+                        "type": str ("kafka_stream"),
+                        "params": dict
+                }
+            user_dataset_prefix: prefix only for datasets defined by the user.
+            i.e. <prefix>.<user_dataset_prefix>.<dataset_name>
 
         Returns:
             True if successful
@@ -116,24 +137,30 @@ class Runner:
         # Connect to kafka cluster
         kafka_client = AdminClient(self.kafka_config)
 
+        # Add prefix to user defined datasets
+        if user_dataset_prefix:
+            config = {
+                f"{user_dataset_prefix}.{dataset_name}": dataset_config
+                for dataset_name, dataset_config in config.items()
+            }
+
         # Fail if reserved dataset names are defined in catalog
         for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
-            if reserved_dataset in pipeline_config["datasets"]:
+            if reserved_dataset in config:
                 raise ValueError(
-                    f"Dataset {reserved_dataset} is reserved for internal use."
+                    f"Unable to create dataset `{reserved_dataset}`. "
+                    "Reserved for internal use."
                 )
 
         # Add logging dataset to catalog
-        pipeline_config["datasets"][
-            DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
-        ] = {
+        config[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")] = {
             "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
             "params": DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
         }
 
         # Create all dataset defined in the catalog
         dataset_list = []
-        for dataset_name, dataset_config in pipeline_config["datasets"].items():
+        for dataset_name, dataset_config in config.items():
             print(f"Creating dataset: {dataset_name}: {dataset_config}")
             # Create dataset for kafka streams
             if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
@@ -144,8 +171,13 @@ class Runner:
                 }
 
                 # Configure dataset
+                if self.dataset_prefix:
+                    topic_name = f"{self.dataset_prefix}.{dataset_name}"
+                else:
+                    topic_name = dataset_name
+
                 new_dataset = NewTopic(
-                    topic=dataset_name,
+                    topic=topic_name,
                     num_partitions=dataset_params.get("num_partitions"),
                     replication_factor=dataset_params.get("replication_factor"),
                     config=dataset_params.get("config"),
@@ -212,18 +244,20 @@ class Runner:
             wrapped_class.options(**actor_params)
             actor_handle = wrapped_class.remote(poison_pill=poison_pill)
 
-            # Setup input and output datasets, incl logging
+            # Setup input and output datasets
             outputs = node_config.get("outputs", [])
-            outputs.extend(DEFAULT_KAFKA_CONFIG.get("DATASETS"))
-            print(
-                f"Running node [{node_name}] on"
-                f"pipeline[{self.pipeline_name}]: "
-                f"inputs={node_config.get('inputs', None)}, "
-                f"outputs={outputs}"
-            )
             actor_handle.setup_datasets.remote(
                 inputs=node_config.get("inputs", None),
                 outputs=outputs,
+                datasets=pipeline_config["datasets"],
+                node=node_name,
+                pipeline=self.pipeline_name,
+                has_pipeline_prefix=True,
+            )
+
+            # Setup internal datasets like logging, without pipeline prefix
+            actor_handle.setup_datasets.remote(
+                outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
                 datasets=pipeline_config["datasets"],
                 node=node_name,
                 pipeline=self.pipeline_name,
