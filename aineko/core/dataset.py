@@ -33,10 +33,15 @@ class DatasetConsumer:
 
     DatasetConsumer objects are designed to consume messages from a single
     dataset and will consume the next unconsumed message in the queue.
-    Prefixes will automatically be added to the dataset name. For example,
-    a dataset named "dataset_1" in a pipeline named "pipeline_1" with a prefix
-    of "test" will subscribe to a topic named "test.pipeline_1.dataset_1" if
-    `has_pipeline_prefix` is set to `True`, and "test.dataset_1" otherwise.
+
+    When accessing kafka topics, prefixes will automatically be added to the
+    dataset name as part of namespacing. For datasets defined in the pipeline
+    config, `has_pipeline_prefix` will be set to `True`, so a dataset named
+    `my_dataset` will point to a topic named `my_pipeline.my_dataset`.
+
+    Optionally, a custom prefix can be provided that will apply to all datasets.
+    In the above example, if the prefix is set to `test`, the topic name will
+    be `test.my_pipeline.my_dataset`.
 
     Args:
         dataset_name: name of the dataset
