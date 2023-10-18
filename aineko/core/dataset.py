@@ -32,9 +32,16 @@ class DatasetConsumer:
     """Wrapper class for Kafka consumer object.
 
     DatasetConsumer objects are designed to consume messages from a single
-    dataset and can consume messages in two different ways:
-        "next": read the next unconsumed message in the queue
-        "last": read the latest message in the queue
+    dataset and will consume the next unconsumed message in the queue.
+
+    When accessing kafka topics, prefixes will automatically be added to the
+    dataset name as part of namespacing. For datasets defined in the pipeline
+    config, `has_pipeline_prefix` will be set to `True`, so a dataset named
+    `my_dataset` will point to a topic named `my_pipeline.my_dataset`.
+
+    Optionally, a custom prefix can be provided that will apply to all datasets.
+    In the above example, if the prefix is set to `test`, the topic name will
+    be `test.my_pipeline.my_dataset`.
 
     Args:
         dataset_name: name of the dataset
@@ -42,6 +49,8 @@ class DatasetConsumer:
         pipeline_name: name of the pipeline
         dataset_config: dataset config
         broker: broker to connect to (ip and port: "54.88.142.21:9092")
+        prefix: prefix for topic name (<prefix>.<dataset_name>)
+        has_pipeline_prefix: whether the dataset name has pipeline name prefix
 
     Attributes:
         consumer: Kafka consumer object
@@ -56,33 +65,43 @@ class DatasetConsumer:
         node_name: str,
         pipeline_name: str,
         dataset_config: Dict[str, Any],
-        broker: Optional[str] = None,
+        bootstrap_servers: Optional[str] = None,
+        prefix: Optional[str] = None,
+        has_pipeline_prefix: bool = False,
     ):
         """Initialize the consumer."""
-        # Assign dataset name
         self.pipeline_name = pipeline_name
-
-        # Assign kafka config
         self.kafka_config = DEFAULT_KAFKA_CONFIG
+        self.prefix = prefix
+        self.has_pipeline_prefix = has_pipeline_prefix
 
-        # Set consumer parameters
         consumer_config = self.kafka_config.get("CONSUMER_CONFIG")
-
-        # Overwrite broker target if provided
-        if broker:
-            consumer_config["bootstrap.servers"] = broker
+        # Overwrite bootstrap server with broker if provided
+        if bootstrap_servers:
+            consumer_config["bootstrap.servers"] = bootstrap_servers
 
         # Override default config with dataset specific config
         for param, value in dataset_config.get("params", {}).items():
             if param in self.kafka_config.get("CONSUMER_OVERRIDABLES"):
                 consumer_config[param] = dataset_config["params"][value]
 
-        # Add consumer group id based on node name
-        consumer_config["group.id"] = f"{self.pipeline_name}.{node_name}"
+        topic_name = dataset_name
+        if has_pipeline_prefix:
+            topic_name = f"{pipeline_name}.{dataset_name}"
 
-        # Create consumer
-        self.consumer = Consumer(consumer_config)
-        self.consumer.subscribe([dataset_name])
+        if self.prefix:
+            consumer_config[
+                "group.id"
+            ] = f"{prefix}.{pipeline_name}.{node_name}"
+            self.consumer = Consumer(consumer_config)
+            self.consumer.subscribe([f"{prefix}.{topic_name}"])
+
+        else:
+            consumer_config["group.id"] = f"{pipeline_name}.{node_name}"
+            self.consumer = Consumer(consumer_config)
+            self.consumer.subscribe([topic_name])
+
+        self.topic_name = topic_name
 
     @staticmethod
     def _validate_message(
@@ -159,11 +178,15 @@ class DatasetConsumer:
 class DatasetProducer:
     """Wrapper class for Kafka producer object.
 
+    See DatasetConsumer for prefix rules.
+
     Args:
         dataset_name: dataset name
         node_name: name of the node that is producing the message
         pipeline_name: name of the pipeline
         dataset_config: dataset config
+        prefix: prefix for topic name (<prefix>.<dataset_name>)
+        has_pipeline_prefix: whether the dataset name has pipeline name prefix
 
     Attributes:
         producer: Kafka producer object
@@ -178,12 +201,23 @@ class DatasetProducer:
         node_name: str,
         pipeline_name: str,
         dataset_config: Dict[str, Any],
+        prefix: Optional[str] = None,
+        has_pipeline_prefix: bool = False,
     ):
         """Initialize the producer."""
-        # Assign dataset name
         self.source_pipeline = pipeline_name
         self.dataset = dataset_name
         self.source_node = node_name
+        self.prefix = prefix
+        self.has_pipeline_prefix = has_pipeline_prefix
+
+        # Create topic name based on prefix rules
+        topic_name = dataset_name
+        if has_pipeline_prefix:
+            topic_name = f"{pipeline_name}.{topic_name}"
+        if prefix:
+            topic_name = f"{prefix}.{topic_name}"
+        self.topic_name = topic_name
 
         # Assign kafka config
         self.kafka_config = DEFAULT_KAFKA_CONFIG
@@ -234,7 +268,7 @@ class DatasetProducer:
         key_bytes = str(key).encode("utf-8") if key is not None else None
 
         self.producer.produce(
-            topic=self.dataset,
+            topic=self.topic_name,
             key=key_bytes,
             value=json.dumps(message).encode("utf-8"),
             callback=self._delivery_report,
