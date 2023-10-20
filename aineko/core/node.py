@@ -17,7 +17,7 @@ that users should override with their own implementation.
 import time
 import traceback
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional
+from typing import Dict, Generator, List, Optional, Tuple
 
 import ray
 
@@ -307,6 +307,72 @@ class AbstractNode(ABC):
             dataset_name: producer.values
             for dataset_name, producer in self.producers.items()
         }
+
+    def run_test_yield(
+        self, runtime: Optional[int] = None
+    ) -> Generator[Tuple[dict, dict, "AbstractNode"], None, None]:
+        """Execute the node in testing mode, yielding at each iteration.
+
+        This method is an alternative to `run_test`. Instead of returning the
+        aggregated output, it yields the most recently consumed value, the
+        produced value and the current node instance at each iteration. This is
+        useful for testing nodes that either don't produce any output or if you
+        need to test intermediate outputs. Testing state modifications is also
+        possible using this method.
+
+        Args:
+            runtime: Number of seconds to run the execute loop for.
+
+        Yields:
+            A tuple containing the most recent input value, output value and
+            the node instance.
+
+        Example:
+            >>> for input, output, node_instance in sequencer.run_test_yield():
+            >>>     print(f"Input: {input}, Output: {output})
+            >>>     print(f"Node Instance: {node_instance}")
+        """
+        if self.test is False:
+            raise RuntimeError(
+                "Node is not in test mode. "
+                "Please initialize with `enable_test_mode()`."
+            )
+        run_loop = True
+        start_time = time.time()
+
+        self._pre_loop_hook(self.params)
+        while run_loop is not False:
+            last_produced_values = {}
+            last_consumed_values = {}
+
+            run_loop = self._execute(self.params)  # type: ignore
+
+            # Do not end loop if runtime not exceeded
+            if runtime is not None:
+                if time.time() - start_time < runtime:
+                    continue
+
+            # End loop if all consumers are empty
+            if self.consumers and all(
+                consumer.empty for consumer in self.consumers.values()
+            ):
+                run_loop = False
+
+            # Capture last consumed values
+            for dataset_name, consumer in self.consumers.items():
+                if consumer.values:
+                    last_value = consumer.values[0]
+                    last_consumed_values[dataset_name] = last_value
+
+            # Capture last produced values
+            for dataset_name, producer in self.producers.items():
+                if producer.values:
+                    last_value = producer.values[-1]
+                    last_produced_values[dataset_name] = last_value
+
+            yield (last_consumed_values, last_produced_values, self)
+
+        self._post_loop_hook(self.params)
 
     def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
         """Hook to be called before the node loop. User overrideable.
