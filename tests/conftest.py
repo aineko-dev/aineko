@@ -121,6 +121,7 @@ def test_doubler_node():
                 params: Defaults to None.
             """
             self.cur_time = time.time()
+            self.cur_integer = 0
 
         def _execute(self, params: Optional[dict] = None) -> None:
             """Generates a sequence of integers and writes them to a dataset.
@@ -158,6 +159,7 @@ def test_doubler_node():
 
             # Convert message to integer
             cur_integer = int(cur_integer["message"])
+            self.cur_integer = cur_integer
 
             # Write message to producer
             self.producers["integer_doubles"].produce(cur_integer * 2)

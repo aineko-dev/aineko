@@ -3,6 +3,8 @@
 """Tests for the ainode.core.node module."""
 import time
 
+from aineko.core.node import AbstractNode
+
 NUM_MESSAGES = 10
 
 
@@ -45,3 +47,25 @@ def test_node_unit_test(test_sequencer_node, test_doubler_node) -> None:
     )
     outputs = doubler.run_test()
     assert outputs["integer_doubles"] == [i * 2 for i in range(NUM_MESSAGES)]
+
+
+def test_output_yielding(test_sequencer_node, test_doubler_node) -> None:
+    """Test sequencer & doubler nodes, focusing on the output per iteration."""
+
+    sequencer: AbstractNode = test_sequencer_node(test=True, poison_pill=None)
+    sequencer.setup_test(
+        inputs=None,
+        outputs=["integer_sequence"],
+        params={"sleep_time": 0.1, "num_messages": NUM_MESSAGES},
+    )
+
+    for _, output, node_instance in sequencer.run_test_yield():
+        assert output["integer_sequence"] == node_instance.cur_integer - 1
+
+    doubler: AbstractNode = test_doubler_node(test=True, poison_pill=None)
+    doubler.setup_test(
+        inputs={"integer_sequence": list(range(NUM_MESSAGES))},
+        outputs=["integer_doubles"],
+    )
+    for _, output, node_instance in doubler.run_test_yield():
+        assert output["integer_doubles"] == node_instance.cur_integer * 2
