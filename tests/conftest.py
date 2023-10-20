@@ -166,3 +166,33 @@ def test_doubler_node():
             self.log(f"Produced {cur_integer * 2}", level="info")
 
     return TestDoubler
+
+
+@pytest.fixture(scope="module")
+def test_internal_value_setter_node():
+    """Returns a node that sets the current input as an internal value."""
+
+    class TestInternalValueSetter(AbstractNode):
+        """Test sequencer node."""
+
+        def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+            """Pre loop hook."""
+            self.cur_integer = 0
+            self.num_messages = 0
+
+        def _execute(self, params: Optional[dict] = None) -> None:
+            """Consumes message from input and sets content to internal value."""
+
+            # Read message from consumer
+            cur_integer = self.consumers["integer_sequence"].consume(
+                how="next", timeout=0
+            )
+            # Validate message
+            if cur_integer is None:
+                return
+
+            # Convert message to integer
+            cur_integer = int(cur_integer["message"])
+            self.cur_integer = cur_integer
+
+    return TestInternalValueSetter

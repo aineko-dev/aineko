@@ -69,3 +69,16 @@ def test_output_yielding(test_sequencer_node, test_doubler_node) -> None:
     )
     for _, output, node_instance in doubler.run_test_yield():
         assert output["integer_doubles"] == node_instance.cur_integer * 2
+
+
+def test_output_yielding_no_output(test_internal_value_setter_node):
+    """Test internal value setter node, focusing on the node state per iteration."""
+    node: AbstractNode = test_internal_value_setter_node(
+        test=True, poison_pill=None
+    )
+
+    input_sequence = list(range(NUM_MESSAGES))
+    node.setup_test(inputs={"integer_sequence": input_sequence}, outputs=[])
+    for input, _, node_instance in node.run_test_yield():
+        if input.get("integer_sequence"):
+            assert input["integer_sequence"] == node_instance.cur_integer + 1
