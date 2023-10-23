@@ -3,11 +3,11 @@
 """Module to load config files."""
 from typing import Union, overload
 
-from schema import Optional as optional  # type: ignore
-from schema import Schema, SchemaError  # type: ignore
+from pydantic import ValidationError
 
 from aineko.config import AINEKO_CONFIG
-from aineko.utils.io import load_yamls
+from aineko.models.config_schema import Config
+from aineko.utils.io import load_yaml
 
 
 class ConfigLoader:
@@ -15,15 +15,14 @@ class ConfigLoader:
 
     Args:
         pipeline_config_file: path of pipeline config file. Defaults
-        to DEFAULT_CONF_SOURCE.
+        to `DEFAULT_PIPELINE_CONFIG`.
 
     Attributes:
-        pipeline_config_file (str): path to pipeline configuration file
-        config_schema (Schema): schema to validate config against
+        pipeline_config_file (str): path to the pipeline configuration file
+        config_schema (Config): Pydantic model to validate a pipeline config
 
     Methods:
-        load_config: load config for project(s) from yaml files
-        validate_config: validate config against config_schema
+        load_config: loads and validates the pipeline config from a yaml file
     """
 
     def __init__(
@@ -36,93 +35,30 @@ class ConfigLoader:
         )
 
         # Setup config schema
-        self.config_schema = Schema(
-            {
-                # Pipeline config
-                "pipeline": {
-                    "name": str,
-                    optional("default_node_settings"): dict,
-                    # Node config
-                    "nodes": {
-                        str: {
-                            "class": str,
-                            optional("node_params"): dict,
-                            optional("node_settings"): dict,
-                            optional("inputs"): list,
-                            optional("outputs"): list,
-                        },
-                    },
-                    # Datasets config
-                    "datasets": {
-                        str: {
-                            "type": str,
-                            optional("params"): dict,
-                        },
-                    },
-                },
-            },
-        )
+        self.config_schema = Config
 
     def load_config(self) -> dict:
-        """Load config for project(s) from yaml files.
-
-        Load the config from the specified pipeline config.
-        Example:
-                {
-                    "pipeline": {
-                        "name": ...,
-                        "nodes": {...},
-                        "datasets": {...}
-                    },
-                }
+        """Load and validate the pipeline config.
 
         Raises:
-            ValueError: If project is not a string or list of strings
+            ValidationError: If the config does not match the schema
 
         Returns:
-            Config for each project (dict keys are project names)
+            The pipeline config as a dictionary
         """
-        config = load_yamls(self.pipeline_config_file)
+        config = load_yaml(self.pipeline_config_file)
 
         try:
-            self._validate_config_schema(pipeline_config=config)
-        except SchemaError as e:
-            raise SchemaError(
+            Config(**config)
+        except ValidationError as e:
+            print(
                 f"Schema validation failed for pipeline "
-                f"`{config['pipeline']['name']}`."
-                f"Config files loaded from {self.pipeline_config_file} "
-                f"returned {config}."
-            ) from e
+                f"`{config['pipeline']['name']}` loaded from "
+                f"{self.pipeline_config_file}. See detailed error below."
+            )
+            raise e
 
         return config
-
-    def _validate_config_schema(self, pipeline_config: dict) -> bool:
-        """Validate config.
-
-        Note:
-        e.g. schema -
-        {
-            "pipeline": {
-                "name": str,
-                "nodes": dict,
-                "datasets": dict,
-            }
-        }
-
-        For more information on schema validation,
-        see: https://github.com/keleshev/schema
-
-        Args:
-            pipeline_config: config to validate
-
-        Raises:
-            SchemaError: if config is invalid
-
-        Returns:
-            True if config is valid
-        """
-        self.config_schema.validate(pipeline_config)
-        return True
 
     @overload
     def _update_params(self, value: dict, params: dict) -> dict:
