@@ -2,9 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Tests for the aineko.core.config_loader module."""
 
-import copy
-
 import pytest
+from pydantic import ValidationError
 
 from aineko.core.config_loader import ConfigLoader
 
@@ -57,3 +56,30 @@ def test_load_config(
     # Test pipeline config containing single pipeline
     config = ConfigLoader(test_pipeline_config_file).load_config()
     assert config == EXPECTED_TEST_PIPELINE
+
+
+def test_load_invalid_config(test_invalid_pipeline_config_file: str, capsys):
+    """Tests the loading of an invalid config.
+
+    The class name is missing from the doubler node definition.
+    We expect a ValidationError to be raised.
+    """
+    with pytest.raises(ValidationError) as err:
+        ConfigLoader(test_invalid_pipeline_config_file).load_config()
+    assert err.value.errors() == [
+        {
+            "loc": ("pipeline", "nodes", "doubler", "class"),
+            "msg": "field required",
+            "type": "value_error.missing",
+        }
+    ]
+    # Capture the print output
+    captured = capsys.readouterr()
+
+    # Check that the correct informational message is printed
+    assert (
+        captured.out
+        == f"Schema validation failed for pipeline `test_invalid_pipeline` "
+        f"loaded from {test_invalid_pipeline_config_file}. See detailed error "
+        "below.\n"
+    )

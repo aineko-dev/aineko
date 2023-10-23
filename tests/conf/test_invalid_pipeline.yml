@@ -1,0 +1,40 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: test_invalid_pipeline
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    # Test actor with no input, single output, and params
+    sequencer:
+      class: aineko.tests.conftest.TestSequencer
+      outputs:
+        - integer_sequence
+        - env_var
+      node_params:
+        start_int: 0
+        num_messages: 25
+        sleep_time: 1
+
+    # Test actor with single input and single output
+    doubler:
+      inputs:
+        - integer_sequence
+      outputs:
+        - integer_doubles
+      node_params:
+        duration: 40
+
+  datasets:
+    integer_sequence:
+      type: kafka_stream
+      params:
+        retention.ms: 86400000
+
+    integer_doubles:
+      type: kafka_stream
+
+    env_var:
+      type: kafka_stream

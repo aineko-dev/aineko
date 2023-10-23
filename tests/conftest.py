@@ -32,6 +32,16 @@ def test_pipeline_config_file(conf_directory: str):
 
 
 @pytest.fixture(scope="module")
+def test_invalid_pipeline_config_file(conf_directory: str):
+    """Pipeline config file fixture.
+
+    Returns:
+        str: Path to pipeline config file
+    """
+    return os.path.join(conf_directory, "test_invalid_pipeline.yml")
+
+
+@pytest.fixture(scope="module")
 def config_loader(test_pipeline_config_file: str):
     """Config loader fixture.
 
