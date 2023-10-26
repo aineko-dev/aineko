@@ -39,6 +39,9 @@ isort = "^5.12.0"
 pydocstyle = "^6.3.0"
 pytest-subtests = "^0.11.0"
 
+[tool.poetry.group.docs]
+optional = true
+
 [tool.poetry.group.docs.dependencies]
 pylint = "^2.17.5"
 black = "^23.7.0"
