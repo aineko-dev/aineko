@@ -789,16 +789,6 @@ files = [
 ]
 
 [[package]]
-name = "doc"
-version = "0.1.0"
-description = "Turn your Python script into a report with inline figures."
-optional = false
-python-versions = "*"
-files = [
-    {file = "doc-0.1.0.tar.gz", hash = "sha256:0aa0f4470c7fc500b57dcad92e0515e349f4ba5a4f1dc2a509f0333d80a55eb0"},
-]
-
-[[package]]
 name = "docutils"
 version = "0.18.1"
 description = "Docutils -- Python Documentation Utilities"
@@ -3126,17 +3116,6 @@ files = [
 ]
 
 [[package]]
-name = "types-pyyaml"
-version = "6.0.12.12"
-description = "Typing stubs for PyYAML"
-optional = false
-python-versions = "*"
-files = [
-    {file = "types-PyYAML-6.0.12.12.tar.gz", hash = "sha256:334373d392fde0fdf95af5c3f1661885fa10c52167b14593eb856289e1855062"},
-    {file = "types_PyYAML-6.0.12.12-py3-none-any.whl", hash = "sha256:c05bc6c158facb0676674b7f11fe3960db4f389718e19e62bd2b84d6205cfd24"},
-]
-
-[[package]]
 name = "typing-extensions"
 version = "4.8.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -3398,4 +3377,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "11efe57ec3fece99cb39531d29957a02546d949e1059dcd206f1fc0b3ee89645"
+content-hash = "b6f89762ab5a9ea77c9d2b3b4e26920a01de1ddcdabc2e05bbee5d0e99a817ec"
