@@ -37,7 +37,6 @@ yamllint = "^1.32.0"
 pre-commit = "^3.4.0"
 isort = "^5.12.0"
 pydocstyle = "^6.3.0"
-pytest-subtests = "^0.11.0"
 
 [tool.poetry.group.docs]
 optional = true
@@ -62,9 +61,10 @@ nbsphinx-link = "^1.3.0"
 myst-parser = "^2.0.0"
 
 [tool.poetry.group.test.dependencies]
+mypy = "^1.5.1"
 pytest = "^7.4.1"
 pytest-cov = "^4.1.0"
-mypy = "^1.5.1"
+pytest-subtests = "^0.11.0"
 
 [build-system]
 requires = ["poetry-core"]
