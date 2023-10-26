@@ -45,9 +45,12 @@ def _run_parser(subparser: argparse._SubParsersAction) -> None:
         help="Path to the config file containing the pipeline config.",
         type=str,
     )
+    run_parser.add_argument(
+        "-p", "--pipeline", help="Name of the pipeline to run (optional)."
+    )
     run_parser.set_defaults(
         func=lambda args: run_main(
-            pipeline_config_file=args.config_path,
+            pipeline_config_file=args.config_path, pipeline_name=args.pipeline
         )
     )
 
