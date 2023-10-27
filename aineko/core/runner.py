@@ -22,13 +22,14 @@ class Runner:
 
     Args:
         pipeline_config_file (str): Path to pipeline config file
-        pipeline (str): Name of the pipeline
+        pipeline_name (str): Name of the pipeline
         kafka_config (dict): Config for kafka broker
         dataset_prefix (Optional[str]): Prefix for dataset names.
         Kafka topics will be called <prefix>.<pipeline>.<dataset_name>.
 
     Attributes:
         pipeline_config_file (str): Path to pipeline config file
+        pipeline_name (str): Name of the pipeline, overrides pipeline config
         kafka_config (dict): Config for kafka broker
         pipeline_name (str): Name of the pipeline, loaded from config
         dataset_prefix (Optional[str]): Prefix for dataset names
@@ -37,6 +38,7 @@ class Runner:
     def __init__(
         self,
         pipeline_config_file: str,
+        pipeline_name: Optional[str] = None,
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
         metrics_export_port: int = AINEKO_CONFIG.get("RAY_METRICS_PORT"),
         dataset_prefix: Optional[str] = None,
@@ -45,7 +47,7 @@ class Runner:
         self.pipeline_config_file = pipeline_config_file
         self.kafka_config = kafka_config
         self.metrics_export_port = metrics_export_port
-        self.pipeline_name: str
+        self.pipeline_name = pipeline_name
         self.dataset_prefix = dataset_prefix or ""
 
     def run(self) -> None:
@@ -61,12 +63,7 @@ class Runner:
         """
         # Load pipeline config
         pipeline_config = self.load_pipeline_config()
-        try:
-            self.pipeline_name = pipeline_config["name"]
-        except KeyError as e:
-            print(
-                f"[Warning] Failed to load pipeline name from config. {str(e)}"
-            )
+        self.pipeline_name = self.pipeline_name or pipeline_config["name"]
 
         # Create the necessary datasets
         self.prepare_datasets(
