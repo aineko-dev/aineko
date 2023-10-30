@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """A wrapper class that executes Docker CLI commands via subprocess."""
 import subprocess
+from typing import Optional
 
 
 class DockerCLIWrapper:
@@ -48,6 +49,11 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 """
+
+    def __init__(self, custom_config_path: Optional[str] = None) -> None:
+        """Initialize DockerCLIWrapper class."""
+        if custom_config_path:
+            self._load_custom_config(custom_config_path)
 
     @classmethod
     def start_service(cls) -> None:
@@ -96,3 +102,13 @@ services:
         except subprocess.CalledProcessError as ex:
             print(f"Error: {ex}")
             print(f"Command Output: {ex.output}")
+
+    @classmethod
+    def _load_custom_config(cls, custom_config_path: str) -> None:
+        """Load a custom Docker Compose config file.
+
+        Args:
+            custom_config_path: Path to the custom Docker Compose config file.
+        """
+        with open(file=custom_config_path, mode="r", encoding="utf-8") as file:
+            cls._docker_compose_config = file.read()

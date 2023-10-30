@@ -60,6 +60,18 @@ def _service_parser(parser: argparse._SubParsersAction) -> None:
     service_parser = parser.add_parser(
         "service", help="Manage Aineko related services"
     )
+    service_parser.add_argument(
+        "-c",
+        "--config",
+        help=(
+            "Path to the custom Docker Compose config file. Please note that "
+            "this is a feature for power users and should be used with caution."
+        ),
+        type=str,
+    )
+
+    service_parser.set_defaults(func=lambda args: service_parser.print_help())
+
     service_subparsers = service_parser.add_subparsers()
 
     start_service_parser = service_subparsers.add_parser(
@@ -67,7 +79,7 @@ def _service_parser(parser: argparse._SubParsersAction) -> None:
     )
 
     start_service_parser.set_defaults(
-        func=lambda args: DockerCLIWrapper.start_service()
+        func=lambda args: DockerCLIWrapper(args.config).start_service()
     )
 
     stop_service_parser = service_subparsers.add_parser(
@@ -75,7 +87,7 @@ def _service_parser(parser: argparse._SubParsersAction) -> None:
     )
 
     stop_service_parser.set_defaults(
-        func=lambda args: DockerCLIWrapper.stop_service()
+        func=lambda args: DockerCLIWrapper(args.config).stop_service()
     )
 
     restart_service_parser = service_subparsers.add_parser(
@@ -83,7 +95,7 @@ def _service_parser(parser: argparse._SubParsersAction) -> None:
     )
 
     restart_service_parser.set_defaults(
-        func=lambda args: DockerCLIWrapper.restart_service()
+        func=lambda args: DockerCLIWrapper(args.config).restart_service()
     )
 
 
