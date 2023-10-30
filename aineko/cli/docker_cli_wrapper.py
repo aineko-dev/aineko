@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """A wrapper class that executes Docker CLI commands via subprocess."""
 import subprocess
+import sys
 from typing import Optional
 
 
@@ -110,5 +111,14 @@ services:
         Args:
             custom_config_path: Path to the custom Docker Compose config file.
         """
-        with open(file=custom_config_path, mode="r", encoding="utf-8") as file:
-            cls._docker_compose_config = file.read()
+        try:
+            with open(
+                file=custom_config_path, mode="r", encoding="utf-8"
+            ) as file:
+                cls._docker_compose_config = file.read()
+        except FileNotFoundError:
+            print(
+                f"FileNotFoundError: Custom config file `{custom_config_path}`"
+                f" not found."
+            )
+            sys.exit(1)
