@@ -17,38 +17,44 @@ description: Fastest way to get an Aineko pipeline up and running
 Install virtual environment. Optional step, but a best practice to isolate dependencies installed.&#x20;
 
 ```
-python -m venv venv 
-source venv/bin/activate 
+python -m venv venv
+source venv/bin/activate
 pip install aineko
 ```
 
 **Step 2: Create a template pipeline with aineko cli**&#x20;
 
 ```
-aineko create 
+aineko create
 ```
 
 You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested! &#x20;
 
 ```
-  [1/5] project_name (My Awesome Pipeline): 
-  [2/5] project_slug (my_awesome_pipeline): 
-  [3/5] project_description (Behold my awesome pipeline!): 
-  [4/5] authors (John Doe <johndoe@gmail.com>): 
-  [5/5] pipeline_slug (test-aineko-pipeline): 
+  [1/5] project_name (My Awesome Pipeline):
+  [2/5] project_slug (my_awesome_pipeline):
+  [3/5] project_description (Behold my awesome pipeline!):
+  [4/5] authors (John Doe <johndoe@gmail.com>):
+  [5/5] pipeline_slug (test-aineko-pipeline):
 ```
 
 **Step 3: Install dependencies in the new pipeline**&#x20;
 
 ```
-cd my-awesome-pipeline
-poetry install 
+cd my_awesome_pipeline
+poetry install
 ```
 
-**Step 4: Start the template pipeline**&#x20;
+**Step 4: Start the Aineko background services**
 
 ```
-aineko run -c ./conf/pipeline.yml
+aineko service start --file docker-compose.yml
+```
+
+**Step 5: Start the template pipeline**&#x20;
+
+```sh
+aineko run ./conf/pipeline.yml
 ```
 
 You will see the following output:&#x20;
@@ -81,8 +87,8 @@ To learn more about Pipeline, Datasets and Nodes, you can visit this page. &#x20
 
 So below is the pipeline we just ran, using the aineko cli, you can also see this pipeline rendered in the browser:&#x20;
 
-```
-poetry run aineko visualize -b ./conf/pipeline.yml
+```sh
+aineko visualize --browser ./conf/pipeline.yml
 ```
 
 <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
