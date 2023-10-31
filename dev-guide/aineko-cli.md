@@ -8,7 +8,7 @@ The Aineko CLI is a dev tool that allows you to get started quickly and introspe
 
 Creates a template pipeline project that you can go into, poetry install and start a pipeline with `aineko run`&#x20;
 
-**`aineko run <path/to/pipeline/definition/config>`**
+**`aineko run <path/to/pipeline/definition/config> [--pipeline-name=<pipeline-name>] [--retry]`**
 
 Creates all the datasets by starting the kafka topic, and uses Ray to run all the nodes.&#x20;
 

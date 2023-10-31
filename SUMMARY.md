@@ -1,9 +1,9 @@
 # Table of contents
 
 * [Aineko](README.md)
+* [Quick Start](quick-start.md)
 * [Dev Guide](dev-guide/README.md)
-  * [Quick Start](dev-guide/quick-start.md)
-    * [Deeper dive](dev-guide/quick-start/deeper-dive.md)
+  * [Deeper dive](dev-guide/deeper-dive.md)
   * [Building a Pipeline](dev-guide/building-a-pipeline.md)
   * [Concepts](dev-guide/concepts.md)
   * [Aineko CLI](dev-guide/aineko-cli.md)
