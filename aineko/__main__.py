@@ -49,7 +49,11 @@ def _run_parser(subparser: argparse._SubParsersAction) -> None:
         "-p", "--pipeline", help="Name of the pipeline to run (optional)."
     )
     run_parser.add_argument(
-        "-r", "--retry", help="Retry running the pipeline on failure."
+        "-r",
+        "--retry",
+        help="Retry running the pipeline on failure.",
+        action=argparse.BooleanOptionalAction,
+        default=False,
     )
     run_parser.set_defaults(
         func=lambda args: run_main(
