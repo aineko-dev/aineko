@@ -29,6 +29,7 @@ EXPECTED_TEST_PIPELINE = {
                 "outputs": ["integer_doubles"],
                 "node_params": {"duration": 40},
             },
+            "dummy": {"class": "aineko.tests.conftest.DummyNode"},
         },
         "datasets": {
             "integer_sequence": {

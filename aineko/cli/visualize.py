@@ -61,28 +61,37 @@ def build_mermaid_from_yaml(
                 transitions.append(
                     {"node": node_name, "output": output_dataset}
                 )
+        if (
+            "inputs" not in node_subscriptions.keys()
+            and "outputs" not in node_subscriptions.keys()
+        ):
+            transitions.append({"node": node_name})
 
     mermaid_transitions = []
 
     for transition in transitions:
-        if "input" in transition.keys():
-            src_node = (
-                f"T_{transition['input']}[{transition['input']}]"
-                ":::datasetClass"
-            )
-            tgt_node = (
+        if (
+            not "input" in transition.keys()
+            and not "output" in transition.keys()
+        ):
+            mermaid_transitions.append(
                 f"N_{transition['node']}(({transition['node']})):::nodeClass"
             )
-        elif "output" in transition.keys():
-            src_node = (
-                f"N_{transition['node']}(({transition['node']})):::nodeClass"
-            )
-            tgt_node = (
-                f"T_{transition['output']}[{transition['output']}]"
-                ":::datasetClass"
-            )
+        else:
+            if "input" in transition.keys():
+                src_node = (
+                    f"T_{transition['input']}[{transition['input']}]"
+                    ":::datasetClass"
+                )
+                tgt_node = f"N_{transition['node']}(({transition['node']})):::nodeClass"  # pylint: disable=line-too-long
+            elif "output" in transition.keys():
+                src_node = f"N_{transition['node']}(({transition['node']})):::nodeClass"  # pylint: disable=line-too-long
+                tgt_node = (
+                    f"T_{transition['output']}[{transition['output']}]"
+                    ":::datasetClass"
+                )
 
-        mermaid_transitions.append(f"{src_node} -->  {tgt_node}")
+            mermaid_transitions.append(f"{src_node} -->  {tgt_node}")
 
     header = f"flowchart {direction}\nclassDef datasetClass "
     header += "fill:#87CEEB\nclassDef nodeClass fill:#eba487"

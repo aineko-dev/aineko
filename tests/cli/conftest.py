@@ -35,6 +35,7 @@ N_sequencer((sequencer)):::nodeClass -->  T_integer_sequence[integer_sequence]::
 N_sequencer((sequencer)):::nodeClass -->  T_env_var[env_var]:::datasetClass
 T_integer_sequence[integer_sequence]:::datasetClass -->  N_doubler((doubler)):::nodeClass
 N_doubler((doubler)):::nodeClass -->  T_integer_doubles[integer_doubles]:::datasetClass
+N_dummy((dummy)):::nodeClass
 """,
         "legend": """subgraph Legend
 node((Node)):::nodeClass
