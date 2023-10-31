@@ -56,7 +56,7 @@ poetry install
 **Step 4: Start the Aineko background services**
 
 ```
-aineko run ./conf/pipeline.yml
+aineko service start --file docker-compose.yml
 ```
 
 **Step 5: Start the template pipeline**
