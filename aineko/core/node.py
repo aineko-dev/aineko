@@ -80,7 +80,9 @@ class AbstractNode(ABC):
     """
 
     def __init__(
-        self, poison_pill: ray.actor.ActorHandle = None, test: bool = False
+        self,
+        poison_pill: Optional[ray.actor.ActorHandle] = None,
+        test: bool = False,
     ) -> None:
         """Initialize the node."""
         self.last_heartbeat = time.time()
