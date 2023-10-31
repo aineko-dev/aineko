@@ -49,14 +49,20 @@ You will see the following prompts as `aineko` tries to create a project directo
 **Step 3: Install dependencies in the new pipeline**
 
 ```
-cd my-awesome-pipeline
+cd my_awesome_pipeline
 poetry install
 ```
 
-**Step 4: Start the template pipeline**
+**Step 4: Start the Aineko background services**
 
 ```
-aineko run -c ./conf/pipeline.yml
+aineko run ./conf/pipeline.yml
+```
+
+**Step 5: Start the template pipeline**
+
+```
+aineko run ./conf/pipeline.yml
 ```
 
 ## Examples
