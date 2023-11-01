@@ -22,7 +22,7 @@ class NodeManager(AbstractNode):
         """Kills all other nodes."""
         # Sleep to prevent high CPU usage
         time.sleep(0.1)
-        # Explicitly accept True to prevent accidents
-        if ray.get(self.poison_pill.get_state.remote()):
-            self.log("Poison pill activated, killing all nodes.")
-            ray.shutdown()
+        if self.poison_pill:
+            if ray.get(self.poison_pill.get_state.remote()):
+                self.log("Poison pill activated, killing all nodes.")
+                ray.shutdown()
