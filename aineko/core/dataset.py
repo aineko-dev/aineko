@@ -84,6 +84,8 @@ class DatasetConsumer:
         for param, value in dataset_config.get("params", {}).items():
             consumer_config[param] = value
 
+        print(f"Consumer config used: {consumer_config}")
+
         topic_name = dataset_name
         if has_pipeline_prefix:
             topic_name = f"{pipeline_name}.{dataset_name}"
