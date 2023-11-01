@@ -82,8 +82,7 @@ class DatasetConsumer:
 
         # Override default config with dataset specific config
         for param, value in dataset_config.get("params", {}).items():
-            if param in self.kafka_config.get("CONSUMER_OVERRIDABLES"):
-                consumer_config[param] = dataset_config["params"][value]
+            consumer_config[param] = dataset_config["params"][value]
 
         topic_name = dataset_name
         if has_pipeline_prefix:
