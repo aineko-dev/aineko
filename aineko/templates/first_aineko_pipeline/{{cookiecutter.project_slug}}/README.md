@@ -18,7 +18,7 @@ aineko service start
 
 Then start the pipeline using
 ```
-aineko run --config-file ./conf/pipeline.yml
+aineko run ./conf/pipeline.yml
 ```
 
 ## Observe the pipeline
