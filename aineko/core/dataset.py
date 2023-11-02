@@ -20,11 +20,14 @@ e.g. message:
 """
 import datetime
 import json
+import logging
 from typing import Any, Dict, Optional
 
 from confluent_kafka import Consumer, Message, Producer  # type: ignore
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
+
+logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-few-public-methods
@@ -120,7 +123,7 @@ class DatasetConsumer:
 
         # Check if message is an error
         if message.error():
-            print(message.error())
+            logger.error(str(message.error()))
             return None
 
         # Convert message to dict
@@ -244,7 +247,7 @@ class DatasetProducer:
             message: message object from Kafka
         """
         if err is not None:
-            print(f"Message {message} delivery failed: {err}")
+            logger.error("Message %s delivery failed: %s", message, err)
 
     def produce(self, message: dict, key: Optional[str] = None) -> None:
         """Produce a message to the dataset.

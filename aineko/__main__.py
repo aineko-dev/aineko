@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Aineko command line interface."""
 import argparse
+import logging
 
 from aineko import __version__
 from aineko.cli.create_pipeline import create_pipeline_directory
@@ -9,6 +10,15 @@ from aineko.cli.docker_cli_wrapper import DockerCLIWrapper
 from aineko.cli.kafka_cli_wrapper import KafkaCLIWrapper
 from aineko.cli.run import main as run_main
 from aineko.cli.visualize import render_mermaid_graph
+
+
+def _setup_logging() -> None:
+    """Setup logging for the application."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s.%(msecs)d - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
 
 def _create_parser(subparser: argparse._SubParsersAction) -> None:
@@ -209,4 +219,7 @@ def _cli() -> None:
 
 
 if __name__ == "__main__":
+    _setup_logging()
+    logger = logging.getLogger("aineko")
+    logger.info("Application is starting.")
     _cli()
