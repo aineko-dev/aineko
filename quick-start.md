@@ -48,7 +48,7 @@ poetry install
 **Step 4: Start the Aineko background services**
 
 ```
-aineko service start --file docker-compose.yml
+aineko service start
 ```
 
 **Step 5: Start the template pipeline**&#x20;
@@ -91,7 +91,7 @@ So below is the pipeline we just ran, using the aineko cli, you can also see thi
 aineko visualize --browser ./conf/pipeline.yml
 ```
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p>The pipeline we just ran </p></figcaption></figure>
 
 
 
