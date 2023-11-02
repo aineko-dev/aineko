@@ -27,6 +27,9 @@ pipeline:
         - integer_doubles
       node_params:
         duration: 40
+    # Test actor with no input, no output, and no params
+    dummy:
+      class: aineko.tests.conftest.DummyNode
 
   datasets:
     integer_sequence:
