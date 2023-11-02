@@ -92,9 +92,6 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     CONSUMER_TIMEOUT = 0
     # Max number of messages to retreive when getting the last message
     CONSUMER_MAX_MESSAGES = 1000000
-    # Consumer overridables
-    # See: https://kafka.apache.org/documentation/#consumerconfigs
-    CONSUMER_OVERRIDABLES = ["auto.offset.reset"]
 
     # Default Kafka producer settings
     # Producer overridables

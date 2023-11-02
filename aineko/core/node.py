@@ -80,7 +80,9 @@ class AbstractNode(ABC):
     """
 
     def __init__(
-        self, poison_pill: ray.actor.ActorHandle, test: bool = False
+        self,
+        poison_pill: Optional[ray.actor.ActorHandle] = None,
+        test: bool = False,
     ) -> None:
         """Initialize the node."""
         self.last_heartbeat = time.time()
@@ -249,7 +251,8 @@ class AbstractNode(ABC):
 
     def activate_poison_pill(self) -> None:
         """Activates poison pill, shutting down entire pipeline."""
-        ray.get(self.poison_pill.activate.remote())
+        if self.poison_pill:
+            ray.get(self.poison_pill.activate.remote())
 
     @abstractmethod
     def _execute(self, params: dict) -> Optional[bool]:
