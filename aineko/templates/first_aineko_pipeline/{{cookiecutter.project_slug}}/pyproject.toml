@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-aineko = "^0.1.4"
+aineko = "0.2.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.1"
