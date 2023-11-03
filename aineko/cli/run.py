@@ -1,11 +1,14 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Module to run a pipeline from the command line."""
+import logging
 import time
 import traceback
 from typing import Optional
 
 from aineko.core.runner import Runner
+
+logger = logging.getLogger(__name__)
 
 
 def main(
@@ -31,7 +34,7 @@ def main(
             if not retry:
                 raise e
             else:
-                print(f"Error running pipeline: {e}")
-                print(traceback.format_exc())
+                logger.error("Error running pipeline: %s", e)
+                logger.debug(traceback.format_exc())
                 time.sleep(10)
                 continue
