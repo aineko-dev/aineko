@@ -1,6 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Submodule that handles the running of a pipeline from config."""
+import logging
 import time
 from typing import Optional
 
@@ -15,6 +16,8 @@ from aineko.config import (
 from aineko.core.config_loader import ConfigLoader
 from aineko.core.node import PoisonPill
 from aineko.utils import imports
+
+logger = logging.getLogger(__name__)
 
 
 class Runner:
@@ -158,7 +161,9 @@ class Runner:
         # Create all dataset defined in the catalog
         dataset_list = []
         for dataset_name, dataset_config in config.items():
-            print(f"Creating dataset: {dataset_name}: {dataset_config}")
+            logger.info(
+                "Creating dataset: %s: %s", dataset_name, dataset_config
+            )
             # Create dataset for kafka streams
             if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
                 # User defined
@@ -196,7 +201,7 @@ class Runner:
         cur_time = time.time()
         while True:
             if all(future.done() for future in datasets.values()):
-                print("All datasets created.")
+                logger.info("All datasets created.")
                 break
             if time.time() - cur_time > AINEKO_CONFIG.get(
                 "DATASET_CREATION_TIMEOUT"

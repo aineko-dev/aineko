@@ -1,6 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Module to load config files."""
+import logging
 from typing import Union, overload
 
 from pydantic import ValidationError
@@ -8,6 +9,8 @@ from pydantic import ValidationError
 from aineko.config import AINEKO_CONFIG
 from aineko.models.config_schema import Config
 from aineko.utils.io import load_yaml
+
+logger = logging.getLogger(__name__)
 
 
 class ConfigLoader:
@@ -51,10 +54,11 @@ class ConfigLoader:
         try:
             Config(**config)
         except ValidationError as e:
-            print(
-                f"Schema validation failed for pipeline "
-                f"`{config['pipeline']['name']}` loaded from "
-                f"{self.pipeline_config_file}. See detailed error below."
+            logger.error(
+                "Schema validation failed for pipeline `%s` loaded from %s. "
+                "See detailed error below.",
+                config["pipeline"]["name"],
+                self.pipeline_config_file,
             )
             raise e
 

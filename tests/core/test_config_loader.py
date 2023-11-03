@@ -59,7 +59,7 @@ def test_load_config(
     assert config == EXPECTED_TEST_PIPELINE
 
 
-def test_load_invalid_config(test_invalid_pipeline_config_file: str, capsys):
+def test_load_invalid_config(test_invalid_pipeline_config_file: str, caplog):
     """Tests the loading of an invalid config.
 
     The class name is missing from the doubler node definition.
@@ -74,13 +74,12 @@ def test_load_invalid_config(test_invalid_pipeline_config_file: str, capsys):
             "type": "value_error.missing",
         }
     ]
-    # Capture the print output
-    captured = capsys.readouterr()
-
-    # Check that the correct informational message is printed
+    # Capture the log output
+    captured = caplog.records[0].message
+    # Check that the correct informational message is logged
     assert (
-        captured.out
+        captured
         == f"Schema validation failed for pipeline `test_invalid_pipeline` "
         f"loaded from {test_invalid_pipeline_config_file}. See detailed error "
-        "below.\n"
+        "below."
     )
