@@ -65,11 +65,18 @@ poetry install
 
 #### Step 6: Check the data being streamed
 
-`poetry run aineko stream --dataset test-aineko-pipeline.logging --from-start`
-or
-`poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-start`
+To view messages running in one of the user-defined datasets:
 
-Note: dataset names have the pipeline name automatically prefixed!
+```
+poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-start
+```
+
+alternatively, to view logs stored in the built-in `logging` dataset:
+```
+poetry run aineko stream --dataset logging --from-start
+```
+
+Note: user-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` does not.
 
 #### Step 7: Stop the Aineko background services
 
