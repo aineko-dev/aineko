@@ -23,6 +23,7 @@ def main(
         pipeline_name: Name of the pipeline to run, overrides pipeline config
         retry: If true, retry running the pipeline on failure every 10 seconds
     """
+    logger.info("Application is starting.")
     while True:
         try:
             runner = Runner(
