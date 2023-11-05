@@ -55,7 +55,7 @@ class KafkaCLIWrapper:
             ) as process:
                 if process.stdout is not None:
                     for line in process.stdout:
-                        print(line.strip())
+                        print(f"{line.strip()}\r")
 
             process.wait()
         except subprocess.CalledProcessError as ex:
