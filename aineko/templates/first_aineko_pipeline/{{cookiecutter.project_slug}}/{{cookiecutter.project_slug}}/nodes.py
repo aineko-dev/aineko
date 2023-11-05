@@ -57,6 +57,6 @@ class MySumNode(AbstractNode):
         msg = self.consumers["test_sequence"].consume(how="next")
         if msg is None:
             return
-        self.log(f"Received input: {msg['message']}. Adding {params['increment']}...")
+        self.log(f"Received: {msg['message']}. Adding {params['increment']}...")
         self.state = int(msg["message"]) + int(params["increment"])
         self.producers["test_sum"].produce(self.state)
