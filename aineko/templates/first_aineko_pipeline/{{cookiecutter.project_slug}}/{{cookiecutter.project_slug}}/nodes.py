@@ -22,7 +22,6 @@ class MySequencerNode(AbstractNode):
         `self.producer`.
         Logs can be sent via the `self.log` method.
         """
-        self.log(f"Received input: {input}")
         self.current_val += params.get("increment", 1)
         time.sleep(5)
         self.producers["test_sequence"].produce(self.current_val)
@@ -58,8 +57,6 @@ class MySumNode(AbstractNode):
         msg = self.consumers["test_sequence"].consume(how="next")
         if msg is None:
             return
-        self.log(
-            f"Received input: {msg['message']}. Adding {params['increment']}..."
-        )
+        self.log(f"Received: {msg['message']}. Adding {params['increment']}...")
         self.state = int(msg["message"]) + int(params["increment"])
         self.producers["test_sum"].produce(self.state)
