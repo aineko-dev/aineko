@@ -1,0 +1,29 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+site_name: Aineko
+site_url: https://docs.aineko.dev/
+theme:
+  name: material
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
+
+plugins:
+  - glightbox
+
+nav:
+  - Home: 'index.md'
+  - Quickstart: 'quickstart.md'
+  - Developer Guide:
+      - Deeper Dive: 'deeper_dive.md'
+      - Concepts: 'concepts.md'
+      - CLI Guide: 'cli_guide.md'
+  - Troubleshooting: 'troubleshooting.md'
+  - Examples:
+      - Aineko Dream: examples/aineko-dream.md
+  - Contributing: 'contributing.md'
+  - Aineko Cloud: 'aineko_cloud.md'
