@@ -19,9 +19,9 @@ nav:
   - Home: 'index.md'
   - Quickstart: 'quickstart.md'
   - Developer Guide:
-      - Deeper Dive: 'deeper_dive.md'
-      - Concepts: 'concepts.md'
-      - CLI Guide: 'cli_guide.md'
+      - Deeper Dive: 'developer_guide/deeper_dive.md'
+      - Concepts: 'developer_guide/concepts.md'
+      - CLI Guide: 'developer_guide/cli_guide.md'
   - Troubleshooting: 'troubleshooting.md'
   - Examples:
       - Aineko Dream: examples/aineko-dream.md
