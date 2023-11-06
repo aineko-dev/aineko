@@ -9,24 +9,28 @@ description: Fastest way to get an Aineko pipeline up and running
 4. [Pip](https://pip.pypa.io/en/stable/installation/) (a python package manager)
 
 ## Get started
-### Step 0: Check your dependencies
 
-It's important to make sure you have the correct dependencies installed. This might sound obvious, but it's easy to miss a step and we want to make sure you have a good experience with Aineko. The only dependency which requires a specific version is Python. The other dependencies should work with any recent version.
+!!! note "Check your dependencies"
+    It's important to make sure you have the correct dependencies installed. The only dependency which requires a specific version is Python. The other dependencies should work with any recent version.
 
-Let's check each dependency one by one. You can run the following commands in your terminal to check each dependency.
+    Let's check each dependency one by one. You can run the following commands in your terminal to check each dependency.
 
-* `docker --version` should return something like `Docker version 20.10.8, build 3967b7d`
-* `python --version` should return something like `Python 3.10.12` Click [here](#how-to-install-a-specific-version-of-python) if you see another version.
-* `pip --version` should return something like `pip 23.0.1 from xxx/python3.10/site-packages/pip (python 3.10)`
-* `poetry --version` should return something like `Poetry (version 1.6.1)`
+    * `docker --version` should return something like `Docker version 20.10.8, build 3967b7d`
+    * `python --version` should return something like `Python 3.10.12` Click [here](./troubleshooting.md#how-to-install-a-specific-version-of-python) if you see another version.
+    * `pip --version` should return something like `pip 23.0.1 from xxx/python3.10/site-packages/pip (python 3.10)`
+    * `poetry --version` should return something like `Poetry (version 1.6.1)`
 
 ### Step 1: Install Aineko
 
-```pip install aineko```
+```
+pip install aineko
+```
 
 ### Step 2: Create a template pipeline with aineko cli
 
-```aineko create```
+```
+aineko create
+```
 
 You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested!
 
@@ -88,7 +92,7 @@ poetry run aineko service stop
 
     The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging and** two nodes - **sum** and **sequence**.
 
-To learn more about Pipeline, Datasets and Nodes, see [concepts](./concepts.md).
+To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_guide/concepts.md).
 
 ### Visualizing the Pipeline
 

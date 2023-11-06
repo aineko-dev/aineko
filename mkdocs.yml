@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 site_name: Aineko
 site_url: https://docs.aineko.dev/
+repo_name: aineko-dev/aineko
+repo_url: https://github.com/aineko-dev/aineko
 theme:
   name: material
 
@@ -14,6 +16,12 @@ markdown_extensions:
 
 plugins:
   - glightbox
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_root_heading: true
 
 nav:
   - Home: 'index.md'
@@ -22,6 +30,7 @@ nav:
       - Deeper Dive: 'developer_guide/deeper_dive.md'
       - Concepts: 'developer_guide/concepts.md'
       - CLI Guide: 'developer_guide/cli_guide.md'
+      - Pipeline Configuration: 'developer_guide/pipeline_configuration.md'
   - Troubleshooting: 'troubleshooting.md'
   - Examples:
       - Aineko Dream: examples/aineko-dream.md

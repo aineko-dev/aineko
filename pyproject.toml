@@ -43,6 +43,7 @@ optional = true
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.4.8"
 mkdocs-glightbox = "^0.3.4"
+mkdocstrings = { extras = ["python"], version = "^0.23.0" }
 
 [tool.poetry.group.test.dependencies]
 mypy = "^1.5.1"
