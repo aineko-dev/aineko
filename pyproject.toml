@@ -66,7 +66,7 @@ pythonpath = ["."]
 markers = ["integration: marks tests as requiring docker (deselect with '-m \"not integration\"'"]
 
 [tool.poetry.scripts]
-aineko = "aineko.cli.cli:aineko"
+aineko = "aineko.__main__:cli"
 
 [tool.pylint.main]
 # Analyse import fallback blocks. This can be used to support both Python 2 and 3
@@ -491,7 +491,7 @@ line-length = 80
 
 [tool.pydocstyle]
 convention = "google"
-add-ignore = "D104"
+add-ignore = "D104,D301,D415"
 
 [tool.mypy]
 check_untyped_defs = true

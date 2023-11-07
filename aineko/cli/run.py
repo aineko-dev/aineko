@@ -16,16 +16,14 @@ logger = logging.getLogger(__name__)
 @click.command()
 @click.argument("pipeline-config-file")
 @click.option(
-    "--pipeline-name",
     "-p",
-    default=None,
-    help="Name of the pipeline to run (optional).",
+    "--pipeline-name",
+    help="Name of the pipeline to run.",
 )
 @click.option(
-    "--retry",
     "-r",
+    "--retry",
     is_flag=True,
-    default=False,
     help="Retry running the pipeline on failure.",
 )
 def run(
@@ -33,7 +31,7 @@ def run(
     pipeline_name: Optional[str] = None,
     retry: bool = False,
 ) -> None:
-    """Main function to run a pipeline from the command line.
+    """Main function to run a pipeline from the command line.\f
 
     Args:
         pipeline_config_file: Path to the file containing the pipeline config

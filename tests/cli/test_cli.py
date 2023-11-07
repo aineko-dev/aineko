@@ -5,14 +5,15 @@ import pytest
 from click.testing import CliRunner
 
 from aineko import __version__
-from aineko.cli.cli import aineko
+from aineko.__main__ import cli
 from aineko.cli.create_pipeline import create
+from aineko.cli.docker_cli_wrapper import service
 
 
 def test_aineko_version():
     """Test that aineko CLI can return version info."""
     runner = CliRunner()
-    result = runner.invoke(aineko, ["--version"])
+    result = runner.invoke(cli, ["--version"])
     assert result.exit_code == 0
     assert result.output == f"aineko, version {__version__}\n"
 
@@ -38,11 +39,11 @@ def test_aineko_create(tmp_path):
 def test_aineko_service():
     """Test service CLI functions, requires docker."""
     runner = CliRunner()
-    result = runner.invoke(aineko, ["service", "start"])
+    result = runner.invoke(service, ["start"])
     assert result.exit_code == 0
-    result = runner.invoke(aineko, ["service", "restart"])
+    result = runner.invoke(service, ["restart"])
     assert result.exit_code == 0
-    result = runner.invoke(aineko, ["service", "stop"])
+    result = runner.invoke(service, ["stop"])
     assert result.exit_code == 0
 
 
@@ -51,17 +52,17 @@ def test_aineko_run(tmp_path):
     """Test run CLI functions, requires docker."""
     runner = CliRunner()
 
-    result = runner.invoke(aineko, ["service", "restart"])
+    result = runner.invoke(cli, ["service", "restart"])
     assert result.exit_code == 0
 
     result = runner.invoke(
-        create, ["-d", "--output-dir", str(tmp_path), "--no-input"]
+        cli, ["create", "-d", "--output-dir", str(tmp_path), "--no-input"]
     )
     assert result.exit_code == 0
 
     assert (tmp_path / "my_awesome_pipeline/conf/pipeline.yml").is_file()
     result = runner.invoke(
-        aineko,
+        cli,
         [
             "run",
             str(tmp_path / "my_awesome_pipeline/conf/pipeline.yml"),

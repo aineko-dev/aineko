@@ -10,7 +10,7 @@ import pytest
 import ray
 from click.testing import CliRunner
 
-from aineko.cli.cli import aineko
+from aineko.__main__ import cli
 from aineko.core.dataset import DatasetConsumer
 from aineko.core.node import AbstractNode
 from aineko.core.runner import Runner
@@ -100,7 +100,7 @@ def test_write_read_to_kafka():
     are as expected.
     """
     runner = CliRunner()
-    result = runner.invoke(aineko, ["service", "restart"])
+    result = runner.invoke(cli, ["service", "restart"])
     assert result.exit_code == 0
 
     runner = Runner(

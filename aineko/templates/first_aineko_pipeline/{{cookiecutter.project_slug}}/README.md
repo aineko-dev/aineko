@@ -32,7 +32,7 @@ aineko stream --dataset test_sequence
 To view all data in the dataset, from the start
 
 ```
-aineko stream --dataset test_sequence --from-start
+aineko stream --dataset test_sequence --from-beginning
 ```
 
 

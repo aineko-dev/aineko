@@ -64,8 +64,9 @@ jobs:
     steps:
       - checkout
       - run: poetry install --with test --no-interaction --quiet
-      - run: poetry run pytest << parameters.test_dir >> -m "<< parameters.markers
-          >>"
+      - run: >
+          poetry run pytest << parameters.test_dir >>
+          -m "<< parameters.markers >>"
 
   python-checks:
     parameters:
