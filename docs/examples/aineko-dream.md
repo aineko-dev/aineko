@@ -9,7 +9,19 @@ coverY: 189
 
 # Aineko Dream: Code Generation using ChatGPT with Real-time QA
 
-<table data-view="cards"><thead><tr><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td>View On GitHub</td><td><a href="https://github.com/aineko-dev/aineko-dream">https://github.com/aineko-dev/aineko-dream</a></td><td><a href="../.gitbook/assets/github-mark.jpg">github-mark.jpg</a></td></tr><tr><td>Try on Slack</td><td><a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ">https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ</a></td><td><a href="../.gitbook/assets/Slack-mark-RGB.png">Slack-mark-RGB.png</a></td></tr></tbody></table>
+<a href="https://github.com/aineko-dev/aineko-dream" markdown>
+<figure markdown>
+  ![View on Github](../img/github-mark.jpg){ width="150" }
+  <a href="https://github.com/aineko-dev/aineko-dream" markdown><figcaption><p>View on Github</p></figcaption></a>
+</figure>
+</a>
+
+<a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown>
+<figure markdown>
+  ![Join us on Slack](../img/Slack-mark-RGB.png){ width="150" }
+  <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown><figcaption><p>Try on Slack</p></figcaption></a>
+</figure>
+</a>
 
 We built an app called [Aineko Dream](https://github.com/aineko-dev/aineko-dream) to test-drive [Aineko's](https://www.aineko.dev/) ability to enable generative AI features. Aineko Dream uses the [OpenAI API](https://platform.openai.com/overview) and the [Aineko docs](https://docs.aineko.dev/) to generate template code for an Aineko pipeline based on a prompt. The pipeline automatically checks the LLM response to ensure it passes some tests and either generates a prompt to fix the errors or passes the response back to the user.
 
@@ -19,19 +31,21 @@ Give it a try using the Aineko Dream bot in our [Slack](https://join.slack.com/t
 
 What will you dream up with Aineko?
 
-<figure><img src="../.gitbook/assets/aineko_dream_gif.gif" alt=""><figcaption><p>See Aineko Dream in Action</p></figcaption></figure>
+<figure markdown>
+  ![Aineko Dream in Action](../img/aineko_dream_gif.gif){ width="100%" }
+  <figcaption><p>Aineko Dream in Action</p></figcaption>
+</figure>
 
-{% hint style="success" %}
-## Featured Unlocks
 
-**Tell a Story with Your Data -** With Aineko, you retain all critical information with the context to help you tell a story in real-time and retroactively.
+!!! success "Featured Unlocks"
+    **Tell a Story with Your Data -** With Aineko, you retain all critical information with the context to help you tell a story in real-time and retroactively.
+    
+    _Aineko made it simple to introduce a feedback loop for real-time QA for ChatGPT responses. We keep track of response evaluation results and submit new prompts to ChatGPT to fix the errors, without any human intervention. Additionally, since we are tracking all prompts, responses, and their evaluation results, we generate a rich dataset of our app’s performance which we can use to track and improve performance._
+    
+    **Move Fast, Break Nothing -** By representing our use case as an Aineko pipeline, it was clear how we could swap building blocks in and out with ease.
+    
+    _Aineko made it easy to try out new foundation models. Once the pipeline was constructed with GPT-3 it was trivial to use GPT-4. Later, we built a second connector node for the the Cohere API and used it as a drop-replacement for OpenAI. We were able to run all three models with standalone pipelines, each with its own unique API endpoint. We can use the various endpoints to route traffic for different users or use one for production and the others for development._
 
-_Aineko made it simple to introduce a feedback loop for real-time QA for ChatGPT responses. We keep track of response evaluation results and submit new prompts to ChatGPT to fix the errors, without any human intervention. Additionally, since we are tracking all prompts, responses, and their evaluation results, we generate a rich dataset of our app’s performance which we can use to track and improve performance._
-
-**Move Fast, Break Nothing -** By representing our use case as an Aineko pipeline, it was clear how we could swap building blocks in and out with ease.
-
-_Aineko made it easy to try out new foundation models. Once the pipeline was constructed with GPT-3 it was trivial to use GPT-4. Later, we built a second connector node for the the Cohere API and used it as a drop-replacement for OpenAI. We were able to run all three models with standalone pipelines, each with its own unique API endpoint. We can use the various endpoints to route traffic for different users or use one for production and the others for development._
-{% endhint %}
 
 ## **Tech overview**
 
@@ -315,20 +329,23 @@ poetry install
 First, make sure that docker is running and run the required docker services in the background using:
 
 ```bash
-aineko service start
+poetry run aineko service start
 
 ```
 
 Then start the pipeline using:
 
 ```bash
-aineko run -c conf/gpt3.yml
+poetry run aineko run ./conf/gpt3.yml
 
 ```
 
 When the pipeline is live, you can visit [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser to interact with the endpoints via the Swagger UI.
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption><p>Swagger UI</p></figcaption></figure>
+<figure markdown>
+  ![Swagger UI](../img/swagger_ui.png){ width="100%" }
+  <figcaption><p>Swagger UI</p></figcaption>
+</figure>
 
 ## Join our Community
 
