@@ -25,8 +25,8 @@ workflows:
           markers: integration
 
   publish-docs:
-    # when:
-    #   equal: [<< pipeline.git.branch >>, develop]
+    when:
+      equal: [<< pipeline.git.branch >>, develop]
     jobs:
       - build-and-push-docs
 
