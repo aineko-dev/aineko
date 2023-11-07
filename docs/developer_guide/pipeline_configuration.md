@@ -47,4 +47,4 @@ A pipeline should have the following attributes:
 !!! note
     Aineko is currently in the Beta release stage and is constantly improving.
 
-    If you have any feedback, questions, or suggestions, please [reach out](mailto:support@convexlabs.xyz) to us.
+    If you have any feedback, questions, or suggestions, please [reach out](mailto:support@aineko.dev) to us.
