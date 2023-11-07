@@ -6,6 +6,8 @@ repo_name: aineko-dev/aineko
 repo_url: https://github.com/aineko-dev/aineko
 theme:
   name: material
+  features:
+    - content.code.copy
 
 markdown_extensions:
   - admonition
@@ -30,13 +32,18 @@ nav:
   - Home: 'index.md'
   - Quickstart: 'quickstart.md'
   - Developer Guide:
-      - Deeper Dive: 'developer_guide/deeper_dive.md'
-      - Concepts: 'developer_guide/concepts.md'
-      - CLI Guide: 'developer_guide/cli_guide.md'
-      - Pipeline Configuration: 'developer_guide/pipeline_configuration.md'
-      - Node Implementation: 'developer_guide/node_implementation.md'
+      - 'developer_guide/deeper_dive.md'
+      - 'developer_guide/concepts.md'
+      - 'developer_guide/cli_guide.md'
+      - 'developer_guide/pipeline_configuration.md'
+      - 'developer_guide/node_implementation.md'
+  - API Reference:
+      - 'api_reference/abstract_node.md'
+      - 'api_reference/dataset.md'
+      - 'api_reference/config_loader.md'
+      - 'api_reference/runner.md'
   - Troubleshooting: 'troubleshooting.md'
   - Examples:
-      - Aineko Dream: examples/aineko-dream.md
+      - examples/aineko-dream.md
   - Contributing: 'contributing.md'
   - Aineko Cloud: 'aineko_cloud.md'
