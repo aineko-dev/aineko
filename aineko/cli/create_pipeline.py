@@ -4,10 +4,18 @@
 
 import os
 
+import click
 from cookiecutter.main import cookiecutter  # type: ignore
 
 
-def create_pipeline_directory(deployment_config: bool) -> None:
+@click.command()
+@click.option(
+    "--deployment-config",
+    "-d",
+    is_flag=True,
+    help="Include deploy.yml that facilitates deployment of pipelines.",
+)
+def create(deployment_config: bool) -> None:
     """Creates boilerplate code and config required for an Aineko pipeline.
 
     Args:

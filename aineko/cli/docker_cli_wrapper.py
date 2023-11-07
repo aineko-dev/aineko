@@ -5,6 +5,9 @@ import subprocess
 import sys
 from typing import Optional
 
+import click
+from click.core import Context
+
 
 class DockerCLIWrapper:
     """A wrapper class that executes Docker CLI commands via subprocess.
@@ -122,3 +125,38 @@ services:
                 f" not found."
             )
             sys.exit(1)
+
+
+@click.group()
+@click.option(
+    "--config",
+    "-c",
+    default=None,
+    help="Path to the custom Docker Compose config file.",
+)
+@click.pass_context
+def service(ctx: Context, config: Optional[str] = None) -> None:
+    """Manage Aineko docker services (Kafka and Zookeeper containers)."""
+    ctx.ensure_object(dict)
+    ctx.obj["config"] = config
+
+
+@service.command()
+@click.pass_context
+def start(ctx: Context) -> None:
+    """Start Aineko docker services."""
+    DockerCLIWrapper(ctx.obj["config"]).start_service()
+
+
+@service.command()
+@click.pass_context
+def stop(ctx: Context) -> None:
+    """Stop Aineko docker services."""
+    DockerCLIWrapper(ctx.obj["config"]).stop_service()
+
+
+@service.command()
+@click.pass_context
+def restart(ctx: Context) -> None:
+    """Restart Aineko docker services."""
+    DockerCLIWrapper(ctx.obj["config"]).restart_service()
