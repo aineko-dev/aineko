@@ -28,7 +28,15 @@ from cookiecutter.main import cookiecutter  # type: ignore
     help="Do not prompt for parameters and use defaults.",
 )
 def create(deployment_config: bool, output_dir: str, no_input: bool) -> None:
-    """Creates boilerplate code and config required for an Aineko pipeline.
+    """Creates working starter template for an Aineko pipeline.
+
+    Files generated include:
+
+        - Pipeline configuration
+        - Node code
+        - Node test code
+        - Boilerplate repo files
+        - Deployment file for Aineko Cloud (Optional)
 
     Args:
         deployment_config: If True, include a deploy file when generating, else
