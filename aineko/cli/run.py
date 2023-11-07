@@ -6,17 +6,32 @@ import time
 import traceback
 from typing import Optional
 
+import click
+
 from aineko.core.runner import Runner
 
 logger = logging.getLogger(__name__)
 
 
-def main(
+@click.command()
+@click.argument("pipeline-config-file")
+@click.option(
+    "-p",
+    "--pipeline-name",
+    help="Name of the pipeline to run.",
+)
+@click.option(
+    "-r",
+    "--retry",
+    is_flag=True,
+    help="Retry running the pipeline on failure.",
+)
+def run(
     pipeline_config_file: str,
     pipeline_name: Optional[str] = None,
     retry: bool = False,
 ) -> None:
-    """Main function to run a pipeline from the command line.
+    """Main function to run a pipeline from the command line.\f
 
     Args:
         pipeline_config_file: Path to the file containing the pipeline config

@@ -27,6 +27,7 @@ PyYAML = "^6.0.1"
 confluent-kafka = "~2.2.0"
 ray = { extras = ["default"], version = "^2.6.3" }
 cookiecutter = "^2.4.0"
+click = "^8.1.7"
 
 [tool.poetry.group.dev.dependencies]
 aineko_style = "^0.0.1"
@@ -67,10 +68,10 @@ filterwarnings = [
   "ignore:.*pkg_resources.*:DeprecationWarning",
 ]
 pythonpath = ["."]
+markers = ["integration: marks tests as requiring docker (deselect with '-m \"not integration\"'"]
 
 [tool.poetry.scripts]
-aineko = "aineko.__main__:_cli"
-
+aineko = "aineko.__main__:cli"
 
 [tool.pylint.main]
 # Analyse import fallback blocks. This can be used to support both Python 2 and 3
@@ -495,7 +496,7 @@ line-length = 80
 
 [tool.pydocstyle]
 convention = "google"
-add-ignore = "D104"
+add-ignore = "D104,D301,D415"
 
 [tool.mypy]
 check_untyped_defs = true

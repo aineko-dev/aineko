@@ -4,28 +4,52 @@
 import os
 import webbrowser
 
+import click
 import yaml
 
 
-def render_mermaid_graph(
+@click.command()
+@click.argument("config_path")
+@click.option(
+    "-d",
+    "--direction",
+    type=click.Choice(["TD", "LR"]),
+    default="LR",
+    help=(
+        "Direction of the graph. Either LR (left to right) or" " TD (top down)."
+    ),
+)
+@click.option(
+    "-l",
+    "--legend",
+    is_flag=True,
+    help="Include a legend in the graph.",
+)
+@click.option(
+    "-b",
+    "--browser",
+    is_flag=True,
+    help="Render graph in browser. Prints graph to stdout otherwise.",
+)
+def visualize(
     config_path: str,
     direction: str = "LR",
     legend: bool = False,
-    render_in_browser: bool = False,
+    browser: bool = False,
 ) -> None:
-    """Builds mermaid graph from an Aineko pipeline config.
+    """Builds mermaid graph from an Aineko pipeline config.\f
 
     Args:
         config_path: file path to pipeline yaml file
         direction: direction of the graph.
         legend: include a legend in the graph.
-        render_in_browser: Whether to render graph in browser. Prints
+        browser: Whether to render graph in browser. Prints
         graph to stdout otherwise.
     """
     graph = build_mermaid_from_yaml(
         config_path=config_path, direction=direction, legend=legend
     )
-    if render_in_browser is True:
+    if browser:
         render_graph_in_browser(graph)
 
     else:

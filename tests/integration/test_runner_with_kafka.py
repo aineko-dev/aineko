@@ -3,12 +3,14 @@
 """Tests that runner is able to generate a pipeline that works
 with a kafka zookeeper and broker service available.
 """
-
 import time
 from typing import Optional
 
+import pytest
 import ray
+from click.testing import CliRunner
 
+from aineko.__main__ import cli
 from aineko.core.dataset import DatasetConsumer
 from aineko.core.node import AbstractNode
 from aineko.core.runner import Runner
@@ -82,6 +84,7 @@ class MessageReader(AbstractNode):
         self.activate_poison_pill()
 
 
+@pytest.mark.integration
 def test_write_read_to_kafka():
     """Integration test to check that nodes can write to kafka.
 
@@ -96,6 +99,10 @@ def test_write_read_to_kafka():
     that reads from the created dataset and checks that the messages
     are as expected.
     """
+    runner = CliRunner()
+    result = runner.invoke(cli, ["service", "restart"])
+    assert result.exit_code == 0
+
     runner = Runner(
         pipeline_config_file="tests/conf/integration_test_write.yml",
     )
