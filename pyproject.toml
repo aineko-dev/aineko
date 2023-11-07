@@ -68,9 +68,10 @@ filterwarnings = [
   "ignore:.*pkg_resources.*:DeprecationWarning",
 ]
 pythonpath = ["."]
+markers = ["integration: marks tests as requiring docker (deselect with '-m \"not integration\"'"]
 
 [tool.poetry.scripts]
-aineko = "aineko.__main__:aineko"
+aineko = "aineko.cli.cli:aineko"
 
 [tool.pylint.main]
 # Analyse import fallback blocks. This can be used to support both Python 2 and 3

@@ -18,10 +18,11 @@ workflows:
       - python-checks:
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
+          markers: "not integration"
       - integration-tests:
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
-          test_dir: tests/integration
+          markers: integration
 
 jobs:
   integration-tests:
@@ -38,6 +39,10 @@ jobs:
         type: string
         default: tests
         description: Test directory
+      markers:
+        type: string
+        default: integration
+        description: Markers to run pytest for
 
     docker:
       - image: cimg/python:<< parameters.python_version >>
@@ -59,7 +64,8 @@ jobs:
     steps:
       - checkout
       - run: poetry install --with test --no-interaction --quiet
-      - run: poetry run pytest << parameters.test_dir >>
+      - run: poetry run pytest << parameters.test_dir >> --markers "<< parameters.markers
+          >>"
 
   python-checks:
     parameters:
@@ -75,6 +81,10 @@ jobs:
         type: string
         default: tests
         description: Test directory
+      markers:
+        type: string
+        default: ""
+        description: Markers to run pytest for
 
     docker:
       - image: cimg/python:<< parameters.python_version >>
@@ -93,7 +103,7 @@ jobs:
       - run: >
           poetry run pytest
           --cov=<< parameters.prj_dir >> << parameters.test_dir >>
-          --ignore=tests/integration
+          --markers "<< parameters.markers >>"
       - run:
           name: mypy
           command: |

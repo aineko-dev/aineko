@@ -12,15 +12,10 @@ from aineko.cli.visualize import visualize
 
 
 @click.group()
+@click.version_option(__version__)
 def aineko() -> None:
     """Aineko CLI."""
     pass
-
-
-@aineko.command()
-def version() -> None:
-    """Prints the version of Aineko."""
-    click.echo(__version__)
 
 
 aineko.add_command(create)
