@@ -13,7 +13,7 @@ coverY: 189
 
 <a href="https://github.com/aineko-dev/aineko-dream" markdown>
 :fontawesome-brands-github: **View on Github**
-</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown>
 :fontawesome-brands-slack: **Try on Slack**
 </a>
@@ -48,11 +48,11 @@ What will you dream up with Aineko?
 
 !!! success "Featured Unlocks"
     **Tell a Story with Your Data -** With Aineko, you retain all critical information with the context to help you tell a story in real-time and retroactively.
-    
+
     _Aineko made it simple to introduce a feedback loop for real-time QA for ChatGPT responses. We keep track of response evaluation results and submit new prompts to ChatGPT to fix the errors, without any human intervention. Additionally, since we are tracking all prompts, responses, and their evaluation results, we generate a rich dataset of our app’s performance which we can use to track and improve performance._
-    
+
     **Move Fast, Break Nothing -** By representing our use case as an Aineko pipeline, it was clear how we could swap building blocks in and out with ease.
-    
+
     _Aineko made it easy to try out new foundation models. Once the pipeline was constructed with GPT-3 it was trivial to use GPT-4. Later, we built a second connector node for the the Cohere API and used it as a drop-replacement for OpenAI. We were able to run all three models with standalone pipelines, each with its own unique API endpoint. We can use the various endpoints to route traffic for different users or use one for production and the others for development._
 
 

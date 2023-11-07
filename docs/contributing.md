@@ -40,7 +40,7 @@ This will ensure your aineko is pointing to the repository you made changes to
 
 **Step 6: Run lints and tests**
 
-Finally, after you have make all the changes, it is good to validate that you adhered to our style guide and you did not break anything.  
+Finally, after you have make all the changes, it is good to validate that you adhered to our style guide and you did not break anything.
 
 ```bash
 # Within aineko git repository
