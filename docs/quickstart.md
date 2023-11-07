@@ -90,7 +90,7 @@ poetry run aineko service stop
 
     A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**. (mailbox)
 
-    The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging and** two nodes - **sum** and **sequence**.
+    The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging**, and that we have created two nodes - **sum** and **sequence**.
 
 To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_guide/concepts.md).
 
@@ -99,7 +99,16 @@ To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_gui
 Using the aineko cli, you can also see the above pipeline rendered in the browser:
 
 ```sh
-aineko visualize --browser ./conf/pipeline.yml
+poetry run aineko visualize --browser ./conf/pipeline.yml
 ```
 
-![Pipeline](./img/pipeline_visualization.png)
+```mermaid
+flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+N_sequence((sequence)):::nodeClass -->  T_test_sequence[test_sequence]:::datasetClass
+T_test_sequence[test_sequence]:::datasetClass -->  N_sum((sum)):::nodeClass
+N_sum((sum)):::nodeClass -->  T_test_sum[test_sum]:::datasetClass
+```
+
+As you iterate and augment your Aineko pipeline, you can use this command as a quick check to visualize your evolving pipeline and ensure that it has the intended architecture.
