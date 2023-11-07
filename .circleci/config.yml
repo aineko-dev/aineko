@@ -120,7 +120,7 @@ jobs:
 
   build-and-push-docs:
     docker:
-      - image: cimg/python:<< parameters.python_version >>
+      - image: cimg/python:<< pipeline.parameters.python_version >>
 
     steps:
       - checkout
