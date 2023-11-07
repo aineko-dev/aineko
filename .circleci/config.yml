@@ -64,7 +64,7 @@ jobs:
     steps:
       - checkout
       - run: poetry install --with test --no-interaction --quiet
-      - run: poetry run pytest << parameters.test_dir >> --markers "<< parameters.markers
+      - run: poetry run pytest << parameters.test_dir >> -m "<< parameters.markers
           >>"
 
   python-checks:
@@ -103,7 +103,7 @@ jobs:
       - run: >
           poetry run pytest
           --cov=<< parameters.prj_dir >> << parameters.test_dir >>
-          --markers "<< parameters.markers >>"
+          -m "<< parameters.markers >>"
       - run:
           name: mypy
           command: |
