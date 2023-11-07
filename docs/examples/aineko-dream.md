@@ -9,19 +9,28 @@ coverY: 189
 
 # Aineko Dream: Code Generation using ChatGPT with Real-time QA
 
+
+
 <a href="https://github.com/aineko-dev/aineko-dream" markdown>
+:fontawesome-brands-github: **View on Github**
+</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown>
+:fontawesome-brands-slack: **Try on Slack**
+</a>
+
+<!-- <a href="https://github.com/aineko-dev/aineko-dream" markdown>
 <figure markdown>
-  ![View on Github](../img/github-mark.jpg){ width="150" }
+  ![View on Github](../img/github-mark.jpg){ width="70" }
   <a href="https://github.com/aineko-dev/aineko-dream" markdown><figcaption><p>View on Github</p></figcaption></a>
 </figure>
 </a>
 
 <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown>
 <figure markdown>
-  ![Join us on Slack](../img/Slack-mark-RGB.png){ width="150" }
+  ![Join us on Slack](../img/Slack-mark-RGB.png){ width="70" }
   <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown><figcaption><p>Try on Slack</p></figcaption></a>
 </figure>
-</a>
+</a> -->
 
 We built an app called [Aineko Dream](https://github.com/aineko-dev/aineko-dream) to test-drive [Aineko's](https://www.aineko.dev/) ability to enable generative AI features. Aineko Dream uses the [OpenAI API](https://platform.openai.com/overview) and the [Aineko docs](https://docs.aineko.dev/) to generate template code for an Aineko pipeline based on a prompt. The pipeline automatically checks the LLM response to ensure it passes some tests and either generates a prompt to fix the errors or passes the response back to the user.
 
