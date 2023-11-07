@@ -71,7 +71,7 @@ pythonpath = ["."]
 markers = ["integration: marks tests as requiring docker (deselect with '-m \"not integration\"'"]
 
 [tool.poetry.scripts]
-aineko = "aineko.__main__:aineko"
+aineko = "aineko.__main__:cli"
 
 [tool.pylint.main]
 # Analyse import fallback blocks. This can be used to support both Python 2 and 3

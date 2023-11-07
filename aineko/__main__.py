@@ -11,18 +11,18 @@ from aineko.cli.run import run
 from aineko.cli.visualize import visualize
 
 
-@click.group()
+@click.group("aineko")
 @click.version_option(__version__)
-def aineko() -> None:
+def cli() -> None:
     """Aineko CLI."""
     pass
 
 
-aineko.add_command(create)
-aineko.add_command(run)
-aineko.add_command(service)
-aineko.add_command(stream)
-aineko.add_command(visualize)
+cli.add_command(create)
+cli.add_command(run)
+cli.add_command(service)
+cli.add_command(stream)
+cli.add_command(visualize)
 
 if __name__ == "__main__":
-    aineko(obj={})
+    cli(obj={})
