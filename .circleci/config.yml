@@ -9,7 +9,7 @@ parameters:
     default: "3.10"
 
 workflows:
-  pre-merge-checks:
+  continuous-integration:
     when:
       and:
         - not:
