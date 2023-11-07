@@ -21,3 +21,5 @@
 - [ ] No unnecessary changes are introduced.
 - [ ] Description motivates each change.
 - [ ] Docs are updated if necessary.
+- [ ] Code is pythonic and consistent with the rest of the codebase.
+- [ ] The code is consistent with the [style guide](https://google.github.io/styleguide/pyguide.html).
