@@ -34,6 +34,7 @@ nav:
       - Concepts: 'developer_guide/concepts.md'
       - CLI Guide: 'developer_guide/cli_guide.md'
       - Pipeline Configuration: 'developer_guide/pipeline_configuration.md'
+      - Node Implementation: 'developer_guide/node_implementation.md'
   - Troubleshooting: 'troubleshooting.md'
   - Examples:
       - Aineko Dream: examples/aineko-dream.md
