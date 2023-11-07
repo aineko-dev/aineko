@@ -24,6 +24,12 @@ workflows:
           python_version: << pipeline.parameters.python_version >>
           markers: integration
 
+  publish-docs:
+    # when:
+    #   equal: [<< pipeline.git.branch >>, develop]
+    jobs:
+      - build-and-push-docs
+
 jobs:
   integration-tests:
     parameters:
@@ -111,3 +117,14 @@ jobs:
             poetry run mypy --install-types \
             --non-interactive << parameters.prj_dir >>
             poetry run mypy << parameters.prj_dir >>
+
+  build-and-push-docs:
+    docker:
+      - image: cimg/python:<< parameters.python_version >>
+
+    steps:
+      - checkout
+      - run: poetry install --with docs --no-interaction --quiet
+      - run: mkdocs build
+      - run: git checkout -b documentation
+      - run: git push --force
