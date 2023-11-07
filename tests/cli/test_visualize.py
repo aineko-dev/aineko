@@ -6,7 +6,6 @@ import pytest
 from aineko.cli.visualize import (
     build_mermaid_from_yaml,
     render_graph_in_browser,
-    render_mermaid_graph,
 )
 
 

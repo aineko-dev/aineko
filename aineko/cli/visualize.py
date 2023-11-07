@@ -4,10 +4,34 @@
 import os
 import webbrowser
 
+import click
 import yaml
 
 
-def render_mermaid_graph(
+@click.command()
+@click.argument("config_path")
+@click.option(
+    "--direction",
+    "-d",
+    type=click.Choice(["TD", "LR"]),
+    default="LR",
+    help=(
+        "Direction of the graph. Either LR (left to right) or" " TD (top down)."
+    ),
+)
+@click.option(
+    "--legend",
+    "-l",
+    is_flag=True,
+    help="Include a legend in the graph.",
+)
+@click.option(
+    "--render-in-browser",
+    "-b",
+    is_flag=True,
+    help="Render graph in browser. Prints graph to stdout otherwise.",
+)
+def visualize(
     config_path: str,
     direction: str = "LR",
     legend: bool = False,

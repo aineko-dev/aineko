@@ -3,6 +3,8 @@
 """A wrapper class that executes Docker CLI commands via subprocess."""
 import subprocess
 
+import click
+
 
 class KafkaCLIWrapper:
     """A utility class for interacting with Kafka using command-line tools.
@@ -61,3 +63,17 @@ class KafkaCLIWrapper:
         except subprocess.CalledProcessError as ex:
             print(f"Error running Kafka viewer: {ex}")
             print(f"Command output: {ex.output}")
+
+
+@click.command()
+@click.argument("dataset")
+@click.option(
+    "--from-beginning",
+    "-b",
+    is_flag=True,
+    default=False,
+    help="If messages should be streamed from the start",
+)
+def stream(dataset: str, from_beginning: bool) -> None:
+    """Stream messages from a dataset."""
+    KafkaCLIWrapper.consume_kafka_topic(dataset, from_beginning=from_beginning)
