@@ -125,6 +125,6 @@ jobs:
     steps:
       - checkout
       - run: poetry install --with docs --no-interaction --quiet
-      - run: mkdocs build
+      - run: poetry run mkdocs build
       - run: git checkout -b documentation
       - run: git push --force
