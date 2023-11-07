@@ -127,4 +127,4 @@ jobs:
       - run: poetry install --with docs --no-interaction --quiet
       - run: poetry run mkdocs build
       - run: git checkout -b documentation
-      - run: git push --force
+      - run: git push --set-upstream origin documentation --force
