@@ -90,7 +90,7 @@ poetry run aineko service stop
 
     A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**. (mailbox)
 
-    The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging and** two nodes - **sum** and **sequence**.
+    The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging**, and that we have created two nodes - **sum** and **sequence**.
 
 To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_guide/concepts.md).
 
