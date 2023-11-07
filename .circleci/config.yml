@@ -129,4 +129,7 @@ jobs:
       - checkout
       - run: poetry install --with docs --no-interaction --quiet
       - run: poetry run mkdocs build
+      - run: git add -f site
+      - run: >
+          git commit -m "docs: update for commit << pipeline.git.revision"
       - run: git push origin --force << pipeline.git.branch >>:documentation
