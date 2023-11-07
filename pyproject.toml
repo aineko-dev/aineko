@@ -496,7 +496,7 @@ line-length = 80
 
 [tool.pydocstyle]
 convention = "google"
-add-ignore = "D104"
+add-ignore = "D104,D301,D415"
 
 [tool.mypy]
 check_untyped_defs = true
