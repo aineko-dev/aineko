@@ -129,9 +129,8 @@ services:
 
 @click.group()
 @click.option(
-    "--config",
     "-c",
-    default=None,
+    "--config",
     help="Path to the custom Docker Compose config file.",
 )
 @click.pass_context

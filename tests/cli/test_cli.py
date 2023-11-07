@@ -5,7 +5,7 @@ import pytest
 from click.testing import CliRunner
 
 from aineko import __version__
-from aineko.cli.cli import aineko
+from aineko.__main__ import aineko
 from aineko.cli.create_pipeline import create
 
 

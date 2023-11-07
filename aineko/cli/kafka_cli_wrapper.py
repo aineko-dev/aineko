@@ -68,10 +68,9 @@ class KafkaCLIWrapper:
 @click.command()
 @click.argument("dataset")
 @click.option(
-    "--from-beginning",
     "-b",
+    "--from-beginning",
     is_flag=True,
-    default=False,
     help="If messages should be streamed from the start",
 )
 def stream(dataset: str, from_beginning: bool) -> None:

@@ -10,25 +10,25 @@ from cookiecutter.main import cookiecutter  # type: ignore
 
 @click.command()
 @click.option(
-    "--deployment-config",
     "-d",
+    "--deployment-config",
     is_flag=True,
     help="Include deploy.yml that facilitates deployment of pipelines.",
 )
 @click.option(
-    "--output-dir",
     "-o",
+    "--output-dir",
     default=".",
     help="Directory to create pipeline in. Defaults to current directory.",
 )
 @click.option(
-    "--no-input",
     "-n",
+    "--no-input",
     is_flag=True,
     help="Do not prompt for parameters and use defaults.",
 )
 def create(deployment_config: bool, output_dir: str, no_input: bool) -> None:
-    """Creates boilerplate code and config required for an Aineko pipeline.
+    """Creates boilerplate code and config required for an Aineko pipeline.\f
 
     Args:
         deployment_config: If True, include a deploy file when generating, else

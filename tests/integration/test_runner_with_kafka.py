@@ -10,7 +10,7 @@ import pytest
 import ray
 from click.testing import CliRunner
 
-from aineko.cli.cli import aineko
+from aineko.__main__ import aineko
 from aineko.core.dataset import DatasetConsumer
 from aineko.core.node import AbstractNode
 from aineko.core.runner import Runner
