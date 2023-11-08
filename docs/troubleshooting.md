@@ -1,6 +1,4 @@
-# Troubleshooting
-
-## How to install a specific version of Python
+# Python Versions
 
 We recommend using [pyenv](https://github.com/pyenv/pyenv?tab=readme-ov-file#getting-pyenv) to manage your Python versions. Once you have pyenv installed, you can run the following commands to install Python 3.10.
 

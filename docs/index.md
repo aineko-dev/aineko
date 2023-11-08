@@ -3,21 +3,18 @@ description: What is Aineko?
 ---
 
 # Aineko
-[![CI](https://circleci.com/gh/aineko-dev/aineko/tree/develop.svg?style=svg)](https://app.circleci.com/pipelines/github/aineko-dev)
-[![downloads](https://static.pepy.tech/badge/aineko/month)](https://pepy.tech/project/aineko)
+[![CI](https://circleci.com/gh/aineko-dev/aineko/tree/develop.svg?style=svg)](https://app.circleci.com/pipelines/github/aineko-dev)<br>
+[![pypi](https://img.shields.io/pypi/v/aineko.svg)](https://pypi.python.org/pypi/aineko)
+[![downloads](https://static.pepy.tech/badge/aineko/month)](https://pepy.tech/project/aineko)<br>
 [![license](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/aineko-dev/aineko/blob/develop/LICENSE)
 
-**Aineko is a Python framework for building powerful data applications, limited only by your imagination!**
+**Aineko is a Python framework for building powerful data applications, limited only by your imagination! Focus on **transformations and business logic**, leave the rest to Aineko.**
 
 [Build an Application &ensp; →](./quickstart.md){ .md-button .md-button--primary } &ensp; in minutes
 
-With Aineko, you seamlessly bring data into any product and iterate quickly. Whether you're an individual developer or part of a larger team, Aineko helps you rapidly build scalable, maintainable, and fast data applications.
 
-Focus on **transformations and business logic**, leave the rest to Aineko.
-
-!!! info
+??? info "What is Aineko?"
     Under the hood, Aineko automatically configures tooling needed for production-ready data apps, like message brokers, distributed compute, and more. This allows you to focus on building your application instead of spending time with configuration and infrastructure.
-
 
 ## Main Features
 
