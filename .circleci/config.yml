@@ -156,7 +156,7 @@ jobs:
       - run: |
           if [ "<< parameters.tag >>" = "true" ]; then
             version=$(echo "<< parameters.version >>" | cut -d'.' -f1,2)
-            poetry run mike deploy version -b << parameters.docs_branch >> --push
+            poetry run mike deploy $version -b << parameters.docs_branch >> --push
           else
             poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
           fi
