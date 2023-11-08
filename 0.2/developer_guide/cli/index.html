@@ -931,12 +931,17 @@
 <div class="highlight"><pre><span></span><code>aineko create [OPTIONS]
 </code></pre></div>
 <p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  -d, --deployment-config  Include deploy.yml that facilitates deployment of
-                           pipelines.
-  -o, --output-dir TEXT    Directory to create pipeline in. Defaults to
-                           current directory.
-  -n, --no-input           Do not prompt for parameters and use defaults.
-  --help                   Show this message and exit.
+<div class="highlight"><pre><span></span><code>  -d, --deployment-config  Include deploy.yml that
+                           facilitates deployment
+                           of pipelines.
+  -o, --output-dir TEXT    Directory to create
+                           pipeline in. Defaults
+                           to current directory.
+  -n, --no-input           Do not prompt for
+                           parameters and use
+                           defaults.
+  --help                   Show this message and
+                           exit.
 </code></pre></div>
 <h3 id="aineko-run">aineko run</h3>
 <p>Main function to run a pipeline from the command line.</p>
@@ -948,9 +953,12 @@
 <div class="highlight"><pre><span></span><code>aineko run [OPTIONS] PIPELINE_CONFIG_FILE
 </code></pre></div>
 <p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  -p, --pipeline-name TEXT  Name of the pipeline to run.
-  -r, --retry               Retry running the pipeline on failure.
-  --help                    Show this message and exit.
+<div class="highlight"><pre><span></span><code>  -p, --pipeline-name TEXT  Name of the pipeline
+                            to run.
+  -r, --retry               Retry running the
+                            pipeline on failure.
+  --help                    Show this message and
+                            exit.
 </code></pre></div>
 <h3 id="aineko-service">aineko service</h3>
 <p>Manage Aineko docker services (Kafka and Zookeeper containers).</p>
@@ -958,7 +966,8 @@
 <div class="highlight"><pre><span></span><code>aineko service [OPTIONS] COMMAND [ARGS]...
 </code></pre></div>
 <p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  -c, --config TEXT  Path to the custom Docker Compose config file.
+<div class="highlight"><pre><span></span><code>  -c, --config TEXT  Path to the custom Docker
+                     Compose config file.
   --help             Show this message and exit.
 </code></pre></div>
 <h4 id="aineko-service-restart">aineko service restart</h4>
@@ -991,8 +1000,10 @@
 <div class="highlight"><pre><span></span><code>aineko stream [OPTIONS] DATASET
 </code></pre></div>
 <p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  -b, --from-beginning  If messages should be streamed from the start
-  --help                Show this message and exit.
+<div class="highlight"><pre><span></span><code>  -b, --from-beginning  If messages should be
+                        streamed from the start
+  --help                Show this message and
+                        exit.
 </code></pre></div>
 <h3 id="aineko-visualize">aineko visualize</h3>
 <p>Builds mermaid graph from an Aineko pipeline config.</p>
@@ -1006,12 +1017,17 @@
 <div class="highlight"><pre><span></span><code>aineko visualize [OPTIONS] CONFIG_PATH
 </code></pre></div>
 <p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  -d, --direction [TD|LR]  Direction of the graph. Either LR (left to right)
-                           or TD (top down).
-  -l, --legend             Include a legend in the graph.
-  -b, --browser            Render graph in browser. Prints graph to stdout
-                           otherwise.
-  --help                   Show this message and exit.
+<div class="highlight"><pre><span></span><code>  -d, --direction [TD|LR]  Direction of the graph.
+                           Either LR (left to
+                           right) or TD (top
+                           down).
+  -l, --legend             Include a legend in the
+                           graph.
+  -b, --browser            Render graph in
+                           browser. Prints graph
+                           to stdout otherwise.
+  --help                   Show this message and
+                           exit.
 </code></pre></div>
 
 

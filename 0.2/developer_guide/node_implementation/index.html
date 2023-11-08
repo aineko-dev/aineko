@@ -827,11 +827,30 @@ class TestSequencer(AbstractNode):
     time.sleep(params.get(&quot;sleep_time&quot;, 1))
 </code></pre></div>
 <p>The producers and consumers you use in your node must be made available to your node via the pipeline configuration. If a dataset is not available in a Node's catalog, a <code>KeyError</code> will be raised.</p>
-<p><strong>Logging</strong></p>
+<p>A node can produce to a dataset, consume from a dataset, or both. Nodes that consume are triggered to action by the arrival of new data in the dataset they consume from.</p>
+<p>Below is a node that only produces to two datasets, and acts like a source for datasets:</p>
+<p><pre class="mermaid"><code>flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+N_node_producer_only((node_producer_only)):::nodeClass --&gt;  T_produced_dataset_1[produced_dataset_1]:::datasetClass
+N_node_producer_only((node_producer_only)):::nodeClass --&gt;  T_produced_dataset_2[produced_dataset_2]:::datasetClass</code></pre>
+The next node only consumes from two datasets, and acts like a sink for datasets:
+<pre class="mermaid"><code>flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+T_consumed_dataset_1[consumed_dataset_1]:::datasetClass --&gt;  N_node_consumer_only((node_consumer_only)):::nodeClass
+T_consumed_dataset_2[consumed_dataset_2]:::datasetClass --&gt;  N_node_consumer_only((node_consumer_only)):::nodeClass</code></pre></p>
+<p>A node that both consumes and produces datasets acts like a transformer for datasets. The consumed datasets are the inputs to the transformer, and the produced datasets are the outputs of the transformer:
+<pre class="mermaid"><code>flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+T_consumed_dataset[consumed_dataset]:::datasetClass --&gt;  N_node_transformer((node_transformer)):::nodeClass
+N_node_transformer((node_transformer)):::nodeClass --&gt;  T_produced_dataset[produced_dataset]:::datasetClass</code></pre>
+<strong>Logging</strong></p>
 <p>Node classes inherit a method named <code>self.log</code> that allows users to log messages to Amber, where logs are aggregated and triaged across observability pipelines. You can set the appropriate level from: <code>info</code>, <code>debug</code>, <code>warning</code>, <code>error</code>, an <code>critical</code>.</p>
 <div class="highlight"><pre><span></span><code>self.log(f&quot;Produced {self.cur_integer}&quot;, level=&quot;info&quot;)
 </code></pre></div>
-<p>You can log from inside of the <code>_pre_loop_hook</code> method, the <code>_execute</code> method, or any other method you add to your node.\</p>
+<p>You can log from inside of the <code>_pre_loop_hook</code> method, the <code>_execute</code> method, or any other method you add to your node.</p>
 
 
   

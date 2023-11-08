@@ -776,7 +776,11 @@
 <h1 id="building-a-pipeline">Building a Pipeline</h1>
 <p>At a high-level, building a pipeline requires defining a pipeline and implementing at least a node.</p>
 <h2 id="defining-a-pipeline">Defining a pipeline</h2>
-<p>For the sake of simplicity, we reference a truncated version of the pipeline below:</p>
+<p><pre class="mermaid"><code>flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+N_sequence((sequence)):::nodeClass --&gt;  T_test_sequence[test_sequence]:::datasetClass</code></pre>
+For the sake of simplicity, we reference a truncated version of the pipeline definition below:
 <div class="highlight"><pre><span></span><code><span class="nt">pipeline</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-aineko-pipeline</span>
 
@@ -796,7 +800,7 @@
 <span class="w">  </span><span class="nt">datasets</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">test_sequence</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka_stream</span>
-</code></pre></div>
+</code></pre></div></p>
 <p>A pipeline should have the following attributes:</p>
 <ul>
 <li><strong><code>name</code></strong> - name of the pipeline</li>
