@@ -53,7 +53,8 @@ markdown_extensions:
 plugins:
   - glightbox
   - search
-  - mike
+  - mike:
+      alias_type: copy
   - mkdocstrings:
       default_handler: python
       handlers:
