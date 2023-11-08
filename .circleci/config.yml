@@ -25,10 +25,19 @@ workflows:
           markers: integration
 
   publish-docs:
-    when:
-      equal: [<< pipeline.git.branch >>, develop]
     jobs:
-      - build-and-push-docs
+      - build-and-push-docs:
+          filters:
+            branches:
+              only: develop
+      - build-and-push-docs:
+          filters:
+            branches:
+              ignore: .*
+            tags:
+              only: /\d+\.\d+\.\d+$/
+          version: << pipeline.git.tag >>
+          tag: true
 
 jobs:
   integration-tests:
@@ -119,9 +128,21 @@ jobs:
             poetry run mypy << parameters.prj_dir >>
 
   build-and-push-docs:
+    parameters:
+      docs_branch:
+        type: string
+        default: docs-site
+        description: Branch to publish docs site files to
+      version:
+        type: string
+        default: dev
+        description: Version of docs to publish
+      tag:
+        type: boolean
+        default: false
+        description: If version is a tag
     docker:
       - image: cimg/python:<< pipeline.parameters.python_version >>
-
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -129,9 +150,11 @@ jobs:
       - checkout
       - run: poetry install --with docs --no-interaction --quiet
       - run: poetry run mkdocs build
-      - run: git add -f site
-      - run: git config user.email "engineering-admins@convexlabs.xyz"
-      - run: git config user.name "engineering-admins"
-      - run: >
-          git commit -m "docs: update for commit << pipeline.git.revision >>"
-      - run: git push origin --force << pipeline.git.branch >>:documentation
+      - run: |
+          if [ "<< parameters.tag >>" = "true" ]; then
+            version=$(echo "<< parameters.version >>" | cut -d'.' -f1,2)
+            poetry run mike deploy version -b << parameters.docs_branch >> --push
+          else
+            poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
+          fi
+    environment: GIT_COMMITTER_NAME=aineko-ci GIT_COMMITTER_EMAIL=engineering-admins@convexlabs.xyz
