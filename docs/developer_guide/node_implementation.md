@@ -70,6 +70,34 @@ def _execute(self, params: dict = None):
 
 The producers and consumers you use in your node must be made available to your node via the pipeline configuration. If a dataset is not available in a Node's catalog, a `KeyError` will be raised.
 
+A node can produce to a dataset, consume from a dataset, or both. Nodes that consume are triggered to action by the arrival of new data in the dataset they consume from. 
+
+Below is a node that only produces to two datasets, and acts like a source for datasets:
+
+```mermaid
+flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+N_node_producer_only((node_producer_only)):::nodeClass -->  T_produced_dataset_1[produced_dataset_1]:::datasetClass
+N_node_producer_only((node_producer_only)):::nodeClass -->  T_produced_dataset_2[produced_dataset_2]:::datasetClass
+```
+The next node only consumes from two datasets, and acts like a sink for datasets:
+```mermaid
+flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+T_consumed_dataset_1[consumed_dataset_1]:::datasetClass -->  N_node_consumer_only((node_consumer_only)):::nodeClass
+T_consumed_dataset_2[consumed_dataset_2]:::datasetClass -->  N_node_consumer_only((node_consumer_only)):::nodeClass
+```
+
+A node that both consumes and produces datasets acts like a transformer for datasets. The consumed datasets are the inputs to the transformer, and the produced datasets are the outputs of the transformer:
+```mermaid
+flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+T_consumed_dataset[consumed_dataset]:::datasetClass -->  N_node_transformer((node_transformer)):::nodeClass
+N_node_transformer((node_transformer)):::nodeClass -->  T_produced_dataset[produced_dataset]:::datasetClass
+```
 **Logging**
 
 Node classes inherit a method named `self.log` that allows users to log messages to Amber, where logs are aggregated and triaged across observability pipelines. You can set the appropriate level from: `info`, `debug`, `warning`, `error`, an `critical`.
@@ -78,4 +106,4 @@ Node classes inherit a method named `self.log` that allows users to log messages
 self.log(f"Produced {self.cur_integer}", level="info")
 ```
 
-You can log from inside of the `_pre_loop_hook` method, the `_execute` method, or any other method you add to your node.\
+You can log from inside of the `_pre_loop_hook` method, the `_execute` method, or any other method you add to your node.

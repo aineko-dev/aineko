@@ -4,8 +4,13 @@ At a high-level, building a pipeline requires defining a pipeline and implementi
 
 ## Defining a pipeline
 
-For the sake of simplicity, we reference a truncated version of the pipeline below:
-
+```mermaid
+flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+N_sequence((sequence)):::nodeClass -->  T_test_sequence[test_sequence]:::datasetClass
+```
+For the sake of simplicity, we reference a truncated version of the pipeline definition below:
 ```yaml
 pipeline:
   name: test-aineko-pipeline

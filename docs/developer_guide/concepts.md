@@ -14,7 +14,7 @@ description: Pipeline, Node, Datasets
 
 ## Pipeline Definition
 
-A pipeline definition is a specialised Program that we write - to tell us what a pipeline comprises. A Pipeline definition is defined in yaml and essentially allows us to compose computation nodes together by specifying the input and output buffers buffers they consume data from and produce data to.
+A pipeline definition is a specialised Program that we write - to tell us what a pipeline comprises. A Pipeline definition is defined in yaml and essentially allows us to compose computation nodes together by specifying the input and output buffers that they consume data from and produce data to.
 
 See [here](./pipeline_configuration.md) to learn about writing a pipeline definition.
 
