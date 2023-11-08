@@ -51,6 +51,7 @@ markdown_extensions:
 plugins:
   - glightbox
   - search
+  - mike
   - mkdocstrings:
       default_handler: python
       handlers:
