@@ -70,7 +70,7 @@ def _execute(self, params: dict = None):
 
 The producers and consumers you use in your node must be made available to your node via the pipeline configuration. If a dataset is not available in a Node's catalog, a `KeyError` will be raised.
 
-A node can produce to a dataset, consume from a dataset, or both. Nodes that consume are triggered to action by the arrival of new data in the dataset they consume from. 
+A node can produce to a dataset, consume from a dataset, or both. Nodes that consume are triggered to action by the arrival of new data in the dataset they consume from.
 
 Below is a node that only produces to two datasets, and acts like a source for datasets:
 
