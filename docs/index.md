@@ -3,6 +3,9 @@ description: What is Aineko?
 ---
 
 # Aineko
+[![CI](https://circleci.com/gh/aineko-dev/aineko/tree/develop.svg?style=svg)](https://app.circleci.com/pipelines/github/aineko-dev)
+[![downloads](https://static.pepy.tech/badge/aineko/month)](https://pepy.tech/project/aineko)
+[![license](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/aineko-dev/aineko/blob/develop/LICENSE)
 
 **Aineko is a Python framework for building powerful data applications, limited only by your imagination!**
 

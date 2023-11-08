@@ -10,10 +10,6 @@ parameters:
 
 workflows:
   continuous-integration:
-    when:
-      and:
-        - not:
-            equal: [<< pipeline.git.branch >>, develop]
     jobs:
       - python-checks:
           prj_dir: aineko
