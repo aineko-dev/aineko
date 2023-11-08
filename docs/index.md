@@ -4,37 +4,49 @@ description: What is Aineko?
 
 # Aineko
 
-Aineko is a Python framework for building data applications.
+**Aineko is a Python framework for building powerful data applications, limited only by your imagination!**
+
+[Build an Application &ensp; →](./quickstart.md){ .md-button .md-button--primary } &ensp; in minutes
 
 With Aineko, you seamlessly bring data into any product and iterate quickly. Whether you're an individual developer or part of a larger team, Aineko helps you rapidly build scalable, maintainable, and fast data applications.
 
-Under the hood, Aineko automatically configures tooling needed for production-ready data apps, like message brokers, distributed compute, and more. This allows you to focus on building your application instead of spending time with configuration and infrastructure.
+Focus on **transformations and business logic**, leave the rest to Aineko.
 
-Focus on transformations and business logic, leave the rest to Aineko.
+!!! info
+    Under the hood, Aineko automatically configures tooling needed for production-ready data apps, like message brokers, distributed compute, and more. This allows you to focus on building your application instead of spending time with configuration and infrastructure.
+
 
 ## Main Features
 
-### **Flexible Nodes**
+| Powerful Pipelines | |
+| --- | --- |
+| **Quick to Code** | Increase speed to develop applications by 100% to 200%.* |
+| **Intuitive** | Codified best practices. Less time reading docs. Less time debugging. |
+| **Robust** | Production-ready from the get-go. Scale with ease. |
+| |
+| **Flexible Nodes**  | |
+| **Composable** | Reuse nodes you've built. Reuse python code. Save time by *not* re-inventing the wheel. |
+| **Stateful** | Work with simple logic. Work with complex logic. Aineko supports it all. |
+| **Code Faster** | Skip the boring stuff with pre-built nodes that work with popular data sources like REST APIs. |
+| |
+| **Delightful Datasets** || |
+| **Fast** | Achieve microsecond latency between nodes.* |
+| **Scalable** | Process billions or records per day with ease.* |
+| **Governance** | Easily work with different versions of data across pipelines and environments. |
 
-* **Transformations & Business Logic** - Nodes can represent any logic that can be built in Python.
-* **State Management** - Nodes can maintain internal state and share it with other nodes.
-* **Connectors** - Aineko comes with pre-built nodes that serve as connectors for popular data sources and endpoints such as WebSocket and REST.
+*Estimate based on development experience by an internal team.
 
-### **Powerful Datasets**
 
-* **Streaming Data -** Datasets simplify processing of streaming data.
-* **Data Broadcasting -** Share data across any node or between pipelines.
-* **Policies -** Choose how to manage each dataset with granular control over settings such as data lifetime and encryption.
-* **Ultra-Low Latency -** Achieve microsecond data transfer rates between nodes.
-* **High Throughput -** Process billions or records per day with ease.
-* **Data Testing -** Run tests on production or synthetic data without impacting live applications.
+## Roadmap
 
-### **Convenient Pipelines**
-
-* **Declarative -** Represent the complete topology of your system in a short YAML file.
-* **Long-Living -** Pipelines remain active and process new data as soon as it is generated.
-* **Cyclic Graphs -** Build use-cases that require cycles between data processing nodes.
-* **Replicas -** Generate replicas of pipelines with different variables without writing new code.
+- [x] Aineko pipeline configuration loader and runner
+- [x] CLI tool for running pipelines
+- [x] CLI tool for visualizing pipelines
+- [x] REST API and Websocket pre-built nodes
+- [ ] Built-in API server node
+- [ ] Schema validation support
+- [ ] Support multiple queuing systems beyond Kafka (RabbitMQ, etc)
+- [ ] Support multiple runtime engines beyond ray (k8s, etc)
 
 ## Join our Community
 

@@ -18,27 +18,13 @@ coverY: 189
 :fontawesome-brands-slack: **Try on Slack**
 </a>
 
-<!-- <a href="https://github.com/aineko-dev/aineko-dream" markdown>
-<figure markdown>
-  ![View on Github](../img/github-mark.jpg){ width="70" }
-  <a href="https://github.com/aineko-dev/aineko-dream" markdown><figcaption><p>View on Github</p></figcaption></a>
-</figure>
-</a>
-
-<a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown>
-<figure markdown>
-  ![Join us on Slack](../img/Slack-mark-RGB.png){ width="70" }
-  <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown><figcaption><p>Try on Slack</p></figcaption></a>
-</figure>
-</a> -->
-
 We built an app called [Aineko Dream](https://github.com/aineko-dev/aineko-dream) to test-drive [Aineko's](https://www.aineko.dev/) ability to enable generative AI features. Aineko Dream uses the [OpenAI API](https://platform.openai.com/overview) and the [Aineko docs](https://docs.aineko.dev/) to generate template code for an Aineko pipeline based on a prompt. The pipeline automatically checks the LLM response to ensure it passes some tests and either generates a prompt to fix the errors or passes the response back to the user.
 
 This app demonstrates how you can rapidly prototype features that use foundation models by leveraging Aineko features, such as REST client connectors, stateful feedback loops, and API endpoints. Real-time QA allows us to ensure the quality of LLM responses while maintaining an interactive experience for users.
 
 Give it a try using the Aineko Dream bot in our [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ). Or checkout the code on [GitHub](https://github.com/aineko-dev/aineko-dream).
 
-What will you dream up with Aineko?
+**What will you dream up with Aineko?**
 
 <figure markdown>
   ![Aineko Dream in Action](../img/aineko_dream_gif.gif){ width="100%" }
@@ -125,11 +111,15 @@ N_APIServer((APIServer)):::nodeClass -->  T_user_prompt[user_prompt]:::datasetCl
 N_APIServer((APIServer)):::nodeClass -->  T_github_event[github_event]:::datasetClass
 ```
 
-Here we add two evaluation steps and an evaluation model. The `PythonEvaluation` node validates that the LLM proposes valid Python code. The `SecurityEvaluation` node runs checks using Bandit to ensure that the Python code that is proposed doesn’t contain any known security concerns. The `EvaluationModel` node consumes evaluation results and decides wether to generate another prompt or submit the final result to the API server. The `EvaluationModel` keeps track of the evaluation results and the number of times we query the LLM.
+Here we add 2 evaluation steps and an evaluation model:
+
+* The `PythonEvaluation` node validates that the LLM proposes valid Python code.
+* The `SecurityEvaluation` node runs checks using Bandit to ensure that the Python code that is proposed doesn’t contain any known security concerns.
+* The `EvaluationModel` node consumes evaluation results and decides wether to generate another prompt or submit the final result to the API server. It keeps track of the evaluation results and the number of times we query the LLM.
 
 ## **Pipeline Configuration**
 
-Here is the pipeline config used to generate this example. We configure the document fetcher (you could change the parameters to target any GitHub repo). We also configure the LLM client where we specify important parameters, like the model to be used. If we wanted to use GPT-4 we would simply change the model param in this file. Furthermore, if we wanted to switch to using Cohere instead of OpenAI, we would switch out the `OpenAIClient` node for the `CohereClient` node. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
+Here is the pipeline config used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
 
 ```yaml
 pipeline:
@@ -137,6 +127,7 @@ pipeline:
 
   nodes:
     # Prompt generation
+    # This node can be configured to target any GitHub repo
     GitHubDocFetcher:
       class: aineko_dream.nodes.GitHubDocFetcher
       inputs:
@@ -155,7 +146,8 @@ pipeline:
         - document
       outputs:
         - generated_prompt
-    # LLM Client
+    # LLM Client: defines model to use. Change to use another model like GPT-4
+    # If we wanted to use Cohere, switch `OpenAIClient` to `Cohere`.
     GPT3Client:
       class: aineko_dream.nodes.OpenAIClient
       inputs:
