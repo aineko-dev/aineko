@@ -27,13 +27,15 @@ workflows:
   publish-docs:
     jobs:
       - build-and-push-docs:
+          name: publish dev docs
           filters:
             branches:
               only: develop
       - build-and-push-docs:
+          name: publish versioned docs
           filters:
             branches:
-              ignore: .*
+              ignore: /.*/
             tags:
               only: /\d+\.\d+\.\d+$/
           version: << pipeline.git.tag >>
@@ -149,7 +151,8 @@ jobs:
             - "18:33:31:05:d5:48:ad:0c:78:8d:23:5c:13:d1:04:ce"
       - checkout
       - run: poetry install --with docs --no-interaction --quiet
-      - run: poetry run mkdocs build
+      - run: git config user.name aineko-ci
+      - run: git config user.email engineering-admins@convexlabs.xyz
       - run: |
           if [ "<< parameters.tag >>" = "true" ]; then
             version=$(echo "<< parameters.version >>" | cut -d'.' -f1,2)
@@ -157,4 +160,3 @@ jobs:
           else
             poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
           fi
-    environment: GIT_COMMITTER_NAME=aineko-ci GIT_COMMITTER_EMAIL=engineering-admins@convexlabs.xyz
