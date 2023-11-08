@@ -64,9 +64,9 @@ nav:
   - Home: 'index.md'
   - Quickstart: 'quickstart.md'
   - Developer Guide:
-      - 'developer_guide/deeper_dive.md'
       - 'developer_guide/concepts.md'
-      - 'developer_guide/cli_guide.md'
+      - 'developer_guide/aineko_project.md'
+      - 'developer_guide/cli.md'
       - 'developer_guide/pipeline_configuration.md'
       - 'developer_guide/node_implementation.md'
   - API Reference:
