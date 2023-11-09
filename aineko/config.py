@@ -13,7 +13,7 @@ configuration values. They correspond to configuration keys found in the above
 link, but with a prefix. For example, `KAFKA_CONFIG_BOOTSTRAP_SERVERS`
 corresponds to `bootstrap.servers`.
 
-- KAFKA_CONFIG_BOOTSTRAP_SERVERS (e.g. localhost:9092,localhost:9093)
+- KAFKA_CONFIG_BOOTSTRAP_SERVERS (e.g. `localhost:9092,localhost:9093`)
 - KAFKA_CONFIG_SASL_USERNAME
 - KAFKA_CONFIG_SASL_PASSWORD
 - KAFKA_CONFIG_SECURITY_PROTOCOL

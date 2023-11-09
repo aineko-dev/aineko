@@ -76,6 +76,7 @@ nav:
       - 'developer_guide/cli.md'
       - 'developer_guide/pipeline_configuration.md'
       - 'developer_guide/node_implementation.md'
+      - 'developer_guide/config_kafka.md'
   - API Documentation:
       - 'api_reference/abstract_node.md'
       - 'api_reference/dataset_consumer.md'

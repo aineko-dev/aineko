@@ -34,20 +34,23 @@ pipeline:
 
 ```
 
-A pipeline should have the following attributes:
+## Pipeline Configuration
+
+A pipeline configuration `yml` file should have the following schema:
 
 * **`name`** - name of the pipeline
-* **`default_node_settings`**
-  * **`num_cpus` -**  Number of cpus allocated to a node
+* **`default_node_settings (optional)`**
+    * **<parameter\>** - Any of the parameters that are passed to [ray actor options](https://docs.ray.io/en/latest/ray-core/api/doc/ray.remote.html#ray.remote) (e.g. `num_cpus`)
 * **`nodes`**
   * **<name of node\>**
-    * **`class`** - which python class to run
-    * **`inputs` -** which dataset to consume from if applicable
-    * **`outputs`** - which dataset to produce to if applicable
-    * **`node_params`** - define any arbitrary params relevant for node's application logic
-* **datasets**
-  * **<name\_of\_dataset\>**
-    * **type** - only `kafka_stream` is supported right now, which maps to a kafka topic
+    * **`class`** - python class to run
+    * **`inputs` (optional)** - dataset(s) to consume from if applicable, should exist in the `datasets` block
+    * **`outputs`(optional)** - dataset(s) to produce to if applicable, should exist in the `datasets` block
+    * **`node_params`(optional)** - define any arbitrary params relevant for node's application logic, these are passed as a dictionary into the `params` argument found in the nodes
+    * **`node_settings`(optional)** - parameters that are passed to [ray actor options](https://docs.ray.io/en/latest/ray-core/api/doc/ray.remote.html#ray.remote), will override the ones set in `default_node_settings`
+* **`datasets`**
+    * **<name\_of\_dataset\>**
+        * **`type`** - only `kafka_stream` is supported right now, which maps to a kafka topic
 
 !!! note
     Aineko is currently in the Beta release stage and is constantly improving.
