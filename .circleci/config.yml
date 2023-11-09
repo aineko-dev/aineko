@@ -9,11 +9,7 @@ parameters:
     default: "3.10"
 
 workflows:
-  pre-merge-checks:
-    when:
-      and:
-        - not:
-            equal: [<< pipeline.git.branch >>, develop]
+  continuous-integration:
     jobs:
       - python-checks:
           prj_dir: aineko
@@ -23,6 +19,23 @@ workflows:
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
           markers: integration
+
+  publish-docs:
+    jobs:
+      - build-and-push-docs:
+          name: publish dev docs
+          filters:
+            branches:
+              only: develop
+      - build-and-push-docs:
+          name: publish versioned docs
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /\d+\.\d+\.\d+$/
+          version: << pipeline.git.tag >>
+          tag: true
 
 jobs:
   integration-tests:
@@ -111,3 +124,35 @@ jobs:
             poetry run mypy --install-types \
             --non-interactive << parameters.prj_dir >>
             poetry run mypy << parameters.prj_dir >>
+
+  build-and-push-docs:
+    parameters:
+      docs_branch:
+        type: string
+        default: docs-site
+        description: Branch to publish docs site files to
+      version:
+        type: string
+        default: dev
+        description: Version of docs to publish
+      tag:
+        type: boolean
+        default: false
+        description: If version is a tag
+    docker:
+      - image: cimg/python:<< pipeline.parameters.python_version >>
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "18:33:31:05:d5:48:ad:0c:78:8d:23:5c:13:d1:04:ce"
+      - checkout
+      - run: poetry install --with docs --no-interaction --quiet
+      - run: git config user.name aineko-ci
+      - run: git config user.email engineering-admins@convexlabs.xyz
+      - run: |
+          if [ "<< parameters.tag >>" = "true" ]; then
+            version=$(echo "<< parameters.version >>" | cut -d'.' -f1,2)
+            poetry run mike deploy $version -b << parameters.docs_branch >> --push
+          else
+            poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
+          fi

@@ -1,0 +1,91 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+site_name: Aineko
+site_url: https://docs.aineko.dev/
+repo_name: aineko-dev/aineko
+repo_url: https://github.com/aineko-dev/aineko
+theme:
+  name: material
+  palette:
+    scheme: aineko
+  favicon: assets/favicon_green.svg
+  logo: assets/favicon_white.svg
+  features:
+    - content.code.copy
+    - navigation.footer
+    - navigation.expand
+    - navigation.tabs
+    - toc.follow
+extra_css:
+  - stylesheets/extra.css
+extra:
+  generator: false
+  version:
+    provider: mike
+  analytics:
+    provider: google
+    property: G-395240980
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/aineko-dev/aineko
+    - icon: fontawesome/brands/chrome
+      link: https://aineko.dev
+copyright: Copyright &copy; 2023 Convex Research
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - def_list
+  - attr_list
+  - md_in_html
+  - mkdocs-click
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+plugins:
+  - glightbox
+  - search
+  - mike:
+      alias_type: copy
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            extension:
+              - griffe_typingdoc
+            show_root_heading: true
+
+nav:
+  - Get Started:
+      - 'index.md'
+      - 'quickstart.md'
+      - 'contributing.md'
+  - Developer Guide:
+      - 'developer_guide/concepts.md'
+      - 'developer_guide/aineko_project.md'
+      - 'developer_guide/cli.md'
+      - 'developer_guide/pipeline_configuration.md'
+      - 'developer_guide/node_implementation.md'
+      - 'developer_guide/config_kafka.md'
+  - API Documentation:
+      - 'api_reference/abstract_node.md'
+      - 'api_reference/dataset_consumer.md'
+      - 'api_reference/dataset_producer.md'
+      - 'api_reference/config.md'
+      - 'api_reference/config_loader.md'
+      - 'api_reference/runner.md'
+  - Troubleshooting:
+      - 'troubleshooting.md'
+  - Examples:
+      - examples/aineko-dream.md
+  - Aineko Cloud: 'aineko_cloud.md'
