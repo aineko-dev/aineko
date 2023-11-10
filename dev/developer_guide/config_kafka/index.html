@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/dev/api_reference/config_loader/">
+        <link rel="canonical" href="https://docs.aineko.dev/dev/developer_guide/config_kafka/">
       
       
-        <link rel="prev" href="../config/">
+        <link rel="prev" href="../node_implementation/">
       
       
-        <link rel="next" href="../runner/">
+        <link rel="next" href="../../api_reference/abstract_node/">
       
       
       <link rel="icon" href="../../assets/favicon_green.svg">
@@ -22,7 +22,7 @@
     
     
       
-        <title>ConfigLoader - Aineko</title>
+        <title>Configuring Kafka - Aineko</title>
       
     
     
@@ -98,7 +98,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configloader" class="md-skip">
+        <a href="#configuring-kafka" class="md-skip">
           Skip to content
         </a>
       
@@ -135,7 +135,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ConfigLoader
+              Configuring Kafka
             
           </span>
         </div>
@@ -231,11 +231,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../developer_guide/concepts/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../concepts/" class="md-tabs__link">
           
   
   Developer Guide
@@ -249,13 +251,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../abstract_node/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../api_reference/abstract_node/" class="md-tabs__link">
           
   
   API Documentation
@@ -475,6 +475,8 @@
       
   
   
+    
+  
   
     
     
@@ -484,14 +486,12 @@
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -505,7 +505,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Developer Guide
@@ -518,7 +518,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer_guide/concepts/" class="md-nav__link">
+      <a href="../concepts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -538,7 +538,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer_guide/aineko_project/" class="md-nav__link">
+      <a href="../aineko_project/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -558,7 +558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer_guide/cli/" class="md-nav__link">
+      <a href="../cli/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -578,7 +578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer_guide/pipeline_configuration/" class="md-nav__link">
+      <a href="../pipeline_configuration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -598,159 +598,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer_guide/node_implementation/" class="md-nav__link">
+      <a href="../node_implementation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Building a Node
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer_guide/config_kafka/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Configuring Kafka
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-    
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    API Documentation
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            API Documentation
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../abstract_node/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    AbstractNode
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../dataset_consumer/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    DatasetConsumer
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../dataset_producer/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    DatasetProducer
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../config/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Pipeline Config
   </span>
   
 
@@ -779,7 +631,7 @@
           
   
   <span class="md-ellipsis">
-    ConfigLoader
+    Configuring Kafka
   </span>
   
 
@@ -790,7 +642,7 @@
         
   
   <span class="md-ellipsis">
-    ConfigLoader
+    Configuring Kafka
   </span>
   
 
@@ -812,23 +664,16 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader" class="md-nav__link">
-    ConfigLoader
+  <a href="#aineko.config" class="md-nav__link">
+    config
   </a>
   
-    <nav class="md-nav" aria-label="ConfigLoader">
+    <nav class="md-nav" aria-label="config">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.load_config" class="md-nav__link">
-    load_config()
+  <a href="#aineko.config.DEFAULT_KAFKA_CONFIG" class="md-nav__link">
+    DEFAULT_KAFKA_CONFIG
   </a>
   
 </li>
@@ -847,13 +692,161 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Documentation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            API Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
   
   
     <li class="md-nav__item">
-      <a href="../runner/" class="md-nav__link">
+      <a href="../../api_reference/abstract_node/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AbstractNode
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DatasetConsumer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DatasetProducer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pipeline Config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/config_loader/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ConfigLoader
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/runner/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1056,23 +1049,16 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader" class="md-nav__link">
-    ConfigLoader
+  <a href="#aineko.config" class="md-nav__link">
+    config
   </a>
   
-    <nav class="md-nav" aria-label="ConfigLoader">
+    <nav class="md-nav" aria-label="config">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.load_config" class="md-nav__link">
-    load_config()
+  <a href="#aineko.config.DEFAULT_KAFKA_CONFIG" class="md-nav__link">
+    DEFAULT_KAFKA_CONFIG
   </a>
   
 </li>
@@ -1100,8 +1086,53 @@
   
 
 
-<h1 id="configloader"><code>ConfigLoader</code></h1>
-<p>Reference for the <code>ConfigLoader</code> class, which contains the logic used for parsing a pipeline config file into a format that can be understood by the <a href="../runner/"><code>Runner</code></a>.</p>
+<h1 id="configuring-kafka">Configuring Kafka</h1>
+<p>Aineko uses <a href="https://kafka.apache.org/documentation/"><code>kafka</code></a> under the hood for sending messages between nodes. As part of running Aineko locally, we recommend running a local <code>kafka</code> and <code>zookeeper</code> server using</p>
+<div class="highlight"><pre><span></span><code>poetry run aineko service start
+</code></pre></div>
+<p>To use a different <code>kafka</code> cluster, such as in deployment settings, we allow for configuring of <code>kafka</code> parameters through environment variables. Typically, you would want to modify configuration for the <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a> and <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> to point to the desired cluster.</p>
+<p>See below for default <code>kafka</code> configuration that ships with <code>aineko</code> and how to override them.</p>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+
+<h2 id="aineko.config" class="doc doc-heading">
+          <code>aineko.config</code>
+
+
+</h2>
+
+  <div class="doc doc-contents first">
+  
+      <p>Configuration file for Aineko modules.</p>
+<p>Kafka configuration can be set using the following environment variables:</p>
+<p>KAFKA_CONFIG: JSON string with kafka configuration
+(see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+for all options)</p>
+<p>Additionally, the following environment variables can be used to specify certain
+configuration values. They correspond to configuration keys found in the above
+link, but with a prefix. For example, <code>KAFKA_CONFIG_BOOTSTRAP_SERVERS</code>
+corresponds to <code>bootstrap.servers</code>.</p>
+<ul>
+<li>KAFKA_CONFIG_BOOTSTRAP_SERVERS (e.g. <code>localhost:9092,localhost:9093</code>)</li>
+<li>KAFKA_CONFIG_SASL_USERNAME</li>
+<li>KAFKA_CONFIG_SASL_PASSWORD</li>
+<li>KAFKA_CONFIG_SECURITY_PROTOCOL</li>
+<li>KAFKA_CONFIG_SASL_MECHANISM</li>
+</ul>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
 
 
 <div class="doc doc-object doc-class">
@@ -1109,135 +1140,23 @@
 
 
 
-<h2 id="aineko.ConfigLoader" class="doc doc-heading">
-          <code>aineko.ConfigLoader</code>
+<h3 id="aineko.config.DEFAULT_KAFKA_CONFIG" class="doc doc-heading">
+          <code>DEFAULT_KAFKA_CONFIG</code>
 
 
-</h2>
+</h3>
 
 
-  <div class="doc doc-contents first">
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="aineko.config.BaseConfig">BaseConfig</span></code></p>
 
   
-      <p>Class to read yaml config files.</p>
-
-
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>pipeline_config_file</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>path of pipeline config file. Defaults</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <p><strong>Attributes:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>pipeline_config_file</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>path to the pipeline configuration file</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><code>config_schema</code></td>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config" href="../config/#aineko.models.config_schema.Config">Config</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Pydantic model to validate a pipeline config</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <p><strong>Methods:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-          <tr>
-            <td><code>load_config</code></td>
-            <td>
-              <div class="doc-md-description">
-                <p>loads and validates the pipeline config from a yaml file</p>
-              </div>
-            </td>
-          </tr>
-    </tbody>
-  </table>
+      <p>Kafka configuration.</p>
 
             <details class="quote">
-              <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 16</span>
-<span class="normal"> 17</span>
-<span class="normal"> 18</span>
-<span class="normal"> 19</span>
-<span class="normal"> 20</span>
-<span class="normal"> 21</span>
-<span class="normal"> 22</span>
-<span class="normal"> 23</span>
-<span class="normal"> 24</span>
-<span class="normal"> 25</span>
-<span class="normal"> 26</span>
-<span class="normal"> 27</span>
-<span class="normal"> 28</span>
-<span class="normal"> 29</span>
-<span class="normal"> 30</span>
-<span class="normal"> 31</span>
-<span class="normal"> 32</span>
-<span class="normal"> 33</span>
-<span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
+              <summary>Source code in <code>aineko/config.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 41</span>
 <span class="normal"> 42</span>
 <span class="normal"> 43</span>
 <span class="normal"> 44</span>
@@ -1300,123 +1219,70 @@
 <span class="normal">101</span>
 <span class="normal">102</span>
 <span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ConfigLoader</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read yaml config files.</span>
+<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">DEFAULT_KAFKA_CONFIG</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kafka configuration.&quot;&quot;&quot;</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        pipeline_config_file: path of pipeline config file. Defaults</span>
-<span class="sd">        to `DEFAULT_PIPELINE_CONFIG`.</span>
+    <span class="c1"># Default Kafka broker settings</span>
+    <span class="n">BROKER_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;bootstrap.servers&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost:9092&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        pipeline_config_file (str): path to the pipeline configuration file</span>
-<span class="sd">        config_schema (Config): Pydantic model to validate a pipeline config</span>
+    <span class="n">kafka_config</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;KAFKA_CONFIG&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">BROKER_CONFIG</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">kafka_config</span><span class="p">))</span>
 
-<span class="sd">    Methods:</span>
-<span class="sd">        load_config: loads and validates the pipeline config from a yaml file</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Override these fields if set</span>
+    <span class="n">OVERRIDABLES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;KAFKA_CONFIG_BOOTSTRAP_SERVERS&quot;</span><span class="p">:</span> <span class="s2">&quot;bootstrap.servers&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;KAFKA_CONFIG_SASL_USERNAME&quot;</span><span class="p">:</span> <span class="s2">&quot;sasl.username&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;KAFKA_CONFIG_SASL_PASSWORD&quot;</span><span class="p">:</span> <span class="s2">&quot;sasl.password&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;KAFKA_CONFIG_SECURITY_PROTOCOL&quot;</span><span class="p">:</span> <span class="s2">&quot;security.protocol&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;KAFKA_CONFIG_SASL_MECHANISM&quot;</span><span class="p">:</span> <span class="s2">&quot;sasl.mechanism&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">env</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">OVERRIDABLES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">BROKER_CONFIG</span><span class="p">[</span><span class="n">config</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pipeline_config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize ConfigLoader.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span> <span class="o">=</span> <span class="n">pipeline_config_file</span> <span class="ow">or</span> <span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;DEFAULT_PIPELINE_CONFIG&quot;</span>
-        <span class="p">)</span>
+    <span class="c1"># Config for default kafka consumer</span>
+    <span class="n">CONSUMER_CONFIG</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="o">**</span><span class="n">BROKER_CONFIG</span><span class="p">,</span>
+        <span class="s2">&quot;auto.offset.reset&quot;</span><span class="p">:</span> <span class="s2">&quot;earliest&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
 
-        <span class="c1"># Setup config schema</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config_schema</span> <span class="o">=</span> <span class="n">Config</span>
+    <span class="c1"># Config for default kafka producer</span>
+    <span class="n">PRODUCER_CONFIG</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">BROKER_CONFIG</span><span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load and validate the pipeline config.</span>
+    <span class="c1"># Default dataset config</span>
+    <span class="n">DATASET_PARAMS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># One single partition for each dataset</span>
+        <span class="s2">&quot;num_partitions&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="c1"># No replication</span>
+        <span class="s2">&quot;replication_factor&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="c1"># Keep messages for 7 days</span>
+            <span class="s2">&quot;retention.ms&quot;</span><span class="p">:</span> <span class="mi">1000</span>
+            <span class="o">*</span> <span class="mi">60</span>
+            <span class="o">*</span> <span class="mi">60</span>
+            <span class="o">*</span> <span class="mi">24</span>
+            <span class="o">*</span> <span class="mi">7</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
 
-<span class="sd">        Raises:</span>
-<span class="sd">            ValidationError: If the config does not match the schema</span>
+    <span class="c1"># Default Kafka consumer settings</span>
+    <span class="c1"># Timeout for kafka consumer polling (seconds)</span>
+    <span class="n">CONSUMER_TIMEOUT</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Max number of messages to retreive when getting the last message</span>
+    <span class="n">CONSUMER_MAX_MESSAGES</span> <span class="o">=</span> <span class="mi">1000000</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            The pipeline config as a dictionary</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">)</span>
+    <span class="c1"># Default Kafka producer settings</span>
+    <span class="c1"># Producer overridables</span>
+    <span class="c1"># See: https://kafka.apache.org/documentation/#producerconfigs</span>
+    <span class="c1"># Empty list means no overridable settings</span>
+    <span class="n">PRODUCER_OVERRIDABLES</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: ignore</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">Config</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                <span class="s2">&quot;Schema validation failed for pipeline `</span><span class="si">%s</span><span class="s2">` loaded from </span><span class="si">%s</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;See detailed error below.&quot;</span><span class="p">,</span>
-                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">raise</span> <span class="n">e</span>
-
-        <span class="k">return</span> <span class="n">config</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">_update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">_update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">_update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">_update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="k">def</span> <span class="nf">_update_params</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update value with params.</span>
-
-<span class="sd">        Recursively calls the method if value is a list or dictionary until it</span>
-<span class="sd">        reaches a string or int. If string then formats the str with variable</span>
-<span class="sd">        mapping in params dict.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            value: value to update</span>
-<span class="sd">            params: params to update value with</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            object with updated values (dict, list, str, or int)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">new_dict_val</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">new_dict_val</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_params</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">new_dict_val</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">new_list_val</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
-                <span class="n">new_list_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_params</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">new_list_val</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">value</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="n">value</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Invalid value type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;Expected dict, list, str, or int.&quot;</span>
-        <span class="p">)</span>
+    <span class="c1"># Default datasets to create for every pipeline</span>
+    <span class="n">LOGGING_DATASET</span> <span class="o">=</span> <span class="s2">&quot;logging&quot;</span>
+    <span class="n">DATASETS</span> <span class="o">=</span> <span class="p">[</span><span class="n">LOGGING_DATASET</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
             </details>
 
@@ -1433,166 +1299,13 @@
 
 
 
-<div class="doc doc-object doc-function">
 
+  </div>
 
-
-
-<h3 id="aineko.ConfigLoader.__init__" class="doc doc-heading">
-          <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">pipeline_config_file</span><span class="p">)</span></code>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Initialize ConfigLoader.</p>
-
-          <details class="quote">
-            <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">pipeline_config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize ConfigLoader.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span> <span class="o">=</span> <span class="n">pipeline_config_file</span> <span class="ow">or</span> <span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="s2">&quot;DEFAULT_PIPELINE_CONFIG&quot;</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Setup config schema</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">config_schema</span> <span class="o">=</span> <span class="n">Config</span>
-</code></pre></div></td></tr></table></div>
-          </details>
   </div>
 
 </div>
 
-
-<div class="doc doc-object doc-function">
-
-
-
-
-<h3 id="aineko.ConfigLoader.load_config" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">load_config</span><span class="p">()</span></code>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Load and validate the pipeline config.</p>
-
-
-
-  <p><strong>Raises:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code><span title="pydantic.ValidationError">ValidationError</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>If the config does not match the schema</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>dict</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The pipeline config as a dictionary</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-          <details class="quote">
-            <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and validate the pipeline config.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        ValidationError: If the config does not match the schema</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The pipeline config as a dictionary</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">)</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">Config</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;Schema validation failed for pipeline `</span><span class="si">%s</span><span class="s2">` loaded from </span><span class="si">%s</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;See detailed error below.&quot;</span><span class="p">,</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">raise</span> <span class="n">e</span>
-
-    <span class="k">return</span> <span class="n">config</span>
-</code></pre></div></td></tr></table></div>
-          </details>
-  </div>
-
-</div>
 
 
 
@@ -1624,7 +1337,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../config/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Pipeline Config">
+          <a href="../node_implementation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Building a Node">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1634,20 +1347,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Pipeline Config
+                Building a Node
               </div>
             </div>
           </a>
         
         
           
-          <a href="../runner/" class="md-footer__link md-footer__link--next" aria-label="Next: Runner">
+          <a href="../../api_reference/abstract_node/" class="md-footer__link md-footer__link--next" aria-label="Next: AbstractNode">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Runner
+                AbstractNode
               </div>
             </div>
             <div class="md-footer__button md-icon">
