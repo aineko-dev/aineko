@@ -10,8 +10,10 @@ repos:
     hooks:
       # Trim trailing whitespace.
       - id: trailing-whitespace
+        exclude: docs/
       # Ensures that a file is either empty, or ends with one newline.
       - id: end-of-file-fixer
+        exclude: docs/
       # Protect specific branches from direct commits.
       - id: no-commit-to-branch
         args: [--branch, develop, --branch, production]

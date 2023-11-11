@@ -2,7 +2,7 @@
 
 Aineko uses [`kafka`](https://kafka.apache.org/documentation/) under the hood for sending messages between nodes. As part of running Aineko locally, we recommend running a local `kafka` and `zookeeper` server using
 
-:
+:   
     ```bash
     $ poetry run aineko service start
     ```
