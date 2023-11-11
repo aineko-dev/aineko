@@ -273,24 +273,6 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../troubleshooting/" class="md-tabs__link">
-          
-  
-  Troubleshooting
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
         <a href="../../examples/aineko-dream/" class="md-tabs__link">
           
   
@@ -307,7 +289,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../aineko_cloud/" class="md-tabs__link">
+      <a href="https://cloud-docs.aineko.dev" class="md-tabs__link">
         
   
     
@@ -464,6 +446,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing_docs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Aineko Docs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -582,7 +584,7 @@
         
   
   <span class="md-ellipsis">
-    Building a Pipeline
+    Pipeline Configuration
   </span>
   
 
@@ -894,7 +896,7 @@
             
   
   <span class="md-ellipsis">
-    Troubleshooting
+    Examples
   </span>
   
 
@@ -903,74 +905,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            Troubleshooting
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Python Versions
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Examples
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Examples
           </label>
@@ -1009,7 +943,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../aineko_cloud/" class="md-nav__link">
+      <a href="https://cloud-docs.aineko.dev" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1088,8 +1022,9 @@
 
 <h1 id="configuring-kafka">Configuring Kafka</h1>
 <p>Aineko uses <a href="https://kafka.apache.org/documentation/"><code>kafka</code></a> under the hood for sending messages between nodes. As part of running Aineko locally, we recommend running a local <code>kafka</code> and <code>zookeeper</code> server using</p>
-<div class="highlight"><pre><span></span><code>poetry run aineko service start
-</code></pre></div>
+<p>:
+    <div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>service<span class="w"> </span>start
+</code></pre></div></p>
 <p>To use a different <code>kafka</code> cluster, such as in deployment settings, we allow for configuring of <code>kafka</code> parameters through environment variables. Typically, you would want to modify configuration for the <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a> and <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> to point to the desired cluster.</p>
 <p>See below for default <code>kafka</code> configuration that ships with <code>aineko</code> and how to override them.</p>
 
@@ -1419,7 +1354,7 @@ corresponds to <code>bootstrap.servers</code>.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.expand", "navigation.tabs", "toc.follow"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.expand", "navigation.tabs", "toc.follow", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.81fa17fe.min.js"></script>
