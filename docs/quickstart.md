@@ -23,7 +23,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 ### Install Aineko
 
-:
+:   
     ```
     $ pip install aineko
     ```
@@ -46,7 +46,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested!
 
-:
+:   
     ```
     $ aineko create
 
@@ -58,7 +58,7 @@ You will see the following prompts as `aineko` tries to create a project directo
 
 ### Install dependencies in the new pipeline
 
-:
+:   
     ```
     $ cd my_awesome_pipeline
     $ poetry install
@@ -66,7 +66,7 @@ You will see the following prompts as `aineko` tries to create a project directo
 
 ### Start Aineko background services
 
-:
+:   
     ```
     $ poetry run aineko service start
 
@@ -82,7 +82,7 @@ You will see the following prompts as `aineko` tries to create a project directo
 
 ### Start the template pipeline
 
-:
+:   
     ```
     $ poetry run aineko run ./conf/pipeline.yml
 
@@ -96,7 +96,7 @@ You will see the following prompts as `aineko` tries to create a project directo
 
 To view messages running in one of the user-defined datasets:
 
-:
+:   
     ```
     $ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
 
@@ -106,7 +106,7 @@ To view messages running in one of the user-defined datasets:
 
 Alternatively, to view logs stored in the built-in `logging` dataset:
 
-:
+:   
     ```
     $ poetry run aineko stream --dataset logging --from-beginning
 
@@ -119,7 +119,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
 ### Stop Aineko background services
 
-:
+:   
     ```
     $ poetry run aineko service stop
     ```
@@ -141,7 +141,7 @@ To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_gui
 
 Using the aineko cli, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
 
-:
+:   
     ```sh
     $ poetry run aineko visualize --browser ./conf/pipeline.yml
     ```

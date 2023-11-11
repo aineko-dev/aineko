@@ -6,7 +6,7 @@ Here are the steps to get started quickly
 
 ## Install Aineko from source
 
-:
+:   
     ```bash
     # install poetry
     $ curl -sSL https://install.python-poetry.org | python3 -
@@ -26,7 +26,7 @@ We use [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) to ge
 
 `MkDocs` comes with a tool to display local documentation as it would on the site, allowing you to view changes as you make them. Set up a local server that automatically updates using:
 
-:
+:   
     ```bash
     $ poetry run mkdocs serve
     ```
@@ -37,7 +37,7 @@ Navigate to [localhost:8000](http://localhost:8000) to see the documentation sit
 
 Once you're happy with your changes, run our linters to keep any additional code stylistically consistent.
 
-:
+:   
     ```bash
     $ make lint
     ```

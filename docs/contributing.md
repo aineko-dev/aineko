@@ -6,7 +6,7 @@ Here are the steps to get started quickly:
 
 ## Install Aineko from source
 
-:
+:   
     ```bash
     # install poetry
     $ curl -sSL https://install.python-poetry.org | python3 -
@@ -24,7 +24,7 @@ We highly encourage you to validate your changes by testing the project creation
 
 First, update poetry to use your local aineko repository.
 
-:
+:   
     ```bash
     $ poetry lock
     $ poetry install
@@ -32,14 +32,14 @@ First, update poetry to use your local aineko repository.
 
 Next, create an Aineko project in the parent directory.
 
-:
+:   
     ```bash
     $ poetry run aineko create --output-dir ../
     ```
 
 We need to update the create aineko project to use the local aineko repository. Go to `../my-awesome-pipeline/pyproject.toml` and update the following line.
 
-:
+:   
     ```bash title="pyproject.toml" linenums="8" hl_lines="3"
     [tool.poetry.dependencies]
     python = ">=3.10,<3.11"
@@ -52,7 +52,7 @@ Test if your changes worked by running the aineko pipeline and any other testing
 
 Finally, after you have make all the changes, it is good to validate that you adhered to our style guide and you did not break anything.
 
-:
+:   
     ```bash
     # Within aineko git repository
     make lint
