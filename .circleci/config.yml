@@ -12,6 +12,9 @@ workflows:
   continuous-integration:
     jobs:
       - python-checks:
+          filters:
+            branches:
+              ignore: develop
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
           markers: "not integration"
