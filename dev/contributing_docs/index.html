@@ -1054,28 +1054,35 @@
 <p>Thank you for your interest in contributing to this set of docs!</p>
 <p>Here are the steps to get started quickly</p>
 <h2 id="install-aineko-from-source">Install Aineko from source</h2>
-<p>:
-    <div class="highlight"><pre><span></span><code><span class="c1"># install poetry</span>
+<dl>
+<dd><div class="highlight"><pre><span></span><code><span class="c1"># install poetry</span>
 $<span class="w"> </span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://install.python-poetry.org<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-
 
 $<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/aineko-dev/aineko
 
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>aineko<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="w"> </span>docs
-</code></pre></div></p>
+</code></pre></div></dd>
+</dl>
 <h2 id="make-your-changes-to-aineko-docs">Make your changes to Aineko docs</h2>
 <p>Aineko raw documentation is in the form of markdown files found in the <code>aineko/docs</code> directory.</p>
 <p>We use <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a> to generate the documentation static site from markdown.</p>
 <h2 id="set-up-a-local-server-to-view-changes-live">Set up a local server to view changes live</h2>
-<p><code>MkDocs</code> comes with a tool to display local documentation as it would on the site, allowing you to view changes as you make them. Set up a local server that automatically updates using:</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>serve
-</code></pre></div></p>
+<dl>
+<dt><code>MkDocs</code> comes with a tool to display local documentation as it would on the site, allowing you to view changes as you make them. Set up a local server that automatically updates using:</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>serve
+</code></pre></div>
+</dd>
+</dl>
 <p>Navigate to <a href="http://localhost:8000">localhost:8000</a> to see the documentation site.</p>
 <h2 id="run-lint">Run lint</h2>
-<p>Once you're happy with your changes, run our linters to keep any additional code stylistically consistent.</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>lint
-</code></pre></div></p>
+<dl>
+<dt>Once you're happy with your changes, run our linters to keep any additional code stylistically consistent.</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>lint
+</code></pre></div>
+</dd>
+</dl>
 <h2 id="push-make-a-pr-and-see-you-on-github">Push, make a PR and see you on GitHub!</h2>
 <details class="question">
 <summary>How to make a PR?</summary>

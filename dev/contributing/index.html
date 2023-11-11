@@ -1054,43 +1054,52 @@
 <p>Thank you for your interest in contributing to <a href="https://github.com/aineko-dev/aineko">Aineko</a>!</p>
 <p>Here are the steps to get started quickly:</p>
 <h2 id="install-aineko-from-source">Install Aineko from source</h2>
-<p>:
-    <div class="highlight"><pre><span></span><code><span class="c1"># install poetry</span>
+<dl>
+<dd><div class="highlight"><pre><span></span><code><span class="c1"># install poetry</span>
 $<span class="w"> </span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://install.python-poetry.org<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-
 
 $<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/aineko-dev/aineko
 
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>aineko<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="w"> </span>dev,test
-</code></pre></div></p>
+</code></pre></div></dd>
+</dl>
 <h2 id="make-your-changes-to-aineko-source-code">Make your changes to Aineko source code</h2>
 <h2 id="test-using-aineko-pipeline">Test using Aineko pipeline</h2>
 <p>We highly encourage you to validate your changes by testing the project creation process end-to-end. This means validating the changes by running a lcoal pipeline that uses your local aineko repository.</p>
-<p>First, update poetry to use your local aineko repository.</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>lock
+<dl>
+<dt>First, update poetry to use your local aineko repository.</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>lock
 $<span class="w"> </span>poetry<span class="w"> </span>install
-</code></pre></div></p>
-<p>Next, create an Aineko project in the parent directory.</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>create<span class="w"> </span>--output-dir<span class="w"> </span>../
-</code></pre></div></p>
-<p>We need to update the create aineko project to use the local aineko repository. Go to <code>../my-awesome-pipeline/pyproject.toml</code> and update the following line.</p>
-<p>:
-    <div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">pyproject.toml</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
+</code></pre></div>
+</dd>
+<dt>Next, create an Aineko project in the parent directory.</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>create<span class="w"> </span>--output-dir<span class="w"> </span>../
+</code></pre></div>
+</dd>
+<dt>We need to update the create aineko project to use the local aineko repository. Go to <code>../my-awesome-pipeline/pyproject.toml</code> and update the following line.</dt>
+<dd>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">pyproject.toml</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">[</span>tool.poetry.dependencies<span class="o">]</span>
 <span class="nv">python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.10,&lt;3.11&quot;</span>
 <span class="hll"><span class="nv">aineko</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="nv">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;path/to/aineko/git/repo&gt;&quot;</span>,<span class="w"> </span><span class="nv">develop</span><span class="o">=</span>true<span class="o">}</span>
-</span></code></pre></div></td></tr></table></div></p>
+</span></code></pre></div></td></tr></table></div>
+</dd>
+</dl>
 <p>Test if your changes worked by running the aineko pipeline and any other testing methods that are relevant.</p>
 <h2 id="run-lints-and-tests">Run lints and tests</h2>
-<p>Finally, after you have make all the changes, it is good to validate that you adhered to our style guide and you did not break anything.</p>
-<p>:
-    <div class="highlight"><pre><span></span><code><span class="c1"># Within aineko git repository</span>
+<dl>
+<dt>Finally, after you have make all the changes, it is good to validate that you adhered to our style guide and you did not break anything.</dt>
+<dd>
+<div class="highlight"><pre><span></span><code><span class="c1"># Within aineko git repository</span>
 make<span class="w"> </span>lint
 make<span class="w"> </span>unit-test
 make<span class="w"> </span>integration-test
-</code></pre></div></p>
+</code></pre></div>
+</dd>
+</dl>
 <h2 id="push-make-a-pr-and-see-you-on-github">Push, make a PR and see you on Github!</h2>
 
 

@@ -1150,9 +1150,10 @@
 </ul>
 </details>
 <h3 id="install-aineko">Install Aineko</h3>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ pip install aineko
-</code></pre></div></p>
+<dl>
+<dd><div class="highlight"><pre><span></span><code>$ pip install aineko
+</code></pre></div></dd>
+</dl>
 <details class="tip">
 <summary>Having trouble getting the correct version of python?</summary>
 <p>We recommend using <a href="https://github.com/pyenv/pyenv?tab=readme-ov-file#getting-pyenv">pyenv</a> to manage your Python versions. Once you have pyenv installed, you can run the following commands in your project directory to install Python 3.10.</p>
@@ -1165,23 +1166,27 @@ Python<span class="w"> </span><span class="m">3</span>.10.12
 <p>Pyenv is a great tool for managing Python versions, but it can be a bit tricky to get it set up correctly. If you're having trouble, check out the <a href="https://github.com/pyenv/pyenv?tab=readme-ov-file#usage">pyenv documentation</a> or <a href="https://realpython.com/intro-to-pyenv/">this tutorial</a>. If you're still having trouble, feel free to reach out to us on <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ">Slack</a>!</p>
 </details>
 <h3 id="create-a-template-pipeline-with-the-cli">Create a template pipeline with the cli</h3>
-<p>You will see the following prompts as <code>aineko</code> tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested!</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ aineko create
+<dl>
+<dt>You will see the following prompts as <code>aineko</code> tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested!</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$ aineko create
 
 [1/4] project_name (My Awesome Pipeline):
 [2/4] project_slug (my_awesome_pipeline):
 [3/4] project_description (Behold my awesome pipeline!):
 [4/4] pipeline_slug (test-aineko-pipeline):
-</code></pre></div></p>
+</code></pre></div>
+</dd>
+</dl>
 <h3 id="install-dependencies-in-the-new-pipeline">Install dependencies in the new pipeline</h3>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ cd my_awesome_pipeline
+<dl>
+<dd><div class="highlight"><pre><span></span><code>$ cd my_awesome_pipeline
 $ poetry install
-</code></pre></div></p>
+</code></pre></div></dd>
+</dl>
 <h3 id="start-aineko-background-services">Start Aineko background services</h3>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ poetry run aineko service start
+<dl>
+<dd><div class="highlight"><pre><span></span><code>$ poetry run aineko service start
 
 Container zookeeper  Creating
 Container zookeeper  Created
@@ -1191,38 +1196,45 @@ Container zookeeper  Starting
 Container zookeeper  Started
 Container broker  Starting
 Container broker  Started
-</code></pre></div></p>
+</code></pre></div></dd>
+</dl>
 <h3 id="start-the-template-pipeline">Start the template pipeline</h3>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ poetry run aineko run ./conf/pipeline.yml
+<dl>
+<dd><div class="highlight"><pre><span></span><code>$ poetry run aineko run ./conf/pipeline.yml
 
 INFO - Application is starting.
 INFO - Creating dataset: aineko-pipeline.sequence: {&#39;type&#39;: &#39;kafka_stream&#39;}
 INFO - All datasets created.
 INFO worker.py:1664 -- Started a local Ray instance.
-</code></pre></div></p>
+</code></pre></div></dd>
+</dl>
 <h3 id="check-the-data-being-streamed">Check the data being streamed</h3>
-<p>To view messages running in one of the user-defined datasets:</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
+<dl>
+<dt>To view messages running in one of the user-defined datasets:</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
 
 {&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 1}
 {&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 2}
-</code></pre></div></p>
-<p>Alternatively, to view logs stored in the built-in <code>logging</code> dataset:</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset logging --from-beginning
+</code></pre></div>
+</dd>
+<dt>Alternatively, to view logs stored in the built-in <code>logging</code> dataset:</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset logging --from-beginning
 
 {&quot;timestamp&quot;: &quot;2023-11-10 17:46:15&quot;, &quot;dataset&quot;: &quot;logging&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sum&quot;, &quot;message&quot;: {&quot;log&quot;: &quot;Received input: 1. Adding 1...&quot;, &quot;level&quot;: &quot;info&quot;}}
-</code></pre></div></p>
+</code></pre></div>
+</dd>
+</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset <code>logging</code> does not.</p>
 </div>
 <h3 id="stop-aineko-background-services">Stop Aineko background services</h3>
-<p>:
-    <div class="highlight"><pre><span></span><code>$ poetry run aineko service stop
-</code></pre></div></p>
+<dl>
+<dd><div class="highlight"><pre><span></span><code>$ poetry run aineko service stop
+</code></pre></div></dd>
+</dl>
 <p><strong>So that's it to get an Aineko pipeline running! We hope that was smooth for you!</strong></p>
 <details class="question">
 <summary>What does the above output mean?</summary>
@@ -1233,10 +1245,13 @@ A Dataset can be thought of as a mailbox. Nodes pass messages to this mailbox, t
 </details>
 <p>To learn more about Pipeline, Datasets and Nodes, see <a href="../developer_guide/concepts/">concepts</a>.</p>
 <h3 id="visualizing-the-pipeline">Visualizing the Pipeline</h3>
-<p>Using the aineko cli, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.</p>
-<p>:
-    <div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>visualize<span class="w"> </span>--browser<span class="w"> </span>./conf/pipeline.yml
-</code></pre></div></p>
+<dl>
+<dt>Using the aineko cli, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.</dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>visualize<span class="w"> </span>--browser<span class="w"> </span>./conf/pipeline.yml
+</code></pre></div>
+</dd>
+</dl>
 <div class="admonition abstract">
 <p class="admonition-title">Visualization output</p>
 <pre class="mermaid"><code>flowchart LR
