@@ -3,39 +3,38 @@ description: What is Aineko?
 ---
 
 # Aineko
-[![CI](https://circleci.com/gh/aineko-dev/aineko/tree/develop.svg?style=svg)](https://app.circleci.com/pipelines/github/aineko-dev)<br>
+
+[![CI](https://circleci.com/gh/aineko-dev/aineko/tree/develop.svg?style=svg)](https://app.circleci.com/pipelines/github/aineko-dev)
 [![pypi](https://img.shields.io/pypi/v/aineko.svg)](https://pypi.python.org/pypi/aineko)
-[![downloads](https://static.pepy.tech/badge/aineko/month)](https://pepy.tech/project/aineko)<br>
+[![pypi](https://img.shields.io/pypi/pyversions/aineko)](https://pypi.python.org/pypi/aineko)
+[![downloads](https://static.pepy.tech/badge/aineko/month)](https://pepy.tech/project/aineko)
 [![license](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/aineko-dev/aineko/blob/develop/LICENSE)
 
-**Aineko is a Python framework for building powerful data applications, limited only by your imagination! Focus on **transformations and business logic**, leave the rest to Aineko.**
 
-[Build an Application &ensp; →](./quickstart.md){ .md-button .md-button--primary } &ensp; in minutes
+## What is Aineko?
 
+**Aineko is a python framework for building powerful data applications quickly.**
 
-??? info "What is Aineko?"
-    Under the hood, Aineko automatically configures tooling needed for production-ready data apps, like message brokers, distributed compute, and more. This allows you to focus on building your application instead of spending time with configuration and infrastructure.
+??? question "How does Aineko work under the hood?"
+    Aineko automatically configures tooling needed for production-ready data apps, like message brokers, distributed compute, and more. This allows you to focus on building your application instead of spending time with configuration and infrastructure.
 
-## Main Features
+## Why use Aineko?
 
-| Powerful Pipelines | |
-| --- | --- |
+| Main Features        | |
+| ----------------- | --- |
 | **Quick to Code** | Increase speed to develop applications by 100% to 200%.* |
-| **Intuitive** | Codified best practices. Less time reading docs. Less time debugging. |
-| **Robust** | Production-ready from the get-go. Scale with ease. |
-| |
-| **Flexible Nodes**  | |
-| **Composable** | Reuse nodes you've built. Reuse python code. Save time by *not* re-inventing the wheel. |
-| **Stateful** | Work with simple logic. Work with complex logic. Aineko supports it all. |
-| **Code Faster** | Skip the boring stuff with pre-built nodes that work with popular data sources like REST APIs. |
-| |
-| **Delightful Datasets** || |
+| **Always Robust** | Production-ready from the get-go. Scale with ease. |
+| **Stateful Computation** | Aineko supports long-running stateful computations. |
+| **Code Faster** | Use pre-built nodes that work with popular data sources like REST APIs. |
+| **Composable** | Scale your project easily with engineering best practices. |
 | **Fast** | Achieve microsecond latency between nodes.* |
 | **Scalable** | Process billions or records per day with ease.* |
-| **Governance** | Easily work with different versions of data across pipelines and environments. |
 
 *Estimate based on development experience by an internal team.
 
+## Try Aineko
+
+[Build your first Aineko Application in minutes!&ensp; →](./quickstart.md){ .md-button .md-button--primary }
 
 ## Roadmap
 
