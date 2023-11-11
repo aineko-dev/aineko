@@ -1,16 +1,17 @@
 ---
 description: Fastest way to get an Aineko pipeline up and running
 ---
-## Technical Dependencies
+
+## Get started with Aineko
+
+### Technical Dependencies
 
 1. [Docker](https://www.docker.com/get-started/) or [Docker Desktop](htps://www.docker.com/products/docker-desktop)
 2. [Poetry](https://python-poetry.org/docs/#installation) (a python dependency manager)
 3. [Python](https://www.python.org/downloads/) (version 3.10)
 4. [Pip](https://pip.pypa.io/en/stable/installation/) (a python package manager)
 
-## Get started
-
-!!! note "Check your dependencies"
+??? note "Check your dependencies before starting"
     It's important to make sure you have the correct dependencies installed. The only dependency which requires a specific version is Python. The other dependencies should work with any recent version.
 
     Let's check each dependency one by one. You can run the following commands in your terminal to check each dependency.
@@ -20,66 +21,108 @@ description: Fastest way to get an Aineko pipeline up and running
     * `pip --version` should return something like `pip 23.0.1 from xxx/python3.10/site-packages/pip (python 3.10)`
     * `poetry --version` should return something like `Poetry (version 1.6.1)`
 
-### Step 1: Install Aineko
+### Install Aineko
 
-```
-pip install aineko
-```
+:
+    ```
+    $ pip install aineko
+    ```
 
-### Step 2: Create a template pipeline with aineko cli
+??? tip "Having trouble getting the correct version of python?"
 
-```
-aineko create
-```
+    We recommend using [pyenv](https://github.com/pyenv/pyenv?tab=readme-ov-file#getting-pyenv) to manage your Python versions. Once you have pyenv installed, you can run the following commands in your project directory to install Python 3.10.
+
+    ```bash
+    $ pyenv install 3.10
+    $ pyenv local 3.10
+    $ python --version
+
+    Python 3.10.12
+    ```
+
+    Pyenv is a great tool for managing Python versions, but it can be a bit tricky to get it set up correctly. If you're having trouble, check out the [pyenv documentation](https://github.com/pyenv/pyenv?tab=readme-ov-file#usage) or [this tutorial](https://realpython.com/intro-to-pyenv/). If you're still having trouble, feel free to reach out to us on [Slack](https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ)!
+
+### Create a template pipeline with the cli
 
 You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested!
 
-```
-  [1/4] project_name (My Awesome Pipeline):
-  [2/4] project_slug (my_awesome_pipeline):
-  [3/4] project_description (Behold my awesome pipeline!):
-  [4/4] pipeline_slug (test-aineko-pipeline):
-```
+:
+    ```
+    $ aineko create
 
-### Step 3: Install dependencies in the new pipeline
+    [1/4] project_name (My Awesome Pipeline):
+    [2/4] project_slug (my_awesome_pipeline):
+    [3/4] project_description (Behold my awesome pipeline!):
+    [4/4] pipeline_slug (test-aineko-pipeline):
+    ```
 
-```
-cd my_awesome_pipeline
-poetry install
-```
+### Install dependencies in the new pipeline
 
-### Step 4: Start the Aineko background services
+:
+    ```
+    $ cd my_awesome_pipeline
+    $ poetry install
+    ```
 
-```
-poetry run aineko service start
-```
+### Start Aineko background services
 
-### Step 5: Start the template pipeline
+:
+    ```
+    $ poetry run aineko service start
 
-```
-poetry run aineko run ./conf/pipeline.yml
-```
+    Container zookeeper  Creating
+    Container zookeeper  Created
+    Container broker  Creating
+    Container broker  Created
+    Container zookeeper  Starting
+    Container zookeeper  Started
+    Container broker  Starting
+    Container broker  Started
+    ```
 
-### Step 6: Check the data being streamed
+### Start the template pipeline
+
+:
+    ```
+    $ poetry run aineko run ./conf/pipeline.yml
+
+    INFO - Application is starting.
+    INFO - Creating dataset: aineko-pipeline.sequence: {'type': 'kafka_stream'}
+    INFO - All datasets created.
+    INFO worker.py:1664 -- Started a local Ray instance.
+    ```
+
+### Check the data being streamed
 
 To view messages running in one of the user-defined datasets:
-```
-poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-start
-```
+
+:
+    ```
+    $ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
+
+    {"timestamp": "2023-11-10 17:27:20", "dataset": "sequence", "source_pipeline": "test-aineko-pipeline", "source_node": "sequence", "message": 1}
+    {"timestamp": "2023-11-10 17:27:20", "dataset": "sequence", "source_pipeline": "test-aineko-pipeline", "source_node": "sequence", "message": 2}
+    ```
 
 Alternatively, to view logs stored in the built-in `logging` dataset:
-```
-poetry run aineko stream --dataset logging --from-start
-```
 
-Note: user-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` does not.
+:
+    ```
+    $ poetry run aineko stream --dataset logging --from-beginning
+
+    {"timestamp": "2023-11-10 17:46:15", "dataset": "logging", "source_pipeline": "test-aineko-pipeline", "source_node": "sum", "message": {"log": "Received input: 1. Adding 1...", "level": "info"}}
+    ```
+
+!!! note
+    User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` does not.
 
 
-### Step 7: Stop the Aineko background services
+### Stop Aineko background services
 
-```
-poetry run aineko service stop
-```
+:
+    ```
+    $ poetry run aineko service stop
+    ```
 
 **So that's it to get an Aineko pipeline running! We hope that was smooth for you!**
 
@@ -96,19 +139,19 @@ To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_gui
 
 ### Visualizing the Pipeline
 
-Using the aineko cli, you can also see the above pipeline rendered in the browser:
+Using the aineko cli, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
 
-```sh
-poetry run aineko visualize --browser ./conf/pipeline.yml
-```
+:
+    ```sh
+    $ poetry run aineko visualize --browser ./conf/pipeline.yml
+    ```
 
-```mermaid
-flowchart LR
-classDef datasetClass fill:#87CEEB
-classDef nodeClass fill:#eba487
-N_sequence((sequence)):::nodeClass -->  T_test_sequence[test_sequence]:::datasetClass
-T_test_sequence[test_sequence]:::datasetClass -->  N_sum((sum)):::nodeClass
-N_sum((sum)):::nodeClass -->  T_test_sum[test_sum]:::datasetClass
-```
-
-As you iterate and augment your Aineko pipeline, you can use this command as a quick check to visualize your evolving pipeline and ensure that it has the intended architecture.
+!!! abstract "Visualization output"
+    ```mermaid
+    flowchart LR
+    classDef datasetClass fill:#87CEEB
+    classDef nodeClass fill:#eba487
+    N_sequence((sequence)):::nodeClass -->  T_test_sequence[test_sequence]:::datasetClass
+    T_test_sequence[test_sequence]:::datasetClass -->  N_sum((sum)):::nodeClass
+    N_sum((sum)):::nodeClass -->  T_test_sum[test_sum]:::datasetClass
+    ```

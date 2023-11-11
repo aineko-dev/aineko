@@ -16,6 +16,7 @@ theme:
     - navigation.expand
     - navigation.tabs
     - toc.follow
+    - content.code.annotate
 extra_css:
   - stylesheets/extra.css
 extra:
@@ -50,6 +51,8 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
 
 plugins:
   - glightbox
@@ -70,6 +73,7 @@ nav:
       - 'index.md'
       - 'quickstart.md'
       - 'contributing.md'
+      - 'contributing_docs.md'
   - Developer Guide:
       - 'developer_guide/concepts.md'
       - 'developer_guide/aineko_project.md'
@@ -84,8 +88,6 @@ nav:
       - 'api_reference/config.md'
       - 'api_reference/config_loader.md'
       - 'api_reference/runner.md'
-  - Troubleshooting:
-      - 'troubleshooting.md'
   - Examples:
       - examples/aineko-dream.md
-  - Aineko Cloud: 'aineko_cloud.md'
+  - Aineko Cloud: 'https://cloud-docs.aineko.dev'

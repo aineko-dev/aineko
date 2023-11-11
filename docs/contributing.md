@@ -4,49 +4,60 @@ Thank you for your interest in contributing to [Aineko](https://github.com/ainek
 
 Here are the steps to get started quickly:
 
-**Step 1: Install Aineko from source**
+## Install Aineko from source
 
-```bash
-# install poetry
-curl -sSL https://install.python-poetry.org | python3 -
+:
+    ```bash
+    # install poetry
+    $ curl -sSL https://install.python-poetry.org | python3 -
 
-git clone https://github.com/aineko-dev/aineko
+    $ git clone https://github.com/aineko-dev/aineko
 
-cd aineko && poetry install
-```
+    $ cd aineko && poetry install --with dev,test
+    ```
 
-**Step 2: Make your changes to Aineko**
+## Make your changes to Aineko source code
 
-**Step 3: Have your own pipeline or create one**
+## Test using Aineko pipeline
 
-We highly encourage you to validate your changes by testing E2E. This means to validate the changes with your pipeline by pointing `aineko` to the dev folder.
+We highly encourage you to validate your changes by testing the project creation process end-to-end. This means validating the changes by running a lcoal pipeline that uses your local aineko repository.
 
-```bash
-# using poetry is important so that we are actually invoking the dev version of Aineko
+First, update poetry to use your local aineko repository.
 
-poetry run aineko create
-```
+:
+    ```bash
+    $ poetry lock
+    $ poetry install
+    ```
 
-**Step 4: Go to `pyproject.toml` and apply the following changes:**
+Next, create an Aineko project in the parent directory.
 
-This will ensure your aineko is pointing to the repository you made changes to
+:
+    ```bash
+    $ poetry run aineko create --output-dir ../
+    ```
 
-```bash
--aineko = "^0.2.3"
-+aineko = { path = "<path/to/aineko/git/repo>", develop=true}
-```
+We need to update the create aineko project to use the local aineko repository. Go to `../my-awesome-pipeline/pyproject.toml` and update the following line.
 
-**Step 5: Test your changes - did it work?**
+:
+    ```bash title="pyproject.toml" linenums="8" hl_lines="3"
+    [tool.poetry.dependencies]
+    python = ">=3.10,<3.11"
+    aineko = { path = "<path/to/aineko/git/repo>", develop=true}
+    ```
 
-**Step 6: Run lints and tests**
+Test if your changes worked by running the aineko pipeline and any other testing methods that are relevant.
+
+## Run lints and tests
 
 Finally, after you have make all the changes, it is good to validate that you adhered to our style guide and you did not break anything.
 
-```bash
-# Within aineko git repository
-make lint
-make unit-test
-make integration-test
-```
+:
+    ```bash
+    # Within aineko git repository
+    make lint
+    make unit-test
+    make integration-test
+    ```
 
-**Step 7: Push, make a PR and see you on Github!**
+## Push, make a PR and see you on Github!

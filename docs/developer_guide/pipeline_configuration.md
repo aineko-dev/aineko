@@ -1,8 +1,10 @@
-# Building a Pipeline
+# Pipeline Configuration
 
 At a high-level, building a pipeline requires defining a pipeline and implementing at least a node.
 
 ## Defining a pipeline
+
+The simplest possible pipeline would consist of a node and a dataset as shown below.
 
 ```mermaid
 flowchart LR
@@ -10,7 +12,7 @@ classDef datasetClass fill:#87CEEB
 classDef nodeClass fill:#eba487
 N_sequence((sequence)):::nodeClass -->  T_test_sequence[test_sequence]:::datasetClass
 ```
-For the sake of simplicity, we reference a truncated version of the pipeline definition below:
+For the sake of simplicity, we reference a truncated version of the pipeline definition:
 
 ???+ example "Example `pipeline.yml` configuration file"
     ```yaml
@@ -54,11 +56,16 @@ This is the top-level key in a pipeline configuration file, a configuration map 
 
 #### `default_node_settings`
 
-This optional section can be used to set common default settings for all nodes in the pipeline. These settings can be overridden at the node level. Currently, the main setting that can be set here is the number of CPUs allocated to a node, `num_cpus`.
+This optional section can be used to set common default settings for all nodes in the pipeline. These settings are passed into [ray actors](https://docs.ray.io/en/latest/ray-core/actors.html) as parameters, and accept any of the arguments found [here](https://docs.ray.io/en/latest/ray-core/api/doc/ray.remote.html#ray.remote). The most common one we usually use is `num_cpus`.
+
 
 | Key | Required | Type | Description |
 | --- | -------- | ---- | ----------- |
+| `<setting>`| N | multiple | Any of the parameters found [here](https://docs.ray.io/en/latest/ray-core/api/doc/ray.remote.html#ray.remote). |
 | `num_cpus` | N | float | Defines default number of CPUs for a node. Can be less than one. |
+
+
+These can be overridden at the node level.
 
 #### `nodes`
 
@@ -68,13 +75,13 @@ This section defines the compute nodes for a pipeline.
 | --- | -------- | ---- | ----------- |
 | `<name of node>` | Y | map | Defines map of node names to node structures in the pipeline. |
 
-##### `<name of node>`
+##### `<node_name>`
 
-A particular node instance in the pipeline, defined by a unique name. Each node is defined by a class, inputs, outputs, node parameters, and num_cpus. Any parameters defined at the individual node level will locally overwrite any default settings defined at the `default_node_settings` level.
+A particular node instance in the pipeline, defined by a unique name. Any parameters defined at the individual node level will locally overwrite any default settings defined at the `default_node_settings` level.
 
 | Key | Required | Type | Description |
 | --- | -------- | ---- | ----------- |
-| `class` | Y | string | Defines which python class to run for node. |
+| `class` | Y | string | Python module to run for the node. |
 | `inputs` | N | list of strings | Defines which datasets to consume from if applicable. |
 | `outputs` | N | list of strings | Defines which datasets to produce to if applicable. |
 | `node_params` | N | map | Defines any arbitrary params relevant for node's application logic. In the example above, we defined `initial_state` and `increment` params, which are both integers.|
