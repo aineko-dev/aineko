@@ -14,4 +14,4 @@ pytest = "^7.4.1"
 pytest-cov = "^4.1.0"
 
 [tool.poetry.scripts]
-aineko = "aineko.__main__:_cli"
+aineko = "aineko.__main__:cli"
