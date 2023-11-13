@@ -16,11 +16,11 @@ Get started with Aineko in minutes by following [this tutorial](https://docs.ain
 
 ## Examples
 
-To see some examples of Aineko in action visit: https://docs.aineko.dev/examples
+To see some examples of Aineko in action visit [here](https://docs.aineko.dev/dev/examples/aineko-dream/)
 
 - [Aineko Dream](https://github.com/aineko-dev/aineko-dream)
 - More coming soon...
 
 ## Contributing
 
-If you're interested in contributing to Aineko, follow this guide: https://docs.aineko.dev/contributing-to-aineko
+If you're interested in contributing to Aineko, follow this [guide](https://docs.aineko.dev/dev/contributing/)
