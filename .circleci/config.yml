@@ -11,7 +11,6 @@ parameters:
 workflows:
   continuous-integration:
     jobs:
-      - check-broken-links
       - python-checks:
           filters:
             branches:
@@ -26,6 +25,7 @@ workflows:
 
   publish-docs:
     jobs:
+      - check-broken-links
       - build-and-push-docs:
           name: publish dev docs
           filters:
