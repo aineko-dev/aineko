@@ -18,7 +18,7 @@ Here are the steps to get started quickly
 
 ## Make your changes to Aineko docs
 
-Aineko raw documentation is in the form of markdown files found in the `aineko/docs` directory.
+Aineko raw documentation is in the form of markdown files found in the `docs` directory.
 
 We use [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) to generate the documentation static site from markdown.
 
