@@ -11,6 +11,7 @@ parameters:
 workflows:
   continuous-integration:
     jobs:
+      - check-broken-links
       - python-checks:
           filters:
             branches:
@@ -159,3 +160,13 @@ jobs:
           else
             poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
           fi
+
+  check-broken-links:
+    docker:
+      - image: ghcr.io/tcort/markdown-link-check:stable
+    steps:
+      - checkout
+      - run:
+          name: check broken links
+          command: |
+            find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check -q
