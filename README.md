@@ -16,7 +16,7 @@ Get started with Aineko in minutes by following [this tutorial](https://docs.ain
 
 ## Examples
 
-To see some examples of Aineko in action visit [here](https://docs.aineko.dev/dev/0.2/examples/aineko-dream/)
+To see some examples of Aineko in action visit [here](https://docs.aineko.dev/0.2/examples/aineko-dream/)
 
 - [Aineko Dream](https://github.com/aineko-dev/aineko-dream)
 - More coming soon...
