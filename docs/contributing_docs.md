@@ -18,7 +18,7 @@ Here are the steps to get started quickly
 
 ## Make your changes to Aineko docs
 
-Aineko raw documentation is in the form of markdown files found in the `aineko/docs` directory.
+Aineko raw documentation is in the form of markdown files found in the `docs` directory.
 
 We use [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) to generate the documentation static site from markdown.
 
@@ -30,7 +30,7 @@ We use [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) to ge
     ```bash
     $ poetry run mkdocs serve
     ```
-
+<!-- markdown-link-check-disable-next-line -->
 Navigate to [localhost:8000](http://localhost:8000) to see the documentation site.
 
 ## Run lint

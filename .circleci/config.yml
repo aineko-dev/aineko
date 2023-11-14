@@ -25,6 +25,7 @@ workflows:
 
   publish-docs:
     jobs:
+      - check-broken-links
       - build-and-push-docs:
           name: publish dev docs
           filters:
@@ -156,6 +157,18 @@ jobs:
           if [ "<< parameters.tag >>" = "true" ]; then
             version=$(echo "<< parameters.version >>" | cut -d'.' -f1,2)
             poetry run mike deploy $version -b << parameters.docs_branch >> --push
+            poetry run mike set-default $version -b << parameters.docs_branch >> --push
           else
             poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
           fi
+
+  check-broken-links:
+    description: Check for broken links in markdown files
+    docker:
+      - image: ghcr.io/tcort/markdown-link-check:stable
+    steps:
+      - checkout
+      - run:
+          name: check broken links
+          command: |
+            find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check -q
