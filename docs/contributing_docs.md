@@ -30,7 +30,7 @@ We use [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) to ge
     ```bash
     $ poetry run mkdocs serve
     ```
-
+<!-- markdown-link-check-disable-next-line -->
 Navigate to [localhost:8000](http://localhost:8000) to see the documentation site.
 
 ## Run lint
