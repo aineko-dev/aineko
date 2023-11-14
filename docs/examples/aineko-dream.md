@@ -340,7 +340,7 @@ Then start the pipeline using:
 poetry run aineko run ./conf/gpt3.yml
 
 ```
-
+<!-- markdown-link-check-disable-next-line -->
 When the pipeline is live, you can visit [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser to interact with the endpoints via the Swagger UI.
 
 <figure markdown>
