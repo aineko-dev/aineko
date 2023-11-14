@@ -162,6 +162,7 @@ jobs:
           fi
 
   check-broken-links:
+    description: Check for broken links in markdown files
     docker:
       - image: ghcr.io/tcort/markdown-link-check:stable
     steps:
