@@ -1,3 +1,4 @@
 [Aa]ineko
 pyenv
 uvicorn
+Pydantic
