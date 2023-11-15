@@ -1,5 +1,5 @@
 [Aa]ineko
 pyenv
-uvicorn
+[Uu]vicorn
 Pydantic
 application
