@@ -34,7 +34,9 @@ workflows:
   publish-docs:
     jobs:
       - check-broken-links
-      - vale/lint
+      - vale/lint:
+          name: lint docs
+          strategy: all
       - build-and-push-docs:
           name: publish dev docs
           filters:
