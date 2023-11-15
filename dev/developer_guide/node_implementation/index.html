@@ -668,8 +668,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#producers-consumers" class="md-nav__link">
+    Producers &amp; Consumers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#logging" class="md-nav__link">
-    Logging**
+    Logging
   </a>
   
 </li>
@@ -1026,8 +1033,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#producers-consumers" class="md-nav__link">
+    Producers &amp; Consumers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#logging" class="md-nav__link">
-    Logging**
+    Logging
   </a>
   
 </li>
@@ -1128,7 +1142,7 @@
 </span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;test_sum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
 </span></code></pre></div>
 <p>The only way to an node "dies", or when the <code>_execute</code> loop terminates, is when the entire pipeline goes down or when the <a href="#poison-pill">poison pill</a> is activated. </p>
-<p><strong>Producers &amp; Consumers</strong></p>
+<h3 id="producers-consumers">Producers &amp; Consumers</h3>
 <p>Node classes inherit attributes named <code>self.producers</code> and <code>self.consumers</code> that are each a dictionary, keyed by dataset name with values being <code>DatasetProducer</code> and <code>DatasetConsumer</code> objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog config.</p>
 <div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
 
@@ -1185,7 +1199,7 @@ N_node_transformer((node_transformer)):::nodeClass --&gt;  T_produced_dataset[pr
 </div>
 </div>
 </div>
-<h3 id="logging">Logging**</h3>
+<h3 id="logging">Logging</h3>
 <dl>
 <dt>Node classes inherit a method named <code>self.log</code> that allows users to log messages to Amber, where logs are aggregated and triaged across observability pipelines. You can set the appropriate level from: <code>info</code>, <code>debug</code>, <code>warning</code>, <code>error</code>, an <code>critical</code>. You can log from inside of the <code>_pre_loop_hook</code> method, the <code>_execute</code> method, or any other method you add to your node.</dt>
 <dd>
