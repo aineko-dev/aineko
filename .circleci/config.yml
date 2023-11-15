@@ -37,6 +37,7 @@ workflows:
       - vale/lint:
           name: lint docs
           strategy: all
+          glob: "[!.]*/*.{md,adoc}"
       - build-and-push-docs:
           name: publish dev docs
           filters:

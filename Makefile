@@ -1,5 +1,6 @@
 help:
 	@echo "lint - lint code"
+	@echo "lint-docs - lint documentation"
 	@echo "unit-test - run unit tests suite"
 	@echo "integration-test - run integration tests suite"
 
@@ -13,6 +14,9 @@ lint:
 	poetry run mypy aineko || ERROR=1; \
 	poetry run pre-commit run --all || ERROR=1; \
 	exit $$ERROR
+
+lint-docs:
+	vale --glob="[!.]*/*.{md,adoc}" --config=.vale.ini .
 
 unit-test:
 	poetry run pytest --cov aineko --ignore tests/integration tests/
