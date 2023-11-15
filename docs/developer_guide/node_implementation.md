@@ -80,7 +80,7 @@ class MySumNode(AbstractNode):
 The only way to an node "dies", or when the `_execute` loop terminates, is when the entire pipeline goes down or when the [poison pill](#poison-pill) is activated. 
 
 
-**Producers & Consumers**
+### Producers & Consumers
 
 Node classes inherit attributes named `self.producers` and `self.consumers` that are each a dictionary, keyed by dataset name with values being `DatasetProducer` and `DatasetConsumer` objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog config.
 
@@ -146,7 +146,7 @@ A node can produce to a dataset, consume from a dataset, or both. Nodes that con
         N_node_transformer((node_transformer)):::nodeClass -->  T_produced_dataset[produced_dataset]:::datasetClass
         ```
 
-### Logging**
+### Logging
 
 Node classes inherit a method named `self.log` that allows users to log messages to Amber, where logs are aggregated and triaged across observability pipelines. You can set the appropriate level from: `info`, `debug`, `warning`, `error`, an `critical`. You can log from inside of the `_pre_loop_hook` method, the `_execute` method, or any other method you add to your node.
 
