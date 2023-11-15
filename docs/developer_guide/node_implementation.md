@@ -29,7 +29,7 @@ class MySumNode(AbstractNode):
 
 ### `_pre_loop_hook`
 
-You can optionally define a `_pre_loop_hook` method in your node class to intialize the state of your node with class variables. If the `node_params` key is defined in `pipeline.yml`, it will be passed in under the `params` argument.
+You can optionally define a `_pre_loop_hook` method in your node class to initialize the state of your node with class variables. If the `node_params` key is defined in `pipeline.yml`, it will be passed in under the `params` argument.
 
 ```python title="sum_node.py" hl_lines="5-7"
 from aineko.internals.node import AbstractNode
