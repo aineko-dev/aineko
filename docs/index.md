@@ -41,7 +41,7 @@ description: What is Aineko?
 - [x] Aineko pipeline configuration loader and runner
 - [x] CLI tool for running pipelines
 - [x] CLI tool for visualizing pipelines
-- [x] REST API and Websocket pre-built nodes
+- [x] REST API and WebSocket pre-built nodes
 - [ ] Built-in API server node
 - [ ] Schema validation support
 - [ ] Support multiple queuing systems beyond Kafka (RabbitMQ, etc)
