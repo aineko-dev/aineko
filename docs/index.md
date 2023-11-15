@@ -5,8 +5,8 @@ description: What is Aineko?
 # Aineko
 
 [![CI](https://circleci.com/gh/aineko-dev/aineko/tree/develop.svg?style=svg)](https://app.circleci.com/pipelines/github/aineko-dev)
-[![pypi](https://img.shields.io/pypi/v/aineko.svg)](https://pypi.python.org/pypi/aineko)
-[![pypi](https://img.shields.io/pypi/pyversions/aineko)](https://pypi.python.org/pypi/aineko)
+[![PyPI](https://img.shields.io/pypi/v/aineko.svg)](https://pypi.python.org/pypi/aineko)
+[![PyPI](https://img.shields.io/pypi/pyversions/aineko)](https://pypi.python.org/pypi/aineko)
 [![downloads](https://static.pepy.tech/badge/aineko/month)](https://pepy.tech/project/aineko)
 [![license](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/aineko-dev/aineko/blob/develop/LICENSE)
 
