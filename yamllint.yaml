@@ -1,9 +1,10 @@
 extends: relaxed
 yaml-files:
-  - '*.yaml'
-  - '*.yml'
-  - '.yamllint'
+  - "*.yaml"
+  - "*.yml"
+  - ".yamllint"
 
 ignore:
   # Ignore pipeline.yml files under template as they have double braces
   - "**/aineko/templates/**/pipeline.yml"
+  - "docs/.styles"
