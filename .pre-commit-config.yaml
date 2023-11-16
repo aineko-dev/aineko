@@ -55,3 +55,8 @@ repos:
         files: \.(py|yml|yaml)$
         exclude: ".pre-commit-config.yaml|yamllint.yaml"
         args: ["--fix"]
+  - repo: https://github.com/tcort/markdown-link-check
+    rev: v3.11.2
+    hooks:
+      - id: markdown-link-check
+        args: [-q]
