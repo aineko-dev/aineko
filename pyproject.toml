@@ -54,6 +54,10 @@ pytest = "^7.4.1"
 pytest-cov = "^4.1.0"
 pytest-subtests = "^0.11.0"
 
+[tool.poetry.group.fastapi.dependencies]
+fastapi = "~0.99"
+uvicorn = { version = "~0.22", extras = ["standard"] }
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
