@@ -171,4 +171,4 @@ jobs:
       - run:
           name: check broken links
           command: |
-            find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check -q
+            find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check --quiet --config markdown_link_check_config.json

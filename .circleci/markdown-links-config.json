@@ -1,0 +1,12 @@
+{
+    "httpHeaders": [
+        {
+            "urls": [
+                "https://platform.openai.com/"
+            ],
+            "headers": {
+                "Accept-Encoding": "zstd, br, gzip, deflate"
+            }
+        }
+    ]
+}
