@@ -238,7 +238,7 @@ class GitHubDocFetcher(AbstractNode):
             f"Fetched documents for {self.organization}/{self.repo} branch {self.branch}"
         )
 ```
-The `OpenAIClient` node creates a connection to the OpenAI API and submits requests to the configured model using the [ChatCompletion](https://platform.openai.com/docs/guides/gpt/chat-completions-api) interface. The response is passed on to the evaluation nodes.
+The `OpenAIClient` node creates a connection to the OpenAI API and submits requests to the configured model using the [ChatCompletion](https://platform.openai.com/docs/guides/text-generation/chat-completions-api) interface. The response is passed on to the evaluation nodes.
 <!-- markdown-link-check-enable -->
 ```python
 class OpenAIClient(AbstractNode):
