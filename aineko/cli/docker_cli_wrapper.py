@@ -162,7 +162,7 @@ def down(ctx: Context) -> None:
 
 @service.command()
 @click.option(
-    "-h",
+    "-H",
     "--hard",
     is_flag=True,
     help=(
