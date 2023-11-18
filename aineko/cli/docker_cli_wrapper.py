@@ -19,8 +19,11 @@ class DockerCLIWrapper:
         start_service(cls) -> None:
             Start the Docker service.
 
-        stop_service(cls) -> None:arg
+        stop_service(cls) -> None:
             Stop the running Docker service.
+
+        kill_service(cls) -> None:
+            Kills the running Docker service.
 
         restart_service(cls) -> None:
             Restart the running Docker service.
@@ -60,11 +63,15 @@ services:
             self._load_custom_config(custom_config_path)
 
     @classmethod
-    def start_service(cls) -> None:
-        """Start the Docker service."""
+    def run_docker_command(cls, command: str) -> None:
+        """Run a Docker CLI command.
+
+        Args:
+            command: The Docker CLI command to run.
+        """
         try:
             output = subprocess.check_output(
-                args="docker-compose -f - up -d",
+                args=command,
                 input=cls._docker_compose_config,
                 shell=True,
                 text=True,
@@ -74,38 +81,30 @@ services:
         except subprocess.CalledProcessError as ex:
             print(f"Error: {ex}")
             print(f"Command Output: {ex.output}")
+
+    @classmethod
+    def start_service(cls) -> None:
+        """Start the Docker service."""
+        cls.run_docker_command("docker-compose -f - up -d")
 
     @classmethod
     def stop_service(cls) -> None:
         """Stop the running Docker service."""
-        try:
-            output = subprocess.check_output(
-                args="docker-compose -f - stop",
-                input=cls._docker_compose_config,
-                shell=True,
-                text=True,
-                stderr=subprocess.STDOUT,
-            )
-            print(output)
-        except subprocess.CalledProcessError as ex:
-            print(f"Error: {ex}")
-            print(f"Command Output: {ex.output}")
+        cls.run_docker_command("docker-compose -f - stop")
 
     @classmethod
-    def restart_service(cls) -> None:
+    def kill_service(cls) -> None:
+        """Kill the running Docker service."""
+        cls.run_docker_command("docker-compose -f - down")
+
+    @classmethod
+    def restart_service(cls, hard: bool) -> None:
         """Restart the running Docker service."""
-        try:
-            output = subprocess.check_output(
-                args="docker-compose -f - restart",
-                input=cls._docker_compose_config,
-                shell=True,
-                text=True,
-                stderr=subprocess.STDOUT,
-            )
-            print(output)
-        except subprocess.CalledProcessError as ex:
-            print(f"Error: {ex}")
-            print(f"Command Output: {ex.output}")
+        if hard:
+            cls.run_docker_command("docker-compose -f - down")
+            cls.run_docker_command("docker-compose -f - up -d")
+        else:
+            cls.run_docker_command("docker-compose -f - restart")
 
     @classmethod
     def _load_custom_config(cls, custom_config_path: str) -> None:
@@ -156,6 +155,22 @@ def stop(ctx: Context) -> None:
 
 @service.command()
 @click.pass_context
-def restart(ctx: Context) -> None:
+def down(ctx: Context) -> None:
+    """Kill Aineko docker services."""
+    DockerCLIWrapper(ctx.obj["config"]).kill_service()
+
+
+@service.command()
+@click.option(
+    "-h",
+    "--hard",
+    is_flag=True,
+    help=(
+        "Forces full restart Aineko docker services."
+        "Clears data from Kafka cache."
+    ),
+)
+@click.pass_context
+def restart(ctx: Context, hard: bool = True) -> None:
     """Restart Aineko docker services."""
-    DockerCLIWrapper(ctx.obj["config"]).restart_service()
+    DockerCLIWrapper(ctx.obj["config"]).restart_service(hard=hard)
