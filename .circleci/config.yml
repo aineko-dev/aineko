@@ -170,5 +170,6 @@ jobs:
       - checkout
       - run:
           name: check broken links
-          command: |
-            find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check -q
+          command: >
+            find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check
+            --quiet --config .circleci/markdown-links-config.json
