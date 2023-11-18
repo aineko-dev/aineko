@@ -148,7 +148,7 @@ A node can produce to a dataset, consume from a dataset, or both. Nodes that con
 
 ### Logging
 
-Node classes inherit a method named `self.log` that allows users to log messages to Amber, where logs are aggregated and triaged across observability pipelines. You can set the appropriate level from: `info`, `debug`, `warning`, `error`, an `critical`. You can log from inside of the `_pre_loop_hook` method, the `_execute` method, or any other method you add to your node.
+Node classes inherit a method named `self.log` that allows users to log messages. You can set the appropriate level from: `info`, `debug`, `warning`, `error`, an `critical`. You can log from inside of the `_pre_loop_hook` method, the `_execute` method, or any other method you add to your node.
 
 :   
     ```python
