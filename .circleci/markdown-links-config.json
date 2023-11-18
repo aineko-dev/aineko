@@ -1,0 +1,13 @@
+{
+    "ignorePatterns": [
+        {
+            "ignorePatterns": ".*openai.com\/.*"
+        },
+        {
+            "ignorePatterns": ".*localhost.*"
+        },
+        {
+            "ignorePatterns": ".*127.0.0.1.*"
+        }
+    ]
+}
