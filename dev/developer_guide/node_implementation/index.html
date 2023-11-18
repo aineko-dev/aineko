@@ -1201,7 +1201,7 @@ N_node_transformer((node_transformer)):::nodeClass --&gt;  T_produced_dataset[pr
 </div>
 <h3 id="logging">Logging</h3>
 <dl>
-<dt>Node classes inherit a method named <code>self.log</code> that allows users to log messages to Amber, where logs are aggregated and triaged across observability pipelines. You can set the appropriate level from: <code>info</code>, <code>debug</code>, <code>warning</code>, <code>error</code>, an <code>critical</code>. You can log from inside of the <code>_pre_loop_hook</code> method, the <code>_execute</code> method, or any other method you add to your node.</dt>
+<dt>Node classes inherit a method named <code>self.log</code> that allows users to log messages. You can set the appropriate level from: <code>info</code>, <code>debug</code>, <code>warning</code>, <code>error</code>, an <code>critical</code>. You can log from inside of the <code>_pre_loop_hook</code> method, the <code>_execute</code> method, or any other method you add to your node.</dt>
 <dd>
 <div class="highlight"><pre><span></span><code><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Produced </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cur_integer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;info&quot;</span><span class="p">)</span>
 </code></pre></div>
