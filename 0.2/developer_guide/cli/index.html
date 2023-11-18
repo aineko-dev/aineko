@@ -636,6 +636,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#aineko-service-down" class="md-nav__link">
+    down
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#aineko-service-restart" class="md-nav__link">
     restart
   </a>
@@ -1068,6 +1075,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#aineko-service-down" class="md-nav__link">
+    down
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#aineko-service-restart" class="md-nav__link">
     restart
   </a>
@@ -1191,13 +1205,24 @@
                      Compose config file.
   --help             Show this message and exit.
 </code></pre></div>
+<h4 id="aineko-service-down">aineko service down</h4>
+<p>Kill Aineko docker services.</p>
+<p><strong>Usage:</strong></p>
+<div class="highlight"><pre><span></span><code>aineko service down [OPTIONS]
+</code></pre></div>
+<p><strong>Options:</strong></p>
+<div class="highlight"><pre><span></span><code>  --help  Show this message and exit.
+</code></pre></div>
 <h4 id="aineko-service-restart">aineko service restart</h4>
 <p>Restart Aineko docker services.</p>
 <p><strong>Usage:</strong></p>
 <div class="highlight"><pre><span></span><code>aineko service restart [OPTIONS]
 </code></pre></div>
 <p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  --help  Show this message and exit.
+<div class="highlight"><pre><span></span><code>  -h, --hard  Forces full restart Aineko docker
+              services.Clears data from Kafka
+              cache.
+  --help      Show this message and exit.
 </code></pre></div>
 <h4 id="aineko-service-start">aineko service start</h4>
 <p>Start Aineko docker services.</p>
