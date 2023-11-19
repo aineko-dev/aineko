@@ -22,6 +22,7 @@ workflows:
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
           markers: integration
+      - test-aineko-create
 
   publish-docs:
     jobs:
@@ -173,3 +174,32 @@ jobs:
           command: >
             find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check
             --quiet --config .circleci/markdown-links-config.json
+
+  test-aineko-create:
+    description: This job tests the aineko create command by creating a new project
+      and running the tests from the newly created project.
+    docker:
+      - image: cimg/python:<< pipeline.parameters.python_version >>
+    steps:
+      - checkout
+      - run:
+          name: Install Aineko from source, simulating a "pip install aineko"
+          command: |
+            cd ..
+            echo "export original_cwd=$(pwd)" >> $BASH_ENV
+            pip install project/
+      - run:
+          name: Test Aineko create command
+          command: |
+            cd $original_cwd
+            aineko create --no-input
+      - run:
+          name: Test installing the newly created project
+          command: |
+            cd $original_cwd/my_awesome_pipeline
+            poetry install --no-interaction --no-ansi
+      - run:
+          name: Run the tests from the newly created project
+          command: |
+            cd $original_cwd/my_awesome_pipeline
+            poetry run pytest
