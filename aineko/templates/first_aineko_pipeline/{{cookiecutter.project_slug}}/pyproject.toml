@@ -12,3 +12,9 @@ aineko = "0.2.4"
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.1"
 pytest-cov = "^4.1.0"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    # Ignore this depracation warning because of the way virtualenvs is implemented
+    "ignore:.*pkg_resources.*:DeprecationWarning",
+]

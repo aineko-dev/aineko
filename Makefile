@@ -6,7 +6,7 @@ help:
 lint:
 	@ERROR=0; \
 	poetry run isort . || ERROR=1; \
-	poetry run black . || ERROR=1; \
+	poetry run black . --exclude .*{{cookiecutter.project_slug}}\/tests\/.*.py || ERROR=1; \
 	poetry run pydocstyle aineko || ERROR=1; \
 	poetry run pylint aineko || ERROR=1; \
 	poetry run yamllint -c yamllint.yaml . || ERROR=1; \
