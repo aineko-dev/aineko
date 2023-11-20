@@ -22,7 +22,11 @@ workflows:
           prj_dir: aineko
           python_version: << pipeline.parameters.python_version >>
           markers: integration
-      - test-aineko-create
+          requires:
+            - python-checks
+      - test-aineko-create:
+          requires:
+            - python-checks
 
   publish-docs:
     jobs:
