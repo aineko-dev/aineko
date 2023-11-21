@@ -205,3 +205,8 @@ jobs:
           command: |
             cd $original_cwd/my_awesome_pipeline
             poetry run pytest
+      - run:
+          name: Run a `poetry run aineko` command from the newly created project
+          command: |
+            cd $original_cwd/my_awesome_pipeline
+            poetry run aineko --help
