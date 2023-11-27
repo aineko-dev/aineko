@@ -58,7 +58,7 @@ class MessageReader(AbstractNode):
 
     def _execute(self, params: Optional[dict] = None) -> None:
         """Read message"""
-        msg = self.consumers["messages"].consume()
+        msg = self.consumers["messages"].next()
         if time.time() - self.last_updated > self.timeout:
             print(f"Received messages: {self.received}")
             print(self.consumers["messages"].topic_name)
@@ -73,7 +73,7 @@ class MessageReader(AbstractNode):
         self.received.append(msg["message"])
         self.last_updated = time.time()
 
-    def _post_loop_hook(self, params: dict | None = None) -> None:
+    def _post_loop_hook(self, params: Optional[dict] = None) -> None:
         if self.messages != self.received:
             raise ValueError(
                 "Failed to read expected messages."
@@ -100,7 +100,7 @@ def test_write_read_to_kafka():
     are as expected.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, ["service", "restart"])
+    result = runner.invoke(cli, ["service", "restart", "--hard"])
     assert result.exit_code == 0
 
     runner = Runner(
@@ -136,3 +136,7 @@ def test_write_read_to_kafka():
         count_messages = consumer.consume_all(end_message="END")
         assert count_messages[0]["source_pipeline"] == "integration_test_read"
         assert count_messages[0]["message"] == "TEST PASSED"
+
+        # Test consume.last functionality
+        last_message = consumer.last(timeout=10)
+        assert last_message["message"] == "END"

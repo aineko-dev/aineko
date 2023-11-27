@@ -71,11 +71,11 @@ class FastAPI(AbstractNode):
     ```
     pipeline:
     nodes:
-        fastapi:
+      fastapi:
         class: aineko.nodes.fastapi
         node_params:
-            app: my_project.fastapi:app
-            port: 8000
+          app: my_project.fastapi:app
+          port: 8000
     ```
     where the app points to a FastAPI app. See https://fastapi.tiangolo.com/
     for documentation on how to create a FastAPI app.

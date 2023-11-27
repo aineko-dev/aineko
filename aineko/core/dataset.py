@@ -165,7 +165,7 @@ class DatasetConsumer:
     def consume(
         self,
         how: str = "next",
-        timeout: Optional[int] = None,
+        timeout: Optional[float] = None,
     ) -> Optional[dict]:
         """Polls a message from the dataset.
 
@@ -174,6 +174,7 @@ class DatasetConsumer:
                 "next": read the next message in the queue
                 "last": read the last message in the queue
             timeout: seconds to poll for a resopnse from kafka broker.
+            If using how="last",
 
         Returns:
             message from the dataset
@@ -195,7 +196,9 @@ class DatasetConsumer:
 
         return self._validate_message(message)
 
-    def _consume_message(self, how: str, timeout: Optional[int] = None) -> dict:
+    def _consume_message(
+        self, how: str, timeout: Optional[float] = None
+    ) -> dict:
         """Calls the consume method and blocks until a message is returned.
 
         Args:
@@ -382,7 +385,7 @@ class FakeDatasetConsumer:
     def consume(
         self,
         how: str = "next",
-        timeout: Optional[int] = None,
+        timeout: Optional[float] = None,
     ) -> Optional[dict]:
         """Reads a message from the dataset.
 
@@ -396,6 +399,9 @@ class FakeDatasetConsumer:
         Raises:
             ValueError: if how is not "next"
         """
+        if how not in ["next", "last"]:
+            raise ValueError(f"Invalid how: {how}. Expected 'next' or 'last'.")
+
         if how == "next":
             remaining = len(self.values)
             if remaining > 0:
@@ -409,9 +415,27 @@ class FakeDatasetConsumer:
                     "source_node": "test",
                     "source_pipeline": "test",
                 }
-            else:
-                return None
-        raise ValueError(f"Invalid how: {how}. Expected 'next'.")
+        if how == "last":
+            if self.values:
+                return self.values[-1]
+        else:
+            return None
+
+    def next(self):
+        """Wraps `consume(how="next")`, blocks until available.
+
+        Returns:
+            msg: message from the dataset
+        """
+        return self.consume(how="next")
+
+    def last(self, timeout: float = 1):
+        """Wraps `consume(how="last")`, blocks until available.
+
+        Returns:
+            msg: message from the dataset
+        """
+        return self.consume(how="last", timeout=timeout)
 
 
 class FakeDatasetProducer:

@@ -144,13 +144,7 @@ def test_doubler_node():
                 return False
 
             # Read message from consumer
-            cur_integer = self.consumers["integer_sequence"].consume(
-                how="next", timeout=0
-            )
-
-            # Validate message
-            if cur_integer is None:
-                return
+            cur_integer = self.consumers["integer_sequence"].next()
 
             # Calculate latency
             latency = (
