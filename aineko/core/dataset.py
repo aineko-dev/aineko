@@ -21,7 +21,7 @@ e.g. message:
 import datetime
 import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Literal, Optional
 
 from confluent_kafka import (  # type: ignore
     Consumer,
@@ -164,7 +164,7 @@ class DatasetConsumer:
 
     def consume(
         self,
-        how: str = "next",
+        how: Literal["next", "last"] = "next",
         timeout: Optional[float] = None,
     ) -> Optional[dict]:
         """Polls a message from the dataset.
