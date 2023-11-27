@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Example file showing unit testing."""
 
-from lib.nodes import MySumNode
+from {{cookiecutter.project_slug}}.nodes import MySumNode
 
 
 def test_mynode():

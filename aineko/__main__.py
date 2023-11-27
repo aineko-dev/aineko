@@ -11,7 +11,7 @@ from aineko.cli.run import run
 from aineko.cli.visualize import visualize
 
 
-@click.group("aineko")
+@click.group("aineko", context_settings={"help_option_names": ["-h", "--help"]})
 @click.version_option(__version__)
 def cli() -> None:
     """Aineko CLI."""
