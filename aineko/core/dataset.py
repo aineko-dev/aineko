@@ -197,7 +197,7 @@ class DatasetConsumer:
         return self._validate_message(message)
 
     def _consume_message(
-        self, how: str, timeout: Optional[float] = None
+        self, how: Literal["next", "last"], timeout: Optional[float] = None
     ) -> dict:
         """Calls the consume method and blocks until a message is returned.
 
@@ -418,10 +418,10 @@ class FakeDatasetConsumer:
         if how == "last":
             if self.values:
                 return self.values[-1]
-        else:
-            return None
 
-    def next(self):
+        return None
+
+    def next(self) -> Optional[dict]:
         """Wraps `consume(how="next")`, blocks until available.
 
         Returns:
@@ -429,7 +429,7 @@ class FakeDatasetConsumer:
         """
         return self.consume(how="next")
 
-    def last(self, timeout: float = 1):
+    def last(self, timeout: float = 1) -> Optional[dict]:
         """Wraps `consume(how="last")`, blocks until available.
 
         Returns:
