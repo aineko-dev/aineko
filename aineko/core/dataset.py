@@ -23,7 +23,12 @@ import json
 import logging
 from typing import Any, Dict, Optional
 
-from confluent_kafka import Consumer, Message, Producer  # type: ignore
+from confluent_kafka import (  # type: ignore
+    Consumer,
+    KafkaError,
+    Message,
+    Producer,
+)
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 
@@ -51,12 +56,14 @@ class DatasetConsumer:
         node_name: name of the node that is consuming the dataset
         pipeline_name: name of the pipeline
         dataset_config: dataset config
-        broker: broker to connect to (ip and port: "54.88.142.21:9092")
+        bootstrap_servers: bootstrap_servers to connect to (e.g. "1.2.3.4:9092")
         prefix: prefix for topic name (<prefix>.<dataset_name>)
         has_pipeline_prefix: whether the dataset name has pipeline name prefix
 
     Attributes:
         consumer: Kafka consumer object
+        cached: if the high watermark offset has been cached
+        (updated when message consumed)
 
     Methods:
         consume: reads a message from the dataset
@@ -77,6 +84,7 @@ class DatasetConsumer:
         self.kafka_config = DEFAULT_KAFKA_CONFIG
         self.prefix = prefix
         self.has_pipeline_prefix = has_pipeline_prefix
+        self.cached = False
 
         consumer_config = self.kafka_config.get("CONSUMER_CONFIG")
         # Overwrite bootstrap server with broker if provided
@@ -132,30 +140,96 @@ class DatasetConsumer:
             message = message.decode("utf-8")
         return json.loads(message)
 
+    def _update_offset_to_latest(self) -> None:
+        """Updates offset to latest.
+
+        Note that the initial call, for this method might take
+        a while due to consumer initialization.
+        """
+        partitions = self.consumer.assignment()
+        # Initialize consumers if not already initialized by polling
+        while not partitions:
+            self.consumer.poll(timeout=0)
+            partitions = self.consumer.assignment()
+
+        for partition in partitions:
+            partition.offset = (
+                self.consumer.get_watermark_offsets(
+                    partition, cached=self.cached
+                )[1]
+                - 1
+            )
+
+        self.consumer.assign(partitions)
+
     def consume(
         self,
         how: str = "next",
         timeout: Optional[int] = None,
     ) -> Optional[dict]:
-        """Reads a message from the dataset.
+        """Polls a message from the dataset.
 
         Args:
-            how: how to read the message
+            how: how to read the message.
                 "next": read the next message in the queue
+                "last": read the last message in the queue
+            timeout: seconds to poll for a resopnse from kafka broker.
+
+        Returns:
+            message from the dataset
+        """
+        if how not in ["next", "last"]:
+            raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
+
+        timeout = timeout or self.kafka_config.get("CONSUMER_TIMEOUT")
+        if how == "next":
+            # next unread message from queue
+            message = self.consumer.poll(timeout=timeout)
+
+        if how == "last":
+            # last message from queue
+            self._update_offset_to_latest()
+            message = self.consumer.poll(timeout=timeout)
+
+        self.cached = True
+
+        return self._validate_message(message)
+
+    def _consume_message(self, how: str, timeout: Optional[int] = None) -> dict:
+        """Calls the consume method and blocks until a message is returned.
+
+        Args:
+            how: See `consume` method for available options.
+
+        Returns:
+            message from dataset
+        """
+        while True:
+            try:
+                message = self.consume(how=how, timeout=timeout)
+                if message is not None:
+                    return message
+            except KafkaError as e:
+                if e.code() == "_MAX_POLL_EXCEEDED":
+                    continue
+                raise e
+
+    def next(self) -> dict:
+        """Wraps `consume(how="next")`, blocks until available.
 
         Returns:
             msg: message from the dataset
         """
-        timeout = timeout or self.kafka_config.get("CONSUMER_TIMEOUT")
-        if how == "next":
-            # next unread message from queue
-            message = self._validate_message(
-                self.consumer.poll(timeout=timeout)
-            )
-        else:
-            raise ValueError(f"Invalid how: {how}. Expected 'next'.")
+        return self._consume_message(how="next")
 
-        return message
+    def last(self, timeout: int = 1) -> dict:
+        """Wraps `consume(how="last")`, blocks until available.
+
+        Returns:
+            msg: message from the dataset
+            timeout: seconds to poll for a resopnse from kafka broker.
+        """
+        return self._consume_message(how="last", timeout=timeout)
 
     def consume_all(self, end_message: str | bool = False) -> list:
         """Reads all messages from the dataset until a specific one is found.

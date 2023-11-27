@@ -244,7 +244,11 @@ class Runner:
 
             wrapped_class = ray.remote(target_class)
             wrapped_class.options(**actor_params)
-            actor_handle = wrapped_class.remote(poison_pill=poison_pill)
+            actor_handle = wrapped_class.remote(
+                node_name=node_name,
+                pipeline_name=self.pipeline_name,
+                poison_pill=poison_pill,
+            )
 
             # Setup input and output datasets
             outputs = node_config.get("outputs", [])
@@ -252,8 +256,6 @@ class Runner:
                 inputs=node_config.get("inputs", None),
                 outputs=outputs,
                 datasets=pipeline_config["datasets"],
-                node=node_name,
-                pipeline=self.pipeline_name,
                 has_pipeline_prefix=True,
             )
 
@@ -261,8 +263,6 @@ class Runner:
             actor_handle.setup_datasets.remote(
                 outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
                 datasets=pipeline_config["datasets"],
-                node=node_name,
-                pipeline=self.pipeline_name,
             )
 
             # Create actor future (for execute method)
