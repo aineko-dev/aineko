@@ -188,3 +188,4 @@ orb.yml
 
 # Vale styles (external)
 !docs/.styles/Vocab/Aineko
+docs/.styles
