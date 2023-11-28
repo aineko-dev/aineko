@@ -187,5 +187,5 @@ terraform-provider*
 orb.yml
 
 # Vale styles (external)
-!docs/.styles/Vocab/Aineko
 docs/.styles
+!docs/.styles/Vocab/Aineko
