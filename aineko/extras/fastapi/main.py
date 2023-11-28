@@ -52,6 +52,7 @@ consumers = Consumers()
 producers = Producers()
 
 
+# pylint: disable=anomalous-backslash-in-string
 class FastAPI(AbstractNode):
     """Node for creating a FastAPI app with a gunicorn server.
 
