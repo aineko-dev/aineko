@@ -85,7 +85,7 @@ jobs:
 
     steps:
       - checkout
-      - run: poetry install --with test,fastapi --no-interaction --quiet
+      - run: poetry install --with test --no-interaction --quiet --all-extras
       - run: >
           poetry run pytest << parameters.test_dir >>
           -m "<< parameters.markers >>"
@@ -114,7 +114,7 @@ jobs:
 
     steps:
       - checkout
-      - run: poetry install --with dev,test --no-interaction --quiet
+      - run: poetry install --with dev,test --no-interaction --quiet --all-extras
       - run: poetry run isort << parameters.prj_dir >>
       - run: >
           poetry run black << parameters.prj_dir >> --check --exclude
