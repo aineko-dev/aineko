@@ -223,12 +223,10 @@ class DatasetConsumer:
     def next(self) -> dict:
         """Use to consume the next message from the dataset.
 
-
         This method is wraps `consume(how="next")`. It implements a
         block that wait until a message is recieved before returning it.
         This is useful when the timeout is short and the consumer often
         returns `None`.
-
 
         Returns:
             msg: message from the dataset
