@@ -3,3 +3,8 @@ pyenv
 [Uu]vicorn
 Pydantic
 application
+LLMs
+CPUs
+APIs
+Composable
+pluggable
