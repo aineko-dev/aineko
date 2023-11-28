@@ -17,7 +17,7 @@ lint:
 
 lint-docs:
 	vale sync
-	vale --glob="[!.]*/*.{md,adoc}" --config=.vale.ini .
+	vale --glob="[!.]*.{md,adoc}" --config=.vale.ini .
 
 unit-test:
 	poetry run pytest --cov aineko --ignore tests/integration tests/
