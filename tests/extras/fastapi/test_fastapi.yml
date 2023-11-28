@@ -1,0 +1,28 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: test_fastapi
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    fastapi:
+      class: aineko.extras.FastAPI
+      node_params:
+        app: tests.extras.fastapi.main:app
+      inputs:
+        - messages
+      outputs:
+        - messages
+
+    fastapi_checker:
+      class: tests.extras.fastapi.test_fastapi.FastAPIChecker
+      outputs:
+        - test_result
+
+  datasets:
+    messages:
+      type: kafka_stream
+    test_result:
+      type: kafka_stream

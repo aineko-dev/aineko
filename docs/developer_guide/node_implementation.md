@@ -17,9 +17,7 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].consume(how="next")
-        if msg is None:
-            return
+        msg = self.consumers["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )
@@ -42,9 +40,7 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].consume(how="next")
-        if msg is None:
-            return
+        msg = self.consumers["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )
@@ -56,7 +52,7 @@ class MySumNode(AbstractNode):
 
 The `_execute` method is repeatedly executed as the pipeline runs. We recommend nodes to follow a design pattern of constantly polling for new data and taking action when new data is received.
 
-```python title="sum_node.py" hl_lines="9-18"
+```python title="sum_node.py" hl_lines="9-16"
 from aineko.internals.node import AbstractNode
 
 class MySumNode(AbstractNode):
@@ -67,9 +63,7 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].consume(how="next")
-        if msg is None:
-            return
+        msg = self.consumers["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )
@@ -84,7 +78,7 @@ The only way to an node "dies", or when the `_execute` loop terminates, is when 
 
 Node classes inherit attributes named `self.producers` and `self.consumers` that are each a dictionary, keyed by dataset name with values being `DatasetProducer` and `DatasetConsumer` objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog config.
 
-```python title="sum_node.py" hl_lines="11 18"
+```python title="sum_node.py" hl_lines="11 16"
 from aineko.internals.node import AbstractNode
 
 class MySumNode(AbstractNode):
@@ -95,9 +89,7 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].consume(how="next")
-        if msg is None:
-            return
+        msg = self.consumers["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )

@@ -56,6 +56,7 @@ class FastAPI(AbstractNode):
     """Node for creating a FastAPI app with a gunicorn server.
 
     `node_params` should contain the following keys:
+
         app: path to FastAPI app
         port (optional): port to run the server on. Defaults to 8000.
 
@@ -68,17 +69,30 @@ class FastAPI(AbstractNode):
     and Producer objects are namespaced at the pipeline level.
 
     Example usage in pipeline.yml:
-    ```
+    ```yaml title="pipeline.yml"
     pipeline:
-    nodes:
-      fastapi:
-        class: aineko.nodes.fastapi
-        node_params:
-          app: my_project.fastapi:app
-          port: 8000
+      nodes:
+        fastapi:
+          class: aineko.extras.FastAPI
+          inputs:
+            - test_sequence
+          node_params:
+            app: my_awesome_pipeline.fastapi:app
+            port: 8000
     ```
-    where the app points to a FastAPI app. See https://fastapi.tiangolo.com/
-    for documentation on how to create a FastAPI app.
+    where the app points to a FastAPI app. See
+    [FastAPI documentation](https://fastapi.tiangolo.com/){:target="\_blank"}
+    on how to create a FastAPI app.
+
+    Example usage in FastAPI app:
+    ```python title="fastapi.py"
+    from aineko.extras.fastapi import consumers, producers
+
+    @app.get("/query")
+    async def query():
+        msg = consumers["test_sequence"].next()
+        return msg
+    ```
     """
 
     def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
