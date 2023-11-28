@@ -26,7 +26,15 @@ class Consumers(dict):
     def __setitem__(
         self, key: str | int | tuple, value: DatasetConsumer
     ) -> None:
-        """Checks that item is of type DatasetConsumer before setting."""
+        """Checks that item is of type DatasetConsumer before setting.
+
+        Args:
+            key: Name of the dataset
+            value: DatasetConsumer object to be stored
+
+        Raises:
+            ValueError: If value is not of type DatasetConsumer
+        """
         if not isinstance(value, DatasetConsumer):
             raise ValueError(
                 f"Value must be of type DatasetConsumer, not {type(value)}"
@@ -40,7 +48,15 @@ class Producers(dict):
     def __setitem__(
         self, key: str | int | tuple, value: DatasetProducer
     ) -> None:
-        """Checks that item is of type DatasetProducer before setting."""
+        """Checks that item is of type DatasetProducer before setting.
+
+        Args:
+            key: Name of the dataset
+            value: DatasetProducer object to be stored
+
+        Raises:
+            ValueError: If value is not of type DatasetProducer
+        """
         if not isinstance(value, DatasetProducer):
             raise ValueError(
                 f"Value must be of type DatasetProducer, not {type(value)}"
@@ -60,6 +76,8 @@ class FastAPI(AbstractNode):
 
         app: path to FastAPI app
         port (optional): port to run the server on. Defaults to 8000.
+        log_level (optional): log level to log messages from the uvicorn server.
+            Defaults to "info".
 
     To access the consumers and producers from your FastAPI app, import the
     `consumers` and `producers` variables from `aineko.extras.fastapi`. Use
@@ -108,7 +126,7 @@ class FastAPI(AbstractNode):
         config = uvicorn.Config(
             app=params.get("app"),  # type: ignore
             port=params.get("port", 8000),
-            log_level="info",
+            log_level=params.get("log_level", "info"),
             host="0.0.0.0",
         )
         server = uvicorn.Server(config)

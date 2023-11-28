@@ -1,8 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Tests that a pipeline with the FastAPI app runs correctly,
-and is able to consume and produce messages.
-"""
+"""Tests that a pipeline with the FastAPI app runs correctly."""
 
 import time
 

@@ -63,7 +63,7 @@ class DatasetConsumer:
     Attributes:
         consumer: Kafka consumer object
         cached: if the high watermark offset has been cached
-        (updated when message consumed)
+            (updated when message consumed)
 
     Methods:
         consume: reads a message from the dataset
@@ -173,11 +173,14 @@ class DatasetConsumer:
             how: how to read the message.
                 "next": read the next message in the queue
                 "last": read the last message in the queue
-            timeout: seconds to poll for a resopnse from kafka broker.
-            If using how="last",
+            timeout: seconds to poll for a response from kafka broker.
+                If using how="last", set to bigger than 0.
 
         Returns:
             message from the dataset
+
+        Raises:
+            ValueError: if how is not "next" or "last"
         """
         if how not in ["next", "last"]:
             raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
@@ -218,7 +221,14 @@ class DatasetConsumer:
                 raise e
 
     def next(self) -> dict:
-        """Wraps `consume(how="next")`, blocks until available.
+        """Use to consume the next message from the dataset.
+
+
+        This method is wraps `consume(how="next")`. It implements a
+        block that wait until a message is recieved before returning it.
+        This is useful when the timeout is short and the consumer often
+        returns `None`.
+
 
         Returns:
             msg: message from the dataset
@@ -226,12 +236,25 @@ class DatasetConsumer:
         return self._consume_message(how="next")
 
     def last(self, timeout: int = 1) -> dict:
-        """Wraps `consume(how="last")`, blocks until available.
+        """Used to consume the last message from the dataset.
+
+        This method is wraps `consume(how="next")`. It implements a
+        block that wait until a message is recieved before returning it.
+        This is useful when the timeout is short and the consumer often
+        returns `None`. The timeout must be >0 to prevent overwhelming the
+        broker with requests to update the offset.
+
+        Args:
+            timeout: seconds to poll for a response from kafka broker.
+                Must be >0.
 
         Returns:
             msg: message from the dataset
-            timeout: seconds to poll for a resopnse from kafka broker.
         """
+        if timeout == 0:
+            raise ValueError(
+                "Timeout must be > 0 when consuming the last message."
+            )
         return self._consume_message(how="last", timeout=timeout)
 
     def consume_all(self, end_message: str | bool = False) -> list:
