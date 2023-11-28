@@ -16,6 +16,7 @@ lint:
 	exit $$ERROR
 
 lint-docs:
+	vale sync
 	vale --glob="[!.]*/*.{md,adoc}" --config=.vale.ini .
 
 unit-test:
