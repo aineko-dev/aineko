@@ -34,7 +34,7 @@ description: What is Aineko?
 
 ## Try Aineko
 
-[Build your first Aineko Application in minutes!&ensp; →](./quickstart.md){ .md-button .md-button--primary }
+[Build your first Aineko application in minutes!&ensp; →](./quickstart.md){ .md-button .md-button--primary }
 
 ## Roadmap
 

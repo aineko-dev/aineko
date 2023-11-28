@@ -44,7 +44,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 ### Create a template pipeline with the CLI
 
-You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested!
+You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested.
 
 :   
     ```
@@ -124,7 +124,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     $ poetry run aineko service stop
     ```
 
-**So that's it to get an Aineko pipeline running! We hope that was smooth for you!**
+**So that's it to get an Aineko pipeline running. We hope that was smooth for you.**
 
 ??? question "What does the above output mean?"
 
@@ -139,7 +139,7 @@ To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_gui
 
 ### Visualizing the Pipeline
 
-Using the aineko cli, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
+Using the Aineko CLI, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
 
 :   
     ```sh

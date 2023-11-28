@@ -119,7 +119,7 @@ Here we add 2 evaluation steps and an evaluation model:
 
 ## Pipeline Configuration
 
-Here is the pipeline config used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
+Here is the pipeline configuration used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
 
 ```yaml
 pipeline:
