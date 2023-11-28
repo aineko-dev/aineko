@@ -7,8 +7,10 @@ import time
 from typing import Optional
 
 import pytest
+from click.testing import CliRunner
 
 from aineko import AbstractNode, ConfigLoader, Runner
+from aineko.__main__ import cli
 
 
 @pytest.fixture(scope="module")
@@ -76,6 +78,15 @@ def dummy_node():
             self.producers["output"].produce(msg)
 
     return DummyNode
+
+
+@pytest.fixture(scope="function")
+def start_service():
+    runner = CliRunner()
+    result = runner.invoke(cli, ["service", "restart", "--hard"])
+    assert result.exit_code == 0
+    yield
+    result = runner.invoke(cli, ["service", "down"])
 
 
 # Test nodes.

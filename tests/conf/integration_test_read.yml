@@ -21,3 +21,5 @@ pipeline:
   datasets:
     messages:
       type: kafka_stream
+    test_result:
+      type: kafka_stream
