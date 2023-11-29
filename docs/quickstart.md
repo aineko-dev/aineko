@@ -114,7 +114,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     ```
 
 !!! note
-    User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` does not.
+    User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` doesn't.
 
 
 ### Stop Aineko background services

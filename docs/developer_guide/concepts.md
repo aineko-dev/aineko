@@ -24,7 +24,7 @@ If a pipeline definition is a program, then a pipeline execution is a process. Y
 
 ## Dataset
 
-A Dataset is an abstraction for a buffer for data that you can define producers and consumers for. Producers write data to a dataset, while consumers read data from the dataset. It is analogous to a **pub-sub topic or channel**. In the current version of aineko, it is a **Kafka Topic,** but in future, other implementations of message channels could be pluggable too.
+A Dataset is an abstraction for a buffer for data that you can define producers and consumers for. Producers write data to a dataset, while consumers read data from the dataset. It's analogous to a **pub-sub topic or channel**. In the current version of aineko, it's a **Kafka Topic,** but in future, other implementations of message channels could be pluggable too.
 
 ## Node
 

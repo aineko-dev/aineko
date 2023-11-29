@@ -30,8 +30,8 @@ This is how the boilerplate directory look - many of these files are boilerplate
 
 Let's zoom in on the more interesting files to take note of:
 
-1. **`conf/pipeline.yml`** - This contains your pipeline definition that you are expected to modify to define your own pipeline. It is defined in YAML.
-2. **`my_awesome_pipeline/nodes.py`** - Remember how nodes are abstractions for computations? These nodes are implemented in Python. You do not have to strictly define them in this file. You can define them anywhere you like within the directory as long as you reference them correctly in `pipeline.yml`.
+1. **`conf/pipeline.yml`** - This contains your pipeline definition that you are expected to modify to define your own pipeline. It's defined in YAML.
+2. **`my_awesome_pipeline/nodes.py`** - Remember how nodes are abstractions for computations? These nodes are implemented in Python. You don't have to strictly define them in this file. You can define them anywhere you like within the directory as long as you reference them correctly in `pipeline.yml`.
 3. **`docker-compose.yml`** - When you invoke `aineko run` , datasets have to be initialised - which means that Aineko needs to create Kafka topics. This file contains the image Aineko needs to create containers from, as well as other configurations like environment variables and network settings. _You typically do not have to change this file._
 
 ## Defining a pipeline

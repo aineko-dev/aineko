@@ -50,7 +50,7 @@ Test if your changes worked by running the aineko pipeline and any other testing
 
 ## Run lints and tests
 
-Finally, after you have make all the changes, it is good to validate that you adhered to the style guide and you did not break anything.
+Finally, after you have make all the changes, it's good to validate that you adhered to the style guide and you didn't break anything.
 
 :   
     ```bash
