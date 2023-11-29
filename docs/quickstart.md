@@ -124,7 +124,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     $ poetry run aineko service stop
     ```
 
-**So that's it to get an Aineko pipeline running. We hope that was smooth for you.**
+**So that's it to get an Aineko pipeline running. How smooth was that?**
 
 ??? question "What does the above output mean?"
 
