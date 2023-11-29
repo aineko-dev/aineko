@@ -1,6 +1,6 @@
 # Building a Node
 
-Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it is a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node!
+Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it is a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node.
 
 ## Implementing a Node
 
@@ -29,7 +29,7 @@ class MySumNode(AbstractNode):
 
 ### `_pre_loop_hook`
 
-You can optionally define a `_pre_loop_hook` method in your node class to intialize the state of your node with class variables. If the `node_params` key is defined in `pipeline.yml`, it will be passed in under the `params` argument.
+You can optionally define a `_pre_loop_hook` method in your node class to initialize the state of your node with class variables. If the `node_params` key is defined in `pipeline.yml`, it will be passed in under the `params` argument.
 
 ```python title="sum_node.py" hl_lines="5-7"
 from aineko.internals.node import AbstractNode
@@ -77,12 +77,12 @@ class MySumNode(AbstractNode):
         self.producers["test_sum"].produce(self.state)
 ```
 
-The only way to an node "dies", or when the `_execute` loop terminates, is when the entire pipeline goes down or when the [poison pill](#poison-pill) is activated. 
+A node will only terminate when the entire pipeline goes down or when the [poison pill](#poison-pill) is activated. 
 
 
 ### Producers & Consumers
 
-Node classes inherit attributes named `self.producers` and `self.consumers` that are each a dictionary, keyed by dataset name with values being `DatasetProducer` and `DatasetConsumer` objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog config.
+Node classes inherit attributes named `self.producers` and `self.consumers` that are each a dictionary, keyed by dataset name with values being `DatasetProducer` and `DatasetConsumer` objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog configuration.
 
 ```python title="sum_node.py" hl_lines="11 18"
 from aineko.internals.node import AbstractNode

@@ -20,7 +20,7 @@ Here are the steps to get started quickly:
 
 ## Test using Aineko pipeline
 
-We highly encourage you to validate your changes by testing the project creation process end-to-end. This means validating the changes by running a lcoal pipeline that uses your local aineko repository.
+We highly encourage you to validate your changes by testing the project creation process end-to-end. This means validating the changes by running a local pipeline that uses your local aineko repository.
 
 First, update poetry to use your local aineko repository.
 
@@ -60,4 +60,4 @@ Finally, after you have make all the changes, it is good to validate that you ad
     make integration-test
     ```
 
-## Push, make a PR and see you on Github!
+## Push, make a PR and see you on GitHub.

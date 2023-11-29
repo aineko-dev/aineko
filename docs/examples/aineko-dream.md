@@ -39,7 +39,7 @@ Give it a try using the Aineko Dream bot in our [Slack](https://join.slack.com/t
 
     **Move Fast, Break Nothing -** By representing our use case as an Aineko pipeline, it was clear how we could swap building blocks in and out with ease.
 
-    _Aineko made it easy to try out new foundation models. Once the pipeline was constructed with GPT-3 it was trivial to use GPT-4. Later, we built a second connector node for the the Cohere API and used it as a drop-replacement for OpenAI. We were able to run all three models with standalone pipelines, each with its own unique API endpoint. We can use the various endpoints to route traffic for different users or use one for production and the others for development._
+    _Aineko made it easy to try out new foundation models. Once the pipeline was constructed with GPT-3 it was trivial to use GPT-4. Later, we built a second connector node for the Cohere API and used it as a drop-replacement for OpenAI. We were able to run all three models with standalone pipelines, each with its own unique API endpoint. We can use the various endpoints to route traffic for different users or use one for production and the others for development._
 
 
 ## Tech overview
@@ -119,7 +119,7 @@ Here we add 2 evaluation steps and an evaluation model:
 
 ## Pipeline Configuration
 
-Here is the pipeline config used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
+Here is the pipeline configuration used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
 
 ```yaml
 pipeline:
@@ -280,7 +280,7 @@ class OpenAIClient(AbstractNode):
 				)
 ```
 
-The `SecurityEvaluation` node takes the LLM response and creates a temporary file with the contents. We then use Bandit to run a test against the file and collect a list of issues. After cleaning up, the results are submitted to the the `EvaluationModel` node.
+The `SecurityEvaluation` node takes the LLM response and creates a temporary file with the contents. We then use Bandit to run a test against the file and collect a list of issues. After cleaning up, the results are submitted to the `EvaluationModel` node.
 
 ```python
 class SecurityEvaluation(AbstractNode):

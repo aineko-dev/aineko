@@ -185,3 +185,7 @@ terraform-provider*
 
 # CircleCI orb
 orb.yml
+
+# Vale styles (external)
+docs/.styles
+!docs/.styles/Vocab/Aineko
