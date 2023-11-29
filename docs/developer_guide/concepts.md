@@ -28,6 +28,6 @@ A Dataset is an abstraction for a buffer for data that you can define producers 
 
 ## Node
 
-A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**.
+A **Node** is an abstraction for some computation, akin to a function. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**.
 
 A node can optionally consume from topics, process that data and produce the output to another buffer that you can chain other Node consumers on.
