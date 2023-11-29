@@ -40,6 +40,7 @@ Once you're happy with your changes, run the linters to keep any additional code
 :   
     ```bash
     $ make lint
+    $ make lint-docs
     ```
 
 ## Push, make a pull request and see you on GitHub
