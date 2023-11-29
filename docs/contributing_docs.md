@@ -42,7 +42,7 @@ Once you're happy with your changes, run our linters to keep any additional code
     $ make lint
     ```
 
-## Push, make a pull request and see you on GitHub.
+## Push, make a pull request and see you on GitHub
 
 ??? question "How to make a PR?"
 
