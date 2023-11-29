@@ -47,6 +47,6 @@ description: What is Aineko?
 - [ ] Support multiple queuing systems beyond Kafka (RabbitMQ, etc)
 - [ ] Support multiple runtime engines beyond ray (k8s, etc)
 
-## Join our community
+## Join the community
 
-If you have questions about anything related to [Aineko](https://www.aineko.dev/), you're always welcome to ask our community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).
+If you have questions about anything related to [Aineko](https://www.aineko.dev/), you're always welcome to ask the community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).

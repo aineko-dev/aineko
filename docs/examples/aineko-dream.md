@@ -197,7 +197,7 @@ pipeline:
 
 Here are some samples of the node code used to run this pipeline.
 
-The `GitHubDocFetcher` emits the latest document when it initializes and updates the document based on triggers from a [GitHub webhook](https://docs.github.com/en/webhooks) that is configured to target our API server. The document is passed to the `PromptModel` to engineer a prompt based on the latest document.
+The `GitHubDocFetcher` emits the latest document when it initializes and updates the document based on triggers from a [GitHub webhook](https://docs.github.com/en/webhooks) that is configured to target the API server. The document is passed to the `PromptModel` to engineer a prompt based on the latest document.
 
 ```python
 class GitHubDocFetcher(AbstractNode):
@@ -280,7 +280,7 @@ class OpenAIClient(AbstractNode):
 				)
 ```
 
-The `SecurityEvaluation` node takes the LLM response and creates a temporary file with the contents. We then use Bandit to run a test against the file and collect a list of issues. After cleaning up, the results are submitted to the `EvaluationModel` node.
+The `SecurityEvaluation` node takes the LLM response and creates a temporary file with the contents. Aineko Dream then uses Bandit to run a test against the file and collect a list of issues. After cleaning up, the results are submitted to the `EvaluationModel` node.
 
 ```python
 class SecurityEvaluation(AbstractNode):
@@ -348,6 +348,6 @@ When the pipeline is live, you can visit [http://127.0.0.1:8000/docs](http://127
   <figcaption><p>Swagger UI</p></figcaption>
 </figure>
 
-## Join our community
+## Join the community
 
-If you have questions about anything related to [Aineko](https://www.aineko.dev/), you're always welcome to ask our community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).
+If you have questions about anything related to [Aineko](https://www.aineko.dev/), you're always welcome to ask the community on [GitHub](https://github.com/aineko-dev) or [Slack](https://join.slack.com/t/aineko-dev/shared\_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ).
