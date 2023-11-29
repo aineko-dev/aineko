@@ -9,3 +9,6 @@ APIs
 Composable
 pluggable
 [Pp]ythonic
+PoisonPill
+ChatGPT
+[Kk]afka
