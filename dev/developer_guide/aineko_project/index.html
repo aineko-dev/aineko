@@ -24,7 +24,7 @@
     
     
       
-        <title>Aineko Project - Aineko</title>
+        <title>Aineko project - Aineko</title>
       
     
     
@@ -137,7 +137,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Aineko Project
+              Aineko project
             
           </span>
         </div>
@@ -458,7 +458,7 @@
         
   
   <span class="md-ellipsis">
-    Contributing to Aineko Docs
+    Contributing to Aineko docs
   </span>
   
 
@@ -555,7 +555,7 @@
           
   
   <span class="md-ellipsis">
-    Aineko Project
+    Aineko project
   </span>
   
 
@@ -566,7 +566,7 @@
         
   
   <span class="md-ellipsis">
-    Aineko Project
+    Aineko project
   </span>
   
 
@@ -596,14 +596,14 @@
       
         <li class="md-nav__item">
   <a href="#defining-a-pipeline" class="md-nav__link">
-    Defining a Pipeline
+    Defining a pipeline
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#implementing-a-node" class="md-nav__link">
-    Implementing a Node
+    Implementing a node
   </a>
   
 </li>
@@ -627,7 +627,7 @@
         
   
   <span class="md-ellipsis">
-    CLI Documentation
+    CLI documentation
   </span>
   
 
@@ -647,7 +647,7 @@
         
   
   <span class="md-ellipsis">
-    Pipeline Configuration
+    Pipeline configuration
   </span>
   
 
@@ -667,7 +667,7 @@
         
   
   <span class="md-ellipsis">
-    Building a Node
+    Building a node
   </span>
   
 
@@ -923,7 +923,7 @@
         
   
   <span class="md-ellipsis">
-    Aineko Dream: Code Generation using ChatGPT with Real-time QA
+    "Aineko Dream": code generation using ChatGPT with real-time quality assurance
   </span>
   
 
@@ -994,14 +994,14 @@
       
         <li class="md-nav__item">
   <a href="#defining-a-pipeline" class="md-nav__link">
-    Defining a Pipeline
+    Defining a pipeline
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#implementing-a-node" class="md-nav__link">
-    Implementing a Node
+    Implementing a node
   </a>
   
 </li>
@@ -1024,7 +1024,7 @@
   
 
 
-<h1 id="aineko-project">Aineko Project</h1>
+<h1 id="aineko-project">Aineko project</h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is a continuation of the <a href="../../quickstart/">previous section (Quick Start)</a>. Before starting, make sure you have already created a template project using <code>aineko create</code>.</p>
@@ -1048,14 +1048,14 @@
 <p>This is how the boilerplate directory look - many of these files are boilerplate files to make things work.</p>
 <p>Let's zoom in on the more interesting files to take note of:</p>
 <ol>
-<li><strong><code>conf/pipeline.yml</code></strong> - This contains your pipeline definition that you are expected to modify to define your own pipeline. It is defined in YAML.</li>
-<li><strong><code>my_awesome_pipeline/nodes.py</code></strong> - Remember how nodes are abstractions for computations? These nodes are implemented in Python. You do not have to strictly define them in this file. You can define them anywhere you like within the directory as long as you reference them correctly in <code>pipeline.yml</code>.</li>
-<li><strong><code>docker-compose.yml</code></strong> - When we invoke <code>aineko run</code> , datasets has to be initialised - which means that we need to create Kafka topics. This file contains the image we need to create containers from, as well as other configurations like environment variables and network settings. <em>You typically do not have to change this file.</em></li>
+<li><strong><code>conf/pipeline.yml</code></strong> - This contains your pipeline definition that you are expected to modify to define your own pipeline. It's defined in YAML.</li>
+<li><strong><code>my_awesome_pipeline/nodes.py</code></strong> - Remember how nodes are abstractions for computations? These nodes are implemented in Python. You don't have to strictly define them in this file. You can define them anywhere you like within the directory as long as you reference them correctly in <code>pipeline.yml</code>.</li>
+<li><strong><code>docker-compose.yml</code></strong> - When you invoke <code>aineko run</code> , datasets have to be initialised - which means that Aineko needs to create Kafka topics. This file contains the image Aineko needs to create containers from, as well as other configurations like environment variables and network settings. <em>You typically do not have to change this file.</em></li>
 </ol>
-<h2 id="defining-a-pipeline">Defining a Pipeline</h2>
+<h2 id="defining-a-pipeline">Defining a pipeline</h2>
 <p>Pipelines are defined using a <code>.yml</code> file that contains specific keys. In this configuration file, you can assemble a pipeline from nodes and datasets.</p>
 <p>Refer to <a href="../pipeline_configuration/#defining-a-pipeline">this</a> for a detailed breakdown on pipeline configuration.</p>
-<h2 id="implementing-a-node">Implementing a Node</h2>
+<h2 id="implementing-a-node">Implementing a node</h2>
 <p>A node requires:</p>
 <ul>
 <li>Inheriting the base node class <strong><code>aineko.core.node.AbstractNode</code></strong></li>
@@ -1108,13 +1108,13 @@
         
         
           
-          <a href="../cli/" class="md-footer__link md-footer__link--next" aria-label="Next: CLI Documentation">
+          <a href="../cli/" class="md-footer__link md-footer__link--next" aria-label="Next: CLI documentation">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                CLI Documentation
+                CLI documentation
               </div>
             </div>
             <div class="md-footer__button md-icon">
