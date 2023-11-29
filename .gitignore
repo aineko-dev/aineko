@@ -186,6 +186,10 @@ terraform-provider*
 # CircleCI orb
 orb.yml
 
-# Vale styles (external)
-docs/.styles
-!docs/.styles/Vocab/Aineko
+# Ignore everything under docs/.styles
+docs/.styles/*
+# But don't ignore the Vocab directory
+!docs/.styles/Vocab/
+# Ignore everything under Vocab, except Aineko
+docs/.styles/Vocab/*
+!docs/.styles/Vocab/Aineko/
