@@ -1077,7 +1077,7 @@
 
 
 <h1 id="building-a-node">Building a Node</h1>
-<p>Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it is a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node!</p>
+<p>Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it is a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node.</p>
 <h2 id="implementing-a-node">Implementing a Node</h2>
 <p>To illustrate how a node should be constructed, we will go through an example of a simple node that consumes a number from an input dataset, increments it by 1, then produces it to an output dataset.</p>
 <div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
@@ -1100,7 +1100,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;test_sum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="_pre_loop_hook"><code>_pre_loop_hook</code></h3>
-<p>You can optionally define a <code>_pre_loop_hook</code> method in your node class to intialize the state of your node with class variables. If the <code>node_params</code> key is defined in <code>pipeline.yml</code>, it will be passed in under the <code>params</code> argument.</p>
+<p>You can optionally define a <code>_pre_loop_hook</code> method in your node class to initialize the state of your node with class variables. If the <code>node_params</code> key is defined in <code>pipeline.yml</code>, it will be passed in under the <code>params</code> argument.</p>
 <div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
 
 <span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
@@ -1141,9 +1141,9 @@
 </span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;increment&quot;</span><span class="p">])</span>
 </span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;test_sum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
 </span></code></pre></div>
-<p>The only way to an node "dies", or when the <code>_execute</code> loop terminates, is when the entire pipeline goes down or when the <a href="#poison-pill">poison pill</a> is activated. </p>
+<p>A node will only terminate when the entire pipeline goes down or when the <a href="#poison-pill">poison pill</a> is activated. </p>
 <h3 id="producers-consumers">Producers &amp; Consumers</h3>
-<p>Node classes inherit attributes named <code>self.producers</code> and <code>self.consumers</code> that are each a dictionary, keyed by dataset name with values being <code>DatasetProducer</code> and <code>DatasetConsumer</code> objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog config.</p>
+<p>Node classes inherit attributes named <code>self.producers</code> and <code>self.consumers</code> that are each a dictionary, keyed by dataset name with values being <code>DatasetProducer</code> and <code>DatasetConsumer</code> objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog configuration.</p>
 <div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
 
 <span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>

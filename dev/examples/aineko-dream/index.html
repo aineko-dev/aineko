@@ -1085,7 +1085,7 @@
 <p><strong>Tell a Story with Your Data -</strong> With Aineko, you retain all critical information with the context to help you tell a story in real-time and retroactively.</p>
 <p><em>Aineko made it simple to introduce a feedback loop for real-time QA for ChatGPT responses. We keep track of response evaluation results and submit new prompts to ChatGPT to fix the errors, without any human intervention. Additionally, since we are tracking all prompts, responses, and their evaluation results, we generate a rich dataset of our app’s performance which we can use to track and improve performance.</em></p>
 <p><strong>Move Fast, Break Nothing -</strong> By representing our use case as an Aineko pipeline, it was clear how we could swap building blocks in and out with ease.</p>
-<p><em>Aineko made it easy to try out new foundation models. Once the pipeline was constructed with GPT-3 it was trivial to use GPT-4. Later, we built a second connector node for the the Cohere API and used it as a drop-replacement for OpenAI. We were able to run all three models with standalone pipelines, each with its own unique API endpoint. We can use the various endpoints to route traffic for different users or use one for production and the others for development.</em></p>
+<p><em>Aineko made it easy to try out new foundation models. Once the pipeline was constructed with GPT-3 it was trivial to use GPT-4. Later, we built a second connector node for the Cohere API and used it as a drop-replacement for OpenAI. We were able to run all three models with standalone pipelines, each with its own unique API endpoint. We can use the various endpoints to route traffic for different users or use one for production and the others for development.</em></p>
 </div>
 <h2 id="tech-overview">Tech overview</h2>
 <p>With the Aineko framework in mind, we broke the problem down into a few key steps:</p>
@@ -1147,7 +1147,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
 <li>The <code>EvaluationModel</code> node consumes evaluation results and decides wether to generate another prompt or submit the final result to the API server. It keeps track of the evaluation results and the number of times we query the LLM.</li>
 </ul>
 <h2 id="pipeline-configuration">Pipeline Configuration</h2>
-<p>Here is the pipeline config used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.</p>
+<p>Here is the pipeline configuration used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">pipeline</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt3-template-generator</span>
 
@@ -1297,7 +1297,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
                         <span class="n">message</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;chat_messages&quot;</span><span class="p">]</span>
                 <span class="p">)</span>
 </code></pre></div>
-<p>The <code>SecurityEvaluation</code> node takes the LLM response and creates a temporary file with the contents. We then use Bandit to run a test against the file and collect a list of issues. After cleaning up, the results are submitted to the the <code>EvaluationModel</code> node.</p>
+<p>The <code>SecurityEvaluation</code> node takes the LLM response and creates a temporary file with the contents. We then use Bandit to run a test against the file and collect a list of issues. After cleaning up, the results are submitted to the <code>EvaluationModel</code> node.</p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">SecurityEvaluation</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Node that evaluates security of code.&quot;&quot;&quot;</span>
 
