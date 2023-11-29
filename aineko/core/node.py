@@ -212,14 +212,10 @@ class AbstractNode(ABC):
             out_msg
         )
 
-    def catch_exception(self) -> None:
-        """Catch an exception and report it.
-
-        Args:
-            exc: Exception to catch
-        """
+    def _log_traceback(self) -> None:
+        """Logs the traceback of an exception."""
         exc_info = traceback.format_exc()
-        self.log(exc_info, level="error")
+        self.log(exc_info, level="debug")
 
     def execute(self, params: Optional[dict] = None) -> None:
         """Execute the node.
@@ -235,7 +231,7 @@ class AbstractNode(ABC):
         try:
             self._pre_loop_hook(params)
         except Exception:  # pylint: disable=broad-except
-            self.catch_exception()
+            self._log_traceback()
             raise
 
         while run_loop is not False:
@@ -243,7 +239,7 @@ class AbstractNode(ABC):
             try:
                 run_loop = self._execute(params)  # type: ignore
             except Exception:  # pylint: disable=broad-except
-                self.catch_exception()
+                self._log_traceback()
                 raise
 
         self.log(f"Execution loop complete for node: {self.__class__.__name__}")
