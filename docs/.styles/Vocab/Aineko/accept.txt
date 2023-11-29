@@ -12,3 +12,4 @@ pluggable
 PoisonPill
 ChatGPT
 [Kk]afka
+CLI
