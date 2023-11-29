@@ -37,7 +37,7 @@ Next, create an Aineko project in the parent directory.
     $ poetry run aineko create --output-dir ../
     ```
 
-We need to update the create aineko project to use the local aineko repository. Go to `../my-awesome-pipeline/pyproject.toml` and update the following line.
+Next, update the create aineko project to use the local aineko repository. Go to `../my-awesome-pipeline/pyproject.toml` and update the following line.
 
 :   
     ```bash title="pyproject.toml" linenums="8" hl_lines="3"
@@ -50,7 +50,7 @@ Test if your changes worked by running the aineko pipeline and any other testing
 
 ## Run lints and tests
 
-Finally, after you have make all the changes, it is good to validate that you adhered to our style guide and you did not break anything.
+Finally, after you have make all the changes, it's good to validate that you adhered to the style guide and you didn't break anything.
 
 :   
     ```bash
@@ -60,4 +60,4 @@ Finally, after you have make all the changes, it is good to validate that you ad
     make integration-test
     ```
 
-## Push, make a PR and see you on GitHub.
+## Push, make a pull request and see you on GitHub

@@ -1,4 +1,4 @@
-# Pipeline Configuration
+# Pipeline configuration
 
 At a high-level, building a pipeline requires defining a pipeline and implementing at least a node.
 

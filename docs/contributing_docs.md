@@ -1,6 +1,6 @@
-# Contributing to Aineko Docs
+# Contributing to Aineko docs
 
-Thank you for your interest in contributing to our documentation.
+Thank you for your interest in contributing to the documentation.
 
 Here are the steps to get started quickly.
 
@@ -20,7 +20,7 @@ Here are the steps to get started quickly.
 
 Aineko raw documentation is in the form of markdown files found in the `docs` directory.
 
-We use [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) to generate the documentation static site from markdown.
+Aineko uses [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) to generate the documentation static site from markdown.
 
 ## Set up a local server to view changes live
 
@@ -35,14 +35,15 @@ Navigate to [localhost:8000](http://localhost:8000) to see the documentation sit
 
 ## Run lint
 
-Once you're happy with your changes, run our linters to keep any additional code stylistically consistent.
+Once you're happy with your changes, run the linters to keep any additional code stylistically consistent.
 
 :   
     ```bash
     $ make lint
+    $ make lint-docs
     ```
 
-## Push, make a PR and see you on GitHub.
+## Push, make a pull request and see you on GitHub
 
 ??? question "How to make a PR?"
 

@@ -8,7 +8,7 @@ Under the hood, Aineko automatically configures tooling needed for production-re
 
 ## Documentation
 
-For full documentation visit: [Aineko Documentation](https://docs.aineko.dev/).
+For complete information please refer to the [Aineko documentation](https://docs.aineko.dev/).
 
 ## Quickstart
 

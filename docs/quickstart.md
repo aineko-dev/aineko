@@ -4,7 +4,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 ## Get started with Aineko
 
-### Technical Dependencies
+### Technical dependencies
 
 1. [Docker](https://www.docker.com/get-started/) or [Docker Desktop](htps://www.docker.com/products/docker-desktop)
 2. [Poetry](https://python-poetry.org/docs/#installation) (a python dependency manager)
@@ -114,7 +114,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     ```
 
 !!! note
-    User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` does not.
+    User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` doesn't.
 
 
 ### Stop Aineko background services
@@ -124,7 +124,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     $ poetry run aineko service stop
     ```
 
-**So that's it to get an Aineko pipeline running. We hope that was smooth for you.**
+**So that's it to get an Aineko pipeline running. How smooth was that?**
 
 ??? question "What does the above output mean?"
 
@@ -137,7 +137,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
 To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_guide/concepts.md).
 
-### Visualizing the Pipeline
+### Visualizing the pipeline
 
 Using the Aineko CLI, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
 
