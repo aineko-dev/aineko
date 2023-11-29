@@ -123,7 +123,7 @@ class DatasetConsumer:
             message: message to check
 
         Returns:
-            message: message if valid, None if not
+            message if valid, None if not
         """
         # Check if message is valid
         if message is None or message.value() is None:
@@ -221,35 +221,49 @@ class DatasetConsumer:
                 raise e
 
     def next(self) -> dict:
-        """Use to consume the next message from the dataset.
+        """Consumes the next message from the dataset.
 
-        This method is wraps `consume(how="next")`. It implements a
-        block that wait until a message is recieved before returning it.
-        This is useful when the timeout is short and the consumer often
-        returns `None`.
+        Wraps the `consume(how="next")` method. It implements a
+        block that waits until a message is received before returning it.
+        This method ensures that every message is consumed, but the consumed
+        message may not be the most recent message if the consumer is slower
+        than the producer.
+
+        This is useful when the timeout is short and you expect the consumer
+        to often return `None`.
 
         Returns:
-            msg: message from the dataset
+            message from the dataset
         """
         return self._consume_message(how="next")
 
     def last(self, timeout: int = 1) -> dict:
-        """Used to consume the last message from the dataset.
+        """Consumes the last message from the dataset.
 
-        This method is wraps `consume(how="next")`. It implements a
-        block that wait until a message is recieved before returning it.
-        This is useful when the timeout is short and the consumer often
-        returns `None`. The timeout must be >0 to prevent overwhelming the
-        broker with requests to update the offset.
+        Wraps the `consume(how="last")` method. It implements a
+        block that waits until a message is received before returning it.
+        This method ensures that the consumed message is always the most
+        recent message. If the consumer is slower than the producer, messages
+        might be skipped. If the consumer is faster than the producer,
+        messages might be repeated.
+
+        This is useful when the timeout is short and you expect the consumer
+        to often return `None`.
+
+        Note: The timeout must be greater than 0 to prevent
+        overwhelming the broker with requests to update the offset.
 
         Args:
             timeout: seconds to poll for a response from kafka broker.
                 Must be >0.
 
         Returns:
-            msg: message from the dataset
+            message from the dataset
+
+        Raises:
+            ValueError: if timeout is <= 0
         """
-        if timeout == 0:
+        if timeout <= 0:
             raise ValueError(
                 "Timeout must be > 0 when consuming the last message."
             )
@@ -262,7 +276,7 @@ class DatasetConsumer:
             end_message: Message to trigger the completion of consumption
 
         Returns:
-            list: list of messages from the dataset
+            list of messages from the dataset
         """
         messages = []
         while True:
@@ -413,12 +427,13 @@ class FakeDatasetConsumer:
         Args:
             how: how to read the message
                 "next": read the next message in the queue
+                ":last": read the last message in the queue
 
         Returns:
-            next value in self.values
+            next or last value in self.values
 
         Raises:
-            ValueError: if how is not "next"
+            ValueError: if how is not "next" or "last"
         """
         if how not in ["next", "last"]:
             raise ValueError(f"Invalid how: {how}. Expected 'next' or 'last'.")
