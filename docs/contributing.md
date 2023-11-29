@@ -60,4 +60,4 @@ Finally, after you have make all the changes, it is good to validate that you ad
     make integration-test
     ```
 
-## Push, make a PR and see you on GitHub.
+## Push, make a pull request and see you on GitHub.

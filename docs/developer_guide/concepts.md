@@ -12,13 +12,13 @@ description: Pipeline, Node, Datasets
 
     In a pipeline, you may implement arbitrary computation units (**Nodes**), and specify where they consume data from, and where they send that data to (**Datasets**). An Aineko Pipeline allows you to construct complex processing graphs that processes streaming data.
 
-## Pipeline Definition
+## Pipeline definition
 
 A pipeline definition is a specialised Program that we write - to tell us what a pipeline comprises. A Pipeline definition is defined in YAML and essentially allows us to compose computation nodes together by specifying the input and output buffers that they consume data from and produce data to.
 
 See [here](./pipeline_configuration.md) to learn about writing a pipeline definition.
 
-## Pipeline Execution
+## Pipeline execution
 
 If a pipeline definition is a program, then a pipeline execution is a process. You can run multiple pipeline executions for a single pipeline definition.
 

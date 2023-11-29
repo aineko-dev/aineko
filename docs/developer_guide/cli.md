@@ -1,4 +1,4 @@
-# CLI Documentation
+# CLI documentation
 
 The Aineko CLI is a development tool that allows you to get started quickly and introspect your pipeline runs more expediently.
 
