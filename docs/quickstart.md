@@ -4,7 +4,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 ## Get started with Aineko
 
-### Technical Dependencies
+### Technical dependencies
 
 1. [Docker](https://www.docker.com/get-started/) or [Docker Desktop](htps://www.docker.com/products/docker-desktop)
 2. [Poetry](https://python-poetry.org/docs/#installation) (a python dependency manager)
@@ -42,9 +42,9 @@ description: Fastest way to get an Aineko pipeline up and running
 
     Pyenv is a great tool for managing Python versions, but it can be a bit tricky to get it set up correctly. If you're having trouble, check out the [pyenv documentation](https://github.com/pyenv/pyenv?tab=readme-ov-file#usage) or [this tutorial](https://realpython.com/intro-to-pyenv/). If you're still having trouble, feel free to reach out to us on [Slack](https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ)!
 
-### Create a template pipeline with the cli
+### Create a template pipeline with the CLI
 
-You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested!
+You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested.
 
 :   
     ```
@@ -114,7 +114,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     ```
 
 !!! note
-    User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` does not.
+    User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` doesn't.
 
 
 ### Stop Aineko background services
@@ -124,7 +124,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     $ poetry run aineko service stop
     ```
 
-**So that's it to get an Aineko pipeline running! We hope that was smooth for you!**
+**So that's it to get an Aineko pipeline running. How smooth was that?**
 
 ??? question "What does the above output mean?"
 
@@ -137,9 +137,9 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
 To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_guide/concepts.md).
 
-### Visualizing the Pipeline
+### Visualizing the pipeline
 
-Using the aineko cli, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
+Using the Aineko CLI, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
 
 :   
     ```sh

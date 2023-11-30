@@ -1,8 +1,8 @@
-# Building a Node
+# Building a node
 
-Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it is a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node!
+Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it's a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node.
 
-## Implementing a Node
+## Implementing a node
 
 To illustrate how a node should be constructed, we will go through an example of a simple node that consumes a number from an input dataset, increments it by 1, then produces it to an output dataset.
 
@@ -27,7 +27,7 @@ class MySumNode(AbstractNode):
 
 ### `_pre_loop_hook`
 
-You can optionally define a `_pre_loop_hook` method in your node class to intialize the state of your node with class variables. If the `node_params` key is defined in `pipeline.yml`, it will be passed in under the `params` argument.
+You can optionally define a `_pre_loop_hook` method in your node class to initialize the state of your node with class variables. If the `node_params` key is defined in `pipeline.yml`, it will be passed in under the `params` argument.
 
 ```python title="sum_node.py" hl_lines="5-7"
 from aineko.internals.node import AbstractNode
@@ -71,12 +71,12 @@ class MySumNode(AbstractNode):
         self.producers["test_sum"].produce(self.state)
 ```
 
-The only way to an node "dies", or when the `_execute` loop terminates, is when the entire pipeline goes down or when the [poison pill](#poison-pill) is activated. 
+A node will only terminate when the entire pipeline goes down or when the [poison pill](#poison-pill) is activated. 
 
 
-### Producers & Consumers
+### Producers & consumers
 
-Node classes inherit attributes named `self.producers` and `self.consumers` that are each a dictionary, keyed by dataset name with values being `DatasetProducer` and `DatasetConsumer` objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog config.
+Node classes inherit attributes named `self.producers` and `self.consumers` that are each a dictionary, keyed by dataset name with values being `DatasetProducer` and `DatasetConsumer` objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog configuration.
 
 ```python title="sum_node.py" hl_lines="11 16"
 from aineko.internals.node import AbstractNode
@@ -148,7 +148,7 @@ Node classes inherit a method named `self.log` that allows users to log messages
     ```
 
 
-### Poison Pill
+### PoisonPill
 
 Poison pills refers to an "emergency shut down" button that can be triggered in times of emergency. Every node has access to a `activate_poison_pill` method that will terminate the entire pipeline and kill all nodes. To invoke it, use the following syntax.
 

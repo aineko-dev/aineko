@@ -1,0 +1,15 @@
+[Aa]ineko
+pyenv
+[Uu]vicorn
+Pydantic
+application
+LLMs
+CPUs
+APIs
+Composable
+pluggable
+[Pp]ythonic
+PoisonPill
+ChatGPT
+[Kk]afka
+CLI
