@@ -1177,7 +1177,6 @@
 ├── README.md
 ├── conf
 │   └── pipeline.yml
-├── docker-compose.yml
 ├── my_awesome_pipeline
 │   ├── __init__.py
 │   ├── config.py
@@ -1191,9 +1190,8 @@
 <p>This is how the boilerplate directory look - many of these files are boilerplate files to make things work.</p>
 <p>Let's zoom in on the more interesting files to take note of:</p>
 <ol>
-<li><strong><code>conf/pipeline.yml</code></strong> - This contains your pipeline definition that you are expected to modify to define your own pipeline. It's defined in YAML.</li>
-<li><strong><code>my_awesome_pipeline/nodes.py</code></strong> - Remember how nodes are abstractions for computations? These nodes are implemented in Python. You don't have to strictly define them in this file. You can define them anywhere you like within the directory as long as you reference them correctly in <code>pipeline.yml</code>.</li>
-<li><strong><code>docker-compose.yml</code></strong> - When you invoke <code>aineko run</code> , datasets have to be initialised - which means that Aineko needs to create Kafka topics. This file contains the image Aineko needs to create containers from, as well as other configurations like environment variables and network settings. <em>You typically do not have to change this file.</em></li>
+<li><strong><code>conf/pipeline.yml</code></strong> - This contains your pipeline definition that you are expected to modify to define your own pipeline. It is defined in YAML.</li>
+<li><strong><code>my_awesome_pipeline/nodes.py</code></strong> - Remember how nodes are abstractions for computations? These nodes are implemented in Python. You do not have to strictly define them in this file. You can define them anywhere you like within the directory as long as you reference them correctly in <code>pipeline.yml</code>.</li>
 </ol>
 <h2 id="defining-a-pipeline">Defining a pipeline</h2>
 <p>Pipelines are defined using a <code>.yml</code> file that contains specific keys. In this configuration file, you can assemble a pipeline from nodes and datasets.</p>
