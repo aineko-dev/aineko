@@ -7,7 +7,7 @@
 
 [tool.poetry]
 name = "aineko"
-version = "0.2.4"
+version = "0.2.5"
 description = "Aineko, a data integration framework."
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
@@ -50,7 +50,6 @@ mkdocs-glightbox = "^0.3.4"
 mkdocstrings = { extras = ["python"], version = "^0.23.0" }
 mkdocs-click = "^0.8.1"
 mike = "^2.0.0"
-vale = "^2.29.6.0"
 
 [tool.poetry.group.test]
 optional = true
