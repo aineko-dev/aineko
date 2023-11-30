@@ -8,12 +8,8 @@ from typing import Optional
 
 import pytest
 import ray
-from click.testing import CliRunner
 
-from aineko.__main__ import cli
-from aineko.core.dataset import DatasetConsumer
-from aineko.core.node import AbstractNode
-from aineko.core.runner import Runner
+from aineko import AbstractNode, DatasetConsumer, Runner
 
 MESSAGES = [
     0,
@@ -58,7 +54,7 @@ class MessageReader(AbstractNode):
 
     def _execute(self, params: Optional[dict] = None) -> None:
         """Read message"""
-        msg = self.consumers["messages"].consume()
+        msg = self.consumers["messages"].next()
         if time.time() - self.last_updated > self.timeout:
             print(f"Received messages: {self.received}")
             print(self.consumers["messages"].topic_name)
@@ -73,7 +69,7 @@ class MessageReader(AbstractNode):
         self.received.append(msg["message"])
         self.last_updated = time.time()
 
-    def _post_loop_hook(self, params: dict | None = None) -> None:
+    def _post_loop_hook(self, params: Optional[dict] = None) -> None:
         if self.messages != self.received:
             raise ValueError(
                 "Failed to read expected messages."
@@ -85,7 +81,7 @@ class MessageReader(AbstractNode):
 
 
 @pytest.mark.integration
-def test_write_read_to_kafka():
+def test_write_read_to_kafka(start_service):
     """Integration test to check that nodes can write to kafka.
 
     First set up the integration test pipeline run it, making use
@@ -99,10 +95,6 @@ def test_write_read_to_kafka():
     that reads from the created dataset and checks that the messages
     are as expected.
     """
-    runner = CliRunner()
-    result = runner.invoke(cli, ["service", "restart"])
-    assert result.exit_code == 0
-
     runner = Runner(
         pipeline_config_file="tests/conf/integration_test_write.yml",
     )
@@ -136,3 +128,7 @@ def test_write_read_to_kafka():
         count_messages = consumer.consume_all(end_message="END")
         assert count_messages[0]["source_pipeline"] == "integration_test_read"
         assert count_messages[0]["message"] == "TEST PASSED"
+
+        # Test consume.last functionality
+        last_message = consumer.last(timeout=10)
+        assert last_message["message"] == "END"

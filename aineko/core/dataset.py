@@ -21,9 +21,14 @@ e.g. message:
 import datetime
 import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Literal, Optional
 
-from confluent_kafka import Consumer, Message, Producer  # type: ignore
+from confluent_kafka import (  # type: ignore
+    Consumer,
+    KafkaError,
+    Message,
+    Producer,
+)
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 
@@ -51,12 +56,14 @@ class DatasetConsumer:
         node_name: name of the node that is consuming the dataset
         pipeline_name: name of the pipeline
         dataset_config: dataset config
-        broker: broker to connect to (ip and port: "54.88.142.21:9092")
+        bootstrap_servers: bootstrap_servers to connect to (e.g. "1.2.3.4:9092")
         prefix: prefix for topic name (<prefix>.<dataset_name>)
         has_pipeline_prefix: whether the dataset name has pipeline name prefix
 
     Attributes:
         consumer: Kafka consumer object
+        cached: if the high watermark offset has been cached
+            (updated when message consumed)
 
     Methods:
         consume: reads a message from the dataset
@@ -77,6 +84,7 @@ class DatasetConsumer:
         self.kafka_config = DEFAULT_KAFKA_CONFIG
         self.prefix = prefix
         self.has_pipeline_prefix = has_pipeline_prefix
+        self.cached = False
 
         consumer_config = self.kafka_config.get("CONSUMER_CONFIG")
         # Overwrite bootstrap server with broker if provided
@@ -115,7 +123,7 @@ class DatasetConsumer:
             message: message to check
 
         Returns:
-            message: message if valid, None if not
+            message if valid, None if not
         """
         # Check if message is valid
         if message is None or message.value() is None:
@@ -132,30 +140,134 @@ class DatasetConsumer:
             message = message.decode("utf-8")
         return json.loads(message)
 
+    def _update_offset_to_latest(self) -> None:
+        """Updates offset to latest.
+
+        Note that the initial call, for this method might take
+        a while due to consumer initialization.
+        """
+        partitions = self.consumer.assignment()
+        # Initialize consumers if not already initialized by polling
+        while not partitions:
+            self.consumer.poll(timeout=0)
+            partitions = self.consumer.assignment()
+
+        for partition in partitions:
+            partition.offset = (
+                self.consumer.get_watermark_offsets(
+                    partition, cached=self.cached
+                )[1]
+                - 1
+            )
+
+        self.consumer.assign(partitions)
+
     def consume(
         self,
-        how: str = "next",
-        timeout: Optional[int] = None,
+        how: Literal["next", "last"] = "next",
+        timeout: Optional[float] = None,
     ) -> Optional[dict]:
-        """Reads a message from the dataset.
+        """Polls a message from the dataset.
 
         Args:
-            how: how to read the message
+            how: how to read the message.
                 "next": read the next message in the queue
+                "last": read the last message in the queue
+            timeout: seconds to poll for a response from kafka broker.
+                If using how="last", set to bigger than 0.
 
         Returns:
-            msg: message from the dataset
+            message from the dataset
+
+        Raises:
+            ValueError: if how is not "next" or "last"
         """
+        if how not in ["next", "last"]:
+            raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
+
         timeout = timeout or self.kafka_config.get("CONSUMER_TIMEOUT")
         if how == "next":
             # next unread message from queue
-            message = self._validate_message(
-                self.consumer.poll(timeout=timeout)
-            )
-        else:
-            raise ValueError(f"Invalid how: {how}. Expected 'next'.")
+            message = self.consumer.poll(timeout=timeout)
 
-        return message
+        if how == "last":
+            # last message from queue
+            self._update_offset_to_latest()
+            message = self.consumer.poll(timeout=timeout)
+
+        self.cached = True
+
+        return self._validate_message(message)
+
+    def _consume_message(
+        self, how: Literal["next", "last"], timeout: Optional[float] = None
+    ) -> dict:
+        """Calls the consume method and blocks until a message is returned.
+
+        Args:
+            how: See `consume` method for available options.
+
+        Returns:
+            message from dataset
+        """
+        while True:
+            try:
+                message = self.consume(how=how, timeout=timeout)
+                if message is not None:
+                    return message
+            except KafkaError as e:
+                if e.code() == "_MAX_POLL_EXCEEDED":
+                    continue
+                raise e
+
+    def next(self) -> dict:
+        """Consumes the next message from the dataset.
+
+        Wraps the `consume(how="next")` method. It implements a
+        block that waits until a message is received before returning it.
+        This method ensures that every message is consumed, but the consumed
+        message may not be the most recent message if the consumer is slower
+        than the producer.
+
+        This is useful when the timeout is short and you expect the consumer
+        to often return `None`.
+
+        Returns:
+            message from the dataset
+        """
+        return self._consume_message(how="next")
+
+    def last(self, timeout: int = 1) -> dict:
+        """Consumes the last message from the dataset.
+
+        Wraps the `consume(how="last")` method. It implements a
+        block that waits until a message is received before returning it.
+        This method ensures that the consumed message is always the most
+        recent message. If the consumer is slower than the producer, messages
+        might be skipped. If the consumer is faster than the producer,
+        messages might be repeated.
+
+        This is useful when the timeout is short and you expect the consumer
+        to often return `None`.
+
+        Note: The timeout must be greater than 0 to prevent
+        overwhelming the broker with requests to update the offset.
+
+        Args:
+            timeout: seconds to poll for a response from kafka broker.
+                Must be >0.
+
+        Returns:
+            message from the dataset
+
+        Raises:
+            ValueError: if timeout is <= 0
+        """
+        if timeout <= 0:
+            raise ValueError(
+                "Timeout must be > 0 when consuming the last message."
+            )
+        return self._consume_message(how="last", timeout=timeout)
 
     def consume_all(self, end_message: str | bool = False) -> list:
         """Reads all messages from the dataset until a specific one is found.
@@ -164,7 +276,7 @@ class DatasetConsumer:
             end_message: Message to trigger the completion of consumption
 
         Returns:
-            list: list of messages from the dataset
+            list of messages from the dataset
         """
         messages = []
         while True:
@@ -308,20 +420,24 @@ class FakeDatasetConsumer:
     def consume(
         self,
         how: str = "next",
-        timeout: Optional[int] = None,
+        timeout: Optional[float] = None,
     ) -> Optional[dict]:
         """Reads a message from the dataset.
 
         Args:
             how: how to read the message
                 "next": read the next message in the queue
+                ":last": read the last message in the queue
 
         Returns:
-            next value in self.values
+            next or last value in self.values
 
         Raises:
-            ValueError: if how is not "next"
+            ValueError: if how is not "next" or "last"
         """
+        if how not in ["next", "last"]:
+            raise ValueError(f"Invalid how: {how}. Expected 'next' or 'last'.")
+
         if how == "next":
             remaining = len(self.values)
             if remaining > 0:
@@ -335,9 +451,27 @@ class FakeDatasetConsumer:
                     "source_node": "test",
                     "source_pipeline": "test",
                 }
-            else:
-                return None
-        raise ValueError(f"Invalid how: {how}. Expected 'next'.")
+        if how == "last":
+            if self.values:
+                return self.values[-1]
+
+        return None
+
+    def next(self) -> Optional[dict]:
+        """Wraps `consume(how="next")`, blocks until available.
+
+        Returns:
+            msg: message from the dataset
+        """
+        return self.consume(how="next")
+
+    def last(self, timeout: float = 1) -> Optional[dict]:
+        """Wraps `consume(how="last")`, blocks until available.
+
+        Returns:
+            msg: message from the dataset
+        """
+        return self.consume(how="last", timeout=timeout)
 
 
 class FakeDatasetProducer:

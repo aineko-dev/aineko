@@ -90,4 +90,7 @@ nav:
       - 'api_reference/runner.md'
   - Examples:
       - examples/aineko-dream.md
+  - Extras:
+      - extras/extra_nodes.md
+      - extras/fastapi.md
   - Aineko Cloud: 'https://cloud-docs.aineko.dev'

@@ -81,10 +81,14 @@ class AbstractNode(ABC):
 
     def __init__(
         self,
+        node_name: str | None,
+        pipeline_name: str,
         poison_pill: Optional[ray.actor.ActorHandle] = None,
         test: bool = False,
     ) -> None:
         """Initialize the node."""
+        self.name = node_name or self.__class__.__name__
+        self.pipeline_name = pipeline_name
         self.last_heartbeat = time.time()
         self.consumers: Dict = {}
         self.producers: Dict = {}
@@ -100,8 +104,6 @@ class AbstractNode(ABC):
     def setup_datasets(
         self,
         datasets: Dict[str, dict],
-        node: str,
-        pipeline: str,
         inputs: Optional[List[str]] = None,
         outputs: Optional[List[str]] = None,
         prefix: Optional[str] = None,
@@ -124,8 +126,8 @@ class AbstractNode(ABC):
             {
                 dataset_name: DatasetConsumer(
                     dataset_name=dataset_name,
-                    node_name=node,
-                    pipeline_name=pipeline,
+                    node_name=self.name,
+                    pipeline_name=self.pipeline_name,
                     dataset_config=datasets.get(dataset_name, {}),
                     prefix=prefix,
                     has_pipeline_prefix=has_pipeline_prefix,
@@ -139,8 +141,8 @@ class AbstractNode(ABC):
             {
                 dataset_name: DatasetProducer(
                     dataset_name=dataset_name,
-                    node_name=node,
-                    pipeline_name=pipeline,
+                    node_name=self.name,
+                    pipeline_name=self.pipeline_name,
                     dataset_config=datasets.get(dataset_name, {}),
                     prefix=prefix,
                     has_pipeline_prefix=has_pipeline_prefix,

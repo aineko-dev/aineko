@@ -24,4 +24,4 @@ unit-test:
 
 integration-test:
 	poetry run aineko service start
-	poetry run pytest tests/integration
+	poetry run pytest tests -m "integration"

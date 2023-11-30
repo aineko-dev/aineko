@@ -28,6 +28,9 @@ confluent-kafka = "~2.2.0"
 ray = { extras = ["default"], version = "^2.6.3" }
 cookiecutter = "^2.4.0"
 click = "^8.1.7"
+# extras: fastapi
+fastapi = {version = "^0.99", optional = true}
+uvicorn = { version = "^0.22", extras = ["standard"], optional = true}
 
 [tool.poetry.group.dev.dependencies]
 aineko_style = "^0.0.1"
@@ -49,11 +52,17 @@ mkdocs-click = "^0.8.1"
 mike = "^2.0.0"
 vale = "^2.29.6.0"
 
+[tool.poetry.group.test]
+optional = true
+
 [tool.poetry.group.test.dependencies]
 mypy = "^1.5.1"
 pytest = "^7.4.1"
 pytest-cov = "^4.1.0"
 pytest-subtests = "^0.11.0"
+
+[tool.poetry.extras]
+fastapi = ["fastapi", "uvicorn"]
 
 [build-system]
 requires = ["poetry-core"]
