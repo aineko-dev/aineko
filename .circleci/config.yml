@@ -210,6 +210,7 @@ jobs:
           name: Test installing the newly created project
           command: |
             cd $original_cwd/my_awesome_pipeline
+            poetry add git+https://github.com/aineko-dev/aineko#<< pipeline.git.branch >>
             poetry install --no-interaction --no-ansi
       - run:
           name: Run the tests from the newly created project
