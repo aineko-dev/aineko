@@ -2890,17 +2890,6 @@ docs = ["Sphinx (>=4.1.2,<4.2.0)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)", "sphinxc
 test = ["Cython (>=0.29.36,<0.30.0)", "aiohttp (==3.9.0b0)", "aiohttp (>=3.8.1)", "flake8 (>=5.0,<6.0)", "mypy (>=0.800)", "psutil", "pyOpenSSL (>=23.0.0,<23.1.0)", "pycodestyle (>=2.9.0,<2.10.0)"]
 
 [[package]]
-name = "vale"
-version = "2.29.7.0"
-description = "Install and use Vale (grammar & style check tool) in python environments."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "vale-2.29.7.0-py3-none-any.whl", hash = "sha256:fb141d2c2466668a3fd358e059b90fab1e9cd1b6408de8e41145f8ec2a63a843"},
-    {file = "vale-2.29.7.0.tar.gz", hash = "sha256:c5618d0e4acabd1fe6e2a1eb1348c2010c34f29d40348581777ccfcfca26007d"},
-]
-
-[[package]]
 name = "verspec"
 version = "0.1.0"
 description = "Flexible version handling"
@@ -3373,4 +3362,4 @@ fastapi = ["fastapi", "uvicorn"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "11760379a506b9db88226b2976b6e8e2d0d484a7a8e82e29a9d75baac6a6162c"
+content-hash = "8b33376ec3647b01ab75bb38624d00ac61d7a3cd32acccd286e44f7b56e3d031"
