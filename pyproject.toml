@@ -47,7 +47,6 @@ mkdocs-glightbox = "^0.3.4"
 mkdocstrings = { extras = ["python"], version = "^0.23.0" }
 mkdocs-click = "^0.8.1"
 mike = "^2.0.0"
-vale = "^2.29.6.0"
 
 [tool.poetry.group.test.dependencies]
 mypy = "^1.5.1"

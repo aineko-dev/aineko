@@ -2698,17 +2698,6 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
-name = "vale"
-version = "2.29.6.0"
-description = "Install and use Vale (grammar & style check tool) in python environments."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "vale-2.29.6.0-py3-none-any.whl", hash = "sha256:fbd04ff58cb19c67582bf63a596c56d5155f345bfdf1ce6b2c110102e6a0f0bb"},
-    {file = "vale-2.29.6.0.tar.gz", hash = "sha256:fc7b9fe1c7981b36caac13c58743b472349ae1fef71f23c934087716c30b87d4"},
-]
-
-[[package]]
 name = "verspec"
 version = "0.1.0"
 description = "Flexible version handling"
@@ -2994,4 +2983,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "cc2f6b7662d59499356a87e49d7df78eef00d06fe10a900e324270e43826b906"
+content-hash = "45879db69921832df0d351985941968f6deab4511e33e6d3209f00bf39af2af8"
