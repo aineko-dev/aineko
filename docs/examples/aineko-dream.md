@@ -7,7 +7,7 @@ cover: >-
 coverY: 189
 ---
 
-# "Aineko Dream": code generation using ChatGPT with real-time quality assurance
+# Aineko Dream: code generation with ChatGPT
 
 
 

@@ -78,8 +78,6 @@ nav:
   - Get Started:
       - 'index.md'
       - 'quickstart.md'
-      - 'contributing.md'
-      - 'contributing_docs.md'
   - Developer Guide:
       - 'developer_guide/concepts.md'
       - 'developer_guide/aineko_project.md'
@@ -94,8 +92,10 @@ nav:
       - 'api_reference/config.md'
       - 'api_reference/config_loader.md'
       - 'api_reference/runner.md'
-  - Examples:
+  - Example Use Cases:
       - examples/aineko-dream.md
+  - Community:
+      - community/index.md
   - Extras:
       - extras/index.md
       - extras/fastapi.md
