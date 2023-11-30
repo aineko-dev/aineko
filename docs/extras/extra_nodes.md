@@ -1,6 +1,6 @@
 # Extra Nodes
 
-Extra nodes are nodes that come shipped with the `aineko` package. They cover popular use-cases and follow best-practice patterns to accelerate your speed of development!
+Extra nodes are nodes that come shipped with the `aineko` package. They cover popular use-cases and follow best-practice patterns to accelerate your speed of development.
 
 To use one of these nodes, simply add it to your dependencies and reference in it in the pipeline configuration.
 
