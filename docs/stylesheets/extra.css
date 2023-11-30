@@ -4,3 +4,12 @@
     --md-primary-fg-color--dark:  #064447;
     --md-accent-fg-color:         #44878A;
   }
+
+.md-typeset h1,
+.md-typeset h2, 
+.md-typeset h3,
+.md-typeset h4, 
+.md-typeset h5,
+.md-typeset h6 {
+  font-weight: bold;
+}
