@@ -8,7 +8,11 @@ from {{cookiecutter.project_slug}}.nodes import MySumNode
 def test_mynode():
     """Unit test for MySumNode."""
 
-    mynode = MySumNode(test=True)
+    mynode = MySumNode(
+        node_name="MySumNode",
+        pipeline_name="test_pipeline",
+        test=True
+    )
     mynode.setup_test(
         inputs={
             "test_sequence": [1, 2, 3]
