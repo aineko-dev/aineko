@@ -35,7 +35,7 @@ Navigate to [localhost:8000](http://localhost:8000) to see the documentation sit
 
 ## Run lint
 
-Once you're happy with your changes, run the linters to keep any additional code stylistically consistent.
+Once you're happy with your changes, run the linters to keep any additional code stylistically consistent. You will need to install [vale](https://vale.sh/) (a linter for prose) first. Installation instructions  can be found [here](https://vale.sh/docs/vale-cli/installation/#package-managers).
 
 :   
     ```bash
