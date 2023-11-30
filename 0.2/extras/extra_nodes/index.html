@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/0.2/developer_guide/node_implementation/">
+        <link rel="canonical" href="https://docs.aineko.dev/0.2/extras/extra_nodes/">
       
       
-        <link rel="prev" href="../pipeline_configuration/">
+        <link rel="prev" href="../../examples/aineko-dream/">
       
       
-        <link rel="next" href="../config_kafka/">
+        <link rel="next" href="../fastapi/">
       
       
       <link rel="icon" href="../../assets/favicon_green.svg">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Building a node - Aineko</title>
+        <title>Extra Nodes - Aineko</title>
       
     
     
@@ -98,7 +98,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#building-a-node" class="md-skip">
+        <a href="#extra-nodes" class="md-skip">
           Skip to content
         </a>
       
@@ -135,7 +135,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Building a node
+              Extra Nodes
             
           </span>
         </div>
@@ -231,13 +231,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../concepts/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../developer_guide/concepts/" class="md-tabs__link">
           
   
   Developer Guide
@@ -287,11 +285,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../extras/extra_nodes/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   Extras
@@ -500,8 +500,6 @@
       
   
   
-    
-  
   
   
     
@@ -512,12 +510,14 @@
       
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -531,7 +531,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Developer Guide
@@ -545,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../concepts/" class="md-nav__link">
+      <a href="../../developer_guide/concepts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -566,7 +566,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../aineko_project/" class="md-nav__link">
+      <a href="../../developer_guide/aineko_project/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -587,7 +587,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../cli/" class="md-nav__link">
+      <a href="../../developer_guide/cli/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -608,7 +608,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pipeline_configuration/" class="md-nav__link">
+      <a href="../../developer_guide/pipeline_configuration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -626,30 +626,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Building a node
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../developer_guide/node_implementation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -658,86 +638,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#implementing-a-node" class="md-nav__link">
-    <span class="md-ellipsis">
-      Implementing a node
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Implementing a node">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_pre_loop_hook" class="md-nav__link">
-    <span class="md-ellipsis">
-      _pre_loop_hook
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_execute" class="md-nav__link">
-    <span class="md-ellipsis">
-      _execute
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#producers-consumers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Producers &amp; consumers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      Logging
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#poisonpill" class="md-nav__link">
-    <span class="md-ellipsis">
-      PoisonPill
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -750,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../config_kafka/" class="md-nav__link">
+      <a href="../../developer_guide/config_kafka/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1020,8 +920,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1030,14 +932,12 @@
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -1051,7 +951,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Extras
@@ -1062,10 +962,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../extras/extra_nodes/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Extra Nodes
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -1074,6 +994,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#adding-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding Dependencies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-in-pipeline-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference in Pipeline Configuration
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1086,7 +1044,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extras/fastapi/" class="md-nav__link">
+      <a href="../fastapi/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1154,62 +1112,20 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#implementing-a-node" class="md-nav__link">
+  <a href="#adding-dependencies" class="md-nav__link">
     <span class="md-ellipsis">
-      Implementing a node
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Implementing a node">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_pre_loop_hook" class="md-nav__link">
-    <span class="md-ellipsis">
-      _pre_loop_hook
+      Adding Dependencies
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#_execute" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#reference-in-pipeline-configuration" class="md-nav__link">
     <span class="md-ellipsis">
-      _execute
+      Reference in Pipeline Configuration
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#producers-consumers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Producers &amp; consumers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      Logging
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#poisonpill" class="md-nav__link">
-    <span class="md-ellipsis">
-      PoisonPill
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1231,137 +1147,41 @@
   
 
 
-<h1 id="building-a-node">Building a node</h1>
-<p>Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it's a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node.</p>
-<h2 id="implementing-a-node">Implementing a node</h2>
-<p>To illustrate how a node should be constructed, we will go through an example of a simple node that consumes a number from an input dataset, increments it by 1, then produces it to an output dataset.</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
-
-<span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">_pre_loop_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optional; used to initialize node state.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;initial_state&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Required; function repeatedly executes.&quot;&quot;&quot;</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;test_sequence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Received input: </span><span class="si">{</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. Adding </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;increment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;increment&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;test_sum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="_pre_loop_hook"><code>_pre_loop_hook</code></h3>
-<p>You can optionally define a <code>_pre_loop_hook</code> method in your node class to initialize the state of your node with class variables. If the <code>node_params</code> key is defined in <code>pipeline.yml</code>, it will be passed in under the <code>params</code> argument.</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
-
-<span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
-
-<span class="hll">    <span class="k">def</span> <span class="nf">_pre_loop_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-</span><span class="hll"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Optional; used to initialize node state.&quot;&quot;&quot;</span>
-</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;initial_state&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span>
-    <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Required; function repeatedly executes.&quot;&quot;&quot;</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;test_sequence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Received input: </span><span class="si">{</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. Adding </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;increment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;increment&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;test_sum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="_execute"><code>_execute</code></h3>
-<p>The <code>_execute</code> method is repeatedly executed as the pipeline runs. We recommend nodes to follow a design pattern of constantly polling for new data and taking action when new data is received.</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
-
-<span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">_pre_loop_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optional; used to initialize node state.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;initial_state&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-<span class="hll">    <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-</span><span class="hll"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Required; function repeatedly executes.&quot;&quot;&quot;</span>
-</span><span class="hll">        <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;test_sequence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-</span><span class="hll">            <span class="sa">f</span><span class="s2">&quot;Received input: </span><span class="si">{</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. Adding </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;increment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
-</span><span class="hll">        <span class="p">)</span>
-</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;increment&quot;</span><span class="p">])</span>
-</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;test_sum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-</span></code></pre></div>
-<p>A node will only terminate when the entire pipeline goes down or when the <a href="#poison-pill">poison pill</a> is activated. </p>
-<h3 id="producers-consumers">Producers &amp; consumers</h3>
-<p>Node classes inherit attributes named <code>self.producers</code> and <code>self.consumers</code> that are each a dictionary, keyed by dataset name with values being <code>DatasetProducer</code> and <code>DatasetConsumer</code> objects respectively. These objects allow you to produce/consume data to/from a dataset from your catalog configuration.</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
-
-<span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">_pre_loop_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optional; used to initialize node state.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;initial_state&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Required; function repeatedly executes.&quot;&quot;&quot;</span>
-<span class="hll">        <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;test_sequence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-</span>        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Received input: </span><span class="si">{</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. Adding </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;increment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;increment&quot;</span><span class="p">])</span>
-<span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;test_sum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-</span></code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Producers and Consumers must be included in the pipeline configuration</p>
-<p>They must be defined in the <code>outputs</code> and <code>inputs</code> list respectively to be available to the node. If a dataset is not available in a Node's catalog, a <code>KeyError</code> will be raised.</p>
-</div>
-<p>A node can produce to a dataset, consume from a dataset, or both. Nodes that consume are triggered to action by the arrival of new data in the dataset they consume from.</p>
-<div class="admonition info">
-<p class="admonition-title">Examples on possible ways to connect nodes with datasets</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Produce only</label><label for="__tabbed_1_2">Consume only</label><label for="__tabbed_1_3">Consume and Produce</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p>This node only produces to two datasets, and acts like a source for datasets:</p>
-<pre class="mermaid"><code>flowchart LR
-classDef datasetClass fill:#87CEEB
-classDef nodeClass fill:#eba487
-N_node_producer_only((node_producer_only)):::nodeClass --&gt;  T_produced_dataset_1[produced_dataset_1]:::datasetClass
-N_node_producer_only((node_producer_only)):::nodeClass --&gt;  T_produced_dataset_2[produced_dataset_2]:::datasetClass</code></pre>
-</div>
-<div class="tabbed-block">
-<p>This node only consumes from two datasets, and acts like a sink for datasets:
-<pre class="mermaid"><code>flowchart LR
-classDef datasetClass fill:#87CEEB
-classDef nodeClass fill:#eba487
-T_consumed_dataset_1[consumed_dataset_1]:::datasetClass --&gt;  N_node_consumer_only((node_consumer_only)):::nodeClass
-T_consumed_dataset_2[consumed_dataset_2]:::datasetClass --&gt;  N_node_consumer_only((node_consumer_only)):::nodeClass</code></pre></p>
-</div>
-<div class="tabbed-block">
-<p>A node that both consumes and produces datasets acts like a transformer for datasets. The consumed datasets are the inputs to the transformer, and the produced datasets are the outputs of the transformer:
-<pre class="mermaid"><code>flowchart LR
-classDef datasetClass fill:#87CEEB
-classDef nodeClass fill:#eba487
-T_consumed_dataset[consumed_dataset]:::datasetClass --&gt;  N_node_transformer((node_transformer)):::nodeClass
-N_node_transformer((node_transformer)):::nodeClass --&gt;  T_produced_dataset[produced_dataset]:::datasetClass</code></pre></p>
-</div>
-</div>
-</div>
-</div>
-<h3 id="logging">Logging</h3>
+<h1 id="extra-nodes">Extra Nodes</h1>
+<p>Extra nodes are nodes that come shipped with the <code>aineko</code> package. They cover popular use-cases and follow best-practice patterns to accelerate your speed of development.</p>
+<p>To use one of these nodes, simply add it to your dependencies and reference in it in the pipeline configuration.</p>
+<h2 id="adding-dependencies">Adding Dependencies</h2>
 <dl>
-<dt>Node classes inherit a method named <code>self.log</code> that allows users to log messages. You can set the appropriate level from: <code>info</code>, <code>debug</code>, <code>warning</code>, <code>error</code>, an <code>critical</code>. You can log from inside of the <code>_pre_loop_hook</code> method, the <code>_execute</code> method, or any other method you add to your node.</dt>
+<dt>To install the dependencies of an extra node submodule, modify your <code>pyproject.toml</code> file by adding the <code>extras</code> key to the <code>aineko</code> package.</dt>
 <dd>
-<div class="highlight"><pre><span></span><code><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Produced </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cur_integer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;info&quot;</span><span class="p">)</span>
+<div class="highlight"><span class="filename">pyproject.toml</span><pre><span></span><code><span class="p p-Indicator">[</span><span class="nv">tool.poetry.dependencies</span><span class="p p-Indicator">]</span>
+<span class="l l-Scalar l-Scalar-Plain">python = &quot;&gt;=3.10,&lt;3.11&quot;</span>
+<span class="hll"><span class="l l-Scalar l-Scalar-Plain">aineko = {version = &quot;^0.2.5&quot;, extras=[&quot;fastapi&quot;]}</span>
+</span></code></pre></div>
+</dd>
+<dt>Once added, install the required dependencies using </dt>
+<dd>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>poetry<span class="w"> </span>lock
+$<span class="w"> </span>poetry<span class="w"> </span>install
 </code></pre></div>
 </dd>
 </dl>
-<h3 id="poisonpill">PoisonPill</h3>
+<h2 id="reference-in-pipeline-configuration">Reference in Pipeline Configuration</h2>
 <dl>
-<dt>Poison pills refers to an "emergency shut down" button that can be triggered in times of emergency. Every node has access to a <code>activate_poison_pill</code> method that will terminate the entire pipeline and kill all nodes. To invoke it, use the following syntax.</dt>
+<dt>To use such a node, simply reference the class in your pipeline configuration.</dt>
 <dd>
-<div class="highlight"><pre><span></span><code><span class="n">node</span><span class="o">.</span><span class="n">activate_poison_pill</span><span class="p">()</span>
+<div class="highlight"><span class="filename">pipeline.yml</span><pre><span></span><code><span class="nt">nodes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">fastapi</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aineko.extras.FastAPI</span>
+<span class="w">    </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_sequence</span>
+<span class="w">    </span><span class="nt">node_params</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_awesome_pipeline.fastapi:app</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
 </code></pre></div>
 </dd>
 </dl>
+<p>Refer to the in-depth pages on each extra node for more detail on how to use them.</p>
 
 
   
@@ -1385,7 +1205,7 @@ N_node_transformer((node_transformer)):::nodeClass --&gt;  T_produced_dataset[pr
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../pipeline_configuration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Pipeline configuration">
+          <a href="../../examples/aineko-dream/" class="md-footer__link md-footer__link--prev" aria-label="Previous: &#34;Aineko Dream&#34;: code generation using ChatGPT with real-time quality assurance">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1395,20 +1215,20 @@ N_node_transformer((node_transformer)):::nodeClass --&gt;  T_produced_dataset[pr
                 Previous
               </span>
               <div class="md-ellipsis">
-                Pipeline configuration
+                "Aineko Dream": code generation using ChatGPT with real-time quality assurance
               </div>
             </div>
           </a>
         
         
           
-          <a href="../config_kafka/" class="md-footer__link md-footer__link--next" aria-label="Next: Configuring Kafka">
+          <a href="../fastapi/" class="md-footer__link md-footer__link--next" aria-label="Next: FastAPI Node">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Configuring Kafka
+                FastAPI Node
               </div>
             </div>
             <div class="md-footer__button md-icon">
