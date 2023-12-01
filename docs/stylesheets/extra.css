@@ -19,4 +19,5 @@
   background-color: var(--md-highlight-color);
   color: #000000;
   font-weight: bold;
+  padding: 0.25rem;
 }
