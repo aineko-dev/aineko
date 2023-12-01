@@ -3,6 +3,7 @@
     --md-primary-fg-color--light: #D0E1E2;
     --md-primary-fg-color--dark:  #064447;
     --md-accent-fg-color:         #44878A;
+    --md-highlight-color:         #bae7ea;
   }
 
 .md-typeset h1,
@@ -11,5 +12,11 @@
 .md-typeset h4, 
 .md-typeset h5,
 .md-typeset h6 {
+  font-weight: bold;
+}
+
+.md-nav__item .md-nav__link--active {
+  background-color: var(--md-highlight-color);
+  color: #000000;
   font-weight: bold;
 }

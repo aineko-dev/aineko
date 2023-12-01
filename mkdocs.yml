@@ -16,11 +16,13 @@ theme:
     size: 20
   features:
     - content.code.copy
-    - navigation.sections
+    - navigation.path
     - navigation.footer
     - navigation.expand
     - navigation.indexes
+    - navigation.tracking
     - navigation.top
+    - navigation.sections
     - toc.follow
     - content.code.annotate
 extra_css:
@@ -76,8 +78,8 @@ plugins:
 
 nav:
   - Get Started:
-      - 'index.md'
-      - 'quickstart.md'
+      - 'start/index.md'
+      - 'start/quickstart.md'
   - Developer Guide:
       - 'developer_guide/concepts.md'
       - 'developer_guide/aineko_project.md'

@@ -49,7 +49,8 @@ You will see the following prompts as `aineko` tries to create a project directo
 :   
     ```
     $ aineko create
-
+    ```
+    ```
     [1/4] project_name (My Awesome Pipeline):
     [2/4] project_slug (my_awesome_pipeline):
     [3/4] project_description (Behold my awesome pipeline!):
@@ -69,7 +70,8 @@ You will see the following prompts as `aineko` tries to create a project directo
 :   
     ```
     $ poetry run aineko service start
-
+    ```
+    ```
     Container zookeeper  Creating
     Container zookeeper  Created
     Container broker  Creating
@@ -85,7 +87,8 @@ You will see the following prompts as `aineko` tries to create a project directo
 :   
     ```
     $ poetry run aineko run ./conf/pipeline.yml
-
+    ```
+    ```
     INFO - Application is starting.
     INFO - Creating dataset: aineko-pipeline.sequence: {'type': 'kafka_stream'}
     INFO - All datasets created.
@@ -99,7 +102,8 @@ To view messages running in one of the user-defined datasets:
 :   
     ```
     $ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
-
+    ```
+    ```
     {"timestamp": "2023-11-10 17:27:20", "dataset": "sequence", "source_pipeline": "test-aineko-pipeline", "source_node": "sequence", "message": 1}
     {"timestamp": "2023-11-10 17:27:20", "dataset": "sequence", "source_pipeline": "test-aineko-pipeline", "source_node": "sequence", "message": 2}
     ```
@@ -109,7 +113,8 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 :   
     ```
     $ poetry run aineko stream --dataset logging --from-beginning
-
+    ```
+    ```
     {"timestamp": "2023-11-10 17:46:15", "dataset": "logging", "source_pipeline": "test-aineko-pipeline", "source_node": "sum", "message": {"log": "Received input: 1. Adding 1...", "level": "info"}}
     ```
 
