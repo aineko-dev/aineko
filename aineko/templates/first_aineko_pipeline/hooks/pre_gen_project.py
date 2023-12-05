@@ -21,7 +21,7 @@ pipeline_slug = "{{ cookiecutter.pipeline_slug }}"
 
 
 class AinekoPathValidationException(Exception):
-    """Exception raised for invalid aineko-core repo paths.
+    """Exception raised for invalid aineko repo paths.
 
     This exception is thrown when the user-provided path does not point
     to a valid aineko-core repository.

@@ -20,7 +20,7 @@ lint-docs:
 	vale --glob="[!.]*.{md,adoc}" --config=.vale.ini .
 
 unit-test:
-	poetry run pytest --cov aineko --ignore tests/integration tests/
+	poetry run pytest --cov aineko -m "not integration" tests
 
 integration-test:
 	poetry run aineko service start
