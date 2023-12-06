@@ -78,7 +78,7 @@ plugins:
 
 nav:
   - Get Started:
-      - 'start/index.md'
+      - 'index.md'
       - 'start/quickstart.md'
   - Developer Guide:
       - 'developer_guide/concepts.md'
