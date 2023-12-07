@@ -19,5 +19,5 @@ project_slug = "{{ cookiecutter.project_slug }}"
 if not truthy(with_deploy):
     remove_deploy_file()
 
-if repo:
+if repo != "None":
     add_files_from_repo(repo, project_slug)
