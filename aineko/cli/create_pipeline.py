@@ -9,7 +9,9 @@ import yaml
 from cookiecutter.main import cookiecutter  # type: ignore
 
 from aineko.models.project_config_schema import ProjectConfig
-from aineko.templates.utils import get_file_from_repo
+from aineko.templates.first_aineko_pipeline.hooks.utils import (
+    get_file_from_repo,
+)
 
 
 @click.command()
@@ -95,7 +97,6 @@ def create(
         project_config = ProjectConfig(**project_config)
 
         extra_context["project_name"] = project_config.project_name
-        extra_context["project_slug"] = project_config.project_slug
         extra_context[
             "project_description"
         ] = project_config.project_description
@@ -108,4 +109,4 @@ def create(
         no_input=no_input,
     )
 
-    click.echo(f"Successfully created pipeline.")
+    click.echo("Successfully created pipeline.")
