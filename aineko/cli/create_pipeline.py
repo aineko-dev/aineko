@@ -5,7 +5,11 @@
 import os
 
 import click
+import yaml
 from cookiecutter.main import cookiecutter  # type: ignore
+
+from aineko.models.project_config_schema import ProjectConfig
+from aineko.templates.utils import get_file_from_repo
 
 
 @click.command()
@@ -78,18 +82,30 @@ def create(
     # assumes templates is a folder that is one-level up
     templates_directory = f"{os.path.dirname(script_directory)}/templates"
 
-    if repo:
-        no_input = True
+    extra_context = {
+        "_deployment_config": deployment_config,
+        "_repo": repo,
+    }
 
-    # Only one type of pipeline, hence this argument is no-arg
+    if repo:
+        click.echo("Getting project config from repo...")
+        no_input = True
+        project_config_raw = get_file_from_repo(repo, "aineko.yml")
+        project_config = yaml.safe_load(project_config_raw)
+        project_config = ProjectConfig(**project_config)
+
+        extra_context["project_name"] = project_config.project_name
+        extra_context["project_slug"] = project_config.project_slug
+        extra_context[
+            "project_description"
+        ] = project_config.project_description
+        extra_context["pipeline_slug"] = project_config.pipeline_slug
+
     cookiecutter(
         f"{templates_directory}/first_aineko_pipeline",
-        extra_context={
-            "_deployment_config": deployment_config,
-            "_repo": repo,
-        },
+        extra_context=extra_context,
         output_dir=output_dir,
         no_input=no_input,
     )
 
-    click.echo(f"Successfully created pipeline in {output_dir}.")
+    click.echo(f"Successfully created pipeline.")

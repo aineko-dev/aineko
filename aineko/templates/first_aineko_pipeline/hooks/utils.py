@@ -8,6 +8,7 @@ See: https://cookiecutter.readthedocs.io/en/1.7.2/advanced/hooks.html
 """
 
 import os
+import shutil
 
 import yaml
 from github import Auth, Github
@@ -98,7 +99,7 @@ def add_files_from_repo(full_repo_rev: str, project_slug: str):
     project_config = ProjectConfig(**project_config)
 
     # Remove files that will be replaced
-    os.remove(os.path.join("my_awesome_pipeline", "nodes.py"))
+    os.remove(os.path.join(project_slug, "nodes.py"))
     os.remove(os.path.join("conf", "pipeline.yml"))
 
     # Add all files except aineko.yml
@@ -116,7 +117,3 @@ def add_files_from_repo(full_repo_rev: str, project_slug: str):
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "wb") as file:
             file.write(content.decoded_content)
-
-    # Rename project directory
-    parent = os.getcwd()
-    os.rename(parent, os.path.join(os.path.dirname(parent), project_slug))
