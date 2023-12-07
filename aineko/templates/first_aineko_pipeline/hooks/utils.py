@@ -43,13 +43,14 @@ def get_all_repo_contents(repo: Repository, ref: str):
     return all_contents
 
 
-def add_files_from_repo(full_repo_rev: str):
+def add_files_from_repo(full_repo_rev: str, project_slug: str):
     """Adds relevant files from the GitHub repo revision to the
     generated aineko project.
 
     Args:
         full_repo_rev: GitHub repo to clone,
             in the format of <<owner>>/<<repo>>#<<rev>>.
+        project_slug: Project slug used for the generated project.
     """
     g = Github()
     repo, ref = full_repo_rev.split("#")
@@ -62,11 +63,24 @@ def add_files_from_repo(full_repo_rev: str):
 
     contents = get_all_repo_contents(repo, ref)
 
+    # Rename project directory
+    os.rename("my_awesome_pipeline", project_slug)
+
+    # Remove files that will be replaced
+    os.remove(f"{project_slug}/{project_slug}/nodes.py")
+    os.remove(f"{project_slug}/conf/pipeline.yml")
+
     # Add all files except aineko.yml
     for content in contents:
         if content.name == "aineko.yml":
             continue
-        file_path = os.path.join(os.getcwd(), content.path)
+
+        file_path = f"{project_slug}/{content.path}"
+        try:
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
+
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "wb") as file:
             file.write(content.decoded_content)

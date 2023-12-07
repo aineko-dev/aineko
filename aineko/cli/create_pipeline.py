@@ -53,7 +53,8 @@ def create(
                 alphanumeric characters and underscores. Will be derived from
                 project_name if not provided.
             - project_description (optional): Description of the pipeline.
-            - pipeline_slug (optional): Name of pipeline.
+            - pipeline_slug (optional): Name of pipeline (alphanumeric characters,
+                dashes and underscores only).
         - <<project_name>>/nodes.py or <<project_name>>/nodes/*.py: Either a
             file containing all node code or a directory containing multiple
             node code files.
@@ -76,6 +77,10 @@ def create(
     script_directory = os.path.dirname(os.path.abspath(__file__))
     # assumes templates is a folder that is one-level up
     templates_directory = f"{os.path.dirname(script_directory)}/templates"
+
+    if repo:
+        no_input = True
+
     # Only one type of pipeline, hence this argument is no-arg
     cookiecutter(
         f"{templates_directory}/first_aineko_pipeline",
@@ -86,3 +91,5 @@ def create(
         output_dir=output_dir,
         no_input=no_input,
     )
+
+    click.echo(f"Successfully created pipeline in {output_dir}.")
