@@ -10,7 +10,7 @@ See: https://cookiecutter.readthedocs.io/en/1.7.2/advanced/hooks.html
 import os
 
 import yaml
-from github import Github, Repository
+from github import Auth, Github
 
 from aineko import __version__
 from aineko.models.project_config_schema import ProjectConfig
@@ -26,21 +26,59 @@ def remove_deploy_file():
         pass
 
 
-def get_all_repo_contents(repo: Repository, ref: str):
+def create_github_client() -> Github:
+    """Creates a GitHub client.
+
+    Returns:
+        GitHub client.
+    """
+    if os.getenv("GITHUB_TOKEN"):
+        return Github(auth=Auth.Token(os.environ["GITHUB_TOKEN"]))
+    return Github()
+
+
+def get_all_repo_contents(full_repo_rev: str) -> list:
     """Recursively gets all contents of a GitHub repo.
 
     Args:
-        repo: github Repository object.
+        full_repo_rev: GitHub repo to clone,
+            in the format of <<owner>>/<<repo>>#<<rev>>.
+
+    Returns:
+        List of all contents of the repo.
     """
+    g = create_github_client()
+    repo, ref = full_repo_rev.split("#")
+    repo = g.get_repo(repo)
+
     all_contents = []
     contents = repo.get_contents("", ref=ref)
     while contents:
         file_content = contents.pop(0)
         if file_content.type == "dir":
-            contents.extend(repo.get_contents(file_content.path))
-    else:
-        all_contents.append(file_content)
+            contents.extend(repo.get_contents(file_content.path, ref=ref))
+        else:
+            all_contents.append(file_content)
+    g.close()
     return all_contents
+
+
+def get_file_from_repo(full_repo_rev: str, file_path: str) -> str:
+    """Gets a file from a GitHub repo.
+
+    Args:
+        full_repo_rev: GitHub repo to clone,
+            in the format of <<owner>>/<<repo>>#<<rev>>.
+        file_path: Path to file to get.
+
+    Returns:
+        Contents of file.
+    """
+    g = create_github_client()
+    repo, ref = full_repo_rev.split("#")
+    repo = g.get_repo(repo)
+    g.close()
+    return repo.get_contents(file_path, ref=ref).decoded_content
 
 
 def add_files_from_repo(full_repo_rev: str, project_slug: str):
@@ -52,35 +90,33 @@ def add_files_from_repo(full_repo_rev: str, project_slug: str):
             in the format of <<owner>>/<<repo>>#<<rev>>.
         project_slug: Project slug used for the generated project.
     """
-    g = Github()
-    repo, ref = full_repo_rev.split("#")
-    repo = g.get_repo(repo)
+    contents = get_all_repo_contents(full_repo_rev)
 
     # Parse aineko.yml
-    project_config_raw = repo.get_contents("aineko.yml", ref=ref)
-    project_config = yaml.safe_load(project_config_raw.decoded_content)
+    project_config_raw = get_file_from_repo(full_repo_rev, "aineko.yml")
+    project_config = yaml.safe_load(project_config_raw)
     project_config = ProjectConfig(**project_config)
 
-    contents = get_all_repo_contents(repo, ref)
-
-    # Rename project directory
-    os.rename("my_awesome_pipeline", project_slug)
-
     # Remove files that will be replaced
-    os.remove(f"{project_slug}/{project_slug}/nodes.py")
-    os.remove(f"{project_slug}/conf/pipeline.yml")
+    os.remove(os.path.join("my_awesome_pipeline", "nodes.py"))
+    os.remove(os.path.join("conf", "pipeline.yml"))
 
     # Add all files except aineko.yml
     for content in contents:
         if content.name == "aineko.yml":
             continue
 
-        file_path = f"{project_slug}/{content.path}"
+        file_path = f"{content.path}"
         try:
             os.remove(file_path)
         except FileNotFoundError:
             pass
 
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        if os.path.dirname(file_path):
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "wb") as file:
             file.write(content.decoded_content)
+
+    # Rename project directory
+    parent = os.getcwd()
+    os.rename(parent, os.path.join(os.path.dirname(parent), project_slug))
