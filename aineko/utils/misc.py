@@ -3,7 +3,7 @@
 """Miscellaneous utilities."""
 
 
-def truthy(val):
+def truthy(val: str | int | bool) -> bool:
     """Returns True if val is truthy, else False.
 
     Truthy values include:

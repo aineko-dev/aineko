@@ -55,19 +55,19 @@ def create(
             Requires keys:
             - aineko_version: Version of aineko to use.
             - project_name: Name of the aineko project.
-            - project_slug (optional): Slug of project. Can only contain
+            - project_slug: (optional) slug of project. Can only contain
                 alphanumeric characters and underscores. Will be derived from
                 project_name if not provided.
-            - project_description (optional): Description of the pipeline.
-            - pipeline_slug (optional): Name of pipeline (alphanumeric characters,
-                dashes and underscores only).
+            - project_description: (optional) Description of the pipeline.
+            - pipeline_slug: (optional) name of pipeline (alphanumeric
+                characters, dashes and underscores only).
         - <<project_name>>/nodes.py or <<project_name>>/nodes/*.py: Either a
             file containing all node code or a directory containing multiple
             node code files.
         - conf/*.yml: Directory containing config files for pipelines.
 
     The following files are optional, and will overwrite the default files:
-        - README.md (optional): README file for the repo.
+        - README.md: README file for the repo.
         - pyproject.toml: Project configuration, including poetry requirements
         - deploy.yml: Project deployment configuration.
         - <<project_name>>/tests/*.py: Test directory

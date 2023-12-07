@@ -8,7 +8,6 @@ See: https://cookiecutter.readthedocs.io/en/1.7.2/advanced/hooks.html
 """
 
 import os
-import shutil
 
 import yaml
 from github import Auth, Github
@@ -83,8 +82,7 @@ def get_file_from_repo(full_repo_rev: str, file_path: str) -> str:
 
 
 def add_files_from_repo(full_repo_rev: str, project_slug: str):
-    """Adds relevant files from the GitHub repo revision to the
-    generated aineko project.
+    """Adds relevant files from the GitHub repo revision.
 
     Args:
         full_repo_rev: GitHub repo to clone,

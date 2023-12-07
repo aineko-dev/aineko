@@ -31,3 +31,4 @@ class ProjectConfig(BaseModel):
                 f"but current version is {__version__}. Use "
                 f"`pip install aineko=={v}` to install the correct version."
             )
+        return v
