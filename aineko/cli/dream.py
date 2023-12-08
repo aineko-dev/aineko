@@ -34,7 +34,13 @@ def dream(prompt: str, api_key: str, url: str) -> None:
         )
         click.echo(f"Received response code: {r.status_code}")
         if r.status_code == 200:
-            click.echo(r.json()["status"])
+            request_id = r.json()["request_id"]
+            click.echo(
+                "Successfully published project to: "
+                f"https://github.com/Convex-Labs/dream-catcher/tree/{request_id}. \n\n"  # pylint: disable=line-too-long
+                "To create a new project from this dream, run: \n\n"
+                f"aineko create --repo Convex-Labs/dream-catcher#{request_id}"
+            )
         else:
             click.echo(r.text)
 
