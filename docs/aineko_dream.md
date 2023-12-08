@@ -12,7 +12,7 @@ poetry run aineko dream "create a pipeline that scrapes twitter and analyses the
 
 replacing `API-KEY` with a valid Aineko Dream API key. Contact support@aineko.dev to get an API key to try this feature.
 
-Aineko Dream goes on to create a complete aineko project, including node code, pipeline configuration and more using OpenAI's GPT-4 models. Upon completion, Aineko Dream publishes the project in the public Github repository [dream-catcher](https://github.com/Convex-Labs/dream-catcher).
+Aineko Dream goes on to create a complete aineko project, including node code, pipeline configuration and more using OpenAI's GPT-4 models. Upon completion, Aineko Dream publishes the project in the public GitHub repository [dream-catcher](https://github.com/Convex-Labs/dream-catcher).
 
 ## Creating your Aineko Dream project
 
@@ -22,5 +22,5 @@ Upon completion of the previous step, `aineko create` offers an easy way to get 
 poetry run aineko create --repo Convex-Labs/dream-catcher#12345
 ```
 
-where the argument after repo should be the unique ID associated to your generated project. This will be output in the result of the previous section.
+where the argument after `--repo` should be the unique ID associated to your generated project. This will be output in the result of the previous section.
 
