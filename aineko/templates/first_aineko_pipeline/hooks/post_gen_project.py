@@ -6,7 +6,6 @@ These code will run after files are generated
 
 See: https://cookiecutter.readthedocs.io/en/1.7.2/advanced/hooks.html
 """
-import distutils
 
 from aineko.templates.first_aineko_pipeline.hooks.utils import (
     add_files_from_repo,
@@ -18,7 +17,7 @@ with_deploy = "{{ cookiecutter._deployment_config }}"
 repo = "{{ cookiecutter._repo }}"
 project_slug = "{{ cookiecutter.project_slug }}"
 
-if not bool(distutils.util.strtobool(with_deploy)):
+if not truthy(with_deploy):
     remove_deploy_file()
 
 if repo != "None":
