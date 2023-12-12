@@ -116,7 +116,7 @@ It can be used in multiple ways for different teams and projects:
 
 ## Join the Community
 
-Have questions or ah-ha! moments? Building something cool with Aineko? Go ahead and share it with out open source community!
+Have questions or "ah-ha" moments? Building something cool with Aineko? Go ahead and share it with out open source community.
 
 <div class="grid" markdown>
 
