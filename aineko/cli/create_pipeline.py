@@ -100,7 +100,10 @@ def create(
         extra_context[
             "project_description"
         ] = project_config.project_description
-        extra_context["pipeline_slug"] = project_config.pipeline_slug
+        if project_config.project_slug:
+            extra_context["project_slug"] = project_config.project_slug
+        if project_config.pipeline_slug:
+            extra_context["pipeline_slug"] = project_config.pipeline_slug
 
     cookiecutter(
         f"{templates_directory}/first_aineko_pipeline",

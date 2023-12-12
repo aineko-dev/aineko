@@ -20,7 +20,7 @@ class ProjectConfig(BaseModel):
     project_name: str
     project_slug: Optional[str]
     project_description: Optional[str]
-    pipeline_slug: str
+    pipeline_slug: Optional[str]
 
     @validator("aineko_version")
     def version(cls, v: str) -> str:  # pylint: disable=no-self-argument

@@ -28,25 +28,25 @@ class AinekoPathValidationException(Exception):
     """
 
 
-def validate_slug(slug: str) -> None:
+def validate_slug(slug: str, key: str) -> None:
     """Validate a slug to ensure compliance with specified rules.
 
     Args:
         slug: The slug to be validated.
-
+        key: The key that the slug is associated with.
     Raises:
         ValueError: Raised if the slug contains invalid characters.
     """
     if not re.match(r"^[a-z_-]+$", slug):
         raise ValueError(
-            f"[{slug}] Slug can only contain lowercase letters, dashes,"
+            f"Got {slug} for {key}: expected only contain lowercase letters, dashes,"
             " and underscores."
         )
 
 
 try:
-    validate_slug(project_slug)
-    validate_slug(pipeline_slug)
+    validate_slug(project_slug, "project_slug")
+    validate_slug(pipeline_slug, "pipeline_slug")
 
 
 except ValueError as ex:
