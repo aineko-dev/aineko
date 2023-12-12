@@ -16,6 +16,7 @@ theme:
     size: 20
   features:
     - content.code.copy
+    - navigation.tabs
     - navigation.path
     - navigation.footer
     - navigation.expand
@@ -77,28 +78,30 @@ plugins:
             show_root_heading: true
 
 nav:
-  - Get Started:
-      - 'index.md'
-      - 'start/quickstart.md'
-  - Developer Guide:
-      - 'developer_guide/concepts.md'
-      - 'developer_guide/aineko_project.md'
-      - 'developer_guide/cli.md'
-      - 'developer_guide/pipeline_configuration.md'
-      - 'developer_guide/node_implementation.md'
-      - 'developer_guide/config_kafka.md'
-  - API Documentation:
-      - 'api_reference/abstract_node.md'
-      - 'api_reference/dataset_consumer.md'
-      - 'api_reference/dataset_producer.md'
-      - 'api_reference/config.md'
-      - 'api_reference/config_loader.md'
-      - 'api_reference/runner.md'
-  - Example Use Cases:
-      - examples/aineko-dream.md
-  - Community:
-      - community/index.md
-  - Extras:
-      - extras/index.md
-      - extras/fastapi.md
+  - Aineko Framework:
+      - Get Started:
+          - 'index.md'
+          - 'start/quickstart.md'
+      - Developer Guide:
+          - 'developer_guide/concepts.md'
+          - 'developer_guide/aineko_project.md'
+          - 'developer_guide/cli.md'
+          - 'developer_guide/pipeline_configuration.md'
+          - 'developer_guide/node_implementation.md'
+          - 'developer_guide/config_kafka.md'
+      - Extras:
+          - extras/index.md
+          - extras/fastapi.md
+      - API Documentation:
+          - 'api_reference/abstract_node.md'
+          - 'api_reference/dataset_consumer.md'
+          - 'api_reference/dataset_producer.md'
+          - 'api_reference/config.md'
+          - 'api_reference/config_loader.md'
+          - 'api_reference/runner.md'
+      - Example Pipelines:
+          - examples/aineko-dream.md
+      - Community:
+          - community/index.md
+
   - Aineko Cloud: 'https://cloud-docs.aineko.dev'
