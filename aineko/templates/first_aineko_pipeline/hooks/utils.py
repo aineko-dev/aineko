@@ -48,15 +48,15 @@ def get_all_repo_contents(full_repo_rev: str) -> list:
         List of all contents of the repo.
     """
     g = create_github_client()
-    repo, ref = full_repo_rev.split("#")
-    repo = g.get_repo(repo)
+    repo = full_repo_rev.split("#")
+    repo = g.get_repo(repo[0])
 
     all_contents = []
-    contents = repo.get_contents("", ref=ref)
+    contents = repo.get_contents("", ref=repo[1])
     while contents:
         file_content = contents.pop(0)
         if file_content.type == "dir":
-            contents.extend(repo.get_contents(file_content.path, ref=ref))
+            contents.extend(repo.get_contents(file_content.path, ref=repo[1]))
         else:
             all_contents.append(file_content)
     g.close()
@@ -75,10 +75,10 @@ def get_file_from_repo(full_repo_rev: str, file_path: str) -> str:
         Contents of file.
     """
     g = create_github_client()
-    repo, ref = full_repo_rev.split("#")
-    repo = g.get_repo(repo)
+    repo = full_repo_rev.split("#")
+    repo = g.get_repo(repo[0])
     g.close()
-    return repo.get_contents(file_path, ref=ref).decoded_content
+    return repo.get_contents(file_path, ref=repo[1]).decoded_content
 
 
 def add_files_from_repo(full_repo_rev: str, project_slug: str):
