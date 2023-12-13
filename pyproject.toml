@@ -28,6 +28,7 @@ confluent-kafka = "~2.2.0"
 ray = { extras = ["default"], version = "^2.6.3" }
 cookiecutter = "^2.4.0"
 click = "^8.1.7"
+pygithub = "~=2.1.1"
 # extras: fastapi
 fastapi = {version = "^0.99", optional = true}
 uvicorn = { version = "^0.22", extras = ["standard"], optional = true}

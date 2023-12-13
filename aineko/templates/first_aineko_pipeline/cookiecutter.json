@@ -2,6 +2,7 @@
     "project_name": "My Awesome Pipeline",
     "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
     "project_description": "Behold my awesome pipeline!",
-    "pipeline_slug": "test-aineko-pipeline",
-    "_deployment_config": false
+    "pipeline_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
+    "_deployment_config": false,
+    "_repo": "None"
 }

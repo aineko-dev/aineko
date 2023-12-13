@@ -12,7 +12,7 @@ coverY: 189
 
 
 <a href="https://github.com/aineko-dev/aineko-dream" markdown>
-:fontawesome-brands-github: **View on Github**
+:fontawesome-brands-github: **View on GitHub**
 </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ" markdown>
 :fontawesome-brands-slack: **Try on Slack**
