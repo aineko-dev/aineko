@@ -2,9 +2,9 @@
 description: Fastest way to get an Aineko pipeline up and running
 ---
 
-## Get started with Aineko
+# Get started with Aineko
 
-### Technical dependencies
+## Technical dependencies
 
 1. [Docker](https://www.docker.com/get-started/) or [Docker Desktop](htps://www.docker.com/products/docker-desktop)
 2. [Poetry](https://python-poetry.org/docs/#installation) (a python dependency manager)
@@ -21,7 +21,7 @@ description: Fastest way to get an Aineko pipeline up and running
     * `pip --version` should return something like `pip 23.0.1 from xxx/python3.10/site-packages/pip (python 3.10)`
     * `poetry --version` should return something like `Poetry (version 1.6.1)`
 
-### Install Aineko
+## Install Aineko
 
 :   
     ```
@@ -43,7 +43,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
     Pyenv is a great tool for managing Python versions, but it can be a bit tricky to get it set up correctly. If you're having trouble, check out the [pyenv documentation](https://github.com/pyenv/pyenv?tab=readme-ov-file#usage) or [this tutorial](https://realpython.com/intro-to-pyenv/). If you're still having trouble, feel free to reach out to us on [Slack](https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ)!
 
-### Create a template pipeline with the CLI
+## Create a template pipeline with the CLI
 
 You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested.
 
@@ -58,7 +58,7 @@ You will see the following prompts as `aineko` tries to create a project directo
     [4/4] pipeline_slug (test-aineko-pipeline):
     ```
 
-### Install dependencies in the new pipeline
+## Install dependencies in the new pipeline
 
 :   
     ```
@@ -83,7 +83,7 @@ You will see the following prompts as `aineko` tries to create a project directo
     Container broker  Started
     ```
 
-### Start the template pipeline
+## Start the template pipeline
 
 :   
     ```
@@ -96,7 +96,7 @@ You will see the following prompts as `aineko` tries to create a project directo
     INFO worker.py:1664 -- Started a local Ray instance.
     ```
 
-### Check the data being streamed
+## Check the data being streamed
 
 To view messages running in one of the user-defined datasets:
 
@@ -123,7 +123,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     User-defined datasets have the pipeline name automatically prefixed, but the special built-in dataset `logging` doesn't.
 
 
-### Stop Aineko background services
+## Stop Aineko background services
 
 :   
     ```
@@ -143,7 +143,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
 To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_guide/concepts.md).
 
-### Visualizing the pipeline
+## Visualizing the pipeline
 
 Using the Aineko CLI, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
 
