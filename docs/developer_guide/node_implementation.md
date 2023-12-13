@@ -165,7 +165,7 @@ In cases where you might require more low-level control over consumption pattern
     self.consumers["dataset"].consume(how="next", timeout=1)
     ```
 
-The timeout argument in these methods signifiy the duration in which the method has to return a message otherwise it will re-poll for a new one.
+The timeout argument in these methods signify the duration in which the method has to return a message otherwise it will re-poll for a new one.
 
 
 ### Logging
