@@ -34,13 +34,14 @@ def validate_slug(slug: str, key: str) -> None:
     Args:
         slug: The slug to be validated.
         key: The key that the slug is associated with.
+
     Raises:
         ValueError: Raised if the slug contains invalid characters.
     """
     if not re.match(r"^[a-z_-]+$", slug):
         raise ValueError(
-            f"Got {slug} for {key}: expected only contain lowercase letters, dashes,"
-            " and underscores."
+            f"Got {slug} for {key}: expected only contain lowercase "
+            "letters, dashes, and underscores."
         )
 
 
