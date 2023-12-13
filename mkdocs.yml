@@ -72,6 +72,7 @@ nav:
   - Get Started:
       - 'index.md'
       - 'quickstart.md'
+      - 'aineko_dream.md'
       - 'contributing.md'
       - 'contributing_docs.md'
   - Developer Guide:

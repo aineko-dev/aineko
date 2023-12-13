@@ -6,6 +6,7 @@ import click
 from aineko import __version__
 from aineko.cli.create_pipeline import create
 from aineko.cli.docker_cli_wrapper import service
+from aineko.cli.dream import dream
 from aineko.cli.kafka_cli_wrapper import stream
 from aineko.cli.run import run
 from aineko.cli.visualize import visualize
@@ -23,6 +24,7 @@ cli.add_command(run)
 cli.add_command(service)
 cli.add_command(stream)
 cli.add_command(visualize)
+cli.add_command(dream)
 
 if __name__ == "__main__":
     cli(obj={})
