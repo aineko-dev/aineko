@@ -79,10 +79,10 @@ class Environment(BaseModel, extra="forbid"):
     def validate_lb_endpoint(  # pylint: disable=no-self-argument
         cls, value: Optional[Dict[str, List[LoadBalancer]]]
     ) -> None | Dict[str, List[LoadBalancer]]:
-        """Load balancer endpoints must be valid.
+        """Validates Load balancer endpoints.
 
         The following criteria apply:
-            - Endpoints must be 12 characters or fewer (total 64).
+            - Endpoints must be 12 characters or fewer.
             - Can only contain alphanumeric characters and hyphens.
         """
         if value is None:
