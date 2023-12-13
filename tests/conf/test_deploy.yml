@@ -19,7 +19,7 @@ environments:
       - simple_example
 
     load_balancers:
-      dev-api.aineko.dev:
+      dev-api:
         - pipeline: example_pipeline
           port: 8000
 

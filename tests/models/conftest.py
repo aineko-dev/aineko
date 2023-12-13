@@ -31,3 +31,16 @@ def pipelines_config(pipeline_config, machine_config):
             },
         ]
     }
+
+
+@pytest.fixture(scope="function")
+def load_balancer_config():
+    return {
+        "pipeline": "test_pipeline_1",
+        "port": 8080,
+    }
+
+
+@pytest.fixture(scope="function")
+def load_balancers_config(load_balancer_config):
+    return {"load_balancers": {"test-point": [load_balancer_config]}}
