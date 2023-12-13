@@ -80,12 +80,12 @@ This section defines the compute nodes for a pipeline.
 A particular node instance in the pipeline, defined by a unique name. Any parameters defined at the individual node level will locally overwrite any default settings defined at the `default_node_settings` level.
 
 | Key           | Required | Type            | Description                                                                                                                                                           |
-| ------------- | -------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `class`       | Y        | string          | Python module to run for the node.                                                                                                                                    |
-| `inputs`      | N        | list of strings | Defines which datasets to consume from if applicable.                                                                                                                 |
-| `outputs`     | N        | list of strings | Defines which datasets to produce to if applicable.                                                                                                                   |
+| ------------- | -------- | --------------- |---------------------------------------------------------------------------------------- |
+| `class`       | Y        | string          | Python module to run for the node. This should exist within the python module in the same repository . |
+| `inputs`      | N        | list of strings | Defines which datasets to consume from if applicable. |
+| `outputs`     | N        | list of strings | Defines which datasets to produce to if applicable. |
 | `node_params` | N        | map             | Defines any arbitrary parameters relevant for node's application logic. In the example above, we defined `initial_state` and `increment` parameters, which are both integers. |
-| `num_cpus`    | Y        | float           | Number of CPUs allocated to a node. Required either for each node definition or at `default_node_settings` level.                                                     |
+| `num_cpus`    | Y        | float           | Number of CPUs allocated to a node. Required either for each node definition or at `default_node_settings` level.  |
 
 
 
