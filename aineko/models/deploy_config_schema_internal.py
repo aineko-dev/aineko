@@ -94,7 +94,8 @@ class Environment(BaseModel, extra="forbid"):
                 )
             if re.compile("^[a-zA-Z0-9-]+$").fullmatch(endpoint) is None:
                 raise ValueError(
-                    f"Endpoints can only contain alphanumeric characters and hyphens: {endpoint}."
+                    "Endpoints can only contain alphanumeric characters "
+                    f"and hyphens: {endpoint}."
                 )
         return value
 
