@@ -16,7 +16,7 @@ import requests
     help="API url to use for the Aineko Dream API.",
 )
 def dream(prompt: str, api_key: str, url: str) -> None:
-    """Main function generate an aineko project using Aineko Dream.\f
+    """Main function to generate an aineko project using Aineko Dream.\f
 
     Args:
         prompt: Prompt to generate a project from.
