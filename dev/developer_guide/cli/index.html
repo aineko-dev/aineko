@@ -273,7 +273,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../examples/aineko-dream/" class="md-tabs__link">
+        <a href="../../examples/aineko-dream.md" class="md-tabs__link">
           
   
   Examples
@@ -438,6 +438,27 @@
   
   <span class="md-ellipsis">
     Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../aineko_dream/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aineko Dream
   </span>
   
 
@@ -646,6 +667,15 @@
   <a href="#aineko-create" class="md-nav__link">
     <span class="md-ellipsis">
       create
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko-dream" class="md-nav__link">
+    <span class="md-ellipsis">
+      dream
     </span>
   </a>
   
@@ -1046,11 +1076,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../examples/aineko-dream/" class="md-nav__link">
+      <a href="../../examples/aineko-dream.md" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    "Aineko Dream": code generation using ChatGPT with real-time quality assurance
+    None
   </span>
   
 
@@ -1224,6 +1254,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#aineko-dream" class="md-nav__link">
+    <span class="md-ellipsis">
+      dream
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#aineko-run" class="md-nav__link">
     <span class="md-ellipsis">
       run
@@ -1346,11 +1385,35 @@
 </code></pre></div>
 <h3 id="aineko-create">aineko create</h3>
 <p>Creates boilerplate code and config required for an Aineko pipeline.</p>
+<p>If repo is set, attempts to clone and use the files from the repo.
+The following files are required:</p>
+<pre><code>- aineko.yml: Contains required data to create an aineko pipeline.
+    Requires keys:
+    - aineko_version: Version of aineko to use.
+    - project_name: Name of the aineko project.
+    - project_slug: (optional) slug of project. Can only contain
+        alphanumeric characters and underscores. Will be derived from
+        project_name if not provided.
+    - project_description: (optional) Description of the pipeline.
+    - pipeline_slug: (optional) name of pipeline (alphanumeric
+        characters, dashes and underscores only).
+- &lt;&lt;project_name&gt;&gt;/nodes.py or &lt;&lt;project_name&gt;&gt;/nodes/*.py: Either a
+    file containing all node code or a directory containing multiple
+    node code files.
+- conf/*.yml: Directory containing config files for pipelines.
+</code></pre>
+<p>The following files are optional, and will overwrite the default files:
+    - README.md: README file for the repo.
+    - pyproject.toml: Project configuration, including poetry requirements
+    - deploy.yml: Project deployment configuration.
+    - &lt;<project_name>&gt;/tests/*.py: Test directory</p>
 <p>Args:
     deployment_config: If True, include a deploy file when generating, else
     do not include.
     output_dir: Directory to create pipeline in. Defaults to current.
-    no_input: If True, do not prompt for parameters and use defaults.</p>
+    no_input: If True, do not prompt for parameters and use defaults.
+    repo: GitHub repo to create pipeline from. Link should contain branch
+        or rev to reference.</p>
 <p><strong>Usage:</strong></p>
 <div class="highlight"><pre><span></span><code>aineko create [OPTIONS]
 </code></pre></div>
@@ -1364,8 +1427,31 @@
   -n, --no-input           Do not prompt for
                            parameters and use
                            defaults.
+  -r, --repo TEXT          GitHub repo to create
+                           pipeline from. Link
+                           should contain branch
+                           or rev to reference.
+                           (Ex aineko-dev/dream-
+                           catcher#my-branch)
+                           Refer to CLI docs for
+                           more info on repo
+                           structure.
   --help                   Show this message and
                            exit.
+</code></pre></div>
+<h3 id="aineko-dream">aineko dream</h3>
+<p>Main function to generate an aineko project using Aineko Dream.</p>
+<p>Args:
+    prompt: Prompt to generate a project from.
+    api_key: API key to use for the Aineko Dream API.
+    url: URL to use for the Aineko Dream API.</p>
+<p><strong>Usage:</strong></p>
+<div class="highlight"><pre><span></span><code>aineko dream [OPTIONS] PROMPT API_KEY
+</code></pre></div>
+<p><strong>Options:</strong></p>
+<div class="highlight"><pre><span></span><code>  -u, --url TEXT  API url to use for the Aineko
+                  Dream API.
+  --help          Show this message and exit.
 </code></pre></div>
 <h3 id="aineko-run">aineko run</h3>
 <p>Main function to run a pipeline from the command line.</p>

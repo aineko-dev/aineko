@@ -16,7 +16,7 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../contributing/">
+        <link rel="next" href="../aineko_dream/">
       
       
       <link rel="icon" href="../assets/favicon_green.svg">
@@ -275,7 +275,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../examples/aineko-dream/" class="md-tabs__link">
+        <a href="../examples/aineko-dream.md" class="md-tabs__link">
           
   
   Examples
@@ -576,6 +576,27 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aineko_dream/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aineko Dream
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1029,11 +1050,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/aineko-dream/" class="md-nav__link">
+      <a href="../examples/aineko-dream.md" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    "Aineko Dream": code generation using ChatGPT with real-time quality assurance
+    None
   </span>
   
 
@@ -1337,16 +1358,20 @@ Python<span class="w"> </span><span class="m">3</span>.10.12
 <p>Pyenv is a great tool for managing Python versions, but it can be a bit tricky to get it set up correctly. If you're having trouble, check out the <a href="https://github.com/pyenv/pyenv?tab=readme-ov-file#usage">pyenv documentation</a> or <a href="https://realpython.com/intro-to-pyenv/">this tutorial</a>. If you're still having trouble, feel free to reach out to us on <a href="https://join.slack.com/t/aineko-dev/shared_invite/zt-23yuq8mrl-uZavRQKGFltxLZLCqcQZaQ">Slack</a>!</p>
 </details>
 <h3 id="create-a-template-pipeline-with-the-cli">Create a template pipeline with the CLI</h3>
+<div class="admonition tip">
+<p class="admonition-title">Create a pipeline using Aineko Dream</p>
+<p>Interested in creating a custom pipeline for a specific use case? Leverage Aineko Dream to generate a pipeline based on a prompt that describes your use case. See more detail <a href="../aineko_dream/">here</a></p>
+</div>
 <dl>
 <dt>You will see the following prompts as <code>aineko</code> tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested.</dt>
 <dd>
-<div class="highlight"><pre><span></span><code>$ aineko create
-
-[1/4] project_name (My Awesome Pipeline):
+<p><div class="highlight"><pre><span></span><code>$ aineko create
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>[1/4] project_name (My Awesome Pipeline):
 [2/4] project_slug (my_awesome_pipeline):
 [3/4] project_description (Behold my awesome pipeline!):
 [4/4] pipeline_slug (test-aineko-pipeline):
-</code></pre></div>
+</code></pre></div></p>
 </dd>
 </dl>
 <h3 id="install-dependencies-in-the-new-pipeline">Install dependencies in the new pipeline</h3>
@@ -1358,8 +1383,8 @@ $ poetry install
 <h3 id="start-aineko-background-services">Start Aineko background services</h3>
 <dl>
 <dd><div class="highlight"><pre><span></span><code>$ poetry run aineko service start
-
-Container zookeeper  Creating
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Container zookeeper  Creating
 Container zookeeper  Created
 Container broker  Creating
 Container broker  Created
@@ -1372,8 +1397,8 @@ Container broker  Started
 <h3 id="start-the-template-pipeline">Start the template pipeline</h3>
 <dl>
 <dd><div class="highlight"><pre><span></span><code>$ poetry run aineko run ./conf/pipeline.yml
-
-INFO - Application is starting.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>INFO - Application is starting.
 INFO - Creating dataset: aineko-pipeline.sequence: {&#39;type&#39;: &#39;kafka_stream&#39;}
 INFO - All datasets created.
 INFO worker.py:1664 -- Started a local Ray instance.
@@ -1383,18 +1408,18 @@ INFO worker.py:1664 -- Started a local Ray instance.
 <dl>
 <dt>To view messages running in one of the user-defined datasets:</dt>
 <dd>
-<div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
-
-{&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 1}
-{&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 2}
+<p><div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
 </code></pre></div>
+<div class="highlight"><pre><span></span><code>{&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 1}
+{&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 2}
+</code></pre></div></p>
 </dd>
 <dt>Alternatively, to view logs stored in the built-in <code>logging</code> dataset:</dt>
 <dd>
-<div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset logging --from-beginning
-
-{&quot;timestamp&quot;: &quot;2023-11-10 17:46:15&quot;, &quot;dataset&quot;: &quot;logging&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sum&quot;, &quot;message&quot;: {&quot;log&quot;: &quot;Received input: 1. Adding 1...&quot;, &quot;level&quot;: &quot;info&quot;}}
+<p><div class="highlight"><pre><span></span><code>$ poetry run aineko stream --dataset logging --from-beginning
 </code></pre></div>
+<div class="highlight"><pre><span></span><code>{&quot;timestamp&quot;: &quot;2023-11-10 17:46:15&quot;, &quot;dataset&quot;: &quot;logging&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sum&quot;, &quot;message&quot;: {&quot;log&quot;: &quot;Received input: 1. Adding 1...&quot;, &quot;level&quot;: &quot;info&quot;}}
+</code></pre></div></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1483,13 +1508,13 @@ N_sum((sum)):::nodeClass --&gt;  T_test_sum[test_sum]:::datasetClass</code></pre
         
         
           
-          <a href="../contributing/" class="md-footer__link md-footer__link--next" aria-label="Next: Contributing to Aineko">
+          <a href="../aineko_dream/" class="md-footer__link md-footer__link--next" aria-label="Next: Aineko Dream">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Contributing to Aineko
+                Aineko Dream
               </div>
             </div>
             <div class="md-footer__button md-icon">

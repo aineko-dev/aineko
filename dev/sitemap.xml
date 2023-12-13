@@ -6,6 +6,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.aineko.dev/dev/aineko_dream/</loc>
+         <lastmod>2023-12-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.aineko.dev/dev/contributing/</loc>
          <lastmod>2023-12-13</lastmod>
          <changefreq>daily</changefreq>
@@ -81,7 +86,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/dev/examples/aineko-dream/</loc>
+         <loc>https://docs.aineko.dev/dev/examples/aineko_dream/</loc>
          <lastmod>2023-12-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
