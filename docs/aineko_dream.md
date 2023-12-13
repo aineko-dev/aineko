@@ -1,6 +1,6 @@
 # Aineko Dream
 
-Aineko Dream is the quickest way to get started with Aineko pipelines by leveraging the power of generative AI to create a starter Aineko pipeline based on your use case. 
+Aineko Dream leverages the power of generative AI to create a starter Aineko pipeline based on your use case. 
 
 ## Generating a Project
 
