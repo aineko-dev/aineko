@@ -40,3 +40,12 @@
   color: #000000;
   font-size: .9rem;
 }
+
+pre .bash_symbol {
+  user-select: none;
+  -webkit-user-select: none;    
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.highlight.no-copy .md-clipboard { display: none; }

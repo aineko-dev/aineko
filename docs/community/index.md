@@ -1,57 +1,63 @@
 # Contributing to Aineko
 
-Thank you for your interest in contributing to [Aineko](https://github.com/aineko-dev/aineko)!
+Thank you for your interest in contributing to [Aineko](https://github.com/Aineko-dev/Aineko)!
 
 Here are the steps to get started quickly:
 
 ## Install Aineko from source
 
-First, install the source code for aineko on your local system.
+First, make sure you have poetry installed on your system if not already installed.
 
 :   
     ```bash
-    $ curl -sSL https://install.python-poetry.org | python3 -
-    $ git clone https://github.com/aineko-dev/aineko
-    $ cd aineko && poetry install --with dev,test,docs
+    curl -sSL https://install.python-poetry.org | python3 -
+    ```
+
+Then, install the source code for Aineko on your local system.
+
+:   
+    ```bash
+    git clone https://github.com/Aineko-dev/Aineko
+    cd Aineko && poetry install --with dev,test,docs
     ```
 
 ## Make your changes to Aineko source code
 
-Update aineko on your local system.
+Update Aineko on your local system.
 
 ## Test using Aineko pipeline
 
-We highly encourage you to validate your changes by testing the project creation process end-to-end. This means validating the changes by running a local pipeline that uses your local aineko repository.
+We highly encourage you to validate your changes by testing the project creation process end-to-end. This means validating the changes by running a local pipeline that uses your local Aineko repository.
 
-First, update poetry to use your local aineko repository.
+First, update poetry to use your local Aineko repository.
 
 :   
     ```bash
-    $ poetry lock
-    $ poetry install
+    poetry lock
+    poetry install
     ```
 
 Next, create an Aineko project in the parent directory.
 
 :   
     ```bash
-    $ poetry run aineko create --output-dir ../
+    poetry run aineko create --output-dir ../
     ```
 
-Next, update the create aineko project to use the local aineko repository. Go to `../my-awesome-pipeline/pyproject.toml` and update the following line.
+Next, update the create Aineko project to use the local Aineko repository. Go to `../my-awesome-pipeline/pyproject.toml` and update the following line.
 
 :   
     ```bash title="pyproject.toml" linenums="8" hl_lines="3"
     [tool.poetry.dependencies]
     python = ">=3.10,<3.11"
-    aineko = { path = "<path/to/aineko/git/repo>", develop=true}
+    aineko = { path = "<path/to/Aineko/git/repo>", develop=true}
     ```
 
-Test if your changes worked by running the aineko pipeline and any other testing methods that are relevant.
+Test if your changes worked by running the Aineko pipeline and any other testing methods that are relevant.
 
 ## Run lints and tests
 
-Finally, after you have make all the changes, it's good to validate that you adhered to the style guide and you didn't break anything.
+Finally, after making all the changes, it's good to validate that you adhered to the style guide and you didn't break anything.
 
 :   
     ```bash
@@ -73,7 +79,7 @@ Aineko uses [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) 
 
 :   
     ```bash
-    $ poetry run mkdocs serve
+    poetry run mkdocs serve
     ```
 
 Navigate to [localhost:8000](http://localhost:8000) to see the documentation site.
@@ -84,8 +90,8 @@ Once you're happy with your changes, run the linters to keep any additional code
 
 :   
     ```bash
-    $ make lint
-    $ make lint-docs
+    make lint
+    make lint-docs
     ```
 
 ## Make a pull request
@@ -95,13 +101,13 @@ Once you're happy with your changes, run the linters to keep any additional code
     To make a PR, first create and push to GitHub a branch by running the following commands.
 
     ```bash
-    $ git checkout -b docs/<branch-name>
-    $ git add .
-    $ git commit -m "docs: <some descriptive message>"
-    $ git push --set-upstream origin docs/<branch-name>
+    git checkout -b docs/<branch-name>
+    git add .
+    git commit -m "docs: <some descriptive message>"
+    git push --set-upstream origin docs/<branch-name>
     ```
 
-    Next, navigate to the [Aineko GitHub repo](https://github.com/aineko-dev/aineko/compare) and select the `docs/<branch-name>` branch in the compare box.
+    Next, navigate to the [Aineko GitHub repo](https://github.com/Aineko-dev/Aineko/compare) and select the `docs/<branch-name>` branch in the compare box.
 
 !!! info "Document versioning"
 

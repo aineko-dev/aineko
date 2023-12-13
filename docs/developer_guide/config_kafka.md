@@ -4,7 +4,7 @@ Aineko uses [`kafka`](https://kafka.apache.org/documentation/) under the hood fo
 
 :   
     ```bash
-    $ poetry run aineko service start
+    poetry run aineko service start
     ```
 
 To use a different `kafka` cluster, such as in deployment settings, Aineko allows for configuring of `kafka` parameters through environment variables. Typically, you would want to modify configuration for the [consumer](https://kafka.apache.org/documentation/#consumerconfigs) and [producer](https://kafka.apache.org/documentation/#producerconfigs) to point to the desired cluster.

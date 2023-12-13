@@ -25,7 +25,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 :   
     ```
-    $ pip install aineko
+    pip install aineko
     ```
 
 ??? tip "Having trouble getting the correct version of python?"
@@ -33,10 +33,11 @@ description: Fastest way to get an Aineko pipeline up and running
     We recommend using [pyenv](https://github.com/pyenv/pyenv?tab=readme-ov-file#getting-pyenv) to manage your Python versions. Once you have pyenv installed, you can run the following commands in your project directory to install Python 3.10.
 
     ```bash
-    $ pyenv install 3.10
-    $ pyenv local 3.10
-    $ python --version
-
+    pyenv install 3.10
+    pyenv local 3.10
+    python --version
+    ```
+    ```{: .optional-language-as-class .no-copy title="Expected output"}
     Python 3.10.12
     ```
 
@@ -48,9 +49,9 @@ You will see the following prompts as `aineko` tries to create a project directo
 
 :   
     ```
-    $ aineko create
+    aineko create
     ```
-    ```
+    ```{: .optional-language-as-class .no-copy title="Expected output"}
     [1/4] project_name (My Awesome Pipeline):
     [2/4] project_slug (my_awesome_pipeline):
     [3/4] project_description (Behold my awesome pipeline!):
@@ -61,17 +62,17 @@ You will see the following prompts as `aineko` tries to create a project directo
 
 :   
     ```
-    $ cd my_awesome_pipeline
-    $ poetry install
+    cd my_awesome_pipeline
+    poetry install
     ```
 
 ### Start Aineko background services
 
 :   
     ```
-    $ poetry run aineko service start
+    poetry run aineko service start
     ```
-    ```
+    ```{: .optional-language-as-class .no-copy title="Expected output"}
     Container zookeeper  Creating
     Container zookeeper  Created
     Container broker  Creating
@@ -86,9 +87,9 @@ You will see the following prompts as `aineko` tries to create a project directo
 
 :   
     ```
-    $ poetry run aineko run ./conf/pipeline.yml
+    poetry run aineko run ./conf/pipeline.yml
     ```
-    ```
+    ```{: .optional-language-as-class .no-copy title="Expected output"}
     INFO - Application is starting.
     INFO - Creating dataset: aineko-pipeline.sequence: {'type': 'kafka_stream'}
     INFO - All datasets created.
@@ -101,9 +102,9 @@ To view messages running in one of the user-defined datasets:
 
 :   
     ```
-    $ poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
+    poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
     ```
-    ```
+    ```{: .optional-language-as-class .no-copy title="Expected output"}
     {"timestamp": "2023-11-10 17:27:20", "dataset": "sequence", "source_pipeline": "test-aineko-pipeline", "source_node": "sequence", "message": 1}
     {"timestamp": "2023-11-10 17:27:20", "dataset": "sequence", "source_pipeline": "test-aineko-pipeline", "source_node": "sequence", "message": 2}
     ```
@@ -112,9 +113,9 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
 :   
     ```
-    $ poetry run aineko stream --dataset logging --from-beginning
+    poetry run aineko stream --dataset logging --from-beginning
     ```
-    ```
+    ```{: .optional-language-as-class .no-copy title="Expected output"}
     {"timestamp": "2023-11-10 17:46:15", "dataset": "logging", "source_pipeline": "test-aineko-pipeline", "source_node": "sum", "message": {"log": "Received input: 1. Adding 1...", "level": "info"}}
     ```
 
@@ -126,7 +127,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
 :   
     ```
-    $ poetry run aineko service stop
+    poetry run aineko service stop
     ```
 
 **So that's it to get an Aineko pipeline running. How smooth was that?**
@@ -147,8 +148,8 @@ To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_gui
 Using the Aineko CLI, you can also see the above pipeline rendered in the browser. This is helpful for quickly checking your pipeline as you iterate and evolve your architecture.
 
 :   
-    ```sh
-    $ poetry run aineko visualize --browser ./conf/pipeline.yml
+    ```
+    poetry run aineko visualize --browser ./conf/pipeline.yml
     ```
 
 !!! abstract "Visualization output"

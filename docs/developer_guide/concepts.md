@@ -34,4 +34,4 @@ A node can optionally consume from topics, process that data and produce the out
 
 ## Workflow
 
-A **workflow** is a series of steps that occur as part of the CI/CD process. For example, a **continuous integration workflow** contains steps that checks the validity of your code and if deployment will be successful. A **continuous deployment workflow**, on the other hand, orchestrates the necessary changes in the cloud to deploy the most recent version of your code.
+A **workflow** is a series of steps that occur as part of the CI/CD process. For example, a **continuous integration workflow** contains steps that checks the validity of your deployment configuration. A **continuous deployment workflow**, on the other hand, orchestrates the necessary changes in the cloud to deploy the most recent version of your code.
