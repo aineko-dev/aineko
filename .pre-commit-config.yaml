@@ -37,13 +37,13 @@ repos:
     hooks:
       - id: yamlfmt
         args: [
-            "-formatter",
-            "retain_line_breaks=true",
-            "-formatter",
-            "max_line_length=80",
-            "-formatter",
-            "scan_folded_as_literal=true", # !yamlfmt!:ignore
-          ]
+          "-formatter",
+          "retain_line_breaks=true",
+          "-formatter",
+          "max_line_length=80",
+          "-formatter",
+          "scan_folded_as_literal=true", # !yamlfmt!:ignore
+        ]
         files: \.(yml|yaml)$
         # exclude all pipeline/deploy files in template due to double brace {{}}
         # exclude all docs/styles/*/*.yml
