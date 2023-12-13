@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Internal models for deployment configuration."""
 
+import re
 from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, validator
@@ -57,7 +58,6 @@ class SpecificPipeline(BaseModel, extra="forbid"):
     name: Optional[str]  # Pipeline name
     machine_config: Optional[MachineConfig]
     env_vars: Optional[Dict[str, str]]
-    load_balancers: Optional[List[LoadBalancer]]
 
 
 class FullPipeline(BaseModel, extra="forbid"):
@@ -74,6 +74,29 @@ class Environment(BaseModel, extra="forbid"):
 
     pipelines: List[Union[str, Dict[str, SpecificPipeline]]]
     load_balancers: Optional[Dict[str, List[LoadBalancer]]]
+
+    @validator("load_balancers")
+    def validate_lb_endpoint(  # pylint: disable=no-self-argument
+        cls, value: Optional[Dict[str, List[LoadBalancer]]]
+    ) -> None | Dict[str, List[LoadBalancer]]:
+        """Load balancer endpoints must be valid.
+
+        The following criteria apply:
+            - Endpoints must be 12 characters or fewer (total 64).
+            - Can only contain alphanumeric characters and hyphens.
+        """
+        if value is None:
+            return value
+        for endpoint in value.keys():
+            if len(endpoint) > 12:
+                raise ValueError(
+                    f"Endpoints should be 12 characters or fewer: {endpoint}."
+                )
+            if re.compile("^[a-zA-Z0-9-]+$").fullmatch(endpoint) is None:
+                raise ValueError(
+                    f"Endpoints can only contain alphanumeric characters and hyphens: {endpoint}."
+                )
+        return value
 
 
 class FullEnvironment(BaseModel, extra="forbid"):

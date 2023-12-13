@@ -7,6 +7,7 @@ from pydantic import ValidationError
 
 from aineko.models.deploy_config_schema_internal import (
     Environment,
+    LoadBalancer,
     MachineConfig,
     SpecificPipeline,
 )
@@ -19,6 +20,11 @@ def test_machine_config(machine_config):
 
     with pytest.raises(ValueError):
         MachineConfig(**{"type": "ec2", "mem_gib": 16, "vcpu": 5})
+
+
+def test_load_balancer(load_balancer_config):
+    """Test LoadBalancer model."""
+    assert LoadBalancer(**load_balancer_config)
 
 
 def test_pipeline(pipeline_config, machine_config):
@@ -38,6 +44,28 @@ def test_pipeline(pipeline_config, machine_config):
         SpecificPipeline(**pipeline_config)
 
 
-def test_environments(pipelines_config):
+def test_environments(
+    pipelines_config, load_balancers_config, load_balancer_config
+):
     """Test Pipelines model."""
     assert Environment(**pipelines_config)
+    assert Environment(**pipelines_config, **load_balancers_config)
+
+    # Test load balancer endpoint character limit
+    with pytest.raises(ValueError):
+        Environment(
+            **{
+                **pipelines_config,
+                "load_balancers": {"invalid_char": [load_balancer_config]},
+            }
+        )
+
+    with pytest.raises(ValueError):
+        Environment(
+            **{
+                **pipelines_config,
+                "load_balancers": {
+                    "endpoint-is-too-long": [load_balancer_config]
+                },
+            }
+        )
