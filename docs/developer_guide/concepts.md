@@ -31,3 +31,7 @@ A Dataset is an abstraction for a buffer for data that you can define producers 
 A **Node** is an abstraction for some computation, akin to a function. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**.
 
 A node can optionally consume from topics, process that data and produce the output to another buffer that you can chain other Node consumers on.
+
+## Workflow
+
+A **workflow** is a series of steps that occur as part of the CI/CD process. For example, a **continuous integration workflow** contains steps that checks the validity of your deployment configuration. A **continuous deployment workflow**, on the other hand, orchestrates the necessary changes in the cloud to deploy the most recent version of your code.

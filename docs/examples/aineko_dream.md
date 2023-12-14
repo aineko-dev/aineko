@@ -7,7 +7,7 @@ cover: >-
 coverY: 189
 ---
 
-# "Aineko Dream": code generation using ChatGPT with real-time quality assurance
+# Aineko Dream: code generation with ChatGPT
 
 
 
@@ -121,77 +121,78 @@ Here we add 2 evaluation steps and an evaluation model:
 
 Here is the pipeline configuration used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
 
-```yaml
-pipeline:
-  name: gpt3-template-generator
+??? abstract "Pipeline configuration"
+    ```yaml
+    pipeline:
+      name: gpt3-template-generator
 
-  nodes:
-    # Prompt generation
-    # This node can be configured to target any GitHub repo
-    GitHubDocFetcher:
-      class: aineko_dream.nodes.GitHubDocFetcher
-      inputs:
-        - github_event
-      outputs:
-        - document
-      node_params:
-        organization: "aineko-dev"
-        repo: "aineko"
-        branch: "documentation"
-        file_path: "/docs/"
-    PromptModel:
-      class: aineko_dream.nodes.PromptModel
-      inputs:
-        - user_prompt
-        - document
-      outputs:
-        - generated_prompt
-    # LLM Client: defines model to use. Change to use another model like GPT-4
-    # If we wanted to use Cohere, switch `OpenAIClient` to `Cohere`.
-    GPT3Client:
-      class: aineko_dream.nodes.OpenAIClient
-      inputs:
-        - generated_prompt
-      outputs:
-        - llm_response
-      node_params:
-        model: "gpt-3.5-turbo-16k"
-        max_tokens: 4000
-        temperature: 0.1
-    # Response evaluation
-    PythonEvaluation:
-      class: aineko_dream.nodes.PythonEvaluation
-      inputs:
-        - llm_response
-      outputs:
-        - evaluation_result
-    SecurityEvaluation:
-      class: aineko_dream.nodes.SecurityEvaluation
-      inputs:
-        - llm_response
-      outputs:
-        - evaluation_result
-    EvaluationModel:
-      class: aineko_dream.nodes.EvaluationModel
-      inputs:
-        - evaluation_result
-      outputs:
-        - final_response
-        - generated_prompt
-			node_params:
-				max_cycles: 2
-    # API
-    APIServer:
-      class: aineko_dream.nodes.APIServer
-      inputs:
-        - final_response
-      outputs:
-        - user_prompt
-        - github_event
-      node_params:
-        app: aineko_dream.api.main:app
-        port: 8000
-```
+      nodes:
+        # Prompt generation
+        # This node can be configured to target any GitHub repo
+        GitHubDocFetcher:
+          class: aineko_dream.nodes.GitHubDocFetcher
+          inputs:
+            - github_event
+          outputs:
+            - document
+          node_params:
+            organization: "aineko-dev"
+            repo: "aineko"
+            branch: "documentation"
+            file_path: "/docs/"
+        PromptModel:
+          class: aineko_dream.nodes.PromptModel
+          inputs:
+            - user_prompt
+            - document
+          outputs:
+            - generated_prompt
+        # LLM Client: defines model to use. Change to use another model like GPT-4
+        # If we wanted to use Cohere, switch `OpenAIClient` to `Cohere`.
+        GPT3Client:
+          class: aineko_dream.nodes.OpenAIClient
+          inputs:
+            - generated_prompt
+          outputs:
+            - llm_response
+          node_params:
+            model: "gpt-3.5-turbo-16k"
+            max_tokens: 4000
+            temperature: 0.1
+        # Response evaluation
+        PythonEvaluation:
+          class: aineko_dream.nodes.PythonEvaluation
+          inputs:
+            - llm_response
+          outputs:
+            - evaluation_result
+        SecurityEvaluation:
+          class: aineko_dream.nodes.SecurityEvaluation
+          inputs:
+            - llm_response
+          outputs:
+            - evaluation_result
+        EvaluationModel:
+          class: aineko_dream.nodes.EvaluationModel
+          inputs:
+            - evaluation_result
+          outputs:
+            - final_response
+            - generated_prompt
+          node_params:
+            max_cycles: 2
+        # API
+        APIServer:
+          class: aineko_dream.nodes.APIServer
+          inputs:
+            - final_response
+          outputs:
+            - user_prompt
+            - github_event
+          node_params:
+            app: aineko_dream.api.main:app
+            port: 8000
+    ```
 
 ## Node code
 
@@ -199,123 +200,132 @@ Here are some samples of the node code used to run this pipeline.
 
 The `GitHubDocFetcher` emits the latest document when it initializes and updates the document based on triggers from a [GitHub webhook](https://docs.github.com/en/webhooks) that is configured to target the API server. The document is passed to the `PromptModel` to engineer a prompt based on the latest document.
 
-```python
-class GitHubDocFetcher(AbstractNode):
-    """Node that fetches code documents from GitHub."""
-
-    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
-        """Initialize connection with GitHub and fetch latest document."""
-        # Set parameters
-        self.access_token = os.environ.get("GITHUB_ACCESS_TOKEN")
-        self.organization = params.get("organization")
-        self.repo = params.get("repo")
-        self.branch = params.get("branch")
-        self.file_path = params.get("file_path")
-
-        # Initialize github client
-        auth = Auth.Token(token=self.access_token)
-        self.github_client = Github(auth=auth)
-
-        # Fetch current document
-        self.emit_new_document()
-
-    def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
-        """Update document in response to commit events."""
-        # Check for new commit events from GitHub
-        message = self.consumers["github_event"].consume()
-        if message is None:
-            return
-
-        # Fetch latest document and send update
-        self.log("Received event from GitHub, fetching latest document.")
-        self.emit_new_document()
-
-    def emit_new_document(self) -> None:
-        """Emit new document."""
-        repo = self.github_client.get_repo(f"{self.organization}/{self.repo}")
-        contents = repo.get_contents(self.file_path, ref=self.branch)
-        github_contents = {f.path: f.decoded_content.decode("utf-8") for f in contents}
-        self.producers["document"].produce(github_contents)
-        self.log(
-            f"Fetched documents for {self.organization}/{self.repo} branch {self.branch}"
-        )
-```
-
 The `OpenAIClient` node creates a connection to the OpenAI API and submits requests to the configured model using the [ChatCompletion](https://platform.openai.com/docs/guides/gpt/chat-completions-api) interface. The response is passed on to the evaluation nodes.
-
-```python
-class OpenAIClient(AbstractNode):
-    """Node that queries OpenAI LLMs."""
-
-    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
-        """Initialize connection with OpenAI."""
-        self.model = params.get("model")
-        self.max_tokens = params.get("max_tokens")
-        self.temperature = params.get("temperature")
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-
-    def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
-        """Query OpenAI LLM."""
-        message = self.consumers["generated_prompt"].consume()
-        if message is None:
-            return
-        messages = message["message"]["chat_messages"]
-        # Query OpenAI LLM
-        self.log("Querying OpenAI LLM...")
-        response = openai.ChatCompletion.create(
-            messages=messages,
-            stream=False,
-            model=self.model,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
-	      )
-        message["message"]["chat_messages"].append(
-            {
-                "role": "assistant",
-                "content": response.choices[0].message.content,
-            }
-        )
-        self.producers["llm_response"].produce(
-						message["message"]["chat_messages"]
-				)
-```
 
 The `SecurityEvaluation` node takes the LLM response and creates a temporary file with the contents. Aineko Dream then uses Bandit to run a test against the file and collect a list of issues. After cleaning up, the results are submitted to the `EvaluationModel` node.
 
-```python
-class SecurityEvaluation(AbstractNode):
-    """Node that evaluates security of code."""
+!!! abstract "Node code examples"
 
-    def _execute(self, params: Optional[dict] = None) -> None:
-        """Evaluate Python code."""
-        message = self.consumers["llm_response"].consume()
-        if message is None:
-            return
+    === "`GitHubDocFetcher`"
 
-				# Make a temporary file with the LLM code
-        python_code = message["message"]
-        issues_list = []
-        with tempfile.NamedTemporaryFile(suffix=".py", delete=False, mode="w") as tmpfile:
-            tmpfile.write(python_code)
+        ```python
+        class GitHubDocFetcher(AbstractNode):
+            """Node that fetches code documents from GitHub."""
 
-        # Setup Bandit and run tests on the temporary file
-        b_mgr = bandit.manager.BanditManager(bandit.config.BanditConfig(), 'file')
-        b_mgr.discover_files([tmpfile.name], None)
-        b_mgr.run_tests()
+            def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+                """Initialize connection with GitHub and fetch latest document."""
+                # Set parameters
+                self.access_token = os.environ.get("GITHUB_ACCESS_TOKEN")
+                self.organization = params.get("organization")
+                self.repo = params.get("repo")
+                self.branch = params.get("branch")
+                self.file_path = params.get("file_path")
 
-        # Store results
-        results = b_mgr.get_issue_list(
-            sev_level=bandit.constants.LOW,
-            conf_level=bandit.constants.LOW,
-            )
+                # Initialize github client
+                auth = Auth.Token(token=self.access_token)
+                self.github_client = Github(auth=auth)
 
-        # Cleanup (remove the temporary file)
-        tmpfile.close()
-        os.remove(tmpfile.name)
+                # Fetch current document
+                self.emit_new_document()
 
-        if results:
-            self.producers["evaluation_result"].produce(results)
-```
+            def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
+                """Update document in response to commit events."""
+                # Check for new commit events from GitHub
+                message = self.consumers["github_event"].consume()
+                if message is None:
+                    return
+
+                # Fetch latest document and send update
+                self.log("Received event from GitHub, fetching latest document.")
+                self.emit_new_document()
+
+            def emit_new_document(self) -> None:
+                """Emit new document."""
+                repo = self.github_client.get_repo(f"{self.organization}/{self.repo}")
+                contents = repo.get_contents(self.file_path, ref=self.branch)
+                github_contents = {f.path: f.decoded_content.decode("utf-8") for f in contents}
+                self.producers["document"].produce(github_contents)
+                self.log(
+                    f"Fetched documents for {self.organization}/{self.repo} branch {self.branch}"
+                )
+        ```
+
+    === "`OpenAIClient`"
+
+        ```python
+        class OpenAIClient(AbstractNode):
+            """Node that queries OpenAI LLMs."""
+
+            def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+                """Initialize connection with OpenAI."""
+                self.model = params.get("model")
+                self.max_tokens = params.get("max_tokens")
+                self.temperature = params.get("temperature")
+                openai.api_key = os.getenv("OPENAI_API_KEY")
+
+            def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
+                """Query OpenAI LLM."""
+                message = self.consumers["generated_prompt"].consume()
+                if message is None:
+                    return
+                messages = message["message"]["chat_messages"]
+                # Query OpenAI LLM
+                self.log("Querying OpenAI LLM...")
+                response = openai.ChatCompletion.create(
+                    messages=messages,
+                    stream=False,
+                    model=self.model,
+                    max_tokens=self.max_tokens,
+                    temperature=self.temperature,
+                )
+                message["message"]["chat_messages"].append(
+                    {
+                        "role": "assistant",
+                        "content": response.choices[0].message.content,
+                    }
+                )
+                self.producers["llm_response"].produce(
+                    message["message"]["chat_messages"]
+                )
+        ```
+
+    === "`SecurityEvaluation`"
+    
+        ```python
+        class SecurityEvaluation(AbstractNode):
+            """Node that evaluates security of code."""
+
+            def _execute(self, params: Optional[dict] = None) -> None:
+                """Evaluate Python code."""
+                message = self.consumers["llm_response"].consume()
+                if message is None:
+                    return
+
+                # Make a temporary file with the LLM code
+                python_code = message["message"]
+                issues_list = []
+                with tempfile.NamedTemporaryFile(suffix=".py", delete=False, mode="w") as tmpfile:
+                    tmpfile.write(python_code)
+
+                # Setup Bandit and run tests on the temporary file
+                b_mgr = bandit.manager.BanditManager(bandit.config.BanditConfig(), 'file')
+                b_mgr.discover_files([tmpfile.name], None)
+                b_mgr.run_tests()
+
+                # Store results
+                results = b_mgr.get_issue_list(
+                    sev_level=bandit.constants.LOW,
+                    conf_level=bandit.constants.LOW,
+                    )
+
+                # Cleanup (remove the temporary file)
+                tmpfile.close()
+                os.remove(tmpfile.name)
+
+                if results:
+                    self.producers["evaluation_result"].produce(results)
+        ```
+
 
 ## Try running locally
 

@@ -8,13 +8,22 @@ theme:
   name: material
   palette:
     scheme: aineko
+  icon:
+    repo: fontawesome/brands/github
   favicon: assets/favicon_green.svg
   logo: assets/favicon_white.svg
+  font:
+    size: 20
   features:
     - content.code.copy
+    - navigation.tabs
+    - navigation.path
     - navigation.footer
     - navigation.expand
-    - navigation.tabs
+    - navigation.indexes
+    - navigation.tracking
+    - navigation.top
+    - navigation.sections
     - toc.follow
     - content.code.annotate
 extra_css:
@@ -69,29 +78,30 @@ plugins:
             show_root_heading: true
 
 nav:
-  - Get Started:
-      - 'index.md'
-      - 'quickstart.md'
-      - 'aineko_dream.md'
-      - 'contributing.md'
-      - 'contributing_docs.md'
-  - Developer Guide:
-      - 'developer_guide/concepts.md'
-      - 'developer_guide/aineko_project.md'
-      - 'developer_guide/cli.md'
-      - 'developer_guide/pipeline_configuration.md'
-      - 'developer_guide/node_implementation.md'
-      - 'developer_guide/config_kafka.md'
-  - API Documentation:
-      - 'api_reference/abstract_node.md'
-      - 'api_reference/dataset_consumer.md'
-      - 'api_reference/dataset_producer.md'
-      - 'api_reference/config.md'
-      - 'api_reference/config_loader.md'
-      - 'api_reference/runner.md'
-  - Examples:
-      - examples/aineko-dream.md
-  - Extras:
-      - extras/extra_nodes.md
-      - extras/fastapi.md
+  - Aineko Framework:
+      - Get Started:
+          - 'index.md'
+          - 'start/quickstart.md'
+      - Developer Guide:
+          - 'developer_guide/concepts.md'
+          - 'developer_guide/aineko_project.md'
+          - 'developer_guide/cli.md'
+          - 'developer_guide/pipeline_configuration.md'
+          - 'developer_guide/node_implementation.md'
+          - 'developer_guide/config_kafka.md'
+      - Extras:
+          - extras/index.md
+          - extras/fastapi.md
+      - API Documentation:
+          - 'api_reference/abstract_node.md'
+          - 'api_reference/dataset_consumer.md'
+          - 'api_reference/dataset_producer.md'
+          - 'api_reference/config.md'
+          - 'api_reference/config_loader.md'
+          - 'api_reference/runner.md'
+      - Example Pipelines:
+          - examples/aineko-dream.md
+      - Community:
+          - community/index.md
+
   - Aineko Cloud: 'https://cloud-docs.aineko.dev'
