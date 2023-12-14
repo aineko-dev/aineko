@@ -7,7 +7,7 @@ Nodes are essentially units of compute that encapsulate any event-driven logic y
 To illustrate how a node should be constructed, we will go through an example of a simple node that consumes a number from an input dataset, increments it by 1, then produces it to an output dataset.
 
 ```python title="sum_node.py"
-from aineko.internals.node import AbstractNode
+from aineko.core.node import AbstractNode
 
 class MySumNode(AbstractNode):
 
@@ -30,7 +30,7 @@ class MySumNode(AbstractNode):
 You can optionally define a `_pre_loop_hook` method in your node class to initialize the state of your node with class variables. If the `node_params` key is defined in `pipeline.yml`, it will be passed in under the `params` argument.
 
 ```python title="sum_node.py" hl_lines="5-7"
-from aineko.internals.node import AbstractNode
+from aineko.core.node import AbstractNode
 
 class MySumNode(AbstractNode):
 
@@ -53,7 +53,7 @@ class MySumNode(AbstractNode):
 The `_execute` method is repeatedly executed as the pipeline runs. We recommend nodes to follow a design pattern of constantly polling for new data and taking action when new data is received.
 
 ```python title="sum_node.py" hl_lines="9-16"
-from aineko.internals.node import AbstractNode
+from aineko.core.node import AbstractNode
 
 class MySumNode(AbstractNode):
 
@@ -81,7 +81,7 @@ Node classes inherit attributes named `self.producers` and `self.consumers` that
 This is an example of typical usage within a node:
 
 ```python title="sum_node.py" hl_lines="11 16"
-from aineko.internals.node import AbstractNode
+from aineko.core.node import AbstractNode
 
 class MySumNode(AbstractNode):
 
