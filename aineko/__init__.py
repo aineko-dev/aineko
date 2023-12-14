@@ -3,7 +3,7 @@
 """Package information for the Aineko package."""
 
 
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 __author__ = "Convex Labs Engineering"
 
 import logging

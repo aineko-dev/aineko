@@ -17,8 +17,8 @@ Then, install the source code for Aineko on your local system.
 
 :   
     ```bash
-    git clone https://github.com/Aineko-dev/Aineko
-    cd Aineko && poetry install --with dev,test,docs
+    git clone https://github.com/aineko-dev/aineko
+    cd aineko && poetry install --with dev,test,docs
     ```
 
 ## Make your changes to Aineko source code

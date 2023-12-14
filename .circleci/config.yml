@@ -7,6 +7,10 @@ parameters:
     description: Version to python to use
     type: string
     default: "3.10"
+  mkdocs_material_version:
+    description: Version of mkdocs-material-insiders to use
+    type: string
+    default: "9.4.14-insiders-4.46.0"
 
 orbs:
   vale: circleci/vale@1.1.1
@@ -165,6 +169,8 @@ jobs:
             - "44:55:52:46:cf:d7:60:1d:8e:99:d4:f8:e8:8b:45:d2"
       - checkout
       - run: poetry install --with docs --no-interaction --quiet
+      - run: poetry add git+ssh://git@github.com/squidfunk/mkdocs-material-insiders.git#<<
+          pipeline.parameters.mkdocs_material_version >> --group docs
       - run: git config user.name aineko-ci
       - run: git config user.email engineering-admins@convexlabs.xyz
       - run: |

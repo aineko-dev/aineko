@@ -12,7 +12,7 @@ import requests
 @click.option(
     "-u",
     "--url",
-    default="https://dream.ap-2359264f-9cba-43ba-9ac4-ae3ba7b1d4b1.aineko.app",
+    default="https://dream.ap-6d356ccd-bfba-4110-994a-fe164ab8bf77.aineko.app",
     help="API url to use for the Aineko Dream API.",
 )
 def dream(prompt: str, api_key: str, url: str) -> None:

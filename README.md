@@ -12,7 +12,7 @@ For complete information please refer to the [Aineko documentation](https://docs
 
 ## Quickstart
 
-Get started with Aineko in minutes by following [this tutorial](https://docs.aineko.dev/0.2/quickstart/).
+Get started with Aineko in minutes by following [this tutorial](https://docs.aineko.dev/latest/start/quickstart/).
 
 ## Examples
 
