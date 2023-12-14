@@ -91,6 +91,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.aineko.dev/landing-page/start/</loc>
+         <lastmod>2023-12-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.aineko.dev/landing-page/start/quickstart/</loc>
          <lastmod>2023-12-14</lastmod>
          <changefreq>daily</changefreq>
