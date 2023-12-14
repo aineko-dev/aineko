@@ -1319,7 +1319,7 @@
 <p>Nodes are essentially units of compute that encapsulate any event-driven logic you can define in python. Whether it's a transformation, an API call or a data transfer, as long as you can express it in python, it can be contained in a node.</p>
 <h2 id="implementing-a-node">Implementing a node</h2>
 <p>To illustrate how a node should be constructed, we will go through an example of a simple node that consumes a number from an input dataset, increments it by 1, then produces it to an output dataset.</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
+<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.core.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
 
 <span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
 
@@ -1338,7 +1338,7 @@
 </code></pre></div>
 <h3 id="_pre_loop_hook"><code>_pre_loop_hook</code></h3>
 <p>You can optionally define a <code>_pre_loop_hook</code> method in your node class to initialize the state of your node with class variables. If the <code>node_params</code> key is defined in <code>pipeline.yml</code>, it will be passed in under the <code>params</code> argument.</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
+<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.core.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
 
 <span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
 
@@ -1357,7 +1357,7 @@
 </code></pre></div>
 <h3 id="_execute"><code>_execute</code></h3>
 <p>The <code>_execute</code> method is repeatedly executed as the pipeline runs. We recommend nodes to follow a design pattern of constantly polling for new data and taking action when new data is received.</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
+<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.core.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
 
 <span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
 
@@ -1378,7 +1378,7 @@
 <h3 id="producers-consumers">Producers &amp; consumers</h3>
 <p>Node classes inherit attributes named <code>self.producers</code> and <code>self.consumers</code> that are each a dictionary, with keys being the dataset name and values being <code>DatasetProducer</code> and <code>DatasetConsumer</code> objects respectively. These objects allow you to produce/consume data to/from a dataset.</p>
 <p>This is an example of typical usage within a node:</p>
-<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.internals.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
+<div class="highlight"><span class="filename">sum_node.py</span><pre><span></span><code><span class="kn">from</span> <span class="nn">aineko.core.node</span> <span class="kn">import</span> <span class="n">AbstractNode</span>
 
 <span class="k">class</span> <span class="nc">MySumNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
 
