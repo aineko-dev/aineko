@@ -80,14 +80,14 @@ plugins:
 nav:
   - Aineko Framework:
       - Get Started:
-          - 'index.md'
+          - 'start/index.md'
           - 'start/quickstart.md'
       - Developer Guide:
           - 'developer_guide/concepts.md'
           - 'developer_guide/aineko_project.md'
-          - 'developer_guide/cli.md'
           - 'developer_guide/pipeline_configuration.md'
           - 'developer_guide/node_implementation.md'
+          - 'developer_guide/cli.md'
           - 'developer_guide/config_kafka.md'
       - Extras:
           - extras/index.md

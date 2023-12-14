@@ -32,6 +32,7 @@ pygithub = "~=2.1.1"
 # extras: fastapi
 fastapi = {version = "^0.99", optional = true}
 uvicorn = { version = "^0.22", extras = ["standard"], optional = true}
+mkdocs-material = {git = "ssh://git@github.com/squidfunk/mkdocs-material-insiders.git", rev = "9.4.14-insiders-4.46.0"}
 
 [tool.poetry.group.dev.dependencies]
 aineko_style = "^0.0.1"
