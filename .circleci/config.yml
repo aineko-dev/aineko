@@ -162,9 +162,9 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "18:33:31:05:d5:48:ad:0c:78:8d:23:5c:13:d1:04:ce"
+            - "44:55:52:46:cf:d7:60:1d:8e:99:d4:f8:e8:8b:45:d2"
       - checkout
-      - run: poetry install --with docs --no-interaction --quiet
+      - run: poetry install --with docs --no-interaction
       - run: git config user.name aineko-ci
       - run: git config user.email engineering-admins@convexlabs.xyz
       - run: |
