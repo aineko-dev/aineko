@@ -49,14 +49,6 @@ description: Fastest way to get an Aineko pipeline up and running
 
     Interested in creating a custom pipeline for a specific use case? Leverage Aineko Dream to generate a pipeline based on a prompt that describes your use case. See more detail [here](./aineko_dream.md)
 
-!!! tip "Create a pipeline using Aineko Dream"
-
-    Interested in creating a custom pipeline for a specific use case? Leverage Aineko Dream to generate a pipeline based on a prompt that describes your use case. See more detail [here](./aineko_dream.md)
-
-!!! tip "Create a pipeline using Aineko Dream"
-
-    Interested in creating a custom pipeline for a specific use case? Leverage Aineko Dream to generate a pipeline based on a prompt that describes your use case. See more detail [here](./aineko_dream.md)
-
 You will see the following prompts as `aineko` tries to create a project directory containing the boilerplate you need for a pipeline. Feel free to use the defaults suggested.
 
 :   
