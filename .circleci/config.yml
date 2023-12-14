@@ -186,7 +186,8 @@ jobs:
             poetry run mike deploy $version latest -b << parameters.docs_branch >> --push --update-aliases
             poetry run mike set-default $version -b << parameters.docs_branch >> --push
           else
-            poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
+            version="<< parameters.version >>"
+            poetry run mike deploy ${input_string##*/} -b << parameters.docs_branch >> --push
           fi
 
   check-broken-links:
