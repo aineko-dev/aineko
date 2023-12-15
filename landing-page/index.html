@@ -271,6 +271,8 @@
           
             
               
+                
+              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -1115,13 +1117,13 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/aineko-dream.md" class="md-nav__link">
+      <a href="examples/aineko_dream/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    None
+    Aineko Dream: code generation with ChatGPT
   
 
     
@@ -1255,7 +1257,9 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -1425,10 +1429,12 @@
               
                 
 
+  
 
 
 
-  <nav class="md-path" aria-label="Navigation" >
+
+  <nav class="md-path" aria-label="Navigation" hidden>
     <ol class="md-path__list">
       
       
@@ -1535,20 +1541,20 @@
 <h3 id="core-concepts">Core Concepts</h3>
 <ul>
 <li><a href="../developer_guide/concepts#pipeline-definition">Pipeline</a></li>
-<li><a href="../developer_guide/concepts.md#node">Node</a></li>
-<li><a href="../developer_guide/concepts.md#dataset">Dataset</a></li>
-<li><a href="../developer_guide/concepts.md#workflow">Workflow</a></li>
+<li><a href="../developer_guide/concepts#node">Node</a></li>
+<li><a href="../developer_guide/concepts#dataset">Dataset</a></li>
+<li><a href="../developer_guide/concepts#workflow">Workflow</a></li>
 <li><a href="https://cloud-docs.aineko.dev/" target="_blank">Aineko Cloud</a></li>
 </ul>
 </div>
 <div>
 <h3 id="creating-building-pipelines">Creating &amp; Building Pipelines</h3>
 <ol>
-<li>Create an Aineko Project</li>
-<li>Pipeline Configuration</li>
-<li>Building a Node</li>
-<li>CLI Documentation</li>
-<li>Configuring Kafka</li>
+<li><a href="../developer_guide/aineko_project">Create an Aineko Project</a></li>
+<li><a href="../developer_guide/pipeline_configuration">Pipeline Configuration</a></li>
+<li><a href="../developer_guide/node_implementation">Building a Node</a></li>
+<li><a href="../developer_guide/cli">CLI Documentation</a></li>
+<li><a href="../developer_guide/config_kafka">Configuring Kafka</a></li>
 </ol>
 </div>
 </div>
@@ -1574,19 +1580,10 @@
 <div class="grid cards">
 <ul>
 <li>
-<p><strong>AI Inference Loops</strong></p>
+<p><strong>Self-checking AI Agents</strong></p>
 <hr />
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
-</li>
-<li>
-<p><strong>Backend Development</strong></p>
-<hr />
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
-</li>
-<li>
-<p><strong>Streaming</strong></p>
-<hr />
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+<p>Create an AI agent that accepts user prompts, iterates on an answer, and outputs it only after all specified checks pass.</p>
+<p><a href="../examples/aineko_dream"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"/></svg></span> Aineko Dream</a></p>
 </li>
 </ul>
 </div>
@@ -1601,10 +1598,15 @@
 
 
 
+  
+  
+
 
 
   
 
+
+  
 
 
 
@@ -1627,6 +1629,8 @@
         <footer class="md-footer">
   
     
+      
+        
       
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
