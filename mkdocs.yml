@@ -100,7 +100,7 @@ nav:
           - 'api_reference/config_loader.md'
           - 'api_reference/runner.md'
       - Example Pipelines:
-          - examples/aineko-dream.md
+          - examples/aineko_dream.md
       - Community:
           - community/index.md
 

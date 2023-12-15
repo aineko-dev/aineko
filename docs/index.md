@@ -1,3 +1,9 @@
+---
+hide:
+  - toc
+  - path
+---
+
 # Welcome to Aineko
 
 Aineko simplifies the developer experience, and helps team create fast and reliable intelligent applications by abstracting away the complexities of deployment.
@@ -62,20 +68,20 @@ To unlock the true power of the framework, try Aineko Cloud, which simplifies yo
 ### Core Concepts
 
 - [Pipeline](../developer_guide/concepts#pipeline-definition)
-- [Node](../developer_guide/concepts.md#node)
-- [Dataset](../developer_guide/concepts.md#dataset)
-- [Workflow](../developer_guide/concepts.md#workflow)
+- [Node](../developer_guide/concepts#node)
+- [Dataset](../developer_guide/concepts#dataset)
+- [Workflow](../developer_guide/concepts#workflow)
 - [Aineko Cloud](https://cloud-docs.aineko.dev/){:target="_blank"}
 </div>
 
 <div markdown>
 ### Creating & Building Pipelines
 
-1. Create an Aineko Project
-2. Pipeline Configuration
-3. Building a Node
-4. CLI Documentation
-5. Configuring Kafka
+1. [Create an Aineko Project](../developer_guide/aineko_project)
+2. [Pipeline Configuration](../developer_guide/pipeline_configuration)
+3. [Building a Node](../developer_guide/node_implementation)
+4. [CLI Documentation](../developer_guide/cli)
+5. [Configuring Kafka](../developer_guide/config_kafka)
 
 </div>
 </div>
@@ -107,23 +113,13 @@ Supercharge your development by using pre-built nodes directly in your pipeline.
 
 <div class="grid cards" markdown>
 
--   __AI Inference Loops__
+-   __Self-checking AI Agents__
 
     ___
 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+    Create an AI agent that accepts user prompts, iterates on an answer, and outputs it only after all specified checks pass.
 
--   __Backend Development__
-
-    ___
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-
--   __Streaming__
-
-    ___
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+    [:octicons-arrow-right-24: Aineko Dream](../examples/aineko_dream)
 
 
 </div>
