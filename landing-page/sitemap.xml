@@ -2,102 +2,97 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.aineko.dev/landing-page/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/aineko_dream/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/api_reference/abstract_node/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/api_reference/config/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/api_reference/config_loader/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/api_reference/dataset_consumer/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/api_reference/dataset_producer/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/api_reference/runner/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/community/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/developer_guide/aineko_project/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/developer_guide/cli/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/developer_guide/concepts/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/developer_guide/config_kafka/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/developer_guide/node_implementation/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/developer_guide/pipeline_configuration/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/examples/aineko_dream/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/extras/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/extras/fastapi/</loc>
-         <lastmod>2023-12-14</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://docs.aineko.dev/landing-page/start/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/start/quickstart/</loc>
-         <lastmod>2023-12-14</lastmod>
+         <lastmod>2023-12-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
