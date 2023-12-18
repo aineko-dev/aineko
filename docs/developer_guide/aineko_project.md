@@ -5,7 +5,7 @@ description: A closer look into how a pipeline is defined and some CLI commands
 # Aineko project
 
 !!! note
-    This is a continuation of the [previous section (Quick Start)](../quickstart.md). Before starting, make sure you have already created a template project using `aineko create`.
+    This is a continuation of the [previous section (Quick Start)](../start/quickstart.md). Before starting, make sure you have already created a template project using `aineko create`.
 
 ## Directory contents
 
