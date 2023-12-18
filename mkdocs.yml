@@ -19,11 +19,9 @@ theme:
     - navigation.tabs
     - navigation.path
     - navigation.footer
-    - navigation.expand
     - navigation.indexes
     - navigation.tracking
     - navigation.top
-    - navigation.sections
     - toc.follow
     - content.code.annotate
 extra_css:
@@ -79,8 +77,8 @@ plugins:
 
 nav:
   - Aineko Framework:
+      - 'index.md'
       - Get Started:
-          - 'index.md'
           - 'start/quickstart.md'
       - Developer Guide:
           - 'developer_guide/concepts.md'
@@ -90,7 +88,7 @@ nav:
           - 'developer_guide/cli.md'
           - 'developer_guide/config_kafka.md'
       - Extras:
-          - extras/index.md
+          - extras/intro.md
           - extras/fastapi.md
       - API Documentation:
           - 'api_reference/abstract_node.md'

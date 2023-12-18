@@ -1,4 +1,4 @@
-# Extra Nodes
+# Introduction to Extras
 
 Extra nodes are nodes that come shipped with the `aineko` package. They cover popular use-cases and follow best-practice patterns to accelerate your speed of development.
 

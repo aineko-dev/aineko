@@ -18,7 +18,7 @@ Aineko is a python framework for building powerful data applications quickly. Yo
 - __Always Robust__ <br><br> Production-ready from the get-go. Scale with ease.
 - __Stateful Computation__ <br><br> Aineko supports long-running stateful computations.
 - __Composable__ <br><br> Scale your project easily with engineering best practices.
-- __Fast__ <br><br> Achieve microsecond latency between nodes.*. 
+- __Fast__ <br><br> Achieve microsecond latency between nodes.*
 - __Scalable__ <br><br> Process billions or records per day with ease.*
 
 </div>
