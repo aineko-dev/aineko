@@ -80,7 +80,7 @@ plugins:
 nav:
   - Aineko Framework:
       - Get Started:
-          - 'index.md'
+          - 'start/index.md'
           - 'start/quickstart.md'
       - Developer Guide:
           - 'developer_guide/concepts.md'
