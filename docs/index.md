@@ -44,7 +44,7 @@ To unlock the true power of the framework, try Aineko Cloud, which simplifies yo
     - Scale and modularity
     - Real-time data processing
 
-    [Quickstart Guide](./quickstart.md){ .md-button .md-button--primary }
+    [Quickstart Guide](./start/quickstart.md){ .md-button .md-button--primary }
 
 -   __Aineko Cloud__
 
@@ -67,21 +67,21 @@ To unlock the true power of the framework, try Aineko Cloud, which simplifies yo
 <div markdown>
 ### Core Concepts
 
-- [Pipeline](../developer_guide/concepts#pipeline-definition)
-- [Node](../developer_guide/concepts#node)
-- [Dataset](../developer_guide/concepts#dataset)
-- [Workflow](../developer_guide/concepts#workflow)
+- [Pipeline](../developer_guide/concepts.md#pipeline-definition)
+- [Node](../developer_guide/concepts.md#node)
+- [Dataset](../developer_guide/concepts.md#dataset)
+- [Workflow](../developer_guide/concepts.md#workflow)
 - [Aineko Cloud](https://cloud-docs.aineko.dev/){:target="_blank"}
 </div>
 
 <div markdown>
 ### Creating & Building Pipelines
 
-1. [Create an Aineko Project](../developer_guide/aineko_project)
-2. [Pipeline Configuration](../developer_guide/pipeline_configuration)
-3. [Building a Node](../developer_guide/node_implementation)
-4. [CLI Documentation](../developer_guide/cli)
-5. [Configuring Kafka](../developer_guide/config_kafka)
+1. [Create an Aineko Project](../developer_guide/aineko_project.md)
+2. [Pipeline Configuration](../developer_guide/pipeline_configuration.md)
+3. [Building a Node](../developer_guide/node_implementation.md)
+4. [CLI Documentation](../developer_guide/cli.md)
+5. [Configuring Kafka](../developer_guide/config_kafka.md)
 
 </div>
 </div>
