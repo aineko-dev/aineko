@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://docs.aineko.dev/landing-page/</loc>
-         <lastmod>2023-12-18</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://docs.aineko.dev/landing-page/aineko_dream/</loc>
          <lastmod>2023-12-18</lastmod>
          <changefreq>daily</changefreq>
@@ -87,6 +82,11 @@
     </url>
     <url>
          <loc>https://docs.aineko.dev/landing-page/extras/fastapi/</loc>
+         <lastmod>2023-12-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.aineko.dev/landing-page/start/</loc>
          <lastmod>2023-12-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
