@@ -42,7 +42,7 @@ To unlock the true power of the framework, try [Aineko Cloud](https://cloud-docs
 
     Prototype locally, and discover:
 
-    - How quickly idea to pipeline takes
+    - Rapid development cycles
     - Scale and modularity
     - Real-time data processing
 
@@ -56,7 +56,7 @@ To unlock the true power of the framework, try [Aineko Cloud](https://cloud-docs
 
     - Run your pipelines in the cloud
     - Share projects & collaborate
-    - Automated infrastructure deployments
+    - Automate infrastructure deployments
 
     [Demo Cloud](https://cloud-docs.aineko.dev){ .md-button .md-button--primary }
 
@@ -92,7 +92,7 @@ To unlock the true power of the framework, try [Aineko Cloud](https://cloud-docs
 
 ## Extras
 
-Supercharge your development by using pre-built nodes directly in your pipeline. Aineko extras contains nodes that are production-ready out of the box.
+Supercharge your development by using pre-built nodes directly in your pipeline. Aineko `Extras` contains nodes that are production-ready out of the box.
 
 - [FastAPI node](./extras/fastapi.md)
 
@@ -103,7 +103,7 @@ Supercharge your development by using pre-built nodes directly in your pipeline.
 - [`AbstractNode`](./api_reference/abstract_node.md)
 - [`DatasetConsumer`](./api_reference/dataset_consumer.md)
 - [`DatasetProducer`](./api_reference/dataset_producer.md)
-- [Pipeline `Config`](./api_reference/config.md)
+- [`Config`](./api_reference/config.md)
 - [`ConfigLoader`](./api_reference/config_loader.md)
 - [`Runner`](./api_reference/runner.md)
 
@@ -119,7 +119,7 @@ Supercharge your development by using pre-built nodes directly in your pipeline.
 
     ___
 
-    Create an AI agent that accepts user prompts, iterates on an answer, and outputs it only after all specified checks pass.
+    Create an AI agent that accepts user prompts, iterates on an answer, and outputs it after all specified checks pass.
 
     [:octicons-arrow-right-24: Aineko Dream](./examples/aineko_dream)
 
