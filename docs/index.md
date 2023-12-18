@@ -23,11 +23,13 @@ Aineko is a python framework for building powerful data applications quickly. Yo
 
 </div>
 
+\* As measured from an internal use case. Performance may vary depending on exact use case.
+
 ## How to Get Started?
 
-As an open source framework, you can install and build pipelines on your local machines. You can explore how easy it is to go from idea to pipeline, see it’s scale and modularity, and see how fast it processes real-time data. 
+As an open source framework, you can install and build pipelines on your local machines. You can explore how easy it is to go from idea to pipeline, see its scale and modularity, and see how fast it processes real-time data. 
 
-To unlock the true power of the framework, try Aineko Cloud, which simplifies your tooling by bundling tedious infrastructure, help you scale, automate deployment, and collaborate as a team. 
+To unlock the true power of the framework, try [Aineko Cloud](https://cloud-docs.aineko.dev). Aineko Cloud  simplifies your tooling by bundling tedious infrastructure, helping you scale, automate deployment, and collaborate as a team. 
 
 
 ### Aineko Products
