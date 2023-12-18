@@ -22,9 +22,7 @@
 }
 
 .md-nav__item .md-nav__link--active {
-  background-color: var(--md-highlight-color);
-  color: #000000;
-  padding: 0.25rem;
+  color: var(--md-accent-fg-color);
 }
 
 .md-nav__link {
