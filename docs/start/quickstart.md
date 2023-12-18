@@ -141,7 +141,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
     The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging**, and that we have created two nodes - **sum** and **sequence**.
 
-To learn more about Pipeline, Datasets and Nodes, see [concepts](./developer_guide/concepts.md).
+To learn more about Pipeline, Datasets and Nodes, see [concepts](../developer_guide/concepts.md).
 
 ## Visualizing the pipeline
 
