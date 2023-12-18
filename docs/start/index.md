@@ -90,7 +90,7 @@ To unlock the true power of the framework, try Aineko Cloud, which simplifies yo
 
 ## Extras
 
-Supercharge your development by using pre-built nodes directly in your pipeline. Aineko extras are templated nodes that are production-ready out of the box.
+Supercharge your development by using pre-built nodes directly in your pipeline. Aineko extras contains nodes that are production-ready out of the box.
 
 - [FastAPI node](../extras/fastapi.md)
 
