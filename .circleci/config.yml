@@ -56,6 +56,13 @@ workflows:
               only: /\d+\.\d+\.\d+$/
           version: << pipeline.git.tag >>
           tag: true
+      - build-and-push-docs:
+          name: publish staging docs
+          docs_branch: docs-staging
+          version: << pipeline.git.branch >>
+          filters:
+            branches:
+              only: /^docs\/.*/
 
 jobs:
   integration-tests:
@@ -179,7 +186,8 @@ jobs:
             poetry run mike deploy $version latest -b << parameters.docs_branch >> --push --update-aliases
             poetry run mike set-default $version -b << parameters.docs_branch >> --push
           else
-            poetry run mike deploy << parameters.version >> -b << parameters.docs_branch >> --push
+            version="<< parameters.version >>"
+            poetry run mike deploy ${version##*/} -b << parameters.docs_branch >> --push
           fi
 
   check-broken-links:

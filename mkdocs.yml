@@ -19,11 +19,9 @@ theme:
     - navigation.tabs
     - navigation.path
     - navigation.footer
-    - navigation.expand
     - navigation.indexes
     - navigation.tracking
     - navigation.top
-    - navigation.sections
     - toc.follow
     - content.code.annotate
 extra_css:
@@ -79,18 +77,18 @@ plugins:
 
 nav:
   - Aineko Framework:
+      - 'index.md'
       - Get Started:
-          - 'index.md'
           - 'start/quickstart.md'
       - Developer Guide:
           - 'developer_guide/concepts.md'
           - 'developer_guide/aineko_project.md'
-          - 'developer_guide/cli.md'
           - 'developer_guide/pipeline_configuration.md'
           - 'developer_guide/node_implementation.md'
+          - 'developer_guide/cli.md'
           - 'developer_guide/config_kafka.md'
       - Extras:
-          - extras/index.md
+          - extras/intro.md
           - extras/fastapi.md
       - API Documentation:
           - 'api_reference/abstract_node.md'
@@ -100,7 +98,7 @@ nav:
           - 'api_reference/config_loader.md'
           - 'api_reference/runner.md'
       - Example Pipelines:
-          - examples/aineko-dream.md
+          - examples/aineko_dream.md
       - Community:
           - community/index.md
 

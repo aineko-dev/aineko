@@ -66,7 +66,7 @@ You will see the following prompts as `aineko` tries to create a project directo
     poetry install
     ```
 
-### Start Aineko background services
+## Start Aineko background services
 
 :   
     ```
