@@ -21,9 +21,11 @@ e.g. message:
 import datetime
 import json
 import logging
+import time
 from typing import Any, Dict, Literal, Optional
 
 from confluent_kafka import (  # type: ignore
+    OFFSET_INVALID,
     Consumer,
     KafkaError,
     Message,
@@ -100,13 +102,13 @@ class DatasetConsumer:
             topic_name = f"{pipeline_name}.{dataset_name}"
 
         if self.prefix:
-            consumer_config[
-                "group.id"
-            ] = f"{prefix}.{pipeline_name}.{node_name}"
+            self.name = f"{prefix}.{pipeline_name}.{node_name}"
+            consumer_config["group.id"] = self.name
             self.consumer = Consumer(consumer_config)
             self.consumer.subscribe([f"{prefix}.{topic_name}"])
 
         else:
+            self.name = f"{pipeline_name}.{node_name}"
             consumer_config["group.id"] = f"{pipeline_name}.{node_name}"
             self.consumer = Consumer(consumer_config)
             self.consumer.subscribe([topic_name])
@@ -153,12 +155,20 @@ class DatasetConsumer:
             partitions = self.consumer.assignment()
 
         for partition in partitions:
-            partition.offset = (
-                self.consumer.get_watermark_offsets(
-                    partition, cached=self.cached
-                )[1]
-                - 1
-            )
+            high_offset = self.consumer.get_watermark_offsets(
+                partition, cached=self.cached
+            )[1]
+
+            # Invalid high offset can be caused by various reasons,
+            # including rebalancing and empty topic.
+            if high_offset == OFFSET_INVALID:
+                logger.error(
+                    "Invalid offset received for consumer: %s", self.name
+                )
+                self.cached = False
+                return
+
+            partition.offset = high_offset - 1
 
         self.consumer.assign(partitions)
 
