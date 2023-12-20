@@ -160,15 +160,14 @@ class DatasetConsumer:
             )[1]
 
             # Invalid high offset can be caused by various reasons,
-            # including rebalancing and empty topic.
+            # including rebalancing and empty topic. Default to -1.
             if high_offset == OFFSET_INVALID:
                 logger.error(
                     "Invalid offset received for consumer: %s", self.name
                 )
-                self.cached = False
-                return
-
-            partition.offset = high_offset - 1
+                partition.offset = -1
+            else:
+                partition.offset = high_offset - 1
 
         self.consumer.assign(partitions)
 
