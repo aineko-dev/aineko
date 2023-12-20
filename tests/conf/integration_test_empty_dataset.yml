@@ -1,0 +1,21 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: integration_test_kafka_edge_cases
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    write:
+      class: tests.integration.test_kafka_edge_cases.ConsumerNode
+      inputs:
+        - messages
+      outputs:
+        - test_result
+
+  datasets:
+    messages:
+      type: kafka_stream
+    test_result:
+      type: kafka_stream

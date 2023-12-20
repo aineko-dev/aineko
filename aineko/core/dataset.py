@@ -177,6 +177,10 @@ class DatasetConsumer:
     ) -> Optional[dict]:
         """Polls a message from the dataset.
 
+        If the consume method is last but the method encounters
+        an error trying to udpdate the offset to latest, it will
+        poll and return None.
+
         Args:
             how: how to read the message.
                 "next": read the next message in the queue
@@ -200,7 +204,15 @@ class DatasetConsumer:
 
         if how == "last":
             # last message from queue
-            self._update_offset_to_latest()
+            try:
+                self._update_offset_to_latest()
+            except KafkaError as e:
+                logger.error(
+                    "Error updating offset to latest for consumer %s: %s",
+                    self.name,
+                    e,
+                )
+                return
             message = self.consumer.poll(timeout=timeout)
 
         self.cached = True
