@@ -212,7 +212,7 @@ class DatasetConsumer:
                     self.name,
                     e,
                 )
-                return
+                return None
             message = self.consumer.poll(timeout=timeout)
 
         self.cached = True
