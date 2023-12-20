@@ -21,7 +21,6 @@ e.g. message:
 import datetime
 import json
 import logging
-import time
 from typing import Any, Dict, Literal, Optional
 
 from confluent_kafka import (  # type: ignore
