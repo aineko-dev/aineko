@@ -5,6 +5,7 @@
 import time
 from typing import Optional
 
+import pytest
 import ray
 
 from aineko import AbstractNode, DatasetConsumer, Runner
@@ -24,6 +25,7 @@ class ConsumerNode(AbstractNode):
         return False
 
 
+@pytest.mark.integration
 def test_consume_empty_datasets():
     """Integration test that checks that empty datasets do not cause errors.
 
