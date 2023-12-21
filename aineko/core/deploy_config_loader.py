@@ -15,7 +15,7 @@ of truth in which infrastructure should be deployed from.
 from collections import defaultdict
 from typing import Optional
 
-from pydantic.utils import deep_update
+from pydantic.v1.utils import deep_update
 
 from aineko.models.deploy_config_schema import (
     DeploymentConfig,
