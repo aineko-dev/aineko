@@ -67,13 +67,22 @@ def test_load_invalid_config(test_invalid_pipeline_config_file: str, caplog):
     """
     with pytest.raises(ValidationError) as err:
         ConfigLoader(test_invalid_pipeline_config_file).load_config()
-    assert err.value.errors() == [
-        {
-            "loc": ("pipeline", "nodes", "doubler", "class"),
-            "msg": "field required",
-            "type": "value_error.missing",
-        }
-    ]
+
+    # We only check for a subset of the expected error message
+    # because the full error message contains a URL that changes
+    # with the version of pydantic.
+    partial_expected = {
+        "loc": ("pipeline", "nodes", "doubler", "class"),
+        "msg": "Field required",
+        "type": "missing",
+    }
+
+    actual = err.value.errors()[0]
+
+    for key, value in partial_expected.items():
+        assert key in actual
+        assert actual[key] == value
+
     # Capture the log output
     captured = caplog.records[0].message
     # Check that the correct informational message is logged
