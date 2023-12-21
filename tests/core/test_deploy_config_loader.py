@@ -18,7 +18,9 @@ def test_load_deployment_config(deploy_config_path, full_deploy_config_path):
 
     full_config = generate_deploy_config_from_file(deploy_config_path)
     expected_full_config = load_yaml(full_deploy_config_path)
-    expected_full_config = FullDeploymentConfig(**expected_full_config).dict()
+    expected_full_config = FullDeploymentConfig(
+        **expected_full_config
+    ).model_dump()
     assert full_config == expected_full_config
 
 

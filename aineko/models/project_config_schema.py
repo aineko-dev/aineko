@@ -8,7 +8,7 @@ repos that are used in `aineko create`.
 
 from typing import Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from aineko import __version__
 
@@ -18,11 +18,11 @@ class ProjectConfig(BaseModel):
 
     aineko_version: str
     project_name: str
-    project_slug: Optional[str]
-    project_description: Optional[str]
-    pipeline_slug: Optional[str]
+    project_slug: Optional[str] = None
+    project_description: Optional[str] = None
+    pipeline_slug: Optional[str] = None
 
-    @validator("aineko_version")
+    @field_validator("aineko_version")
     def version(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that the aineko version matches."""
         if v != __version__:

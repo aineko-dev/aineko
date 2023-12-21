@@ -16,16 +16,16 @@ class Config(BaseModel):
             """Dataset model."""
 
             type: str
-            params: Optional[dict]
+            params: Optional[dict] = None
 
         class Node(BaseModel):
             """Node model."""
 
             class_name: str = Field(..., alias="class")
-            node_params: Optional[dict]
-            node_settings: Optional[dict]
-            inputs: Optional[list]
-            outputs: Optional[list]
+            node_params: Optional[dict] = None
+            node_settings: Optional[dict] = None
+            inputs: Optional[list] = None
+            outputs: Optional[list] = None
 
         name: str
         default_node_settings: Optional[dict]
