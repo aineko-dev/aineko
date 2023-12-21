@@ -15,7 +15,7 @@ of truth in which infrastructure should be deployed from.
 from collections import defaultdict
 from typing import Optional
 
-from pydantic.utils import deep_update
+from pydantic.v1.utils import deep_update
 
 from aineko.models.deploy_config_schema import (
     DeploymentConfig,
@@ -60,11 +60,11 @@ def generate_deploy_config(
 
     user_deploy_config = DeploymentConfig(**user_config)
     if config_type == "user":
-        return user_deploy_config.dict()
+        return user_deploy_config.model_dump()
 
     else:
         full_config = _generate_full_config(user_deploy_config)
-        return full_config.dict()
+        return full_config.model_dump()
 
 
 def _generate_full_config(
@@ -99,18 +99,24 @@ def _generate_full_config(
                 pipeline_name = next(iter(pipeline))
 
             defaults = (
-                user_config.defaults.dict() if user_config.defaults else {}
+                user_config.defaults.model_dump()
+                if user_config.defaults
+                else {}
             )
             pipeline_specific_config = {
                 k: v
-                for k, v in user_config.pipelines[pipeline_name].dict().items()
+                for k, v in user_config.pipelines[pipeline_name]
+                .model_dump()
+                .items()
                 if v
             }
 
             # Env specific config may not be defined
             if isinstance(pipeline, dict):
                 env_specific_config = {
-                    k: v for k, v in pipeline[pipeline_name].dict().items() if v
+                    k: v
+                    for k, v in pipeline[pipeline_name].model_dump().items()
+                    if v
                 }
             else:
                 env_specific_config = {}

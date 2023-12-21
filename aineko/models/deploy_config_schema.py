@@ -15,7 +15,7 @@ pipelines.
 
 from typing import Dict, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from aineko.models.deploy_config_schema_internal import (
     Environment,
@@ -28,11 +28,11 @@ class DeploymentConfig(BaseModel, extra="forbid"):
     """User deployment configuration (Schema for deploy.yml)."""
 
     version: str
-    defaults: Optional[ParameterizableDefaults]
+    defaults: Optional[ParameterizableDefaults] = None
     pipelines: Dict[str, GenericPipeline]
     environments: Dict[str, Environment]
 
-    @validator("version")
+    @field_validator("version")
     def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that versioning follow semver convention."""
         if len(v.split(".")) != 3:
@@ -46,7 +46,7 @@ class FullDeploymentConfig(BaseModel):
     version: str
     environments: Dict[str, Environment]
 
-    @validator("version")
+    @field_validator("version")
     def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that versioning follow semver convention."""
         if len(v.split(".")) != 3:

@@ -16,7 +16,7 @@ from aineko.models.deploy_config_schema_internal import (
 def test_machine_config(machine_config):
     """Test MachineConfig model."""
     expected = {"type": "ec2", "mem_gib": 16, "vcpu": 4}
-    assert MachineConfig(**machine_config) == expected
+    assert MachineConfig(**machine_config).model_dump() == expected
 
     with pytest.raises(ValueError):
         MachineConfig(**{"type": "ec2", "mem_gib": 16, "vcpu": 5})
