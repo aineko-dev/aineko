@@ -4,6 +4,7 @@ help:
 	@echo "unit-test - run unit tests suite"
 	@echo "integration-test - run integration tests suite"
 	@echo "install-dev - install all dependencies for development"
+	@echo "view-docs - run a local server to view documentation"
 
 install-dev:
 	poetry install --with dev,docs,test --all-extras
@@ -29,3 +30,6 @@ unit-test:
 integration-test:
 	poetry run aineko service start
 	poetry run pytest tests -m "integration"
+
+view-docs:
+	poetry run mkdocs serve
