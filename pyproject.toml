@@ -22,16 +22,16 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-pydantic = "<2"
+pydantic = ">=2.5"
 PyYAML = "^6.0.1"
 confluent-kafka = "~2.2.0"
-ray = { extras = ["default"], version = "^2.6.3" }
+ray = { extras = ["default"], version = "^2.9.0" }
 cookiecutter = "^2.4.0"
 click = "^8.1.7"
 pygithub = "~=2.1.1"
 # extras: fastapi
-fastapi = {version = "^0.99", optional = true}
-uvicorn = { version = "^0.22", extras = ["standard"], optional = true}
+fastapi = { version = ">0.101", optional = true }
+uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
 
 [tool.poetry.group.dev.dependencies]
 aineko_style = "^0.0.1"
@@ -74,7 +74,9 @@ filterwarnings = [
   "ignore:.*pkg_resources.*:DeprecationWarning",
 ]
 pythonpath = ["."]
-markers = ["integration: marks tests as requiring docker (deselect with '-m \"not integration\"'"]
+markers = [
+  "integration: marks tests as requiring docker (deselect with '-m \"not integration\"'",
+]
 
 [tool.poetry.scripts]
 aineko = "aineko.__main__:cli"
