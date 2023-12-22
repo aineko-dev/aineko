@@ -24,6 +24,7 @@ import logging
 from typing import Any, Dict, Literal, Optional
 
 from confluent_kafka import (  # type: ignore
+    OFFSET_INVALID,
     Consumer,
     KafkaError,
     Message,
@@ -100,13 +101,13 @@ class DatasetConsumer:
             topic_name = f"{pipeline_name}.{dataset_name}"
 
         if self.prefix:
-            consumer_config[
-                "group.id"
-            ] = f"{prefix}.{pipeline_name}.{node_name}"
+            self.name = f"{prefix}.{pipeline_name}.{node_name}"
+            consumer_config["group.id"] = self.name
             self.consumer = Consumer(consumer_config)
             self.consumer.subscribe([f"{prefix}.{topic_name}"])
 
         else:
+            self.name = f"{pipeline_name}.{node_name}"
             consumer_config["group.id"] = f"{pipeline_name}.{node_name}"
             self.consumer = Consumer(consumer_config)
             self.consumer.subscribe([topic_name])
@@ -153,12 +154,19 @@ class DatasetConsumer:
             partitions = self.consumer.assignment()
 
         for partition in partitions:
-            partition.offset = (
-                self.consumer.get_watermark_offsets(
-                    partition, cached=self.cached
-                )[1]
-                - 1
-            )
+            high_offset = self.consumer.get_watermark_offsets(
+                partition, cached=self.cached
+            )[1]
+
+            # Invalid high offset can be caused by various reasons,
+            # including rebalancing and empty topic. Default to -1.
+            if high_offset == OFFSET_INVALID:
+                logger.error(
+                    "Invalid offset received for consumer: %s", self.name
+                )
+                partition.offset = -1
+            else:
+                partition.offset = high_offset - 1
 
         self.consumer.assign(partitions)
 
@@ -168,6 +176,10 @@ class DatasetConsumer:
         timeout: Optional[float] = None,
     ) -> Optional[dict]:
         """Polls a message from the dataset.
+
+        If the consume method is last but the method encounters
+        an error trying to udpdate the offset to latest, it will
+        poll and return None.
 
         Args:
             how: how to read the message.
@@ -192,7 +204,15 @@ class DatasetConsumer:
 
         if how == "last":
             # last message from queue
-            self._update_offset_to_latest()
+            try:
+                self._update_offset_to_latest()
+            except KafkaError as e:
+                logger.error(
+                    "Error updating offset to latest for consumer %s: %s",
+                    self.name,
+                    e,
+                )
+                return None
             message = self.consumer.poll(timeout=timeout)
 
         self.cached = True
