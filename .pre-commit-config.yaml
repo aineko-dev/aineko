@@ -57,3 +57,11 @@ repos:
         files: \.(py|yml|yaml)$
         exclude: .pre-commit-config.yaml|yamllint.yaml|^docs/.styles/.*$
         args: ["--fix"]
+      - id: poetry-check
+        name: Poetry check
+        description: Validates the content of the pyproject.toml file and its consistency
+          with the poetry.lock file.
+        entry: poetry check
+        language: system
+        pass_filenames: false
+        files: pyproject.toml
