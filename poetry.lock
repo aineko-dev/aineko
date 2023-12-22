@@ -3641,4 +3641,4 @@ fastapi = ["fastapi", "uvicorn"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "943a2d0b7dd1437c20893b8dbab3294c995b6e41ac6e47a63be28ed40d47e084"
+content-hash = "939167f1e8432c0b8d2ebafb7b98ff380b33e92322d84680f3dc979ab7793476"

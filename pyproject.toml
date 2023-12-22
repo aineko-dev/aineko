@@ -7,7 +7,7 @@
 
 [tool.poetry]
 name = "aineko"
-version = "0.2.6"
+version = "0.2.7"
 description = "Aineko, a data integration framework."
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
@@ -532,7 +532,7 @@ warn_untyped_fields = true
 
 
 [[tool.mypy.overrides]]
-module = ["confluent_kafka", "confluent_kafka.*", "schema"]
+module = ["confluent_kafka", "confluent_kafka.*", "schema", "uvicorn"]
 ignore_missing_imports = true
 
 [tool.coverage.run]
