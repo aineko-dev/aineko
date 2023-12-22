@@ -532,7 +532,7 @@ warn_untyped_fields = true
 
 
 [[tool.mypy.overrides]]
-module = ["confluent_kafka", "confluent_kafka.*", "schema"]
+module = ["confluent_kafka", "confluent_kafka.*", "schema", "uvicorn"]
 ignore_missing_imports = true
 
 [tool.coverage.run]
