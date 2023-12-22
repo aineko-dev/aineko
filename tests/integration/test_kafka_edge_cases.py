@@ -37,12 +37,15 @@ def test_consume_empty_datasets():
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="integration_test_kafka_edge_cases",
-            dataset_config={},
-            has_pipeline_prefix=True,
-        )
-        count_messages = consumer.consume_all(end_message="END")
-        assert count_messages[0]["message"] == "OK"
+        # This is expected because we activated the poison pill
+        pass
+
+    consumer = DatasetConsumer(
+        dataset_name="test_result",
+        node_name="consumer",
+        pipeline_name="integration_test_kafka_edge_cases",
+        dataset_config={},
+        has_pipeline_prefix=True,
+    )
+    count_messages = consumer.consume_all(end_message="END")
+    assert count_messages[0]["message"] == "OK"
