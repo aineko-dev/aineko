@@ -3,6 +3,8 @@
 """Tests for the ainode.core.node module."""
 import time
 
+import pytest
+
 from aineko.core.node import AbstractNode
 
 NUM_MESSAGES = 10
@@ -101,3 +103,55 @@ def test_output_yielding_no_output(test_internal_value_setter_node):
     for input, _, node_instance in node.run_test_yield():
         if input.get("integer_sequence"):
             assert input["integer_sequence"] == node_instance.cur_integer + 1
+
+
+@pytest.mark.parametrize("test_log_internals", [None], indirect=True)
+def test_root_logger(test_log_internals):
+    """Test that the root logger is used when no namespace is provided."""
+    node: tuple(AbstractNode, int) = test_log_internals[0](
+        node_name="test",
+        pipeline_name="testing_pipeline",
+        log_to_dataset=True,
+        logging_namespace=None,
+    )
+    node.enable_test_mode()
+    node.setup_test(inputs=None, outputs=["logging", "messages"])
+    outputs = node.run_test()
+
+    for log_entry in outputs["logging"]:
+        assert "Dummy function called." in log_entry["log"]
+
+    assert len(outputs["logging"]) == test_log_internals[1]
+
+
+@pytest.mark.parametrize("test_log_internals", ["hello"], indirect=True)
+def test_namespaced_logger(test_log_internals, subtests):
+    """Test that the namespaced logger is used when a namespace is provided."""
+    with subtests.test("Test with matching namespace"):
+        node: AbstractNode = test_log_internals[0](
+            node_name="test",
+            pipeline_name="testing_pipeline",
+            log_to_dataset=True,
+            logging_namespace="hello",
+        )
+        node.enable_test_mode()
+        node.setup_test(inputs=None, outputs=["logging", "messages"])
+        outputs = node.run_test()
+
+        for log_entry in outputs["logging"]:
+            assert "Dummy function called." in log_entry["log"]
+
+        assert len(outputs["logging"]) == test_log_internals[1]
+
+    with subtests.test("Test with non-matching namespace"):
+        node: AbstractNode = test_log_internals[0](
+            node_name="test",
+            pipeline_name="testing_pipeline",
+            log_to_dataset=True,
+            logging_namespace="goodbye",
+        )
+        node.enable_test_mode()
+        node.setup_test(inputs=None, outputs=["logging", "messages"])
+        outputs = node.run_test()
+
+        assert len(outputs["logging"]) == 0
