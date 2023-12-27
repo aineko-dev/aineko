@@ -26,10 +26,14 @@ class Config(BaseModel):
             node_settings: Optional[dict] = None
             inputs: Optional[list] = None
             outputs: Optional[list] = None
+            log_to_dataset: bool = False
+            logging_namespace: Optional[str] = None
 
         name: str
         default_node_settings: Optional[dict]
         nodes: dict[str, Node]
         datasets: dict[str, Dataset]
+        log_to_dataset: bool = False
+        logging_namespace: Optional[str] = None
 
     pipeline: Pipeline
