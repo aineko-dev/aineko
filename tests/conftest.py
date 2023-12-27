@@ -4,7 +4,6 @@
 import datetime
 import os
 import time
-from typing import Optional
 
 import pytest
 from click.testing import CliRunner
@@ -72,7 +71,7 @@ def dummy_node():
     class DummyNode(AbstractNode):
         """Dummy node that passes through messages."""
 
-        def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
+        def _execute(self, params: dict | None = None) -> bool | None:
             """Consumes message from input and outputs it to output."""
             msg = self.consumers["input"].consume(how="next", timeout=0)
             self.producers["output"].produce(msg)
@@ -99,13 +98,13 @@ def test_sequencer_node():
     class TestSequencer(AbstractNode):
         """Test sequencer node."""
 
-        def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+        def _pre_loop_hook(self, params: dict | None = None) -> None:
             """Pre loop hook."""
             self.cur_integer = int(params.get("start_int", 0))
             self.num_messages = 0
             self.log(f"Starting at {self.cur_integer}", level="info")
 
-        def _execute(self, params: Optional[dict] = None) -> None:
+        def _execute(self, params: dict | None = None) -> None:
             """Generates a sequence of integers and writes them to a dataset.
 
             Args:
@@ -135,7 +134,7 @@ def test_doubler_node():
     class TestDoubler(AbstractNode):
         """Test doubler node."""
 
-        def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+        def _pre_loop_hook(self, params: dict | None = None) -> None:
             """Initializes node with current time.
 
             Args:
@@ -144,7 +143,7 @@ def test_doubler_node():
             self.cur_time = time.time()
             self.cur_integer = 0
 
-        def _execute(self, params: Optional[dict] = None) -> None:
+        def _execute(self, params: dict | None = None) -> None:
             """Generates a sequence of integers and writes them to a dataset.
 
             Args:
@@ -190,12 +189,12 @@ def test_internal_value_setter_node():
     class TestInternalValueSetter(AbstractNode):
         """Test sequencer node."""
 
-        def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+        def _pre_loop_hook(self, params: dict | None = None) -> None:
             """Pre loop hook."""
             self.cur_integer = 0
             self.num_messages = 0
 
-        def _execute(self, params: Optional[dict] = None) -> None:
+        def _execute(self, params: dict | None = None) -> None:
             """Consumes message from input and sets content to internal value."""
 
             # Read message from consumer

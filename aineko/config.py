@@ -22,7 +22,7 @@ corresponds to `bootstrap.servers`.
 import copy
 import json
 import os
-from typing import Any, Dict
+from typing import Any
 
 
 # pylint: disable=too-few-public-methods
@@ -63,13 +63,13 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
             BROKER_CONFIG[config] = value
 
     # Config for default kafka consumer
-    CONSUMER_CONFIG: Dict[str, str] = {
+    CONSUMER_CONFIG: dict[str, str] = {
         **BROKER_CONFIG,
         "auto.offset.reset": "earliest",
     }
 
     # Config for default kafka producer
-    PRODUCER_CONFIG: Dict[str, str] = {**BROKER_CONFIG}
+    PRODUCER_CONFIG: dict[str, str] = {**BROKER_CONFIG}
 
     # Default dataset config
     DATASET_PARAMS = {

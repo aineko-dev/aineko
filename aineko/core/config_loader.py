@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Module to load config files."""
 import logging
-from typing import Union, overload
+from typing import overload
 
 from pydantic import ValidationError
 
@@ -81,8 +81,8 @@ class ConfigLoader:
         ...
 
     def _update_params(
-        self, value: Union[dict, list, str, int], params: dict
-    ) -> Union[dict, list, str, int]:
+        self, value: dict | list | str | int, params: dict
+    ) -> dict | list | str | int:
         """Update value with params.
 
         Recursively calls the method if value is a list or dictionary until it

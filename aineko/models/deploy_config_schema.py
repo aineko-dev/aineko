@@ -12,9 +12,6 @@ explicitly injected into the config so all pipelines are explicitly defined.
 This config represents the source of truth for all deployments of aineko
 pipelines.
 """
-
-from typing import Dict, Optional
-
 from pydantic import BaseModel, field_validator
 
 from aineko.models.deploy_config_schema_internal import (
@@ -28,9 +25,9 @@ class DeploymentConfig(BaseModel, extra="forbid"):
     """User deployment configuration (Schema for deploy.yml)."""
 
     version: str
-    defaults: Optional[ParameterizableDefaults] = None
-    pipelines: Dict[str, GenericPipeline]
-    environments: Dict[str, Environment]
+    defaults: ParameterizableDefaults | None = None
+    pipelines: dict[str, GenericPipeline]
+    environments: dict[str, Environment]
 
     @field_validator("version")
     def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
@@ -44,7 +41,7 @@ class FullDeploymentConfig(BaseModel):
     """Full deployment configuration (Schema for deploy.yml)."""
 
     version: str
-    environments: Dict[str, Environment]
+    environments: dict[str, Environment]
 
     @field_validator("version")
     def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument

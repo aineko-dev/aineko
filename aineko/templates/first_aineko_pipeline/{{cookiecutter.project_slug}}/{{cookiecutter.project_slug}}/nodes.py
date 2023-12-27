@@ -3,7 +3,6 @@
 """Example file showing how to create nodes."""
 
 import time
-from typing import Optional
 
 from aineko.core.node import AbstractNode
 
@@ -11,11 +10,11 @@ from aineko.core.node import AbstractNode
 class MySequencerNode(AbstractNode):
     """Example node."""
 
-    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+    def _pre_loop_hook(self, params: dict | None = None) -> None:
         """Optional; used to initialize node state."""
         self.current_val = params.get("initial_state", 0)
 
-    def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
+    def _execute(self, params: dict | None = None) -> bool | None:
         """Required; function repeatedly executes.
 
         Accesses inputs via `self.consumer`, and outputs via
@@ -30,7 +29,7 @@ class MySequencerNode(AbstractNode):
 class PrintInput(AbstractNode):
     """Prints input."""
 
-    def _execute(self, params: Optional[dict] = None):
+    def _execute(self, params: dict | None = None):
         for dataset, consumer in self.consumers.items():
             msg = consumer.consume(how="next")
             if msg is None:
@@ -43,11 +42,11 @@ class PrintInput(AbstractNode):
 class MySumNode(AbstractNode):
     """Example node."""
 
-    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+    def _pre_loop_hook(self, params: dict | None = None) -> None:
         """Optional; used to initialize node state."""
         self.state = params.get("initial_state", 0)
 
-    def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
+    def _execute(self, params: dict | None = None) -> bool | None:
         """Required; function repeatedly executes.
 
         Accesses inputs via `self.consumer`, and outputs via
