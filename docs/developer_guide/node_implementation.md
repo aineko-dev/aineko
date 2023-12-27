@@ -169,13 +169,59 @@ The timeout argument in these methods signify the duration in which the method h
 
 
 ### Logging
-
-Node classes inherit a method named `self.log` that allows users to log messages. You can set the appropriate level from: `info`, `debug`, `warning`, `error`, an `critical`. You can log from inside of the `_pre_loop_hook` method, the `_execute` method, or any other method you add to your node.
+#### From within a node
+Node classes inherit a method named `self.log` that allows users to produce messages to the `logging` dataset. This is useful for debugging and monitoring purposes. You can specify the level of the log message, by specifying the `level` argument. By default, the level is set to `info`. Other valid levels are `debug`, `warning`, `error`, and `critical`. You can log from any method that inherits from `AbstractNode`.
 
 :   
     ```python
     self.log(f"Produced {self.cur_integer}", level="info")
     ```
+
+#### From outside a node
+Since `self.log` is inherited from `AbstractNode`, you can't use it outside of a node. However, you can still log to the `logging` dataset by using the native Python `logging` module and specifying the `logging_namespace` and setting `log_to_dataset` to `true` in the node or pipeline configuration as shown below. This configuration will read all log entries from the "foo" namespace and produce them to the `logging` dataset.
+
+:   
+
+    ```yaml title="conf/pipeline.yml" linenums="7"
+    nodes:
+      example_node:
+        class: your_package.your_module.YourNode
+        log_to_dataset: true
+        logging_namespace: foo
+    ```
+
+    ```python title="your_package/your_utils.py" linenums="7"
+    import logging
+
+    logger = logging.getLogger("foo")
+    
+    def some_function():
+        logger.info("Hello world!")
+    ```
+ 
+    ```python title="your_package/your_module.py"
+    from your_package.your_utils import some_function
+    from aineko.core.node import AbstractNode
+
+    class YourNode(AbstractNode):
+        def _execute(self, params=None):
+            some_function()
+    ```
+??? note
+    * In the preceding example, the `logging_namespace` is set to `foo`. This means that only log entries with the namespace "foo" will be read and produced to the `logging` dataset. If you want to read and produce all log entries, set `logging_namespace` to `None`.
+    * Since nodes are isolated processes, the preceding example will only read logs that are written when invoked (either directly or indirectly) by the node. Specifying the logging parameters at the node level allows for very fine-grained control over what log messages are read and produced. However, the same parameters can be specified at the pipeline level. This will read all log entries from the specified namespace and produce them to the `logging` dataset.
+
+    :   
+        ```yaml title="conf/pipeline.yml" linenums="7"
+        nodes:
+          example_node:
+            class: your_package.your_module.YourNode
+          second_node:
+            class: your_package.your_module.YourSecondNode        
+           
+        log_to_dataset: true
+        logging_namespace: foo
+        ```
 
 
 ### PoisonPill

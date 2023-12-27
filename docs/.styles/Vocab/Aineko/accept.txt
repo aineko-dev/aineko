@@ -16,3 +16,4 @@ CLI
 [Bb]lockchain
 GitHub
 github
+namespace
