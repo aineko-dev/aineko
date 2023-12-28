@@ -222,6 +222,7 @@ Since `self.log` is inherited from `AbstractNode`, you can't use it outside of a
         log_to_dataset: true
         logging_namespace: foo
         ```
+    * Logging parameters at the node level have precedence over logging parameters at the pipeline level. For example, if `log_to_dataset` is set to `true` at the pipeline level, but `log_to_dataset` is set to `false` for node `xyz`, then node `xyz` will nog read and produce log entries. However, all other nodes will read and produce log entries.
 
 
 ### PoisonPill
