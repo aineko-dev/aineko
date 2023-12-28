@@ -87,7 +87,7 @@ class AbstractNode(ABC):
         poison_pill: Optional[ray.actor.ActorHandle] = None,
         test: bool = False,
         logging_namespace: Optional[str] = None,
-        log_to_dataset: bool = False,
+        log_to_dataset: Optional[bool] = None,
     ) -> None:
         """Initialize the node."""
         self.name = node_name or self.__class__.__name__

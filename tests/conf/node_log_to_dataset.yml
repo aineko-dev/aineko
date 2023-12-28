@@ -1,0 +1,18 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: test_log_to_dataset
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    with_logging:
+      class: foo.bar.BazNode
+      log_to_dataset: true
+      logging_namespace: "okenia"
+
+    without_logging:
+      class: foo.bar.BazNode
+
+  datasets: {}
