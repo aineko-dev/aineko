@@ -1,9 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Tests edge cases to do with kafka clusters."""
-
 import time
-from typing import Optional
 
 import pytest
 import ray
@@ -14,7 +12,7 @@ from aineko import AbstractNode, DatasetConsumer, Runner
 class ConsumerNode(AbstractNode):
     """Node that consumes message using different consume methods."""
 
-    def _execute(self, params: Optional[dict] = None) -> None:
+    def _execute(self, params: dict | None = None) -> None:
         """Consumes message."""
         self.consumers["messages"].consume(how="next")
         self.consumers["messages"].consume(how="last", timeout=1)

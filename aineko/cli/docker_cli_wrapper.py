@@ -3,7 +3,6 @@
 """A wrapper class that executes Docker CLI commands via subprocess."""
 import subprocess
 import sys
-from typing import Optional
 
 import click
 from click.core import Context
@@ -57,7 +56,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 """
 
-    def __init__(self, custom_config_path: Optional[str] = None) -> None:
+    def __init__(self, custom_config_path: str | None = None) -> None:
         """Initialize DockerCLIWrapper class."""
         if custom_config_path:
             self._load_custom_config(custom_config_path)
@@ -114,9 +113,7 @@ services:
             custom_config_path: Path to the custom Docker Compose config file.
         """
         try:
-            with open(
-                file=custom_config_path, mode="r", encoding="utf-8"
-            ) as file:
+            with open(file=custom_config_path, encoding="utf-8") as file:
                 cls._docker_compose_config = file.read()
         except FileNotFoundError:
             print(
@@ -133,7 +130,7 @@ services:
     help="Path to the custom Docker Compose config file.",
 )
 @click.pass_context
-def service(ctx: Context, config: Optional[str] = None) -> None:
+def service(ctx: Context, config: str | None = None) -> None:
     """Manage Aineko docker services (Kafka and Zookeeper containers)."""
     ctx.ensure_object(dict)
     ctx.obj["config"] = config

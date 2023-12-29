@@ -3,7 +3,6 @@
 """Submodule that handles the running of a pipeline from config."""
 import logging
 import time
-from typing import Optional
 
 import ray
 from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
@@ -41,10 +40,10 @@ class Runner:
     def __init__(
         self,
         pipeline_config_file: str,
-        pipeline_name: Optional[str] = None,
+        pipeline_name: str | None = None,
         kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
         metrics_export_port: int = AINEKO_CONFIG.get("RAY_METRICS_PORT"),
-        dataset_prefix: Optional[str] = None,
+        dataset_prefix: str | None = None,
     ):
         """Initializes the runner class."""
         self.pipeline_config_file = pipeline_config_file
@@ -110,7 +109,7 @@ class Runner:
         return config["pipeline"]
 
     def prepare_datasets(
-        self, config: dict, user_dataset_prefix: Optional[str] = None
+        self, config: dict, user_dataset_prefix: str | None = None
     ) -> bool:
         """Creates the required datasets for a given pipeline.
 
