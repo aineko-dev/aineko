@@ -1581,13 +1581,13 @@ corresponds to <code>bootstrap.servers</code>.</p>
             <span class="n">BROKER_CONFIG</span><span class="p">[</span><span class="n">config</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="c1"># Config for default kafka consumer</span>
-    <span class="n">CONSUMER_CONFIG</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">CONSUMER_CONFIG</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="o">**</span><span class="n">BROKER_CONFIG</span><span class="p">,</span>
         <span class="s2">&quot;auto.offset.reset&quot;</span><span class="p">:</span> <span class="s2">&quot;earliest&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># Config for default kafka producer</span>
-    <span class="n">PRODUCER_CONFIG</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">BROKER_CONFIG</span><span class="p">}</span>
+    <span class="n">PRODUCER_CONFIG</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">BROKER_CONFIG</span><span class="p">}</span>
 
     <span class="c1"># Default dataset config</span>
     <span class="n">DATASET_PARAMS</span> <span class="o">=</span> <span class="p">{</span>
