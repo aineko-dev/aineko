@@ -122,6 +122,7 @@ Here we add 2 evaluation steps and an evaluation model:
 Here is the pipeline configuration used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.
 
 ??? abstract "Pipeline configuration"
+
     ```yaml
     pipeline:
       name: gpt3-template-generator
@@ -212,7 +213,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
         class GitHubDocFetcher(AbstractNode):
             """Node that fetches code documents from GitHub."""
 
-            def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+            def _pre_loop_hook(self, params: dict | None = None) -> None:
                 """Initialize connection with GitHub and fetch latest document."""
                 # Set parameters
                 self.access_token = os.environ.get("GITHUB_ACCESS_TOKEN")
@@ -228,7 +229,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
                 # Fetch current document
                 self.emit_new_document()
 
-            def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
+            def _execute(self, params: dict | None = None) -> bool | None:
                 """Update document in response to commit events."""
                 # Check for new commit events from GitHub
                 message = self.consumers["github_event"].consume()
@@ -256,14 +257,14 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
         class OpenAIClient(AbstractNode):
             """Node that queries OpenAI LLMs."""
 
-            def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+            def _pre_loop_hook(self, params: dict | None = None) -> None:
                 """Initialize connection with OpenAI."""
                 self.model = params.get("model")
                 self.max_tokens = params.get("max_tokens")
                 self.temperature = params.get("temperature")
                 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-            def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
+            def _execute(self, params: dict | None = None) -> bool | None:
                 """Query OpenAI LLM."""
                 message = self.consumers["generated_prompt"].consume()
                 if message is None:
@@ -290,12 +291,12 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
         ```
 
     === "`SecurityEvaluation`"
-    
+
         ```python
         class SecurityEvaluation(AbstractNode):
             """Node that evaluates security of code."""
 
-            def _execute(self, params: Optional[dict] = None) -> None:
+            def _execute(self, params: dict | None = None) -> None:
                 """Evaluate Python code."""
                 message = self.consumers["llm_response"].consume()
                 if message is None:

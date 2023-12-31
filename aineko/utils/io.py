@@ -1,8 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """IO utilities."""
-from typing import Union
-
 import yaml
 
 
@@ -15,14 +13,14 @@ def load_yaml(file_path: str) -> dict:
     Returns:
         dictionary of yaml file
     """
-    with open(file_path, "r", encoding="utf-8") as conf_file:
+    with open(file_path, encoding="utf-8") as conf_file:
         contents = yaml.safe_load(conf_file)
     if not contents:
         raise ValueError(f"YAML file {file_path} cannot be loaded.")
     return contents
 
 
-def load_yamls(file_paths: Union[str, list]) -> dict:
+def load_yamls(file_paths: str | list) -> dict:
     """Load yaml file(s) into a dictionary.
 
     If multiple keys with the same name exist, the last one will be used.

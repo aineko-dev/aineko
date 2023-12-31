@@ -18,7 +18,7 @@ def check_license(filename: str) -> bool:
     Returns:
         True if the license snippet is present and correct, False otherwise.
     """
-    with open(filename, "r", encoding="utf-8") as f:
+    with open(filename, encoding="utf-8") as f:
         lines = [f.readline().strip() for _ in range(2)]
         return "\n".join(lines) == LICENSE_SNIPPET.strip()
 

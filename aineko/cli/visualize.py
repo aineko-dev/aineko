@@ -69,7 +69,7 @@ def build_mermaid_from_yaml(
     Returns:
         A mermaid graph as a string.
     """
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, encoding="utf-8") as f:
         text = f.read()
     root = yaml.safe_load(text)
     pipeline_name = next(iter(root))
