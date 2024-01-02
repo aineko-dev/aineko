@@ -1,11 +1,10 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Extra module for connecting to a WebSocket."""
+"""Extra module for connecting to a HTTPS endpoint."""
 
 import time
 import json
 from typing import Dict, Any, Optional
-import os
 
 from dotenv import load_dotenv
 import requests
@@ -15,7 +14,7 @@ from aineko import AbstractNode
 from aineko.utils.secrets import dict_inject_secrets, str_inject_secrets
 
 class ParamsHTTPS(BaseModel):
-    """Connector params for WebSocket model."""
+    """Connector params for HTTPS model."""
 
     timeout: Optional[int] = 10
     url: str
@@ -23,7 +22,7 @@ class ParamsHTTPS(BaseModel):
 
     @field_validator("url")
     def supported_url(cls, u: str) -> str:  # pylint: disable=no-self-argument
-        """Validates that the url is a valid WebSocket URL."""
+        """Validates that the url is a valid HTTPS URL."""
         if not u.startswith("https://"):
             raise ValueError(
                 "Invalid url provided to HTTPS params. "
@@ -56,7 +55,7 @@ class GetHTTPS(AbstractNode):
         self.retry_count = 0
 
     def _execute(self, params: Dict[str, Any] = None):
-        """Polls and gets data from the WebSocket."""
+        """Polls and gets data from the HTTPS endpoint."""
         # Check if it is time to poll
         if time.time() - self.last_poll_time >= self.params_https.poll_interval:
             # Update the last poll time
