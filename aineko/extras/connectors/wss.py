@@ -42,7 +42,7 @@ class ParamsWSS(BaseModel):
     subscription: Dict[str, Any]
 
 
-class ConnectorWSS(AbstractNode):
+class WSS(AbstractNode):
     """Connector for a websocket."""
 
     def _pre_loop_hook(self, params: Dict[str, Any] = None) -> None:
