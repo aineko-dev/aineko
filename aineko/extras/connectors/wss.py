@@ -45,7 +45,6 @@ class WSS(AbstractNode):
 
         # Cast params to ParamsWSS type
         self.params_wss = ParamsWSS(**params)
-        # TODO: Can we inject secrets via the Pydantic class?
         self.params.header = dict_inject_secrets(self.params.header)
         self.params.message = dict_inject_secrets(self.params.message)
         self.params.url = str_inject_secrets(self.params.url)
