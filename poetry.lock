@@ -2504,7 +2504,7 @@ six = ">=1.5"
 name = "python-dotenv"
 version = "1.0.0"
 description = "Read key-value pairs from a .env file and set them as environment variables"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "python-dotenv-1.0.0.tar.gz", hash = "sha256:a8df96034aae6d2d50a4ebe8216326c61c3eb64836776504fcca410e5937a3ba"},
@@ -3350,7 +3350,7 @@ files = [
 name = "websocket-client"
 version = "1.7.0"
 description = "WebSocket client for Python with low level API options"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "websocket-client-1.7.0.tar.gz", hash = "sha256:10e511ea3a8c744631d3bd77e61eb17ed09304c413ad42cf6ddfa4c7787e8fe6"},
@@ -3660,8 +3660,9 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [extras]
 fastapi = ["fastapi", "uvicorn"]
+wss = ["websocket-client"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "902df3bf75be9a50deda107411c6d476d8d45e767fe5e7217c9daa29c5ea5943"
+content-hash = "82451e703c09e3517c37dd00f2891b37f8513cba912d5e1c8fcd8436792d79b0"
