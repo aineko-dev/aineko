@@ -4,14 +4,13 @@
 
 import time
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
-from dotenv import load_dotenv
 import websocket
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
-from aineko.utils.secrets import dict_inject_secrets, str_inject_secrets
+from aineko.utils.secrets import inject_secrets
 
 class ParamsWSS(BaseModel):
     """Connector params for WebSocket model."""
@@ -20,8 +19,8 @@ class ParamsWSS(BaseModel):
     retry_sleep: Optional[int] = 5
     url: str
     header: Optional[Dict[str, str]] = None
-    init_messages: Optional[Dict[str, str]] = None
-    subscription: Optional[Dict[str, Any]] = None
+    init_messages: Optional[List[Any]] = []
+    metadata: Optional[Dict[str, Any]] = None
 
     @field_validator("url")
     def supported_url(cls, u: str) -> str:  # pylint: disable=no-self-argument
@@ -40,14 +39,17 @@ class WSS(AbstractNode):
 
     def _pre_loop_hook(self, params: Dict[str, Any] = None) -> None:
         """Initalize the WebSocket connection."""
-        # Load environment variables from .env file, if it exists
-        load_dotenv()
-
         # Cast params to ParamsWSS type
-        self.params = ParamsWSS(**params)
-        self.params.header = dict_inject_secrets(self.params.header)
-        self.params.message = dict_inject_secrets(self.params.message)
-        self.params.url = str_inject_secrets(self.params.url)
+        try:
+            self.params = ParamsWSS(**params)
+        except Exception as err:  # pylint: disable=broad-except
+            raise ValueError(
+                "Failed to cast params to ParamsWSS type. "
+                f"The following error occured: {err}"
+            ) from err
+        self.params.header = inject_secrets(self.params.header)
+        self.params.init_messages = inject_secrets(self.params.init_messages)
+        self.params.url = inject_secrets(self.params.url)
 
         # Setup the websocket node parameters
         self.retry_count = 0
@@ -76,6 +78,11 @@ class WSS(AbstractNode):
         try:
             # Parse the message and emit to producers
             message = json.loads(raw_message)
+            if self.params.metadata is not None:
+                message = {
+                    "metadata": self.params.metadata,
+                    "data": message,
+                }
             for dataset, producer in self.producers.items():
                 if dataset != "logging":
                     producer.produce(message)
@@ -99,50 +106,31 @@ class WSS(AbstractNode):
                     f"The following error occured: {err}"
                 ) from err
 
-    def create_subscription(self, params: ParamsWSS) -> None:
+    def create_subscription(self) -> None:
         """Creates a subscription on the websocket."""
         try:
-            self.log(f"Creating subscription to {params.url}...")
-            self.ws.connect(url=params.url, header=params.header)
+            self.log(f"Creating subscription to {self.params.url}...")
+            self.ws.connect(url=self.params.url, header=self.params.header)
 
-            # Get login message
-            message = self.ws.recv()
-            self.log(
-                f"Connected to WebSocket at {params.url}. "
-                f"Acknowledged login message: {message}"
-                )
-
-            # TODO: check if this is still needed
-            if params.auth.url_key:
-                # Get auth message
-                message = self.ws.recv()
-                self.log(
-                    f"Authenticated to WebSocket at {params.url}. "
-                    f"Acknowledged auth message: {message}"
-                    )
-
-            if params.init_messages:
+            if self.params.init_messages:
                 # Send initialization messages
-                for init_msg in params.init_messages:
+                for init_msg in self.params.init_messages:
                     self.ws.send(json.dumps(init_msg))
                     message = self.ws.recv()
                     self.log(
-                        f"Sent initialization message to {params.url}. "
+                        f"Sent initialization message to {self.params.url}. "
                         f"Acknowledged initialization message: {message}"
                         )
-
-            if params.subscription:
-                # Subscribe to the WebSocket stream
-                self.ws.send(json.dumps(params.subscription))
-                message = self.ws.recv()
-                self.log(
-                    f"Subscribed to stream at {params.subscription}. "
-                    f"Acknowledged subscription message: {message}"
-                    )
+            
+            ack_message = self.ws.recv()
+            self.log(
+                f"Subscription to {self.params.url} created. "
+                f"Acknowledged subscription message: {ack_message}"
+                )
 
             self.retry_count = 0
         except Exception as err:  # pylint: disable=broad-except
-            if self.retry_count < self.max_retries:
+            if self.retry_count < self.params.max_retries:
                 self.log(
                     "Encountered error when attempting to connect to "
                     f"{self.params.url}. Will retry in "
@@ -154,6 +142,6 @@ class WSS(AbstractNode):
             else:
                 raise ValueError(
                     f"Retry count exceeded max retries. "
-                    f"Failed to create subscription to {params.url}. "
+                    f"Failed to create subscription to {self.params.url}. "
                     f"The following error occured: {err}"
                 ) from err
