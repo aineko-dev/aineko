@@ -75,8 +75,8 @@ class WSS(AbstractNode):
             # If the connection is closed, reconnect
             self.log(
                 "Websocket connection closed. "
-                f"Reconnecting in {self.wss_params.retry_sleep} seconds... "
-                f"The following error occured: {err}",
+                f"Reconnecting in {str(self.wss_params.retry_sleep)} "
+                f"seconds... The following error occured: {str(err)}",
                 level="error",
             )
             time.sleep(self.wss_params.retry_sleep)
@@ -99,9 +99,10 @@ class WSS(AbstractNode):
             if self.retry_count < self.wss_params.max_retries:
                 self.retry_count += 1
                 self.log(
-                    f"Failed to parse message: {raw_message}. "
-                    f"The following error occured: {err} "
-                    f"Reconnecting in {self.wss_params.retry_sleep} seconds...",
+                    f"Failed to parse message: {str(raw_message)}. "
+                    f"The following error occured: {str(err)} "
+                    f"Reconnecting in {str(self.wss_params.retry_sleep)} "
+                    "seconds...",
                     level="error",
                 )
                 time.sleep(self.wss_params.retry_sleep)
@@ -117,7 +118,7 @@ class WSS(AbstractNode):
     def create_subscription(self) -> None:
         """Creates a subscription on the websocket."""
         try:
-            self.log(f"Creating subscription to {self.wss_params.url}...")
+            self.log(f"Creating subscription to {str(self.wss_params.url)}...")
             self.ws.connect(
                 url=self.wss_params.url, header=self.wss_params.header
             )
@@ -129,14 +130,14 @@ class WSS(AbstractNode):
                     message = self.ws.recv()
                     self.log(
                         f"Sent initialization message to "
-                        f"{self.wss_params.url}. "
-                        f"Acknowledged initialization message: {message}"
+                        f"{str(self.wss_params.url)}. "
+                        f"Acknowledged initialization message: {str(message)}"
                     )
 
             ack_message = self.ws.recv()
             self.log(
-                f"Subscription to {self.wss_params.url} created. "
-                f"Acknowledged subscription message: {ack_message}"
+                f"Subscription to {str(self.wss_params.url)} created. "
+                f"Acknowledged subscription message: {str(ack_message)}"
             )
 
             self.retry_count = 0
@@ -144,8 +145,8 @@ class WSS(AbstractNode):
             if self.retry_count < self.wss_params.max_retries:
                 self.log(
                     "Encountered error when attempting to connect to "
-                    f"{self.wss_params.url}. Will retry in "
-                    f"{self.wss_params.retry_sleep} seconds"
+                    f"{str(self.wss_params.url)}. Will retry in "
+                    f"{str(self.wss_params.retry_sleep)} seconds"
                 )
                 self.retry_count += 1
                 time.sleep(self.wss_params.retry_sleep)
