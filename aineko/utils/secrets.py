@@ -3,38 +3,66 @@
 """Secrets utilities."""
 
 import os
-from typing import Dict, Str, Any, Union
+from typing import Dict, Any, Union, List
 import re
 
 
-def str_inject_secret(string: Union[str, None]) -> Union[str, None]:
+def _str_inject_secrets(str_: str) -> str:
     """Inject secrets from environment into a str."""
-    if string is None:
-        return None
-    secret_pattern = r"{$.*?}"
-    secret_match = re.search(secret_pattern, string, re.DOTALL)
+    secret_pattern = r"\{\$.*?\}"
+    secret_match = re.search(secret_pattern, str_, re.DOTALL)
     if not secret_match:
-        return string
+        return str_
     else:
-        secret_env_string = secret_match.group(1)
-        secret_v = os.getenv(secret_env_string[1:][:-1], default=None)
+        secret_env_str = secret_match.group()
+        secret_v = os.getenv(secret_env_str[2:][:-1], default=None)
         if secret_v is None:
             raise ValueError(
                 "Failed to inject secret. "
-                f"Environment variable {string} not found."
+                f"Environment variable {secret_env_str[2:][:-1]} not found."
                 )
-        string.replace(secret_env_string, secret_v)
-        str_inject_secret(string)
+        str_ = str_.replace(secret_env_str, secret_v)
+        return _str_inject_secrets(str_)
 
-def dict_inject_secret(
-        dictionary: Union[Dict[Str, Any], None]
-        ) -> Union[Dict[Str, Any], None]:
+def _dict_inject_secrets(
+        dict_: Dict[str, Any]
+        ) -> Dict[str, Any]:
     """Inject secrets from environment into a dict."""
-    if dictionary is None:
-        return None
-    for k, v in dictionary.items():
+    for k, v in list(dict_.items()):
         if isinstance(v, str):
-            dictionary[k] = str_inject_secret(v)
+            dict_[k] = _str_inject_secrets(v)
         elif isinstance(v, dict):
-            dictionary[k] = dict_inject_secret(v)
-    return dictionary
+            dict_[k] = _dict_inject_secrets(v)
+        elif isinstance(v, list):
+            dict_[k] = _list_inject_secrets(v)
+    return dict_
+
+def _list_inject_secrets(
+        list_: List[Any]
+        ) -> List[Any]:
+    """Inject secrets from environment into a list."""
+    for i, v in enumerate(list_):
+        if isinstance(v, str):
+            list_[i] = _str_inject_secrets(v)
+        elif isinstance(v, dict):
+            list_[i] = _dict_inject_secrets(v)
+        elif isinstance(v, list):
+            list_[i] = _list_inject_secrets(v)
+    return list_
+
+def inject_secrets(obj: Any) -> Any:
+    """Inject secrets from environment into an object."""
+    if obj is None:
+        return None
+    if isinstance(obj, str):
+        return _str_inject_secrets(obj)
+    elif isinstance(obj, dict):
+        return _dict_inject_secrets(obj)
+    elif isinstance(obj, list):
+        return _list_inject_secrets(obj)
+    else:
+        raise ValueError(
+            "Failed to inject secrets. "
+            f"Object type {type(obj)} not supported. "
+            "Supported types are str, dict, and list."
+            )
