@@ -128,7 +128,8 @@ class WSS(AbstractNode):
                     self.ws.send(json.dumps(init_msg))
                     message = self.ws.recv()
                     self.log(
-                        f"Sent initialization message to {self.wss_params.url}. "
+                        f"Sent initialization message to "
+                        f"{self.wss_params.url}. "
                         f"Acknowledged initialization message: {message}"
                     )
 
