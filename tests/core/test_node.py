@@ -23,7 +23,7 @@ def test_node_setup_and_run_test(dummy_node) -> None:
     run_time = time.time() - start_time
 
     # Check that correct keys exist
-    assert set(output.keys()) == set(["logging", "output"])
+    assert set(output.keys()) == {"logging", "output"}
     # Check that correct messages are received
     assert [i["message"] for i in output["output"] if i] == [1, 2, 3]
     # Check that timeout worked as intended
