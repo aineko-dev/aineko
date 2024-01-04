@@ -2,3 +2,4 @@
 # SPDX-License-Identifier: Apache-2.0
 """Extra submodules for Aineko."""
 from aineko.extras.fastapi.main import FastAPI
+from aineko.extras.connectors.wss import WSS
