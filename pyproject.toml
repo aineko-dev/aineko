@@ -32,8 +32,8 @@ pygithub = "~=2.1.1"
 # extras: fastapi
 fastapi = { version = ">0.101", optional = true }
 uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
-websocket-client = "^1.7.0"
-python-dotenv = "^1.0.0"
+# extras: wss
+websocket-client = { version = "^1.7.0", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 aineko_style = "^0.0.1"
@@ -65,6 +65,7 @@ pytest-subtests = "^0.11.0"
 
 [tool.poetry.extras]
 fastapi = ["fastapi", "uvicorn"]
+wss = ["websocket-client"]
 
 [build-system]
 requires = ["poetry-core"]
