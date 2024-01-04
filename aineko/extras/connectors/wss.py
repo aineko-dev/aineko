@@ -30,7 +30,7 @@ class ParamsWSS(BaseModel):
             raise ValueError(
                 "Invalid url provided to WebSocket params. "
                 'Expected url to start with "wss://" or "ws://". '
-                f"Provided url was: {u}"
+                f"Provided url was: {str(u)}"
             )
         return u
 
@@ -54,7 +54,7 @@ class WSS(AbstractNode):
         except Exception as err:  # pylint: disable=broad-except
             raise ValueError(
                 "Failed to cast params to ParamsWSS type. "
-                f"The following error occured: {err}"
+                f"The following error occured: {str(err)}"
             ) from err
         self.wss_params.header = inject_secrets(self.wss_params.header)
         self.wss_params.init_messages = inject_secrets(
@@ -110,9 +110,9 @@ class WSS(AbstractNode):
             else:
                 raise ValueError(
                     "Retry count exceeded max retries "
-                    f"({self.wss_params.max_retries}). "
-                    f"Failed to parse message: {raw_message}. "
-                    f"The following error occured: {err}"
+                    f"({str(self.wss_params.max_retries)}). "
+                    f"Failed to parse message: {str(raw_message)}. "
+                    f"The following error occured: {str(err)}"
                 ) from err
 
     def create_subscription(self) -> None:
@@ -121,7 +121,7 @@ class WSS(AbstractNode):
             self.log(f"Creating subscription to {str(self.wss_params.url)}...")
             self.ws.connect(
                 url=self.wss_params.url, header=self.wss_params.header
-            )
+            )  # type: ignore
 
             if self.wss_params.init_messages:
                 # Send initialization messages
@@ -153,7 +153,8 @@ class WSS(AbstractNode):
                 self.create_subscription()
             else:
                 raise ValueError(
-                    f"Retry count exceeded max retries. "
-                    f"Failed to create subscription to {self.wss_params.url}. "
-                    f"The following error occured: {err}"
+                    "Retry count exceeded max retries. "
+                    "Failed to create subscription to "
+                    f"{str(self.wss_params.url)}. "
+                    f"The following error occured: {str(err)}"
                 ) from err
