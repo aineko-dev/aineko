@@ -2,15 +2,16 @@
 # SPDX-License-Identifier: Apache-2.0
 """Extra module for connecting to a WebSocket."""
 
-import time
 import json
-from typing import Dict, Any, Optional, List
+import time
+from typing import Any, Dict, List, Optional
 
 import websocket
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
 from aineko.utils.secrets import inject_secrets
+
 
 class ParamsWSS(BaseModel):
     """Connector params for WebSocket model."""
@@ -28,7 +29,7 @@ class ParamsWSS(BaseModel):
         if not u.startswith("wss://") or u.startswith("ws://"):
             raise ValueError(
                 "Invalid url provided to WebSocket params. "
-                "Expected url to start with \"wss://\" or \"ws://\". "
+                'Expected url to start with "wss://" or "ws://". '
                 f"Provided url was: {u}"
             )
         return u
@@ -120,13 +121,13 @@ class WSS(AbstractNode):
                     self.log(
                         f"Sent initialization message to {self.params.url}. "
                         f"Acknowledged initialization message: {message}"
-                        )
-            
+                    )
+
             ack_message = self.ws.recv()
             self.log(
                 f"Subscription to {self.params.url} created. "
                 f"Acknowledged subscription message: {ack_message}"
-                )
+            )
 
             self.retry_count = 0
         except Exception as err:  # pylint: disable=broad-except
@@ -135,7 +136,7 @@ class WSS(AbstractNode):
                     "Encountered error when attempting to connect to "
                     f"{self.params.url}. Will retry in "
                     f"{self.params.retry_sleep} seconds"
-                    )
+                )
                 self.retry_count += 1
                 time.sleep(self.params.retry_sleep)
                 self.create_subscription()
