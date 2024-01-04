@@ -20,16 +20,16 @@ class ParamsWSS(BaseModel):
     retry_sleep: Optional[int] = 5
     url: str
     header: Optional[Dict[str, str]] = None
-    message: Optional[Dict[str, str]] = None
-    subscription: Dict[str, Any]
+    init_messages: Optional[Dict[str, str]] = None
+    subscription: Optional[Dict[str, Any]] = None
 
     @field_validator("url")
     def supported_url(cls, u: str) -> str:  # pylint: disable=no-self-argument
         """Validates that the url is a valid WebSocket URL."""
-        if not u.startswith("wss://"):
+        if not u.startswith("wss://") or u.startswith("ws://"):
             raise ValueError(
                 "Invalid url provided to WebSocket params. "
-                "Expected url to start with \"wss://\". "
+                "Expected url to start with \"wss://\" or \"ws://\". "
                 f"Provided url was: {u}"
             )
         return u
@@ -40,11 +40,11 @@ class WSS(AbstractNode):
 
     def _pre_loop_hook(self, params: Dict[str, Any] = None) -> None:
         """Initalize the WebSocket connection."""
-        # Load the API key from the .env file
+        # Load environment variables from .env file, if it exists
         load_dotenv()
 
         # Cast params to ParamsWSS type
-        self.params_wss = ParamsWSS(**params)
+        self.params = ParamsWSS(**params)
         self.params.header = dict_inject_secrets(self.params.header)
         self.params.message = dict_inject_secrets(self.params.message)
         self.params.url = str_inject_secrets(self.params.url)
@@ -65,11 +65,11 @@ class WSS(AbstractNode):
             # If the connection is closed, reconnect
             self.log(
                 "Websocket connection closed. "
-                f"Reconnecting in {self.params_wss.retry_sleep} seconds... "
+                f"Reconnecting in {self.params.retry_sleep} seconds... "
                 f"The following error occured: {err}",
                 level="error",
             )
-            time.sleep(self.params_wss.retry_sleep)
+            time.sleep(self.params.retry_sleep)
             self.create_subscription()
             return
 
@@ -81,20 +81,20 @@ class WSS(AbstractNode):
                     producer.produce(message)
             self.retry_count = 0
         except json.decoder.JSONDecodeError as err:
-            if self.retry_count < self.params_wss.max_retries:
+            if self.retry_count < self.params.max_retries:
                 self.retry_count += 1
                 self.log(
                     f"Failed to parse message: {raw_message}. "
                     f"The following error occured: {err} "
-                    f"Reconnecting in {self.params_wss.retry_sleep} seconds...",
+                    f"Reconnecting in {self.params.retry_sleep} seconds...",
                     level="error",
                 )
-                time.sleep(self.params_wss.retry_sleep)
+                time.sleep(self.params.retry_sleep)
                 self.create_subscription()
             else:
                 raise ValueError(
                     "Retry count exceeded max retries "
-                    f"({self.params_wss.max_retries}). "
+                    f"({self.params.max_retries}). "
                     f"Failed to parse message: {raw_message}. "
                     f"The following error occured: {err}"
                 ) from err
@@ -112,15 +112,8 @@ class WSS(AbstractNode):
                 f"Acknowledged login message: {message}"
                 )
 
-            if params.message:
-                # Authenticate using message
-                self.ws.send(json.dumps(params.message))
-                auth_response = self.ws.recv()
-                self.log(
-                    f"Authenticated to WebSocket at {params.url}. "
-                    f"Acknowledged auth message: {auth_response}"
-                )
-            elif params.auth.url_key:
+            # TODO: check if this is still needed
+            if params.auth.url_key:
                 # Get auth message
                 message = self.ws.recv()
                 self.log(
@@ -128,23 +121,35 @@ class WSS(AbstractNode):
                     f"Acknowledged auth message: {message}"
                     )
 
-            # Subscribe to the WebSocket stream
-            self.ws.send(json.dumps(params.subscription))
-            message = self.ws.recv()
-            self.log(
-                f"Subscribed to stream at {params.subscription}. "
-                f"Acknowledged subscription message: {message}"
-                )
+            if params.init_messages:
+                # Send initialization messages
+                for init_msg in params.init_messages:
+                    self.ws.send(json.dumps(init_msg))
+                    message = self.ws.recv()
+                    self.log(
+                        f"Sent initialization message to {params.url}. "
+                        f"Acknowledged initialization message: {message}"
+                        )
+
+            if params.subscription:
+                # Subscribe to the WebSocket stream
+                self.ws.send(json.dumps(params.subscription))
+                message = self.ws.recv()
+                self.log(
+                    f"Subscribed to stream at {params.subscription}. "
+                    f"Acknowledged subscription message: {message}"
+                    )
+
             self.retry_count = 0
         except Exception as err:  # pylint: disable=broad-except
             if self.retry_count < self.max_retries:
                 self.log(
                     "Encountered error when attempting to connect to "
-                    f"{self.params_wss.url}. Will retry in "
-                    f"{self.params_wss.retry_sleep} seconds"
+                    f"{self.params.url}. Will retry in "
+                    f"{self.params.retry_sleep} seconds"
                     )
                 self.retry_count += 1
-                time.sleep(self.params_wss.retry_sleep)
+                time.sleep(self.params.retry_sleep)
                 self.create_subscription()
             else:
                 raise ValueError(
