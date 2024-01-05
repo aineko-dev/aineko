@@ -52,6 +52,10 @@ class WSS(AbstractNode):
                     "Node requires at least a url param."
                 )
         except Exception as err:  # pylint: disable=broad-except
+            # Cast pydantic validation error to ValueError
+            # so that it can be properly caught by the node
+            # Note: this is required because pydantic errors
+            # are not pickleable
             raise ValueError(
                 "Failed to cast params to ParamsWSS type. "
                 f"The following error occured: {str(err)}"
