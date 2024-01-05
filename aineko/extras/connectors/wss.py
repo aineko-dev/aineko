@@ -85,7 +85,7 @@ class WSS(AbstractNode):
 
     retry_count = 0
 
-    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
+    def _pre_loop_hook(self, params: dict | None = None) -> None:
         """Initalize the WebSocket connection."""
         # Cast params to ParamsWSS type
         try:
@@ -115,7 +115,7 @@ class WSS(AbstractNode):
         self.ws = websocket.WebSocket()
         self.create_subscription()
 
-    def _execute(self, params: Optional[dict] = None) -> None:
+    def _execute(self, params: dict | None = None) -> None:
         """Polls and gets data from the WebSocket."""
         try:
             # Poll the websocket
