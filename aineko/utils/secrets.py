@@ -67,15 +67,15 @@ def inject_secrets(obj: Any) -> Any:
 
     The following string:
     
-        ```
-        "This is a string with a {$SECRET1} and a {$SECRET2}."
-        ```
+    ```
+    "This is a string with a {$SECRET1} and a {$SECRET2}."
+    ```
     
     Would be transformed to:
     
-            ```
-            "This is a string with a secret1 and a secret2."
-            ```
+    ```
+    "This is a string with a secret1 and a secret2."
+    ```
 
     This function supports injecting secrets into str, dict, and list objects.
     """
