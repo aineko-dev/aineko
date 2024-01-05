@@ -56,8 +56,8 @@ def inject_secrets(obj: Any) -> Any:
     passed in to node params via a pipeline config.
 
     Given an object, inject secrets from the environment into the object
-    recursively. Secrets are identified in strings by the pattern 
-    {$SECRET_NAME} where SECRET_NAME is the name of the environment variable 
+    recursively. Secrets are identified in strings by the pattern
+    {$SECRET_NAME} where SECRET_NAME is the name of the environment variable
     to inject. For example, given the following environment variables:
 
     ```
@@ -66,13 +66,13 @@ def inject_secrets(obj: Any) -> Any:
     ```
 
     The following string:
-    
+
     ```
     "This is a string with a {$SECRET1} and a {$SECRET2}."
     ```
-    
+
     Would be transformed to:
-    
+
     ```
     "This is a string with a secret1 and a secret2."
     ```
