@@ -35,8 +35,53 @@ class ParamsWSS(BaseModel):
         return u
 
 
+# pylint: disable=anomalous-backslash-in-string
 class WSS(AbstractNode):
-    """Connector for a websocket."""
+    """Node for ingesting data from a WebSocket.
+
+    This node is a wrapper around the
+    [websocket-client](
+        https://websocket-client.readthedocs.io/en/latest/index.html
+        ){:target="\_blank"} library.
+
+    `node_params` should be a dictionary with the following keys:
+
+        url: The WebSocket URL to connect to
+        header (optional): A dictionary of headers to send to the WebSocket.
+            Defaults to None.
+        init_messages (optional): A list of messages to send to the WebSocket
+            upon connection. Defaults to [].
+        metadata (optional): A dictionary of metadata to attach to outgoing
+            messages. Defaults to None.
+        max_retries (optional): The maximum number of times to retry
+            connecting to the WebSocket. Defaults to 30.
+        retry_sleep (optional): The number of seconds to wait between retries.
+            Defaults to 5.
+
+    Secrets can be injected (from environment) into the `url`, `header`, and
+    `init_messages` fields by passing a string with the following format:
+    `{$SCRET_NAME}`. For example, if you have a secret named `SCRET_NAME`
+    with value `SCRET_VALUE`, you can inject it into the url field by passing
+    `wss://example.com?secret={$SCRET_NAME}` as the url. The connector will
+    then replace `{$SCRET_NAME}` with `SCRET_VALUE` before connecting to the
+    WebSocket.
+
+    Example usage in pipeline.yml:
+    ```yaml title="pipeline.yml"
+    pipeline:
+      nodes:
+        wss:
+          class: aineko.extras.WSS
+          outputs:
+            - test_wss
+          node_params:
+            url: "wss://example.com"
+            header:
+              auth: "Bearer {$SCRET_NAME}"
+            init_messages:
+                - {"Greeting": "Hello, world!"}
+    ```
+    """
 
     retry_count = 0
 
