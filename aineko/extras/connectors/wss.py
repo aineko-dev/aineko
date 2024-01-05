@@ -40,7 +40,7 @@ class WSS(AbstractNode):
 
     retry_count = 0
 
-    def _pre_loop_hook(self, params: dict | None = None) -> None:
+    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
         """Initalize the WebSocket connection."""
         # Cast params to ParamsWSS type
         try:
