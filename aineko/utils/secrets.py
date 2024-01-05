@@ -50,7 +50,35 @@ def _list_inject_secrets(list_: List[Any]) -> List[Any]:
 
 
 def inject_secrets(obj: Any) -> Any:
-    """Inject secrets from environment into an object."""
+    """Inject secrets from environment into an object.
+
+    This function is used by an aineko node to inject secrets into objects
+    passed in to node params via a pipeline config.
+
+    Given an object, inject secrets from the environment into the object
+    recursively. Secrets are identified in strings by the pattern 
+    {$SECRET_NAME} where SECRET_NAME is the name of the environment variable 
+    to inject. For example, given the following environment variables:
+
+    ```
+    $ export SECRET1=secret1
+    $ export SECRET2=secret2
+    ```
+
+    The following string:
+    
+        ```
+        "This is a string with a {$SECRET1} and a {$SECRET2}."
+        ```
+    
+    Would be transformed to:
+    
+            ```
+            "This is a string with a secret1 and a secret2."
+            ```
+
+    This function supports injecting secrets into str, dict, and list objects.
+    """
     if obj is None:
         return None
     if isinstance(obj, str):
