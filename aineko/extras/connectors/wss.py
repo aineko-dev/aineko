@@ -70,7 +70,7 @@ class WSS(AbstractNode):
         self.ws = websocket.WebSocket()
         self.create_subscription()
 
-    def _execute(self, params: dict) -> None:
+    def _execute(self, params: Optional[dict] = None) -> None:
         """Polls and gets data from the WebSocket."""
         try:
             # Poll the websocket
