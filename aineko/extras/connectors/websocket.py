@@ -10,7 +10,7 @@ import websocket
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
-from aineko.utils.secrets import inject_secrets
+from aineko.extras.connectors.secrets import inject_secrets
 
 
 class ParamsWebSocket(BaseModel):
