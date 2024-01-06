@@ -95,7 +95,7 @@ To unlock the true power of the framework, try [Aineko Cloud](https://cloud-docs
 Supercharge your development by using pre-built nodes directly in your pipeline. Aineko `Extras` contains nodes that are production-ready out of the box.
 
 - [FastAPI node](./extras/fastapi.md)
-- [WSS (WebSocket) node](./extras/wss.md)
+- [WebSocket node](./extras/websocket.md)
 
 ---
 

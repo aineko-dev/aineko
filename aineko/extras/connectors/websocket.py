@@ -13,7 +13,7 @@ from aineko import AbstractNode
 from aineko.utils.secrets import inject_secrets
 
 
-class ParamsWSS(BaseModel):
+class ParamsWebSocket(BaseModel):
     """Connector params for WebSocket model."""
 
     max_retries: int = 30
@@ -36,7 +36,7 @@ class ParamsWSS(BaseModel):
 
 
 # pylint: disable=anomalous-backslash-in-string
-class WSS(AbstractNode):
+class WebSocket(AbstractNode):
     """Node for ingesting data from a WebSocket.
 
     This node is a wrapper around the
@@ -70,10 +70,10 @@ class WSS(AbstractNode):
     ```yaml title="pipeline.yml"
     pipeline:
       nodes:
-        wss:
-          class: aineko.extras.WSS
+        WebSocket:
+          class: aineko.extras.WebSocket
           outputs:
-            - test_wss
+            - test_websocket
           node_params:
             url: "wss://example.com"
             header:
@@ -87,13 +87,13 @@ class WSS(AbstractNode):
 
     def _pre_loop_hook(self, params: dict | None = None) -> None:
         """Initalize the WebSocket connection."""
-        # Cast params to ParamsWSS type
+        # Cast params to ParamsWebSocket type
         try:
             if params is not None:
-                self.wss_params = ParamsWSS(**params)
+                self.ws_params = ParamsWebSocket(**params)
             else:
                 raise ValueError(
-                    "No params provided to WSS connector. "
+                    "No params provided to WebSocket connector. "
                     "Node requires at least a url param."
                 )
         except Exception as err:  # pylint: disable=broad-except
@@ -102,14 +102,14 @@ class WSS(AbstractNode):
             # Note: this is required because pydantic errors
             # are not pickleable
             raise ValueError(
-                "Failed to cast params to ParamsWSS type. "
+                "Failed to cast params to ParamsWebSocket type. "
                 f"The following error occured: {str(err)}"
             ) from err
-        self.wss_params.header = inject_secrets(self.wss_params.header)
-        self.wss_params.init_messages = inject_secrets(
-            self.wss_params.init_messages
+        self.ws_params.header = inject_secrets(self.ws_params.header)
+        self.ws_params.init_messages = inject_secrets(
+            self.ws_params.init_messages
         )
-        self.wss_params.url = inject_secrets(self.wss_params.url)
+        self.ws_params.url = inject_secrets(self.ws_params.url)
 
         # Create the websocket subscription
         self.ws = websocket.WebSocket()
@@ -124,20 +124,20 @@ class WSS(AbstractNode):
             # If the connection is closed, reconnect
             self.log(
                 "Websocket connection closed. "
-                f"Reconnecting in {str(self.wss_params.retry_sleep)} "
+                f"Reconnecting in {str(self.ws_params.retry_sleep)} "
                 f"seconds... The following error occured: {str(err)}",
                 level="error",
             )
-            time.sleep(self.wss_params.retry_sleep)
+            time.sleep(self.ws_params.retry_sleep)
             self.create_subscription()
             return
 
         try:
             # Parse the message and emit to producers
             message = json.loads(raw_message)
-            if self.wss_params.metadata is not None:
+            if self.ws_params.metadata is not None:
                 message = {
-                    "metadata": self.wss_params.metadata,
+                    "metadata": self.ws_params.metadata,
                     "data": message,
                 }
             for dataset, producer in self.producers.items():
@@ -145,21 +145,21 @@ class WSS(AbstractNode):
                     producer.produce(message)
             self.retry_count = 0
         except json.decoder.JSONDecodeError as err:
-            if self.retry_count < self.wss_params.max_retries:
+            if self.retry_count < self.ws_params.max_retries:
                 self.retry_count += 1
                 self.log(
                     f"Failed to parse message: {str(raw_message)}. "
                     f"The following error occured: {str(err)} "
-                    f"Reconnecting in {str(self.wss_params.retry_sleep)} "
+                    f"Reconnecting in {str(self.ws_params.retry_sleep)} "
                     "seconds...",
                     level="error",
                 )
-                time.sleep(self.wss_params.retry_sleep)
+                time.sleep(self.ws_params.retry_sleep)
                 self.create_subscription()
             else:
                 raise ValueError(
                     "Retry count exceeded max retries "
-                    f"({str(self.wss_params.max_retries)}). "
+                    f"({str(self.ws_params.max_retries)}). "
                     f"Failed to parse message: {str(raw_message)}. "
                     f"The following error occured: {str(err)}"
                 ) from err
@@ -167,43 +167,43 @@ class WSS(AbstractNode):
     def create_subscription(self) -> None:
         """Creates a subscription on the websocket."""
         try:
-            self.log(f"Creating subscription to {str(self.wss_params.url)}...")
+            self.log(f"Creating subscription to {str(self.ws_params.url)}...")
             self.ws.connect(
-                url=self.wss_params.url, header=self.wss_params.header
+                url=self.ws_params.url, header=self.ws_params.header
             )  # type: ignore
 
-            if self.wss_params.init_messages:
+            if self.ws_params.init_messages:
                 # Send initialization messages
-                for init_msg in self.wss_params.init_messages:
+                for init_msg in self.ws_params.init_messages:
                     self.ws.send(json.dumps(init_msg))
                     message = self.ws.recv()
                     self.log(
                         f"Sent initialization message to "
-                        f"{str(self.wss_params.url)}. "
+                        f"{str(self.ws_params.url)}. "
                         f"Acknowledged initialization message: {str(message)}"
                     )
 
             ack_message = self.ws.recv()
             self.log(
-                f"Subscription to {str(self.wss_params.url)} created. "
+                f"Subscription to {str(self.ws_params.url)} created. "
                 f"Acknowledged subscription message: {str(ack_message)}"
             )
 
             self.retry_count = 0
         except Exception as err:  # pylint: disable=broad-except
-            if self.retry_count < self.wss_params.max_retries:
+            if self.retry_count < self.ws_params.max_retries:
                 self.log(
                     "Encountered error when attempting to connect to "
-                    f"{str(self.wss_params.url)}. Will retry in "
-                    f"{str(self.wss_params.retry_sleep)} seconds"
+                    f"{str(self.ws_params.url)}. Will retry in "
+                    f"{str(self.ws_params.retry_sleep)} seconds"
                 )
                 self.retry_count += 1
-                time.sleep(self.wss_params.retry_sleep)
+                time.sleep(self.ws_params.retry_sleep)
                 self.create_subscription()
             else:
                 raise ValueError(
                     "Retry count exceeded max retries. "
                     "Failed to create subscription to "
-                    f"{str(self.wss_params.url)}. "
+                    f"{str(self.ws_params.url)}. "
                     f"The following error occured: {str(err)}"
                 ) from err
