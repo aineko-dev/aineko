@@ -69,6 +69,7 @@ class REST(AbstractNode):
         self.rest_params.data = inject_secrets(self.rest_params.data)
 
         # Create a session
+        self.log(f"Creating new session to REST endpoint {self.rest_params.url}.")
         self.session = requests.Session()
 
     def _execute(self, params: dict | None = None) -> None:
@@ -105,6 +106,7 @@ class REST(AbstractNode):
                 )
                 time.sleep(self.rest_params.poll_interval)
                 # Reset the session
+                self.log(f"Creating new session to REST endpoint {self.rest_params.url}.")
                 self.session = requests.Session()
                 return
 
