@@ -3660,7 +3660,7 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [extras]
 fastapi = ["fastapi", "uvicorn"]
-wss = ["websocket-client"]
+websocket = ["websocket-client"]
 
 [metadata]
 lock-version = "2.0"
