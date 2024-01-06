@@ -15,12 +15,12 @@ from aineko.extras.connectors.secrets import inject_secrets
 class ParamsREST(BaseModel):
     """Connector params for REST model."""
 
-    timeout: Optional[int] = 10
+    timeout: int = 10
     url: str
     headers: Optional[Dict[str, Any]] = None
-    poll_interval = Optional[int] = 1
-    poll_throttle = Optional[float] = 0.1
-    max_retries: Optional[int] = 30
+    poll_interval: int = 1
+    poll_throttle: float = 0.1
+    max_retries: int = 30
 
     @field_validator("url")
     @classmethod
