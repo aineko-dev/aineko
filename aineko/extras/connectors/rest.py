@@ -18,6 +18,7 @@ class ParamsREST(BaseModel):
     timeout: int = 10
     url: str
     headers: Optional[Dict[str, Any]] = None
+    data: Optional[Dict[str, Any]] = None
     poll_interval: int = 5
     poll_throttle: float = 0.1
     max_retries: int = 30
@@ -65,6 +66,7 @@ class REST(AbstractNode):
             ) from err
         self.rest_params.headers = inject_secrets(self.rest_params.headers)
         self.rest_params.url = inject_secrets(self.rest_params.url)
+        self.rest_params.data = inject_secrets(self.rest_params.data)
 
         # Create a session
         self.session = requests.Session()
@@ -82,6 +84,7 @@ class REST(AbstractNode):
                     self.rest_params.url,
                     timeout=self.rest_params.timeout,
                     headers=self.rest_params.headers,
+                    data=self.rest_params.data,
                     )
                 # Check if the request was successful
                 if response.status_code != 200:
