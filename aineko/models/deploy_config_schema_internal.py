@@ -3,7 +3,6 @@
 """Internal models for deployment configuration."""
 
 import re
-from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, field_validator
 
@@ -31,17 +30,17 @@ class MachineConfig(BaseModel, extra="forbid"):
 class ParameterizableDefaults(BaseModel, extra="forbid"):
     """Parameters that can be set in the defaults block."""
 
-    machine_config: Optional[MachineConfig] = None
-    env_vars: Optional[Dict[str, str]] = None
+    machine_config: MachineConfig | None = None
+    env_vars: dict[str, str] | None = None
 
 
 class GenericPipeline(BaseModel, extra="forbid"):
     """Configuration for a pipeline defined under top-level pipelines key."""
 
     source: str
-    name: Optional[str] = None
-    machine_config: Optional[MachineConfig] = None
-    env_vars: Optional[Dict[str, str]] = None
+    name: str | None = None
+    machine_config: MachineConfig | None = None
+    env_vars: dict[str, str] | None = None
 
 
 class LoadBalancer(BaseModel, extra="forbid"):
@@ -54,31 +53,31 @@ class LoadBalancer(BaseModel, extra="forbid"):
 class SpecificPipeline(BaseModel, extra="forbid"):
     """Pipeline defined under the top-level environments key."""
 
-    source: Optional[str] = None  # Pipeline config file path
-    name: Optional[str] = None  # Pipeline name
-    machine_config: Optional[MachineConfig] = None
-    env_vars: Optional[Dict[str, str]] = None
+    source: str | None = None  # Pipeline config file path
+    name: str | None = None  # Pipeline name
+    machine_config: MachineConfig | None = None
+    env_vars: dict[str, str] | None = None
 
 
 class FullPipeline(BaseModel, extra="forbid"):
     """Pipeline defined in the full deployment config."""
 
     source: str
-    name: Optional[str] = None
+    name: str | None = None
     machine_config: MachineConfig
-    env_vars: Optional[Dict[str, str]] = None
+    env_vars: dict[str, str] | None = None
 
 
 class Environment(BaseModel, extra="forbid"):
     """Environment defined under the top-level environments key."""
 
-    pipelines: List[Union[str, Dict[str, SpecificPipeline]]]
-    load_balancers: Optional[Dict[str, List[LoadBalancer]]] = None
+    pipelines: list[str | dict[str, SpecificPipeline]]
+    load_balancers: dict[str, list[LoadBalancer]] | None = None
 
     @field_validator("load_balancers")
     def validate_lb_endpoint(  # pylint: disable=no-self-argument
-        cls, value: Optional[Dict[str, List[LoadBalancer]]]
-    ) -> None | Dict[str, List[LoadBalancer]]:
+        cls, value: dict[str, list[LoadBalancer]] | None
+    ) -> None | dict[str, list[LoadBalancer]]:
         """Validates Load balancer endpoints.
 
         The following criteria apply:
@@ -103,5 +102,5 @@ class Environment(BaseModel, extra="forbid"):
 class FullEnvironment(BaseModel, extra="forbid"):
     """Environment defined under the top-level environments key."""
 
-    pipelines: List[Union[Dict[str, FullPipeline], str]]
-    load_balancers: Optional[Dict[str, List[LoadBalancer]]] = None
+    pipelines: list[dict[str, FullPipeline] | str]
+    load_balancers: dict[str, list[LoadBalancer]] | None = None
