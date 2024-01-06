@@ -21,6 +21,7 @@ class ParamsREST(BaseModel):
     poll_interval: int = 5
     poll_throttle: float = 0.1
     max_retries: int = 30
+    metadata: Optional[Dict[str, Any]] = None
 
     @field_validator("url")
     @classmethod
@@ -107,9 +108,9 @@ class REST(AbstractNode):
             try:
                 # Parse the message and emit to producers
                 message = json.loads(raw_message)
-                if self.ws_params.metadata is not None:
+                if self.rest_params.metadata is not None:
                     message = {
-                        "metadata": self.ws_params.metadata,
+                        "metadata": self.rest_params.metadata,
                         "data": message,
                     }
                 for dataset, producer in self.producers.items():
