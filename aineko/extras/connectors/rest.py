@@ -137,4 +137,4 @@ class REST(AbstractNode):
                     ) from err
         else:
             # If it is not time to poll, sleep
-            time.sleep(self.poll_throttle)
+            time.sleep(self.rest_params.poll_throttle)
