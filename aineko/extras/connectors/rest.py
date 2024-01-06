@@ -18,7 +18,7 @@ class ParamsREST(BaseModel):
     timeout: int = 10
     url: str
     headers: Optional[Dict[str, Any]] = None
-    poll_interval: int = 1
+    poll_interval: int = 5
     poll_throttle: float = 0.1
     max_retries: int = 30
 
@@ -77,11 +77,10 @@ class REST(AbstractNode):
 
             try:
                 # Poll REST api
-                response = requests.get(
+                response = self.session.get(
                     self.rest_params.url,
                     timeout=self.rest_params.timeout,
                     headers=self.rest_params.headers,
-                    session=self.session,
                     )
                 # Check if the request was successful
                 if response.status_code != 200:
