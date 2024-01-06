@@ -71,23 +71,23 @@ class REST(AbstractNode):
     def _execute(self, params: dict | None = None) -> None:
         """Polls and gets data from the HTTPS endpoint."""
         # Check if it is time to poll
-        if time.time() - self.last_poll_time >= self.params_rest.poll_interval:
+        if time.time() - self.last_poll_time >= self.rest_params.poll_interval:
             # Update the last poll time
             self.last_poll_time = time.time()
 
             try:
                 # Poll REST api
                 response = requests.get(
-                    self.params_rest.url,
-                    timeout=self.params_rest.timeout,
-                    headers=self.params_rest.headers,
+                    self.rest_params.url,
+                    timeout=self.rest_params.timeout,
+                    headers=self.rest_params.headers,
                     session=self.session,
                     )
                 # Check if the request was successful
                 if response.status_code != 200:
                     # pylint: disable=broad-exception-raised
                     raise Exception(
-                        f"Request to url {self.params_rest.url} "
+                        f"Request to url {self.rest_params.url} "
                         "failed with status code: "
                         f"{response.status_code}"
                     )
@@ -96,11 +96,11 @@ class REST(AbstractNode):
                 # If request fails, log the error and sleep
                 self.log(
                     "Request failed. "
-                    f"Sleeping for {self.params_rest.poll_interval} seconds. "
+                    f"Sleeping for {self.rest_params.poll_interval} seconds. "
                     f"Error: {err}",
                     level="error",
                 )
-                time.sleep(self.params_rest.poll_interval)
+                time.sleep(self.rest_params.poll_interval)
                 # Reset the session
                 self.session = requests.Session()
                 return
@@ -118,20 +118,20 @@ class REST(AbstractNode):
                         producer.produce(message)
                 self.retry_count = 0
             except json.decoder.JSONDecodeError as err:
-                if self.retry_count < self.params_rest.max_retries:
+                if self.retry_count < self.rest_params.max_retries:
                     self.retry_count += 1
                     self.log(
                         f"Failed to parse message: {raw_message}. "
                         f"The following error occured: {err} "
-                        f"Will retry in {self.params_rest.retry_sleep} "
+                        f"Will retry in {self.rest_params.retry_sleep} "
                         "seconds...",
                         level="error",
                     )
-                    time.sleep(self.params_rest.retry_sleep)
+                    time.sleep(self.rest_params.retry_sleep)
                 else:
                     raise ValueError(
                         "Retry count exceeded max retries "
-                        f"({self.params_rest.max_retries}). "
+                        f"({self.rest_params.max_retries}). "
                         f"Failed to parse message: {raw_message}. "
                         f"The following error occured: {err}"
                     ) from err
