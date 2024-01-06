@@ -2,15 +2,16 @@
 # SPDX-License-Identifier: Apache-2.0
 """Extra module for connecting to a REST endpoint."""
 
-import time
 import json
-from typing import Dict, Any, Optional
+import time
+from typing import Any, Dict, Optional
 
 import requests
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
 from aineko.extras.connectors.secrets import inject_secrets
+
 
 class ParamsREST(BaseModel):
     """Connector params for REST model."""
@@ -23,6 +24,7 @@ class ParamsREST(BaseModel):
     poll_throttle: float = 0.1
     max_retries: int = 30
     metadata: Optional[Dict[str, Any]] = None
+    retry_sleep: float = 5
 
     @field_validator("url")
     @classmethod
@@ -31,7 +33,7 @@ class ParamsREST(BaseModel):
         if not (url.startswith("https://") or url.startswith("http://")):
             raise ValueError(
                 "Invalid url provided to HTTPS params. "
-                "Expected url to start with \"https://\". "
+                'Expected url to start with "https://". '
                 f"Provided url was: {url}"
             )
         return url
@@ -69,7 +71,9 @@ class REST(AbstractNode):
         self.rest_params.data = inject_secrets(self.rest_params.data)
 
         # Create a session
-        self.log(f"Creating new session to REST endpoint {self.rest_params.url}.")
+        self.log(
+            f"Creating new session to REST endpoint {self.rest_params.url}."
+        )
         self.session = requests.Session()
 
     def _execute(self, params: dict | None = None) -> None:
@@ -86,7 +90,7 @@ class REST(AbstractNode):
                     timeout=self.rest_params.timeout,
                     headers=self.rest_params.headers,
                     data=self.rest_params.data,
-                    )
+                )
                 # Check if the request was successful
                 if response.status_code != 200:
                     # pylint: disable=broad-exception-raised
@@ -106,7 +110,10 @@ class REST(AbstractNode):
                 )
                 time.sleep(self.rest_params.poll_interval)
                 # Reset the session
-                self.log(f"Creating new session to REST endpoint {self.rest_params.url}.")
+                self.log(
+                    "Creating new session to REST endpoint "
+                    f"{self.rest_params.url}."
+                )
                 self.session = requests.Session()
                 return
 
