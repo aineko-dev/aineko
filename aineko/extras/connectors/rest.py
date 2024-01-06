@@ -6,73 +6,88 @@ import time
 import json
 from typing import Dict, Any, Optional
 
-from dotenv import load_dotenv
 import requests
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
-from aineko.utils.secrets import dict_inject_secrets, str_inject_secrets
+from aineko.extras.connectors.secrets import inject_secrets
 
-class ParamsHTTPS(BaseModel):
-    """Connector params for HTTPS model."""
+class ParamsREST(BaseModel):
+    """Connector params for REST model."""
 
     timeout: Optional[int] = 10
     url: str
     headers: Optional[Dict[str, Any]] = None
-
-    @field_validator("url")
-    def supported_url(cls, u: str) -> str:  # pylint: disable=no-self-argument
-        """Validates that the url is a valid HTTPS URL."""
-        if not u.startswith("https://"):
-            raise ValueError(
-                "Invalid url provided to HTTPS params. "
-                "Expected url to start with \"https://\". "
-                f"Provided url was: {u}"
-            )
-        return u
-
     poll_interval = Optional[int] = 1
     poll_throttle = Optional[float] = 0.1
     max_retries: Optional[int] = 30
 
+    @field_validator("url")
+    @classmethod
+    def supported_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
+        """Validates that the url is a valid HTTPS URL."""
+        if not (url.startswith("https://") or url.startswith("http://")):
+            raise ValueError(
+                "Invalid url provided to HTTPS params. "
+                "Expected url to start with \"https://\". "
+                f"Provided url was: {url}"
+            )
+        return u
 
-class GetHTTPS(AbstractNode):
+
+class REST(AbstractNode):
     """Connects to an REST endpoint via HTTPS."""
 
-    def _pre_loop_hook(self, params: Dict[str, Any] = None):
+    # Poll settings
+    last_poll_time = time.time()
+    retry_count = 0
+
+    def _pre_loop_hook(self, params: dict | None = None) -> None:
         """Initializes connection to API."""
-        # Load the API keys from the .env file, used locally
-        load_dotenv()
+        # Cast params to ParamsREST type
+        try:
+            if params is not None:
+                self.rest_params = ParamsREST(**params)
+            else:
+                raise ValueError(
+                    "No params provided to REST connector. "
+                    "Node requires at least a url param."
+                )
+        except Exception as err:  # pylint: disable=broad-except
+            # Cast pydantic validation error to ValueError
+            # so that it can be properly caught by the node
+            # Note: this is required because pydantic errors
+            # are not pickleable
+            raise ValueError(
+                "Failed to cast params to ParamsREST type. "
+                f"The following error occurred: {err}"
+            ) from err
+        self.rest_params.header = inject_secrets(self.rest_params.header)
+        self.rest_params.url = inject_secrets(self.rest_params.url)
 
-        # Cast params to ParamsHTTPS type
-        self.params_https = ParamsHTTPS(**params)
-        # TODO: Can we inject secrets via the Pydantic class?
-        self.params_https.headers = dict_inject_secrets(self.params_https.headers)
-        self.params_https.url = str_inject_secrets(self.params_https.url)
+        # Create a session
+        self.session = requests.Session()
 
-        # Poll settings
-        self.last_poll_time = time.time()
-        self.retry_count = 0
-
-    def _execute(self, params: Dict[str, Any] = None):
+    def _execute(self, params: dict | None = None) -> None:
         """Polls and gets data from the HTTPS endpoint."""
         # Check if it is time to poll
-        if time.time() - self.last_poll_time >= self.params_https.poll_interval:
+        if time.time() - self.last_poll_time >= self.params_rest.poll_interval:
             # Update the last poll time
             self.last_poll_time = time.time()
 
             try:
                 # Poll REST api
                 response = requests.get(
-                    self.params_https.url,
-                    timeout=self.params_https.timeout,
-                    headers=self.params_https.headers
+                    self.params_rest.url,
+                    timeout=self.params_rest.timeout,
+                    headers=self.params_rest.headers,
+                    session=self.session,
                     )
                 # Check if the request was successful
                 if response.status_code != 200:
                     # pylint: disable=broad-exception-raised
                     raise Exception(
-                        f"Request to url {self.params_https.url} "
+                        f"Request to url {self.params_rest.url} "
                         "failed with status code: "
                         f"{response.status_code}"
                     )
@@ -81,34 +96,42 @@ class GetHTTPS(AbstractNode):
                 # If request fails, log the error and sleep
                 self.log(
                     "Request failed. "
-                    f"Sleeping for {self.params_https.poll_interval} seconds. "
+                    f"Sleeping for {self.params_rest.poll_interval} seconds. "
                     f"Error: {err}",
                     level="error",
                 )
+                time.sleep(self.params_rest.poll_interval)
+                # Reset the session
+                self.session = requests.Session()
                 return
 
             try:
                 # Parse the message and emit to producers
                 message = json.loads(raw_message)
+                if self.ws_params.metadata is not None:
+                    message = {
+                        "metadata": self.ws_params.metadata,
+                        "data": message,
+                    }
                 for dataset, producer in self.producers.items():
                     if dataset != "logging":
                         producer.produce(message)
                 self.retry_count = 0
             except json.decoder.JSONDecodeError as err:
-                if self.retry_count < self.params_https.max_retries:
+                if self.retry_count < self.params_rest.max_retries:
                     self.retry_count += 1
                     self.log(
                         f"Failed to parse message: {raw_message}. "
                         f"The following error occured: {err} "
-                        f"Will retry in {self.params_https.retry_sleep} "
+                        f"Will retry in {self.params_rest.retry_sleep} "
                         "seconds...",
                         level="error",
                     )
-                    time.sleep(self.params_https_wss.retry_sleep)
+                    time.sleep(self.params_rest.retry_sleep)
                 else:
                     raise ValueError(
                         "Retry count exceeded max retries "
-                        f"({self.params_https.max_retries}). "
+                        f"({self.params_rest.max_retries}). "
                         f"Failed to parse message: {raw_message}. "
                         f"The following error occured: {err}"
                     ) from err
