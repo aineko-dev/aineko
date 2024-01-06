@@ -1,6 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Extra module for connecting to a HTTPS endpoint."""
+"""Extra module for connecting to a REST endpoint."""
 
 import time
 import json
