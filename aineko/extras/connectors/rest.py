@@ -32,7 +32,7 @@ class ParamsREST(BaseModel):
                 "Expected url to start with \"https://\". "
                 f"Provided url was: {url}"
             )
-        return u
+        return url
 
 
 class REST(AbstractNode):
