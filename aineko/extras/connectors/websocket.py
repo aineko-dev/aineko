@@ -31,7 +31,7 @@ class ParamsWebSocket(BaseModel):
             raise ValueError(
                 "Invalid url provided to WebSocket params. "
                 'Expected url to start with "wss://" or "ws://". '
-                f"Provided url was: {str(url)}"
+                f"Provided url was: {url}"
             )
         return url
 
@@ -104,7 +104,7 @@ class WebSocket(AbstractNode):
             # are not pickleable
             raise ValueError(
                 "Failed to cast params to ParamsWebSocket type. "
-                f"The following error occured: {str(err)}"
+                f"The following error occurred: {err}"
             ) from err
         self.ws_params.header = inject_secrets(self.ws_params.header)
         self.ws_params.init_messages = inject_secrets(
@@ -125,8 +125,8 @@ class WebSocket(AbstractNode):
             # If the connection is closed, reconnect
             self.log(
                 "Websocket connection closed. "
-                f"Reconnecting in {str(self.ws_params.retry_sleep)} "
-                f"seconds... The following error occured: {str(err)}",
+                f"Reconnecting in {self.ws_params.retry_sleep} "
+                f"seconds... The following error occured: {err}",
                 level="error",
             )
             time.sleep(self.ws_params.retry_sleep)
@@ -149,9 +149,9 @@ class WebSocket(AbstractNode):
             if self.retry_count < self.ws_params.max_retries:
                 self.retry_count += 1
                 self.log(
-                    f"Failed to parse message: {str(raw_message)}. "
-                    f"The following error occured: {str(err)} "
-                    f"Reconnecting in {str(self.ws_params.retry_sleep)} "
+                    f"Failed to parse message: {raw_message!r}. "
+                    f"The following error occured: {err} "
+                    f"Reconnecting in {self.ws_params.retry_sleep} "
                     "seconds...",
                     level="error",
                 )
@@ -160,15 +160,15 @@ class WebSocket(AbstractNode):
             else:
                 raise ValueError(
                     "Retry count exceeded max retries "
-                    f"({str(self.ws_params.max_retries)}). "
-                    f"Failed to parse message: {str(raw_message)}. "
-                    f"The following error occured: {str(err)}"
+                    f"({self.ws_params.max_retries}). "
+                    f"Failed to parse message: {raw_message!r}. "
+                    f"The following error occurred: {err}"
                 ) from err
 
     def create_subscription(self) -> None:
         """Creates a subscription on the websocket."""
         try:
-            self.log(f"Creating subscription to {str(self.ws_params.url)}...")
+            self.log(f"Creating subscription to {self.ws_params.url}...")
             self.ws.connect(
                 url=self.ws_params.url, header=self.ws_params.header
             )  # type: ignore
@@ -179,15 +179,15 @@ class WebSocket(AbstractNode):
                     self.ws.send(json.dumps(init_msg))
                     message = self.ws.recv()
                     self.log(
-                        f"Sent initialization message to "
-                        f"{str(self.ws_params.url)}. "
-                        f"Acknowledged initialization message: {str(message)}"
+                        "Sent initialization message to "
+                        f"{self.ws_params.url}. "
+                        f"Acknowledged initialization message: {message!r}"
                     )
 
             ack_message = self.ws.recv()
             self.log(
-                f"Subscription to {str(self.ws_params.url)} created. "
-                f"Acknowledged subscription message: {str(ack_message)}"
+                f"Subscription to {self.ws_params.url} created. "
+                f"Acknowledged subscription message: {ack_message!r}"
             )
 
             self.retry_count = 0
@@ -195,8 +195,8 @@ class WebSocket(AbstractNode):
             if self.retry_count < self.ws_params.max_retries:
                 self.log(
                     "Encountered error when attempting to connect to "
-                    f"{str(self.ws_params.url)}. Will retry in "
-                    f"{str(self.ws_params.retry_sleep)} seconds"
+                    f"{self.ws_params.url}. Will retry in "
+                    f"{self.ws_params.retry_sleep} seconds"
                 )
                 self.retry_count += 1
                 time.sleep(self.ws_params.retry_sleep)
@@ -205,6 +205,6 @@ class WebSocket(AbstractNode):
                 raise ValueError(
                     "Retry count exceeded max retries. "
                     "Failed to create subscription to "
-                    f"{str(self.ws_params.url)}. "
-                    f"The following error occured: {str(err)}"
+                    f"{self.ws_params.url}. "
+                    f"The following error occurred: {err}"
                 ) from err
