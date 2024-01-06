@@ -62,7 +62,7 @@ class REST(AbstractNode):
                 "Failed to cast params to ParamsREST type. "
                 f"The following error occurred: {err}"
             ) from err
-        self.rest_params.header = inject_secrets(self.rest_params.header)
+        self.rest_params.headers = inject_secrets(self.rest_params.headers)
         self.rest_params.url = inject_secrets(self.rest_params.url)
 
         # Create a session
