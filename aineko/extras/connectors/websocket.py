@@ -25,15 +25,15 @@ class ParamsWebSocket(BaseModel):
 
     @field_validator("url")
     @classmethod
-    def supported_url(cls, u: str) -> str:  # pylint: disable=no-self-argument
+    def supported_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
         """Validates that the url is a valid WebSocket URL."""
-        if not (u.startswith("wss://") or u.startswith("ws://")):
+        if not (url.startswith("wss://") or url.startswith("ws://")):
             raise ValueError(
                 "Invalid url provided to WebSocket params. "
                 'Expected url to start with "wss://" or "ws://". '
-                f"Provided url was: {str(u)}"
+                f"Provided url was: {str(url)}"
             )
-        return u
+        return url
 
 
 # pylint: disable=anomalous-backslash-in-string
