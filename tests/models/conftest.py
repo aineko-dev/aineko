@@ -4,6 +4,8 @@
 
 import pytest
 
+from aineko.utils.io import load_yaml
+
 
 @pytest.fixture(scope="function")
 def machine_config():
@@ -44,3 +46,28 @@ def load_balancer_config():
 @pytest.fixture(scope="function")
 def load_balancers_config(load_balancer_config):
     return {"load_balancers": {"test-point": [load_balancer_config]}}
+
+
+@pytest.fixture(scope="function")
+def node_log_to_dataset():
+    return load_yaml("tests/conf/node_log_to_dataset.yml")
+
+
+@pytest.fixture(scope="function")
+def pipeline_log_to_dataset():
+    return load_yaml("tests/conf/pipeline_log_to_dataset.yml")
+
+
+@pytest.fixture(scope="function")
+def pipeline_dont_log_to_dataset():
+    return load_yaml("tests/conf/pipeline_dont_log_to_dataset.yml")
+
+
+@pytest.fixture(scope="function")
+def invalid_pipeline_log_to_dataset():
+    return load_yaml("tests/conf/invalid_pipeline_log_to_dataset.yml")
+
+
+@pytest.fixture(scope="function")
+def invalid_node_log_to_dataset():
+    return load_yaml("tests/conf/invalid_node_log_to_dataset.yml")

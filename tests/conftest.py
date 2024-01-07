@@ -210,3 +210,56 @@ def test_internal_value_setter_node():
             self.cur_integer = cur_integer
 
     return TestInternalValueSetter
+
+
+@pytest.fixture(scope="module")
+def test_log_internals(request):
+    """Returns a node that produces messages and calls an external function.
+
+    The node is expected to call the external function which has a logger that
+    logs a message with info level. As part of the AbstractNode, the node
+    should capture external logs and produce them to the logging dataset.
+
+    Returns:
+        A tuple of the node and the number of messages produced.
+    """
+    import logging
+
+    if request:
+        namespace = request.param
+    else:
+        namespace = None
+
+    def dummy_function():
+        """Dummy function which logs a message with info level."""
+        logger = logging.getLogger(namespace)
+        logger.info("Dummy function called.")
+
+    """Returns a node that logs internal values."""
+    MESSAGES = [
+        0,
+        1,
+        2,
+        3,
+        "test_1",
+        "test_2",
+        {"test_1": 1, "test_2": 2},
+    ]
+
+    class MessageWriter(AbstractNode):
+        """Node that produces messages every 0.1 second."""
+
+        def _pre_loop_hook(self, params: dict | None = None) -> None:
+            self.messages = MESSAGES.copy()
+
+        def _execute(self, params: dict | None = None) -> None:
+            """Sends message."""
+            if len(self.messages) > 0:
+                dummy_function()
+                self.producers["messages"].produce(self.messages.pop(0))
+                time.sleep(0.1)
+            else:
+                self.producers["messages"].produce("END")
+                return False
+
+    return (MessageWriter, len(MESSAGES))

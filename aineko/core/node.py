@@ -14,6 +14,7 @@ The AbstractNode class is the parent class for all Aineko pipeline nodes.
 It contains  helper methods for setup, util methods, and dummy methods
 that users should override with their own implementation.
 """
+import logging
 import time
 import traceback
 from abc import ABC, abstractmethod
@@ -85,6 +86,8 @@ class AbstractNode(ABC):
         pipeline_name: str,
         poison_pill: ray.actor.ActorHandle | None = None,
         test: bool = False,
+        logging_namespace: str | None = None,
+        log_to_dataset: bool | None = None,
     ) -> None:
         """Initialize the node."""
         self.name = node_name or self.__class__.__name__
@@ -96,6 +99,35 @@ class AbstractNode(ABC):
         self.test = test
         self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")
         self.poison_pill = poison_pill
+
+        if log_to_dataset:
+            node_log_levels = self.log_levels
+            node_logger = self.log
+            internal_logger = logging.getLogger(logging_namespace)
+            internal_logger.setLevel(logging.DEBUG)
+
+            class LogHandler(logging.Handler):
+                """Custom log handler for the node."""
+
+                def emit(self, record: logging.LogRecord) -> None:
+                    """Emit a log record to node's log method.
+
+                    Args:
+                        record: Log record to emit.
+                    """
+                    level_name = record.levelname.lower()
+                    if level_name in node_log_levels:
+                        node_logger(self.format(record), level=level_name)
+                    else:
+                        node_logger(self.format(record), level="info")
+
+            # Create and configure the handler
+            handler = LogHandler()
+            formatter = logging.Formatter(
+                "%(asctime)s - %(name)s - %(message)s"
+            )
+            handler.setFormatter(formatter)
+            internal_logger.addHandler(handler)
 
     def enable_test_mode(self) -> None:
         """Enable test mode."""
