@@ -21,7 +21,7 @@ e.g. message:
 import datetime
 import json
 import logging
-from typing import Any, Literal
+from typing import Any, Dict, Literal, Optional
 
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
@@ -75,9 +75,9 @@ class DatasetConsumer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: dict[str, Any],
-        bootstrap_servers: str | None = None,
-        prefix: str | None = None,
+        dataset_config: Dict[str, Any],
+        bootstrap_servers: Optional[str] = None,
+        prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ):
         """Initialize the consumer."""
@@ -116,8 +116,8 @@ class DatasetConsumer:
 
     @staticmethod
     def _validate_message(
-        message: Message | None = None,
-    ) -> dict | None:
+        message: Optional[Message] = None,
+    ) -> Optional[dict]:
         """Checks if a message is valid and converts it to appropriate format.
 
         Args:
@@ -173,8 +173,8 @@ class DatasetConsumer:
     def consume(
         self,
         how: Literal["next", "last"] = "next",
-        timeout: float | None = None,
-    ) -> dict | None:
+        timeout: Optional[float] = None,
+    ) -> Optional[dict]:
         """Polls a message from the dataset.
 
         If the consume method is last but the method encounters
@@ -220,7 +220,7 @@ class DatasetConsumer:
         return self._validate_message(message)
 
     def _consume_message(
-        self, how: Literal["next", "last"], timeout: float | None = None
+        self, how: Literal["next", "last"], timeout: Optional[float] = None
     ) -> dict:
         """Calls the consume method and blocks until a message is returned.
 
@@ -334,8 +334,8 @@ class DatasetProducer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: dict[str, Any],
-        prefix: str | None = None,
+        dataset_config: Dict[str, Any],
+        prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ):
         """Initialize the producer."""
@@ -381,7 +381,7 @@ class DatasetProducer:
         if err is not None:
             logger.error("Message %s delivery failed: %s", message, err)
 
-    def produce(self, message: dict, key: str | None = None) -> None:
+    def produce(self, message: dict, key: Optional[str] = None) -> None:
         """Produce a message to the dataset.
 
         Args:
@@ -440,8 +440,8 @@ class FakeDatasetConsumer:
     def consume(
         self,
         how: str = "next",
-        timeout: float | None = None,
-    ) -> dict | None:
+        timeout: Optional[float] = None,
+    ) -> Optional[dict]:
         """Reads a message from the dataset.
 
         Args:
@@ -477,7 +477,7 @@ class FakeDatasetConsumer:
 
         return None
 
-    def next(self) -> dict | None:
+    def next(self) -> Optional[dict]:
         """Wraps `consume(how="next")`, blocks until available.
 
         Returns:
@@ -485,7 +485,7 @@ class FakeDatasetConsumer:
         """
         return self.consume(how="next")
 
-    def last(self, timeout: float = 1) -> dict | None:
+    def last(self, timeout: float = 1) -> Optional[dict]:
         """Wraps `consume(how="last")`, blocks until available.
 
         Returns:

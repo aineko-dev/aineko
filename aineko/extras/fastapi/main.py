@@ -12,6 +12,9 @@ and Producer objects are namespaced at the pipeline level. If you must
 have multiple FastAPI nodes, we recommend using different datasets to avoid
 namespace collisions.
 """
+
+from typing import Optional
+
 import uvicorn
 
 from aineko import AbstractNode, DatasetConsumer, DatasetProducer
@@ -111,7 +114,7 @@ class FastAPI(AbstractNode):
     ```
     """
 
-    def _pre_loop_hook(self, params: dict | None = None) -> None:
+    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
         """Initialize node state. Set env variables for Fast API app."""
         for key, value in self.consumers.items():
             consumers[key] = value
