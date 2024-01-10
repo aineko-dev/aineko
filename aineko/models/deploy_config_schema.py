@@ -30,8 +30,7 @@ class DeploymentConfig(BaseModel, extra="forbid"):
     environments: dict[str, Environment]
 
     @field_validator("version")
-    @classmethod
-    def semver(cls, v: str) -> str:
+    def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that versioning follow semver convention."""
         if len(v.split(".")) != 3:
             raise ValueError("Version must be in the form `1.2.3`")
@@ -45,8 +44,7 @@ class FullDeploymentConfig(BaseModel):
     environments: dict[str, Environment]
 
     @field_validator("version")
-    @classmethod
-    def semver(cls, v: str) -> str:
+    def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that versioning follow semver convention."""
         if len(v.split(".")) != 3:
             raise ValueError("Version must be in the form `1.2.3`")

@@ -20,8 +20,7 @@ class ProjectConfig(BaseModel):
     pipeline_slug: str | None = None
 
     @field_validator("aineko_version")
-    @classmethod
-    def version(cls, v: str) -> str:
+    def version(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that the aineko version matches."""
         if v != __version__:
             raise ValueError(
