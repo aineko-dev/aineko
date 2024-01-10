@@ -38,6 +38,8 @@ extra:
       link: https://github.com/aineko-dev/aineko
     - icon: fontawesome/brands/chrome
       link: https://aineko.dev
+    - icon: fontawesome/brands/slack
+      link: https://aineko-dev.slack.com
 copyright: Copyright &copy; 2023 Convex Research
 
 markdown_extensions:
