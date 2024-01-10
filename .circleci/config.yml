@@ -19,15 +19,32 @@ workflows:
   continuous-integration:
     jobs:
       - python-checks:
+          matrix:
+            parameters:
+              python_version:
+                - "3.8"
+                - "3.9"
+                - "3.10"
+                - "3.11"
+                - "3.12"
+          python_version: << matrix.python_version >>
           filters:
             branches:
               ignore: develop
           prj_dir: aineko
-          python_version: << pipeline.parameters.python_version >>
+          # python_version: << matrix.python_version >>
           markers: "not integration"
       - integration-tests:
+          matrix:
+            parameters:
+              python_version:
+                - "3.8"
+                - "3.9"
+                - "3.10"
+                - "3.11"
+                - "3.12"
+          # python_version: << matrix.python_version >>
           prj_dir: aineko
-          python_version: << pipeline.parameters.python_version >>
           markers: integration
           requires:
             - python-checks
