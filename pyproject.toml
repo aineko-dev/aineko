@@ -21,7 +21,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.8,<3.13"
 pydantic = ">=2.5"
 PyYAML = "^6.0.1"
 confluent-kafka = "~2.2.0"
@@ -34,7 +34,7 @@ fastapi = { version = ">0.101", optional = true }
 uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
 
 [tool.poetry.group.dev.dependencies]
-aineko_style = "^0.0.1"
+# aineko_style = "^0.0.1"
 pylint = "^2.17.5"
 black = "^23.7.0"
 yamllint = "^1.32.0"
