@@ -78,7 +78,7 @@ class Environment(BaseModel, extra="forbid"):
     @field_validator("load_balancers")
     def validate_lb_endpoint(  # pylint: disable=no-self-argument
         cls, value: Optional[Dict[str, List[LoadBalancer]]]
-    ) -> None | Dict[str, List[LoadBalancer]]:
+    ) -> Optional[Dict[str, List[LoadBalancer]]]:
         """Validates Load balancer endpoints.
 
         The following criteria apply:

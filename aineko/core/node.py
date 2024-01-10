@@ -81,8 +81,8 @@ class AbstractNode(ABC):
 
     def __init__(
         self,
-        node_name: str | None,
         pipeline_name: str,
+        node_name: Optional[str] = None,
         poison_pill: Optional[ray.actor.ActorHandle] = None,
         test: bool = False,
     ) -> None:

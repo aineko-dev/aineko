@@ -21,7 +21,7 @@ e.g. message:
 import datetime
 import json
 import logging
-from typing import Any, Dict, Literal, Optional
+from typing import Any, Dict, Literal, Optional, Union
 
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
@@ -289,7 +289,7 @@ class DatasetConsumer:
             )
         return self._consume_message(how="last", timeout=timeout)
 
-    def consume_all(self, end_message: str | bool = False) -> list:
+    def consume_all(self, end_message: Union[str, bool] = False) -> list:
         """Reads all messages from the dataset until a specific one is found.
 
         Args:

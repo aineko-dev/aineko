@@ -13,7 +13,7 @@ have multiple FastAPI nodes, we recommend using different datasets to avoid
 namespace collisions.
 """
 
-from typing import Optional
+from typing import Optional, Union
 
 import uvicorn
 
@@ -24,7 +24,7 @@ class Consumers(dict):
     """Class to contain consumers."""
 
     def __setitem__(
-        self, key: str | int | tuple, value: DatasetConsumer
+        self, key: Union[str, int, tuple], value: DatasetConsumer
     ) -> None:
         """Checks that item is of type DatasetConsumer before setting.
 
@@ -46,7 +46,7 @@ class Producers(dict):
     """Class to contain producers."""
 
     def __setitem__(
-        self, key: str | int | tuple, value: DatasetProducer
+        self, key: Union[str, int, tuple], value: DatasetProducer
     ) -> None:
         """Checks that item is of type DatasetProducer before setting.
 

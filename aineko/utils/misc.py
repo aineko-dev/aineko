@@ -3,7 +3,10 @@
 """Miscellaneous utilities."""
 
 
-def truthy(val: str | int | bool) -> bool:
+from typing import Union
+
+
+def truthy(val: Union[str, int, bool]) -> bool:
     """Returns True if val is truthy, else False.
 
     Truthy values include:
