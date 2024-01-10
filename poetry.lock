@@ -3678,5 +3678,5 @@ fastapi = ["fastapi", "uvicorn"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.8,<3.13"
-content-hash = "569a50fe8927c952ece640f6a502dd986107d701ce723fb2d2f212f09876e844"
+python-versions = ">=3.8,<3.12"
+content-hash = "56b27d9c311c7241b2abad560598ec56f7ae20ccdffd30516e4da6a915f32a04"

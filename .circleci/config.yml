@@ -26,7 +26,6 @@ workflows:
                 - "3.9"
                 - "3.10"
                 - "3.11"
-                - "3.12"
           python_version: << matrix.python_version >>
           filters:
             branches:
@@ -42,7 +41,6 @@ workflows:
                 - "3.9"
                 - "3.10"
                 - "3.11"
-                - "3.12"
           # python_version: << matrix.python_version >>
           prj_dir: aineko
           markers: integration
