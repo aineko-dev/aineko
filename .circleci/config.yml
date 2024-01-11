@@ -106,7 +106,9 @@ jobs:
       - run: poetry install --with test --no-interaction --quiet --all-extras
       - run: >
           poetry run pytest << parameters.test_dir >>
-          -m "<< parameters.markers >>"
+          -m "<< parameters.markers >>" --junitxml=test-results/pytest-integration.xml
+      - store_test_results:
+          path: test-results
 
   python-checks:
     parameters:
@@ -146,13 +148,17 @@ jobs:
       - run: >
           poetry run pytest
           --cov=<< parameters.prj_dir >> << parameters.test_dir >>
-          -m "<< parameters.markers >>"
+          -m "<< parameters.markers >>" --junitxml=test-results/pytest.xml
+      - store_test_results:
+          path: test-results
       - run:
           name: mypy
           command: |
             poetry run mypy --install-types \
             --non-interactive << parameters.prj_dir >>
-            poetry run mypy << parameters.prj_dir >>
+            poetry run mypy << parameters.prj_dir >> --junit-xml=test-results/mypy.xml
+      - store_test_results:
+          path: test-results
 
   build-and-push-docs:
     parameters:
@@ -231,7 +237,9 @@ jobs:
           name: Run the tests from the newly created project
           command: |
             cd $original_cwd/my_awesome_pipeline
-            poetry run pytest
+            poetry run pytest tests --junitxml=test-results/pytest-aineko-create.xml
+      - store_test_results:
+          path: test-results
       - run:
           name: Run `poetry run aineko --help` command from the newly created project
           command: |
