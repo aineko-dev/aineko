@@ -47,6 +47,14 @@ workflows:
           requires:
             - python-checks
       - test-aineko-create:
+          matrix:
+            parameters:
+              python_version:
+                - "3.8"
+                - "3.9"
+                - "3.10"
+                - "3.11"
+          python_version: << matrix.python_version >>
           requires:
             - python-checks
 
@@ -221,8 +229,13 @@ jobs:
   test-aineko-create:
     description: This job tests the aineko create command by creating a new project
       and running the tests from the newly created project.
+    parameters:
+      python_version:
+        type: string
+        default: "3.10"
+        description: Version of python to use
     docker:
-      - image: cimg/python:<< pipeline.parameters.python_version >>
+      - image: cimg/python:<< parameters.python_version >>
     steps:
       - checkout
       - run:
