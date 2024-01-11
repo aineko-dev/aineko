@@ -240,7 +240,7 @@ jobs:
           name: Test installing the newly created project
           command: |
             cd $original_cwd/my_awesome_pipeline
-            poetry add git+$CIRCLE_REPOSITORY_URL#<< pipeline.git.branch >> --no-interaction --no-ansi
+            poetry add git+https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME#<< pipeline.git.branch >>  --no-interaction --no-ansi
             poetry install --no-interaction --no-ansi
       - run:
           name: Run the tests from the newly created project
