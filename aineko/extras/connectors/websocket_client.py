@@ -1,6 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Extra module for connecting to a WebSocket."""
+"""Extra module for connecting to a WebSockets."""
 
 import json
 import time
@@ -13,7 +13,7 @@ from aineko import AbstractNode
 from aineko.extras.connectors.secrets import inject_secrets
 
 
-class ParamsWebSocket(BaseModel):
+class ParamsWebSocketClient(BaseModel):
     """Connector params for WebSocket model."""
 
     max_retries: int = 30
@@ -37,7 +37,7 @@ class ParamsWebSocket(BaseModel):
 
 
 # pylint: disable=anomalous-backslash-in-string
-class WebSocket(AbstractNode):
+class WebSocketClient(AbstractNode):
     """Node for ingesting data from a WebSocket.
 
     This node is a wrapper around the
@@ -71,8 +71,8 @@ class WebSocket(AbstractNode):
     ```yaml title="pipeline.yml"
     pipeline:
       nodes:
-        WebSocket:
-          class: aineko.extras.WebSocket
+        WebSocketClient:
+          class: aineko.extras.WebSocketClient
           outputs:
             - test_websocket
           node_params:
@@ -88,10 +88,10 @@ class WebSocket(AbstractNode):
 
     def _pre_loop_hook(self, params: dict | None = None) -> None:
         """Initalize the WebSocket connection."""
-        # Cast params to ParamsWebSocket type
+        # Cast params to ParamsWebSocketClient type
         try:
             if params is not None:
-                self.ws_params = ParamsWebSocket(**params)
+                self.ws_params = ParamsWebSocketClient(**params)
             else:
                 raise ValueError(
                     "No params provided to WebSocket connector. "
@@ -103,7 +103,7 @@ class WebSocket(AbstractNode):
             # Note: this is required because pydantic errors
             # are not pickleable
             raise ValueError(
-                "Failed to cast params to ParamsWebSocket type. "
+                "Failed to cast params to ParamsWebSocketClient type. "
                 f"The following error occurred: {err}"
             ) from err
         self.ws_params.header = inject_secrets(self.ws_params.header)
