@@ -38,7 +38,9 @@ def _dict_inject_secrets(
     return dict_
 
 
-def _list_inject_secrets(list_: list[Union[str, dict, list, None]]) -> list[Union[str, dict, list, None]]:
+def _list_inject_secrets(
+        list_: list[Union[str, dict, list, None]]
+        ) -> list[Union[str, dict, list, None]]:
     """Inject secrets from environment into a list."""
     for i, v in enumerate(list_):
         if isinstance(v, str):
