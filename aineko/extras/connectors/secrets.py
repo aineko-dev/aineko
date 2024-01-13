@@ -22,16 +22,15 @@ def _str_inject_secrets(str_: str) -> str:
     secret_match = re.search(secret_pattern, str_, re.DOTALL)
     if not secret_match:
         return str_
-    else:
-        secret_env_str = secret_match.group()
-        secret_v = os.getenv(secret_env_str[2:][:-1], default=None)
-        if secret_v is None:
-            raise ValueError(
-                "Failed to inject secret. "
-                f"Environment variable {secret_env_str[2:][:-1]} not found."
-            )
-        str_ = str_.replace(secret_env_str, secret_v)
-        return _str_inject_secrets(str_)
+    secret_env_str = secret_match.group()
+    secret_v = os.getenv(secret_env_str[2:][:-1], default=None)
+    if secret_v is None:
+        raise ValueError(
+            "Failed to inject secret. "
+            f"Environment variable {secret_env_str[2:][:-1]} not found."
+        )
+    str_ = str_.replace(secret_env_str, secret_v)
+    return _str_inject_secrets(str_)
 
 
 def _dict_inject_secrets(
@@ -152,9 +151,8 @@ def inject_secrets(
         return _dict_inject_secrets(obj)
     elif isinstance(obj, list):
         return _list_inject_secrets(obj)
-    else:
-        raise ValueError(
-            "Failed to inject secrets. "
-            f"Object type {type(obj)} not supported. "
-            "Supported types are str, dict, and list."
-        )
+    raise ValueError(
+        "Failed to inject secrets. "
+        f"Object type {type(obj)} not supported. "
+        "Supported types are str, dict, and list."
+    )
