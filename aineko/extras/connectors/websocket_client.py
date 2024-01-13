@@ -87,7 +87,11 @@ class WebSocketClient(AbstractNode):
     retry_count = 0
 
     def _pre_loop_hook(self, params: dict | None = None) -> None:
-        """Initalize the WebSocket connection."""
+        """Initalize the WebSocket connection.
+        
+        Raises:
+            ValueError: If the params are invalid.
+        """
         # Cast params to ParamsWebSocketClient type
         try:
             if params is not None:
@@ -117,7 +121,11 @@ class WebSocketClient(AbstractNode):
         self.create_subscription()
 
     def _execute(self, params: dict | None = None) -> None:
-        """Polls and gets data from the WebSocket."""
+        """Polls and gets data from the WebSocket.
+        
+        Raises:
+            ValueError: If the retry count exceeds the max retries.
+        """
         try:
             # Poll the websocket
             raw_message = self.ws.recv()
@@ -166,7 +174,11 @@ class WebSocketClient(AbstractNode):
                 ) from err
 
     def create_subscription(self) -> None:
-        """Creates a subscription on the websocket."""
+        """Creates a subscription on the websocket.
+        
+        Raises:
+            ValueError: If the retry count exceeds the max retries.
+        """
         try:
             self.log(f"Creating subscription to {self.ws_params.url}...")
             self.ws.connect(
