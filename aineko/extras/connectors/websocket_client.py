@@ -4,7 +4,7 @@
 
 import json
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
 import websocket
 from pydantic import BaseModel, field_validator
@@ -19,9 +19,9 @@ class ParamsWebSocketClient(BaseModel):
     max_retries: int = 30
     retry_sleep: float = 5
     url: str
-    header: Optional[Dict[str, str]] = None
+    header: Optional[dict[str, str]] = None
     init_messages: List[Any] = []
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: Optional[dict[str, Any]] = None
 
     @field_validator("url")
     @classmethod
