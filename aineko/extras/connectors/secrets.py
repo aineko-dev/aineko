@@ -4,8 +4,7 @@
 
 import os
 import re
-from typing import Any, Dict, List
-
+from typing import Union
 
 def _str_inject_secrets(str_: str) -> str:
     """Inject secrets from environment into a str."""
@@ -25,7 +24,9 @@ def _str_inject_secrets(str_: str) -> str:
         return _str_inject_secrets(str_)
 
 
-def _dict_inject_secrets(dict_: Dict[str, Any]) -> Dict[str, Any]:
+def _dict_inject_secrets(
+        dict_: dict[str, Union[str, dict, list, None]]
+        ) -> dict[str, Union[str, dict, list, None]]:
     """Inject secrets from environment into a dict."""
     for k, v in list(dict_.items()):
         if isinstance(v, str):
@@ -37,7 +38,7 @@ def _dict_inject_secrets(dict_: Dict[str, Any]) -> Dict[str, Any]:
     return dict_
 
 
-def _list_inject_secrets(list_: List[Any]) -> List[Any]:
+def _list_inject_secrets(list_: list[Union[str, dict, list, None]]) -> list[Union[str, dict, list, None]]:
     """Inject secrets from environment into a list."""
     for i, v in enumerate(list_):
         if isinstance(v, str):
@@ -49,7 +50,9 @@ def _list_inject_secrets(list_: List[Any]) -> List[Any]:
     return list_
 
 
-def inject_secrets(obj: Any) -> Any:
+def inject_secrets(
+        obj: Union[str, dict, list, None]
+        ) -> Union[str, dict, list, None]:
     """Inject secrets from environment into an object.
 
     This function is used by an aineko node to inject secrets into objects
