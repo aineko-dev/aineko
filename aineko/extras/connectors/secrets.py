@@ -7,7 +7,17 @@ import re
 from typing import Union
 
 def _str_inject_secrets(str_: str) -> str:
-    """Inject secrets from environment into a str."""
+    """Inject secrets from environment into a str.
+    
+    This function is used by an aineko node to inject secrets into strings
+    passed in to node params via a pipeline config. See the docstring for
+    `inject_secrets` for more information.
+
+    Running this function on a string receursively replaces all instances of
+    the string pattern {$SECRET_NAME} with the value of the corresponding
+    environment variable. This ensures that strings with multiple secrets
+    can be injected.
+    """
     secret_pattern = r"\{\$.*?\}"
     secret_match = re.search(secret_pattern, str_, re.DOTALL)
     if not secret_match:
@@ -27,7 +37,17 @@ def _str_inject_secrets(str_: str) -> str:
 def _dict_inject_secrets(
         dict_: dict[str, Union[str, dict, list, None]]
         ) -> dict[str, Union[str, dict, list, None]]:
-    """Inject secrets from environment into a dict."""
+    """Inject secrets from environment into a dict.
+    
+    This function is used by an aineko node to inject secrets into dicts
+    passed in to node params via a pipeline config. See the docstring for
+    `inject_secrets` for more information.
+
+    Running this function on a dict recursively replaces all instances of
+    the string pattern {$SECRET_NAME} with the value of the corresponding
+    environment variable. This ensures that dicts with secrets nested at
+    multiple levels can be injected.
+    """
     for k, v in list(dict_.items()):
         if isinstance(v, str):
             dict_[k] = _str_inject_secrets(v)
@@ -41,7 +61,17 @@ def _dict_inject_secrets(
 def _list_inject_secrets(
         list_: list[Union[str, dict, list, None]]
         ) -> list[Union[str, dict, list, None]]:
-    """Inject secrets from environment into a list."""
+    """Inject secrets from environment into a list.
+    
+    This function is used by an aineko node to inject secrets into lists
+    passed in to node params via a pipeline config. See the docstring for
+    `inject_secrets` for more information.
+
+    Running this function on a list recursively replaces all instances of
+    the string pattern {$SECRET_NAME} with the value of the corresponding
+    environment variable. This ensures that lists with secrets nested at
+    multiple levels can be injected.
+    """
     for i, v in enumerate(list_):
         if isinstance(v, str):
             list_[i] = _str_inject_secrets(v)
@@ -60,8 +90,8 @@ def inject_secrets(
     This function is used by an aineko node to inject secrets into objects
     passed in to node params via a pipeline config.
 
-    Given an object, inject secrets from the environment into the object
-    recursively. Secrets are identified in strings by the pattern
+    Given a str, dict, or list inject secrets from the environment into the
+    object recursively. Secrets are identified in strings by the pattern
     {$SECRET_NAME} where SECRET_NAME is the name of the environment variable
     to inject. For example, given the following environment variables:
 
@@ -83,6 +113,36 @@ def inject_secrets(
     ```
 
     This function supports injecting secrets into str, dict, and list objects.
+
+    Given the following dict:
+    
+        ```
+        {
+            "key1": "This is a string with a {$SECRET1} and a {$SECRET2}.",
+            "key2": {
+                "key3": "This is a string with a {$SECRET1} and a {$SECRET2}.",
+                "key4": [
+                    "This is a string with a {$SECRET1} and a {$SECRET2}.",
+                    "This is a string with a {$SECRET1} and a {$SECRET2}."
+                ]
+            }
+        }
+        ```
+    
+    Would be transformed to:
+    
+            ```
+            {
+                "key1": "This is a string with a secret1 and a secret2.",
+                "key2": {
+                    "key3": "This is a string with a secret1 and a secret2.",
+                    "key4": [
+                        "This is a string with a secret1 and a secret2.",
+                        "This is a string with a secret1 and a secret2."
+                    ]
+                }
+            }
+            ```
     """
     if obj is None:
         return None
