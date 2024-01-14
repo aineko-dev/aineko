@@ -87,7 +87,7 @@ class WebSocketClient(AbstractNode):
 
     def _pre_loop_hook(self, params: dict | None = None) -> None:
         """Initialize the WebSocket connection.
-        
+
         Raises:
             ValueError: If the params are invalid.
         """
@@ -116,7 +116,7 @@ class WebSocketClient(AbstractNode):
 
     def _execute(self, params: dict | None = None) -> None:
         """Polls and gets data from the WebSocket.
-        
+
         Raises:
             ValueError: If the retry count exceeds the max retries.
         """
@@ -169,7 +169,7 @@ class WebSocketClient(AbstractNode):
 
     def create_subscription(self) -> None:
         """Creates a subscription on the websocket.
-        
+
         Raises:
             ValueError: If the retry count exceeds the max retries.
         """
