@@ -1,4 +1,4 @@
-# WebSocket Node
+# WebSocketClient Node
 
 The WebSocket extra node can be used by adding the following to `pyproject.toml`
 
@@ -10,4 +10,4 @@ The WebSocket extra node can be used by adding the following to `pyproject.toml`
 
 ## API Reference
 
-::: aineko.extras.connectors.websocket.WebSocket
+::: aineko.extras.connectors.websocket_client.WebSocketClient

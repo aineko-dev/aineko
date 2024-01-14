@@ -30,6 +30,7 @@ class ConfigLoader:
 
     Methods:
         load_config: loads and validates the pipeline config from a yaml file
+        inject_env_vars: injects environment variables into node params
     """
 
     def __init__(
@@ -69,7 +70,7 @@ class ConfigLoader:
         # Inject environment variables into node params
         for node in config["pipeline"]["nodes"].values():
             if node["node_params"] is not None:
-                node["node_params"] = self._inject_env_vars(node["node_params"])
+                node["node_params"] = self.inject_env_vars(node["node_params"])
 
         return config
 
@@ -127,14 +128,30 @@ class ConfigLoader:
         )
 
     @overload
-    def _inject_env_vars(self, node_params: dict) -> dict:
+    def inject_env_vars(self, node_params: dict) -> dict:
         ...
 
     @overload
-    def _inject_env_vars(self, node_params: None) -> None:
+    def inject_env_vars(self, node_params: list) -> list:
         ...
 
-    def _inject_env_vars(self, node_params: dict | None) -> dict | None:
+    @overload
+    def inject_env_vars(self, node_params: str) -> str:
+        ...
+
+    @overload
+    def inject_env_vars(self, node_params: int) -> int:
+        ...
+
+    @overload
+    def inject_env_vars(self, node_params: float) -> float:
+        ...
+
+    @overload
+    def inject_env_vars(self, node_params: None) -> None:
+        ...
+
+    def inject_env_vars(self, node_params: NodeParamTypes) -> NodeParamTypes:
         """Inject environment variables into node params.
 
         This function is used to recursively inject environment variables
@@ -184,10 +201,10 @@ class ConfigLoader:
         """
         if isinstance(node_params, dict):
             for k, v in list(node_params.items()):
-                node_params[k] = self._inject_env_vars(v)
+                node_params[k] = self.inject_env_vars(v)
         elif isinstance(node_params, list):
             for i, v in enumerate(node_params):
-                node_params[i] = self._inject_env_vars(v)
+                node_params[i] = self.inject_env_vars(v)
         elif isinstance(node_params, str):
             env_var_pattern = r"\{\$.*?\}"
             env_var_match = re.search(env_var_pattern, node_params, re.DOTALL)
@@ -204,6 +221,6 @@ class ConfigLoader:
                 node_params = node_params.replace(
                     env_var_env_str, env_var_value
                 )
-                return self._inject_env_vars(node_params)
+                return self.inject_env_vars(node_params)
 
         return node_params
