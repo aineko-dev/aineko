@@ -10,7 +10,6 @@ import websocket
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
-from aineko.extras.connectors.secrets import inject_secrets
 
 
 class ParamsWebSocketClient(BaseModel):
@@ -110,11 +109,6 @@ class WebSocketClient(AbstractNode):
                 "Failed to cast params to ParamsWebSocketClient type. "
                 f"The following error occurred: {err}"
             ) from err
-        self.ws_params.header = inject_secrets(self.ws_params.header)
-        self.ws_params.init_messages = inject_secrets(
-            self.ws_params.init_messages
-        )
-        self.ws_params.url = inject_secrets(self.ws_params.url)
 
         # Create the websocket subscription
         self.ws = websocket.WebSocket()

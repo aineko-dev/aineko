@@ -3,6 +3,8 @@
 """Module to load config files."""
 import logging
 from typing import overload
+import os
+import re
 
 from pydantic import ValidationError
 
@@ -12,6 +14,7 @@ from aineko.utils.io import load_yaml
 
 logger = logging.getLogger(__name__)
 
+NodeParamTypes = dict | list | str | int | float | bool | None
 
 class ConfigLoader:
     """Class to read yaml config files.
@@ -61,6 +64,11 @@ class ConfigLoader:
                 self.pipeline_config_file,
             )
             raise e
+
+        # Inject environment variables into node params
+        for node in config["pipeline"]["nodes"].values():
+            if node["node_params"] is not None:
+                node["node_params"] = self._inject_env_vars(node["node_params"])
 
         return config
 
@@ -116,3 +124,83 @@ class ConfigLoader:
             f"Invalid value type {type(value)}. "
             "Expected dict, list, str, or int."
         )
+
+    @overload
+    def _inject_env_vars(self, obj: dict) -> dict:
+        ...
+
+    @overload
+    def _inject_env_vars(self, obj: None) -> None:
+        ...
+
+    def _inject_env_vars(self, node_params: dict | None) -> dict | None:
+        """Inject environment variables into node params.
+
+        This function is used to recursively inject environment variables into strings 
+        passed through node params via the pipeline config. We only recursively parse
+        strings, dicts, and lists, as these are the only types that can contain
+        environment variables (i.e. excluding ints, floats, and Nones).
+
+        Environment variables are identified in strings by the pattern {$ENV_VAR}
+        where ENV_VAR is the name of the environment variable
+        to inject. For example, given the following environment variables:
+
+        ```
+        $ export SECRET1=secret1
+        $ export SECRET2=secret2
+        ```
+
+        The following node params dict:
+        
+            ```
+            {
+                "key1": "This is a string with a {$SECRET1} and a {$SECRET2}.",
+                "key2": {
+                    "key3": "This is a string with a {$SECRET1} and a {$SECRET2}.",
+                    "key4": [
+                        "This is a string with a {$SECRET1} and a {$SECRET2}.",
+                        "This is a string with a {$SECRET1} and a {$SECRET2}."
+                    ]
+                }
+            }
+            ```
+        
+        Will be transformed to:
+        
+                ```
+                {
+                    "key1": "This is a string with a secret1 and a secret2.",
+                    "key2": {
+                        "key3": "This is a string with a secret1 and a secret2.",
+                        "key4": [
+                            "This is a string with a secret1 and a secret2.",
+                            "This is a string with a secret1 and a secret2."
+                        ]
+                    }
+                }
+                ```
+        """
+        if isinstance(node_params, dict):
+            for k, v in list(node_params.items()):
+                node_params[k] = self._inject_env_vars(v)
+            return node_params
+        elif isinstance(node_params, list):
+            for i, v in enumerate(node_params):
+                node_params[i] = self._inject_env_vars(v)
+            return node_params
+        elif isinstance(node_params, str):
+            env_var_pattern = r"\{\$.*?\}"
+            env_var_match = re.search(env_var_pattern, node_params, re.DOTALL)
+            if not env_var_match:
+                return node_params
+            env_var_env_str = env_var_match.group()
+            env_var_value = os.getenv(env_var_env_str[2:][:-1], default=None)
+            if env_var_value is None:
+                raise ValueError(
+                    "Failed to inject environment variable. "
+                    f"{env_var_env_str[2:][:-1]} was not found."
+                )
+            node_params = node_params.replace(env_var_env_str, env_var_value)
+            return self._inject_env_vars(node_params)
+
+        return node_params
