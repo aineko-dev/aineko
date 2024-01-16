@@ -35,7 +35,8 @@ workflows:
   publish-docs:
     jobs:
       - check-broken-links
-      - vale-lint
+      - vale-lint:
+          name: lint docs
       - build-and-push-docs:
           name: publish dev docs
           filters:
@@ -238,6 +239,7 @@ jobs:
             aineko --help
 
   vale-lint:
+    description: Lint docs with Vale
     docker:
       - image: jdkato/vale:v3.0.3
     steps:
