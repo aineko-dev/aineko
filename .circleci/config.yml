@@ -12,9 +12,6 @@ parameters:
     type: string
     default: "9.5.2-insiders-4.47.1"
 
-orbs:
-  vale: circleci/vale@1.1.1
-
 workflows:
   continuous-integration:
     jobs:
@@ -38,10 +35,7 @@ workflows:
   publish-docs:
     jobs:
       - check-broken-links
-      - vale/lint:
-          name: lint docs
-          strategy: all
-          glob: "[!.]*.{md,adoc}"
+      - vale-lint
       - build-and-push-docs:
           name: publish dev docs
           filters:
@@ -242,3 +236,11 @@ jobs:
           command: |
             cd $original_cwd/my_awesome_pipeline
             aineko --help
+
+  vale-lint:
+    docker:
+      - image: jdkato/vale:v3.0.3
+    steps:
+      - checkout
+      - run: vale sync
+      - run: vale --glob="[!.]*.{md,adoc}" --config=.vale.ini .
