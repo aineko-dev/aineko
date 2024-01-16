@@ -100,4 +100,4 @@ def test_output_yielding_no_output(test_internal_value_setter_node):
     node.setup_test(inputs={"integer_sequence": input_sequence}, outputs=[])
     for input, _, node_instance in node.run_test_yield():
         if input.get("integer_sequence"):
-            assert input["integer_sequence"] == node_instance.cur_integer + 1
+            assert input["integer_sequence"] == node_instance.cur_integer
