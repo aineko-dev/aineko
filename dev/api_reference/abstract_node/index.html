@@ -2380,6 +2380,12 @@ pipeline communication without dataset dependency.</p>
             <span class="n">last_produced_values</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">last_consumed_values</span> <span class="o">=</span> <span class="p">{}</span>
 
+            <span class="c1"># Capture last consumed values</span>
+            <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                    <span class="n">last_value</span> <span class="o">=</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">last_consumed_values</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_value</span>
+
             <span class="n">run_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
             <span class="c1"># Do not end loop if runtime not exceeded</span>
@@ -2392,12 +2398,6 @@ pipeline communication without dataset dependency.</p>
                 <span class="n">consumer</span><span class="o">.</span><span class="n">empty</span> <span class="k">for</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
             <span class="p">):</span>
                 <span class="n">run_loop</span> <span class="o">=</span> <span class="kc">False</span>
-
-            <span class="c1"># Capture last consumed values</span>
-            <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-                    <span class="n">last_value</span> <span class="o">=</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">last_consumed_values</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_value</span>
 
             <span class="c1"># Capture last produced values</span>
             <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">producer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -3140,6 +3140,12 @@ possible using this method.</p>
         <span class="n">last_produced_values</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">last_consumed_values</span> <span class="o">=</span> <span class="p">{}</span>
 
+        <span class="c1"># Capture last consumed values</span>
+        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                <span class="n">last_value</span> <span class="o">=</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">last_consumed_values</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_value</span>
+
         <span class="n">run_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
         <span class="c1"># Do not end loop if runtime not exceeded</span>
@@ -3152,12 +3158,6 @@ possible using this method.</p>
             <span class="n">consumer</span><span class="o">.</span><span class="n">empty</span> <span class="k">for</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="p">):</span>
             <span class="n">run_loop</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="c1"># Capture last consumed values</span>
-        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-                <span class="n">last_value</span> <span class="o">=</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">last_consumed_values</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_value</span>
 
         <span class="c1"># Capture last produced values</span>
         <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">producer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
