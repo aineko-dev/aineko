@@ -344,6 +344,12 @@ class AbstractNode(ABC):
             last_produced_values = {}
             last_consumed_values = {}
 
+            # Capture last consumed values
+            for dataset_name, consumer in self.consumers.items():
+                if consumer.values:
+                    last_value = consumer.values[0]
+                    last_consumed_values[dataset_name] = last_value
+
             run_loop = self._execute(self.params)  # type: ignore
 
             # Do not end loop if runtime not exceeded
@@ -356,12 +362,6 @@ class AbstractNode(ABC):
                 consumer.empty for consumer in self.consumers.values()
             ):
                 run_loop = False
-
-            # Capture last consumed values
-            for dataset_name, consumer in self.consumers.items():
-                if consumer.values:
-                    last_value = consumer.values[0]
-                    last_consumed_values[dataset_name] = last_value
 
             # Capture last produced values
             for dataset_name, producer in self.producers.items():
