@@ -4,6 +4,7 @@ site_name: Aineko
 site_url: https://docs.aineko.dev/
 repo_name: aineko-dev/aineko
 repo_url: https://github.com/aineko-dev/aineko
+edit_uri: edit/develop/docs/
 theme:
   name: material
   palette:
@@ -15,6 +16,7 @@ theme:
   font:
     size: 20
   features:
+    - content.action.edit
     - content.code.copy
     - navigation.tabs
     - navigation.path

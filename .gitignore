@@ -189,7 +189,7 @@ orb.yml
 # Ignore everything under docs/.styles
 docs/.styles/*
 # But don't ignore the Vocab directory
-!docs/.styles/Vocab/
-# Ignore everything under Vocab, except Aineko
-docs/.styles/Vocab/*
-!docs/.styles/Vocab/Aineko/
+!docs/.styles/config/
+# Ignore everything under vocabularies, except Aineko
+docs/.styles/config/vocabularies/*
+!docs/.styles/config/vocabularies/Aineko
