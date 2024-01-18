@@ -6,7 +6,7 @@ authors = ["Jane Smith <janesmith@example.org>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.8,<3.12"
 aineko = "0.2.7"
 
 [tool.poetry.group.test.dependencies]
