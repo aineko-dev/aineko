@@ -1,0 +1,36 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: test_websocket_client
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    websocket_server:
+      class: tests.extras.connectors.test_websocket_client.WebSocketServer
+      node_params:
+        host: "localhost"
+        port: 8765
+        sleep: 0.01
+
+    websocket_client:
+      class: aineko.extras.WebSocketClient
+      node_params:
+        url: "ws://localhost:8765"
+        max_retries: 3
+      outputs:
+        - test_messages
+
+    websocket_client_checker:
+      class: tests.extras.connectors.test_websocket_client.WebSocketClientChecker
+      inputs:
+        - test_messages
+      outputs:
+        - test_result
+
+  datasets:
+    test_messages:
+      type: kafka_stream
+    test_result:
+      type: kafka_stream
