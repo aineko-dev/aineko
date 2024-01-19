@@ -110,6 +110,16 @@ class WebSocketClient(AbstractNode):
                 f"The following error occurred: {err}"
             ) from err
 
+        # Ensure only one output dataset is provided
+        output_datasets = [d for d in self.producers.keys() if d != "logging"]
+        if len(output_datasets) > 1:
+            raise ValueError(
+                "Only one output dataset is allowed for the "
+                "WebSocketClient connector. "
+                f"{len(output_datasets)} datasets given."
+            )
+        self.output_dataset = output_datasets[0]
+
         # Create the websocket subscription
         self.ws = websocket.WebSocket()
         self.create_subscription()
@@ -143,9 +153,7 @@ class WebSocketClient(AbstractNode):
                     "metadata": self.ws_params.metadata,
                     "data": message,
                 }
-            for dataset, producer in self.producers.items():
-                if dataset != "logging":
-                    producer.produce(message)
+            self.producers[self.output_dataset].produce(message)
             self.retry_count = 0
         except json.decoder.JSONDecodeError as err:
             if self.retry_count < self.ws_params.max_retries:
