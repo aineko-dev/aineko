@@ -25,6 +25,7 @@ def import_from_string(  # type: ignore[no-untyped-def]
         imported_func: Imported function
 
     Raises:
+        AttributeError: If attr does not exist
         ValueError: If kind is not a valid kind
         ValueError: If attr is not in the correct format
         ValueError: If attr is not a function
