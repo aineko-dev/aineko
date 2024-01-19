@@ -69,10 +69,7 @@ class ConfigLoader:
 
         # Inject environment variables into node params
         for node in config["pipeline"]["nodes"].values():
-            if (
-                "node_params" in node and 
-                node["node_params"] is not None
-                ):
+            if "node_params" in node and node["node_params"] is not None:
                 node["node_params"] = self.inject_env_vars(node["node_params"])
 
         return config

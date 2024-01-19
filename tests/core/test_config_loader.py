@@ -31,11 +31,8 @@ EXPECTED_TEST_PIPELINE = {
                 "outputs": ["integer_doubles"],
                 "node_params": {
                     "duration": 40,
-                    "dict_env_vars": {
-                        "key_1": "value_1",
-                        "key_2": "value_2"
-                        },
-                    },
+                    "dict_env_vars": {"key_1": "value_1", "key_2": "value_2"},
+                },
             },
             "dummy": {"class": "aineko.tests.conftest.DummyNode"},
         },
