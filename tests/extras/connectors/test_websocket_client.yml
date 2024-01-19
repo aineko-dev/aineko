@@ -10,7 +10,7 @@ pipeline:
     websocket_server:
       class: tests.extras.connectors.test_websocket_client.WebSocketServer
       node_params:
-        host: "localhost"
+        host: "127.0.0.1"
         port: 8765
         sleep: 0.01
 
