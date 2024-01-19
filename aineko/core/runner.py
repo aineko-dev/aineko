@@ -223,6 +223,9 @@ class Runner:
         Returns:
             dict: mapping of node names to actor handles
             list: list of ray objects
+
+        Raises:
+            ValueError: if error occurs while initializing actor from config
         """
         # Collect all  actor futures
         results = []
@@ -231,9 +234,18 @@ class Runner:
 
         for node_name, node_config in pipeline_config["nodes"].items():
             # Initialize actor from specified class in config
-            target_class = imports.import_from_string(
-                attr=node_config["class"], kind="class"
-            )
+            try:
+                target_class = imports.import_from_string(
+                    attr=node_config["class"], kind="class"
+                )
+            except AttributeError as exc:
+                raise ValueError(
+                    "Invalid node class name specified in config for node '"
+                    f"{node_name}'. Please check your config file at: "
+                    f"{self.pipeline_config_file}\n"
+                    f"Error: {exc}"
+                ) from None
+
             actor_params = {
                 **default_node_config,
                 **node_config.get("node_settings", {}),
