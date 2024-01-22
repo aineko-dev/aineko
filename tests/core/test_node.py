@@ -13,8 +13,10 @@ def test_node_setup_and_run_test(dummy_node) -> None:
     node_name = "test"
     pipeline_name = "testing_pipeline"
 
-    node = dummy_node(node_name, pipeline_name, test=True, poison_pill=None)
-    inputs = {"input": [1, 2, 3]}
+    node: AbstractNode = dummy_node(
+        node_name, pipeline_name, test=True, poison_pill=None
+    )
+    inputs = {"input": [{"i": 1}, {"i": 2}, {"i": 3}]}
     outputs = ["output"]
     node.setup_test(inputs=inputs, outputs=outputs)
 
@@ -25,7 +27,11 @@ def test_node_setup_and_run_test(dummy_node) -> None:
     # Check that correct keys exist
     assert set(output.keys()) == {"logging", "output"}
     # Check that correct messages are received
-    assert [i["message"] for i in output["output"] if i] == [1, 2, 3]
+    assert [i.message for i in output["output"] if i] == [
+        {"i": 1},
+        {"i": 2},
+        {"i": 3},
+    ]
     # Check that timeout worked as intended
     assert run_time - 1 < 0.01
 
@@ -37,7 +43,7 @@ def test_node_unit_test(test_sequencer_node, test_doubler_node) -> None:
     node_name = "test"
     pipeline_name = "testing_pipeline"
 
-    sequencer = test_sequencer_node(
+    sequencer: AbstractNode = test_sequencer_node(
         node_name, pipeline_name, test=True, poison_pill=None
     )
     sequencer.setup_test(
@@ -45,18 +51,21 @@ def test_node_unit_test(test_sequencer_node, test_doubler_node) -> None:
         outputs=["integer_sequence"],
         params={"sleep_time": 0.1, "num_messages": NUM_MESSAGES},
     )
-    outputs = sequencer.run_test()
-    assert outputs["integer_sequence"] == list(range(NUM_MESSAGES))
+    assert [i.message for i in sequencer.run_test()["integer_sequence"]] == [
+        {"i": i} for i in range(NUM_MESSAGES)
+    ]
 
-    doubler = test_doubler_node(
+    doubler: AbstractNode = test_doubler_node(
         node_name, pipeline_name, test=True, poison_pill=None
     )
     doubler.setup_test(
-        inputs={"integer_sequence": list(range(NUM_MESSAGES))},
+        inputs={"integer_sequence": [{"i": i} for i in range(NUM_MESSAGES)]},
         outputs=["integer_doubles"],
     )
     outputs = doubler.run_test()
-    assert outputs["integer_doubles"] == [i * 2 for i in range(NUM_MESSAGES)]
+    assert [output.message for output in outputs["integer_doubles"]] == [
+        {"i": i * 2} for i in range(NUM_MESSAGES)
+    ]
 
 
 def test_output_yielding(test_sequencer_node, test_doubler_node) -> None:
@@ -74,17 +83,21 @@ def test_output_yielding(test_sequencer_node, test_doubler_node) -> None:
     )
 
     for _, output, node_instance in sequencer.run_test_yield():
-        assert output["integer_sequence"] == node_instance.cur_integer - 1
+        assert output["integer_sequence"].message == {
+            "i": node_instance.cur_integer - 1
+        }
 
     doubler: AbstractNode = test_doubler_node(
         node_name, pipeline_name, test=True, poison_pill=None
     )
     doubler.setup_test(
-        inputs={"integer_sequence": list(range(NUM_MESSAGES))},
+        inputs={"integer_sequence": [{"i": i} for i in range(NUM_MESSAGES)]},
         outputs=["integer_doubles"],
     )
     for _, output, node_instance in doubler.run_test_yield():
-        assert output["integer_doubles"] == node_instance.cur_integer * 2
+        assert output["integer_doubles"].message == {
+            "i": node_instance.cur_integer * 2
+        }
 
 
 def test_output_yielding_no_output(test_internal_value_setter_node):
@@ -96,8 +109,8 @@ def test_output_yielding_no_output(test_internal_value_setter_node):
         node_name, pipeline_name, test=True, poison_pill=None
     )
 
-    input_sequence = list(range(NUM_MESSAGES))
+    input_sequence = [{"i": i} for i in range(NUM_MESSAGES)]
     node.setup_test(inputs={"integer_sequence": input_sequence}, outputs=[])
     for input, _, node_instance in node.run_test_yield():
         if input.get("integer_sequence"):
-            assert input["integer_sequence"] == node_instance.cur_integer
+            assert input["integer_sequence"]["i"] == node_instance.cur_integer

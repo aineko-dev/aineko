@@ -74,7 +74,11 @@ def dummy_node():
         def _execute(self, params: dict | None = None) -> bool | None:
             """Consumes message from input and outputs it to output."""
             msg = self.consumers["input"].consume(how="next", timeout=0)
-            self.producers["output"].produce(msg)
+            if msg is None:
+                return
+            else:
+                message = msg.message
+            self.producers["output"].produce(message)
 
     return DummyNode
 
@@ -115,7 +119,7 @@ def test_sequencer_node():
                 return False
 
             # Write message to producer
-            self.producers["integer_sequence"].produce(self.cur_integer)
+            self.producers["integer_sequence"].produce({"i": self.cur_integer})
             self.log(f"Produced {self.cur_integer}", level="info")
             self.log("Just a red herring", level="error")
             self.num_messages += 1
@@ -154,29 +158,29 @@ def test_doubler_node():
                 return False
 
             # Read message from consumer
-            cur_integer = self.consumers["integer_sequence"].next()
+            cur_integer_msg = self.consumers["integer_sequence"].next()
 
             # Calculate latency
             latency = (
                 time.time()
                 - datetime.datetime.strptime(
-                    cur_integer["timestamp"], "%Y-%m-%d %H:%M:%S.%f"
+                    cur_integer_msg.timestamp, "%Y-%m-%d %H:%M:%S.%f"
                 ).timestamp()
             )
 
             # Log message
             self.log(
-                f"Consumed: {cur_integer} - "
+                f"Consumed: {cur_integer_msg} - "
                 f"Latency (ms): {round(latency*1000, 2)}",
                 level="info",
             )
 
             # Convert message to integer
-            cur_integer = int(cur_integer["message"])
+            cur_integer = int(cur_integer_msg.message["i"])
             self.cur_integer = cur_integer
 
             # Write message to producer
-            self.producers["integer_doubles"].produce(cur_integer * 2)
+            self.producers["integer_doubles"].produce({"i": cur_integer * 2})
             self.log(f"Produced {cur_integer * 2}", level="info")
 
     return TestDoubler
@@ -206,7 +210,7 @@ def test_internal_value_setter_node():
                 return
 
             # Convert message to integer
-            cur_integer = int(cur_integer["message"])
+            cur_integer = int(cur_integer.message["i"])
             self.cur_integer = cur_integer
 
     return TestInternalValueSetter
