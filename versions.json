@@ -3,5 +3,10 @@
     "version": "landing-page",
     "title": "landing-page",
     "aliases": []
+  },
+  {
+    "version": "docstrings",
+    "title": "docstrings",
+    "aliases": []
   }
 ]
