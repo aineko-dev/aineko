@@ -1929,7 +1929,19 @@
 <span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span>
-<span class="normal">274</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Runner</span><span class="p">:</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Runner</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs the pipeline described in the config.</span>
 
 <span class="sd">    Args:</span>
@@ -2133,6 +2145,9 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            dict: mapping of node names to actor handles</span>
 <span class="sd">            list: list of ray objects</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: if error occurs while initializing actor from config</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Collect all  actor futures</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
@@ -2141,9 +2156,18 @@
 
         <span class="k">for</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">node_config</span> <span class="ow">in</span> <span class="n">pipeline_config</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># Initialize actor from specified class in config</span>
-            <span class="n">target_class</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">import_from_string</span><span class="p">(</span>
-                <span class="n">attr</span><span class="o">=</span><span class="n">node_config</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;class&quot;</span>
-            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">target_class</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">import_from_string</span><span class="p">(</span>
+                    <span class="n">attr</span><span class="o">=</span><span class="n">node_config</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;class&quot;</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid node class name specified in config for node &#39;&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">&#39;. Please check your config file at: &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+
             <span class="n">actor_params</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="o">**</span><span class="n">default_node_config</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">node_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;node_settings&quot;</span><span class="p">,</span> <span class="p">{}),</span>
@@ -2720,6 +2744,30 @@ found in: https://kafka.apache.org/documentation.html#topicconfigs</p>
     </tbody>
   </table>
 
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>ValueError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>if error occurs while initializing actor from config</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
           <details class="quote">
             <summary>Source code in <code>aineko/core/runner.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">215</span>
@@ -2781,7 +2829,19 @@ found in: https://kafka.apache.org/documentation.html#topicconfigs</p>
 <span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span>
-<span class="normal">274</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_nodes</span><span class="p">(</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_nodes</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">pipeline_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">poison_pill</span><span class="p">:</span> <span class="n">ray</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">ActorHandle</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare actor handles for all nodes.</span>
@@ -2792,6 +2852,9 @@ found in: https://kafka.apache.org/documentation.html#topicconfigs</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        dict: mapping of node names to actor handles</span>
 <span class="sd">        list: list of ray objects</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if error occurs while initializing actor from config</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Collect all  actor futures</span>
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
@@ -2800,9 +2863,18 @@ found in: https://kafka.apache.org/documentation.html#topicconfigs</p>
 
     <span class="k">for</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">node_config</span> <span class="ow">in</span> <span class="n">pipeline_config</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># Initialize actor from specified class in config</span>
-        <span class="n">target_class</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">import_from_string</span><span class="p">(</span>
-            <span class="n">attr</span><span class="o">=</span><span class="n">node_config</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;class&quot;</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">target_class</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">import_from_string</span><span class="p">(</span>
+                <span class="n">attr</span><span class="o">=</span><span class="n">node_config</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;class&quot;</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid node class name specified in config for node &#39;&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">&#39;. Please check your config file at: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+
         <span class="n">actor_params</span> <span class="o">=</span> <span class="p">{</span>
             <span class="o">**</span><span class="n">default_node_config</span><span class="p">,</span>
             <span class="o">**</span><span class="n">node_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;node_settings&quot;</span><span class="p">,</span> <span class="p">{}),</span>
