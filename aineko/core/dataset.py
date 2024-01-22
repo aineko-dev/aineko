@@ -140,6 +140,17 @@ class DatasetConsumer:
         if isinstance(raw_message, bytes):
             raw_message = raw_message.decode("utf-8")
 
+        if isinstance(raw_message, str):
+            try:
+                raw_message = json.loads(raw_message)
+            except json.JSONDecodeError as err:
+                logger.error(
+                    "Error decoding message from dataset %s: %s",
+                    self.topic_name,
+                    err,
+                )
+                return None
+
         # Convert message to WrappedMessage
         wrapped_message = WrappedMessage(**raw_message)
 
