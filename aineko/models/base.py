@@ -8,8 +8,8 @@ from pydantic import BaseModel, Field
 from aineko.config import AINEKO_CONFIG
 
 
-class WrappedMessage(BaseModel):
-    """Aineko message wrapper.
+class MessageData(BaseModel):
+    """Aineko message data model.
 
     This model is used when consuming and producing messages by nodes. It
     contains the message itself, along with metadata about the message.

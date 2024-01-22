@@ -31,7 +31,7 @@ from confluent_kafka import (  # type: ignore
 )
 
 from aineko.config import DEFAULT_KAFKA_CONFIG
-from aineko.models.base import WrappedMessage
+from aineko.models.base import MessageData
 
 logger = logging.getLogger(__name__)
 
@@ -117,7 +117,7 @@ class DatasetConsumer:
     def _validate_message(
         self,
         raw_message: Message | None = None,
-    ) -> WrappedMessage | None:
+    ) -> MessageData | None:
         """Checks if a message is valid and converts it to appropriate format.
 
         Args:
@@ -152,7 +152,7 @@ class DatasetConsumer:
                 return None
 
         # Convert message to WrappedMessage
-        wrapped_message = WrappedMessage(**raw_message)
+        wrapped_message = MessageData(**raw_message)
 
         return wrapped_message
 
@@ -189,7 +189,7 @@ class DatasetConsumer:
         self,
         how: Literal["next", "last"] = "next",
         timeout: float | None = None,
-    ) -> WrappedMessage | None:
+    ) -> MessageData | None:
         """Polls a message from the dataset.
 
         If the consume method is last but the method encounters
@@ -236,7 +236,7 @@ class DatasetConsumer:
 
     def _consume_message(
         self, how: Literal["next", "last"], timeout: float | None = None
-    ) -> WrappedMessage:
+    ) -> MessageData:
         """Calls the consume method and blocks until a message is returned.
 
         Args:
@@ -255,7 +255,7 @@ class DatasetConsumer:
                     continue
                 raise e
 
-    def next(self) -> WrappedMessage:
+    def next(self) -> MessageData:
         """Consumes the next message from the dataset.
 
         Wraps the `consume(how="next")` method. It implements a
@@ -272,7 +272,7 @@ class DatasetConsumer:
         """
         return self._consume_message(how="next")
 
-    def last(self, timeout: int = 1) -> WrappedMessage:
+    def last(self, timeout: int = 1) -> MessageData:
         """Consumes the last message from the dataset.
 
         Wraps the `consume(how="last")` method. It implements a
@@ -304,7 +304,7 @@ class DatasetConsumer:
             )
         return self._consume_message(how="last", timeout=timeout)
 
-    def consume_all(self, end_message: str | dict) -> list[WrappedMessage]:
+    def consume_all(self, end_message: str | dict) -> list[MessageData]:
         """Reads all messages from the dataset until a specific one is found.
 
         Args:
@@ -403,7 +403,7 @@ class DatasetProducer:
             message: message to produce to the dataset
             key: key to use for the message
         """
-        wrapped_message = WrappedMessage(
+        wrapped_message = MessageData(
             dataset=self.dataset,
             message=message,
             source_node=self.source_node,
@@ -462,7 +462,7 @@ class FakeDatasetConsumer:
         self,
         how: Literal["next", "last"] = "next",
         timeout: float | None = None,
-    ) -> WrappedMessage | None:
+    ) -> MessageData | None:
         """Reads a message from the dataset.
 
         Args:
@@ -484,7 +484,7 @@ class FakeDatasetConsumer:
             if remaining > 0:
                 if remaining == 1:
                     self.empty = True
-                return WrappedMessage(
+                return MessageData(
                     dataset=self.dataset_name,
                     message=self.values.pop(0),
                     source_node=self.node_name,
@@ -496,7 +496,7 @@ class FakeDatasetConsumer:
 
         return None
 
-    def next(self) -> WrappedMessage | None:
+    def next(self) -> MessageData | None:
         """Wraps `consume(how="next")`, blocks until available.
 
         Returns:
@@ -504,7 +504,7 @@ class FakeDatasetConsumer:
         """
         return self.consume(how="next")
 
-    def last(self, timeout: float = 1) -> WrappedMessage | None:
+    def last(self, timeout: float = 1) -> MessageData | None:
         """Wraps `consume(how="last")`, blocks until available.
 
         Returns:
@@ -543,7 +543,7 @@ class FakeDatasetProducer:
         Args:
             message: message to produce.
         """
-        wrapped_message = WrappedMessage(
+        wrapped_message = MessageData(
             dataset=self.dataset_name,
             source_pipeline=self.source_pipeline,
             source_node=self.node_name,
