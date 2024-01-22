@@ -217,7 +217,7 @@ class DatasetConsumer:
             # next unread message from queue
             wrapped_message = self.consumer.poll(timeout=timeout)
 
-        if how == "last":
+        elif how == "last":
             # last message from queue
             try:
                 self._update_offset_to_latest()
