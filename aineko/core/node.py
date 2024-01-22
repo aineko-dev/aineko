@@ -177,6 +177,7 @@ class AbstractNode(ABC):
             dataset_name: FakeDatasetConsumer(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
+                source_pipeline=self.pipeline_name,
                 values=values,
             )
             for dataset_name, values in inputs.items()
@@ -187,6 +188,7 @@ class AbstractNode(ABC):
             dataset_name: FakeDatasetProducer(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
+                source_pipeline=self.pipeline_name,
             )
             for dataset_name in outputs
         }

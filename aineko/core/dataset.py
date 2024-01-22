@@ -18,7 +18,6 @@ e.g. message:
     "message": {...},
 }
 """
-import datetime
 import json
 import logging
 from typing import Any, Literal
@@ -31,7 +30,8 @@ from confluent_kafka import (  # type: ignore
     Producer,
 )
 
-from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
+from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.models.base import WrappedMessage
 
 logger = logging.getLogger(__name__)
 
@@ -114,10 +114,10 @@ class DatasetConsumer:
 
         self.topic_name = topic_name
 
-    @staticmethod
     def _validate_message(
-        message: Message | None = None,
-    ) -> dict | None:
+        self,
+        raw_message: Message | None = None,
+    ) -> WrappedMessage | None:
         """Checks if a message is valid and converts it to appropriate format.
 
         Args:
@@ -127,19 +127,23 @@ class DatasetConsumer:
             message if valid, None if not
         """
         # Check if message is valid
-        if message is None or message.value() is None:
+        if raw_message is None or raw_message.value() is None:
             return None
 
         # Check if message is an error
-        if message.error():
-            logger.error(str(message.error()))
+        if raw_message.error():
+            logger.error(str(raw_message.error()))
             return None
 
         # Convert message to dict
-        message = message.value()
-        if isinstance(message, bytes):
-            message = message.decode("utf-8")
-        return json.loads(message)
+        raw_message = raw_message.value()
+        if isinstance(raw_message, bytes):
+            raw_message = raw_message.decode("utf-8")
+
+        # Convert message to WrappedMessage
+        wrapped_message = WrappedMessage(**raw_message)
+
+        return wrapped_message
 
     def _update_offset_to_latest(self) -> None:
         """Updates offset to latest.
@@ -174,7 +178,7 @@ class DatasetConsumer:
         self,
         how: Literal["next", "last"] = "next",
         timeout: float | None = None,
-    ) -> dict | None:
+    ) -> WrappedMessage | None:
         """Polls a message from the dataset.
 
         If the consume method is last but the method encounters
@@ -200,7 +204,7 @@ class DatasetConsumer:
         timeout = timeout or self.kafka_config.get("CONSUMER_TIMEOUT")
         if how == "next":
             # next unread message from queue
-            message = self.consumer.poll(timeout=timeout)
+            wrapped_message = self.consumer.poll(timeout=timeout)
 
         if how == "last":
             # last message from queue
@@ -213,15 +217,15 @@ class DatasetConsumer:
                     e,
                 )
                 return None
-            message = self.consumer.poll(timeout=timeout)
+            wrapped_message = self.consumer.poll(timeout=timeout)
 
         self.cached = True
 
-        return self._validate_message(message)
+        return self._validate_message(wrapped_message)
 
     def _consume_message(
         self, how: Literal["next", "last"], timeout: float | None = None
-    ) -> dict:
+    ) -> WrappedMessage:
         """Calls the consume method and blocks until a message is returned.
 
         Args:
@@ -240,7 +244,7 @@ class DatasetConsumer:
                     continue
                 raise e
 
-    def next(self) -> dict:
+    def next(self) -> WrappedMessage:
         """Consumes the next message from the dataset.
 
         Wraps the `consume(how="next")` method. It implements a
@@ -257,7 +261,7 @@ class DatasetConsumer:
         """
         return self._consume_message(how="next")
 
-    def last(self, timeout: int = 1) -> dict:
+    def last(self, timeout: int = 1) -> WrappedMessage:
         """Consumes the last message from the dataset.
 
         Wraps the `consume(how="last")` method. It implements a
@@ -300,12 +304,12 @@ class DatasetConsumer:
         """
         messages = []
         while True:
-            message = self.consume()
-            if message is None:
+            wrapped_message = self.consume()
+            if wrapped_message is None:
                 continue
-            if message["message"] == end_message:
+            if wrapped_message.message == end_message:
                 break
-            messages.append(message)
+            messages.append(wrapped_message)
         return messages
 
 
@@ -388,15 +392,13 @@ class DatasetProducer:
             message: message to produce to the dataset
             key: key to use for the message
         """
-        message = {
-            "timestamp": datetime.datetime.now().strftime(
-                AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
-            ),
-            "dataset": self.dataset,
-            "source_pipeline": self.source_pipeline,
-            "source_node": self.source_node,
-            "message": message,
-        }
+        wrapped_message = WrappedMessage(
+            dataset=self.dataset,
+            message=message,
+            source_node=self.source_node,
+            source_pipeline=self.source_pipeline,
+        ).model_dump(mode="json")
+
         self.producer.poll(0)
 
         key_bytes = str(key).encode("utf-8") if key is not None else None
@@ -404,7 +406,7 @@ class DatasetProducer:
         self.producer.produce(
             topic=self.topic_name,
             key=key_bytes,
-            value=json.dumps(message).encode("utf-8"),
+            value=json.dumps(wrapped_message).encode("utf-8"),
             callback=self._delivery_report,
         )
         self.producer.flush()
@@ -421,6 +423,7 @@ class FakeDatasetConsumer:
     Args:
         dataset_name: name of the dataset
         node_name: name of the node that is consuming the dataset
+        source_pipeline: name of the pipeline that is consuming the dataset
         values: list of values to feed the node
 
     Attributes:
@@ -430,18 +433,25 @@ class FakeDatasetConsumer:
         empty (bool): True if the list of values is empty, False otherwise
     """
 
-    def __init__(self, dataset_name: str, node_name: str, values: list):
+    def __init__(
+        self,
+        dataset_name: str,
+        node_name: str,
+        source_pipeline: str,
+        values: list,
+    ):
         """Initialize the consumer."""
         self.dataset_name = dataset_name
         self.node_name = node_name
+        self.source_pipeline = source_pipeline
         self.values = values
         self.empty = False
 
     def consume(
         self,
-        how: str = "next",
+        how: Literal["next", "last"] = "next",
         timeout: float | None = None,
-    ) -> dict | None:
+    ) -> WrappedMessage | None:
         """Reads a message from the dataset.
 
         Args:
@@ -463,21 +473,19 @@ class FakeDatasetConsumer:
             if remaining > 0:
                 if remaining == 1:
                     self.empty = True
-                return {
-                    "timestamp": datetime.datetime.now().strftime(
-                        AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
-                    ),
-                    "message": self.values.pop(0),
-                    "source_node": "test",
-                    "source_pipeline": "test",
-                }
+                return WrappedMessage(
+                    dataset=self.dataset_name,
+                    message=self.values.pop(0),
+                    source_node=self.node_name,
+                    source_pipeline=self.source_pipeline,
+                )
         if how == "last":
             if self.values:
                 return self.values[-1]
 
         return None
 
-    def next(self) -> dict | None:
+    def next(self) -> WrappedMessage | None:
         """Wraps `consume(how="next")`, blocks until available.
 
         Returns:
@@ -485,7 +493,7 @@ class FakeDatasetConsumer:
         """
         return self.consume(how="next")
 
-    def last(self, timeout: float = 1) -> dict | None:
+    def last(self, timeout: float = 1) -> WrappedMessage | None:
         """Wraps `consume(how="last")`, blocks until available.
 
         Returns:
@@ -503,6 +511,7 @@ class FakeDatasetProducer:
     Args:
         dataset_name: name of the dataset
         node_name: name of the node that is producing the dataset
+        source_pipeline: name of the pipeline that is producing the dataset
 
     Attributes:
         dataset_name (str): name of the dataset
@@ -510,16 +519,23 @@ class FakeDatasetProducer:
         values (list): list of mock data values produced by the node
     """
 
-    def __init__(self, dataset_name: str, node_name: str):
+    def __init__(self, dataset_name: str, node_name: str, source_pipeline: str):
         """Initialize the producer."""
         self.dataset_name = dataset_name
         self.node_name = node_name
+        self.source_pipeline = source_pipeline
         self.values = []  # type: ignore
 
-    def produce(self, message: Any) -> None:
+    def produce(self, message: dict) -> None:
         """Stores message in self.values.
 
         Args:
             message: message to produce.
         """
-        self.values.append(message)
+        wrapped_message = WrappedMessage(
+            dataset=self.dataset_name,
+            source_pipeline=self.source_pipeline,
+            source_node=self.node_name,
+            message=message,
+        )
+        self.values.append(wrapped_message)
