@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 """Module to load config files."""
 import logging
-from typing import overload
 
 from pydantic import ValidationError
 

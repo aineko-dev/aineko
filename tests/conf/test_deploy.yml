@@ -7,15 +7,12 @@ defaults:
     type: ec2
     mem_gib: 16
     vcpu: 4
-  env_vars:
-    var_1: aineko_test
+
 
 environments:
   develop:
     pipelines:
-      - example_pipeline:
-          env_vars:
-            env: develop
+      - example_pipeline
       - simple_example
 
     load_balancers:
