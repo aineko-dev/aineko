@@ -11,8 +11,9 @@ from aineko.config import AINEKO_CONFIG
 class MessageData(BaseModel):
     """Aineko message data model.
 
-    This model is used when consuming and producing messages by nodes. It
-    contains the message itself, along with metadata about the message.
+    The `MessageData` is a Pydantic model that represents the data as produced
+    or consumed by the nodes in an Aineko pipeline. It contains the message
+    itself, along with metadata about the message.
     """
 
     message: dict | str = Field(..., description="Message payload")
