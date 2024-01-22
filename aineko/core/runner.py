@@ -27,7 +27,7 @@ class Runner:
         pipeline_name (str): Name of the pipeline
         kafka_config (dict): Config for kafka broker
         dataset_prefix (Optional[str]): Prefix for dataset names.
-        Kafka topics will be called <prefix>.<pipeline>.<dataset_name>.
+            Kafka topics will be called `<prefix>.<pipeline>.<dataset_name>`.
 
     Attributes:
         pipeline_config_file (str): Path to pipeline config file
@@ -118,14 +118,16 @@ class Runner:
 
         Args:
             config: dataset configuration found in pipeline config
-            Should follow the schema
-                {
-                    "dataset_name": {
-                        "type": str ("kafka_stream"),
-                        "params": dict
-                }
+                Should follow the schema below:
+                ```python
+                    {
+                        "dataset_name": {
+                            "type": str ("kafka_stream"),
+                            "params": dict
+                    }
+                ```
             user_dataset_prefix: prefix only for datasets defined by the user.
-            i.e. <prefix>.<user_dataset_prefix>.<dataset_name>
+                i.e. `<prefix>.<user_dataset_prefix>.<dataset_name>`
 
         Returns:
             True if successful
