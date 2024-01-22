@@ -121,7 +121,7 @@ Supercharge your development by using pre-built nodes directly in your pipeline.
 
     Create an AI agent that accepts user prompts, iterates on an answer, and outputs it after all specified checks pass.
 
-    [:octicons-arrow-right-24: Aineko Dream](./examples/aineko_dream)
+    [:octicons-arrow-right-24: Aineko Dream](./examples/aineko_dream.md)
 
 
 </div>
@@ -133,4 +133,4 @@ Have questions or "ah-ha" moments? Building something cool with Aineko? Go ahead
 
 [:fontawesome-brands-slack: Join our Slack](https://join.slack.com/t/aineko-dev/shared_invite/zt-27z2vi9k7-OvTeysc2yIPVrF4Yqo5qzw){ .md-button }
 
-[Contribution Guide](./community){ .md-button .md-button--primary }
+[Contribution Guide](./community/index.md){ .md-button .md-button--primary }
