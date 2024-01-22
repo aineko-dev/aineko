@@ -15,7 +15,7 @@ class WrappedMessage(BaseModel):
     contains the message itself, along with metadata about the message.
     """
 
-    message: dict = Field(..., description="Message payload")
+    message: dict | str = Field(..., description="Message payload")
     timestamp: str = Field(
         default_factory=lambda: datetime.datetime.now().strftime(
             AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")

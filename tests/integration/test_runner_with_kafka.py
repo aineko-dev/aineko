@@ -11,13 +11,13 @@ import ray
 from aineko import AbstractNode, DatasetConsumer, Runner
 
 MESSAGES = [
-    0,
-    1,
-    2,
-    3,  # int
+    {"i": 0},
+    {"i": 1},
+    {"i": 2},
+    {"i": 3},
     "test_1",
-    "test_2",  # str
-    {"test_1": 1, "test_2": 2},  # dict
+    "test_2",
+    {"test_1": 1, "test_2": 2},
 ]
 
 
@@ -62,10 +62,10 @@ class MessageReader(AbstractNode):
         if not msg:
             return
 
-        if msg["message"] == "END":
+        if msg.message == "END":
             return False
 
-        self.received.append(msg["message"])
+        self.received.append(msg.message)
         self.last_updated = time.time()
 
     def _post_loop_hook(self, params: dict | None = None) -> None:
@@ -107,9 +107,9 @@ def test_write_read_to_kafka(start_service):
             dataset_config={},
             has_pipeline_prefix=True,
         )
-        count_messages = consumer.consume_all(end_message="END")
-        count_values = [msg["message"] for msg in count_messages]
-        assert count_values == MESSAGES
+        consumed_messages = consumer.consume_all(end_message="END")
+        message_values = [msg.message for msg in consumed_messages]
+        assert message_values == MESSAGES
 
     runner = Runner(
         pipeline_config_file="tests/conf/integration_test_read.yml",
@@ -124,10 +124,10 @@ def test_write_read_to_kafka(start_service):
             dataset_config={},
             has_pipeline_prefix=True,
         )
-        count_messages = consumer.consume_all(end_message="END")
-        assert count_messages[0]["source_pipeline"] == "integration_test_read"
-        assert count_messages[0]["message"] == "TEST PASSED"
+        consumed_messages = consumer.consume_all(end_message="END")
+        assert consumed_messages[0].source_pipeline == "integration_test_read"
+        assert consumed_messages[0].message == "TEST PASSED"
 
         # Test consume.last functionality
         last_message = consumer.last(timeout=10)
-        assert last_message["message"] == "END"
+        assert last_message.message == "END"

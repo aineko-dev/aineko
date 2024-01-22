@@ -46,4 +46,4 @@ def test_consume_empty_datasets():
         has_pipeline_prefix=True,
     )
     count_messages = consumer.consume_all(end_message="END")
-    assert count_messages[0]["message"] == "OK"
+    assert count_messages[0].message == "OK"

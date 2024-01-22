@@ -304,7 +304,7 @@ class DatasetConsumer:
             )
         return self._consume_message(how="last", timeout=timeout)
 
-    def consume_all(self, end_message: str | bool = False) -> list:
+    def consume_all(self, end_message: str | dict) -> list[WrappedMessage]:
         """Reads all messages from the dataset until a specific one is found.
 
         Args:
@@ -396,7 +396,7 @@ class DatasetProducer:
         if err is not None:
             logger.error("Message %s delivery failed: %s", message, err)
 
-    def produce(self, message: dict, key: str | None = None) -> None:
+    def produce(self, message: dict | str, key: str | None = None) -> None:
         """Produce a message to the dataset.
 
         Args:
@@ -537,7 +537,7 @@ class FakeDatasetProducer:
         self.source_pipeline = source_pipeline
         self.values = []  # type: ignore
 
-    def produce(self, message: dict) -> None:
+    def produce(self, message: dict | str) -> None:
         """Stores message in self.values.
 
         Args:
