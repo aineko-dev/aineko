@@ -232,8 +232,8 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
             def _execute(self, params: dict | None = None) -> bool | None:
                 """Update document in response to commit events."""
                 # Check for new commit events from GitHub
-                message = self.consumers["github_event"].consume()
-                if message is None:
+                msg = self.consumers["github_event"].consume()
+                if msg is None:
                     return
 
                 # Fetch latest document and send update
@@ -266,10 +266,10 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
 
             def _execute(self, params: dict | None = None) -> bool | None:
                 """Query OpenAI LLM."""
-                message = self.consumers["generated_prompt"].consume()
-                if message is None:
+                msg = self.consumers["generated_prompt"].consume()
+                if msg is None:
                     return
-                messages = message["message"]["chat_messages"]
+                messages = msg.message["chat_messages"]
                 # Query OpenAI LLM
                 self.log("Querying OpenAI LLM...")
                 response = openai.ChatCompletion.create(
@@ -279,14 +279,14 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
                     max_tokens=self.max_tokens,
                     temperature=self.temperature,
                 )
-                message["message"]["chat_messages"].append(
+                msg.message["chat_messages"].append(
                     {
                         "role": "assistant",
                         "content": response.choices[0].message.content,
                     }
                 )
                 self.producers["llm_response"].produce(
-                    message["message"]["chat_messages"]
+                    msg.message["chat_messages"]
                 )
         ```
 
@@ -298,12 +298,12 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
 
             def _execute(self, params: dict | None = None) -> None:
                 """Evaluate Python code."""
-                message = self.consumers["llm_response"].consume()
-                if message is None:
+                msg = self.consumers["llm_response"].consume()
+                if msg is None:
                     return
 
                 # Make a temporary file with the LLM code
-                python_code = message["message"]
+                python_code = msg.message
                 issues_list = []
                 with tempfile.NamedTemporaryFile(suffix=".py", delete=False, mode="w") as tmpfile:
                     tmpfile.write(python_code)

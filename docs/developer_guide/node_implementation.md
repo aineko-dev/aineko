@@ -19,9 +19,9 @@ class MySumNode(AbstractNode):
         """Required; function repeatedly executes."""
         msg = self.consumers["test_sequence"].next()
         self.log(
-            f"Received input: {msg['message']}. Adding {params['increment']}..."
+            f"Received input: {msg.message}. Adding {params['increment']}..."
         )
-        self.state = int(msg["message"]) + int(params["increment"])
+        self.state = int(msg.message) + int(params["increment"])
         self.producers["test_sum"].produce(self.state)
 ```
 
@@ -42,9 +42,9 @@ class MySumNode(AbstractNode):
         """Required; function repeatedly executes."""
         msg = self.consumers["test_sequence"].next()
         self.log(
-            f"Received input: {msg['message']}. Adding {params['increment']}..."
+            f"Received input: {msg.message}. Adding {params['increment']}..."
         )
-        self.state = int(msg["message"]) + int(params["increment"])
+        self.state = int(msg.message) + int(params["increment"])
         self.producers["test_sum"].produce(self.state)
 ```
 
@@ -65,9 +65,9 @@ class MySumNode(AbstractNode):
         """Required; function repeatedly executes."""
         msg = self.consumers["test_sequence"].next()
         self.log(
-            f"Received input: {msg['message']}. Adding {params['increment']}..."
+            f"Received input: {msg.message}. Adding {params['increment']}..."
         )
-        self.state = int(msg["message"]) + int(params["increment"])
+        self.state = int(msg.message) + int(params["increment"])
         self.producers["test_sum"].produce(self.state)
 ```
 
@@ -93,9 +93,9 @@ class MySumNode(AbstractNode):
         """Required; function repeatedly executes."""
         msg = self.consumers["test_sequence"].next()
         self.log(
-            f"Received input: {msg['message']}. Adding {params['increment']}..."
+            f"Received input: {msg.message}. Adding {params['increment']}..."
         )
-        self.state = int(msg["message"]) + int(params["increment"])
+        self.state = int(msg.message) + int(params["increment"])
         self.producers["test_sum"].produce(self.state)
 ```
 
