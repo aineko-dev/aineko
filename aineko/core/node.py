@@ -113,13 +113,11 @@ class AbstractNode(ABC):
 
         Args:
             datasets: dataset configuration
-            node: name of the node
-            pipeline: name of the pipeline
             inputs: list of dataset names for the inputs to the node
             outputs: list of dataset names for the outputs of the node
             prefix: prefix for topic name (`<prefix>.<dataset_name>`)
             has_pipeline_prefix: whether the dataset name has pipeline name
-            prefix
+                prefix
         """
         inputs = inputs or []
         self.consumers.update(
@@ -161,8 +159,8 @@ class AbstractNode(ABC):
 
         Args:
             inputs: inputs to the node, format should be {"dataset": [1, 2, 3]}
-            outputs: outputs of the node, format should be
-                ["dataset_1", "dataset_2", ...]
+            outputs: outputs of the node, format should be ["dataset_1",
+                "dataset_2", ...]
             params: dictionary of parameters to make accessible to _execute
 
         Raises:
@@ -346,6 +344,12 @@ class AbstractNode(ABC):
             last_produced_values = {}
             last_consumed_values = {}
 
+            # Capture last consumed values
+            for dataset_name, consumer in self.consumers.items():
+                if consumer.values:
+                    last_value = consumer.values[0]
+                    last_consumed_values[dataset_name] = last_value
+
             run_loop = self._execute(self.params)  # type: ignore
 
             # Do not end loop if runtime not exceeded
@@ -358,12 +362,6 @@ class AbstractNode(ABC):
                 consumer.empty for consumer in self.consumers.values()
             ):
                 run_loop = False
-
-            # Capture last consumed values
-            for dataset_name, consumer in self.consumers.items():
-                if consumer.values:
-                    last_value = consumer.values[0]
-                    last_consumed_values[dataset_name] = last_value
 
             # Capture last produced values
             for dataset_name, producer in self.producers.items():

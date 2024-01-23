@@ -17,6 +17,11 @@ pipeline:
         start_int: 0
         num_messages: 25
         sleep_time: 1
+        str_env_var: "{$AINEKO_TEST_STR_VAR}"
+        list_env_vars:
+          - "{$AINEKO_TEST_LIST_VAR_1}"
+          - "{$AINEKO_TEST_LIST_VAR_2}"
+          - "{$AINEKO_TEST_LIST_VAR_3}"
 
     # Test actor with single input and single output
     doubler:
@@ -27,6 +32,9 @@ pipeline:
         - integer_doubles
       node_params:
         duration: 40
+        dict_env_vars:
+          key_1: "{$AINEKO_TEST_DICT_VAR_1}"
+          key_2: "{$AINEKO_TEST_DICT_VAR_2}"
     # Test actor with no input, no output, and no params
     dummy:
       class: aineko.tests.conftest.DummyNode

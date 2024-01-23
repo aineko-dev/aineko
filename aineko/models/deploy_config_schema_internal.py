@@ -17,12 +17,14 @@ class MachineConfig(BaseModel, extra="forbid"):
     vcpu: int
 
     @field_validator("mem_gib")
-    def memory(cls, value: int) -> int:  # pylint: disable=no-self-argument
+    @classmethod
+    def memory(cls, value: int) -> int:
         """Validates that memory is a power of 2."""
         return check_power_of_2(value)
 
     @field_validator("vcpu")
-    def power_of_2(cls, value: int) -> int:  # pylint: disable=no-self-argument
+    @classmethod
+    def power_of_2(cls, value: int) -> int:
         """Validates that vcpu is a power of 2."""
         return check_power_of_2(value)
 
@@ -31,7 +33,6 @@ class ParameterizableDefaults(BaseModel, extra="forbid"):
     """Parameters that can be set in the defaults block."""
 
     machine_config: MachineConfig | None = None
-    env_vars: dict[str, str] | None = None
 
 
 class GenericPipeline(BaseModel, extra="forbid"):
@@ -40,7 +41,6 @@ class GenericPipeline(BaseModel, extra="forbid"):
     source: str
     name: str | None = None
     machine_config: MachineConfig | None = None
-    env_vars: dict[str, str] | None = None
 
 
 class LoadBalancer(BaseModel, extra="forbid"):
@@ -56,7 +56,6 @@ class SpecificPipeline(BaseModel, extra="forbid"):
     source: str | None = None  # Pipeline config file path
     name: str | None = None  # Pipeline name
     machine_config: MachineConfig | None = None
-    env_vars: dict[str, str] | None = None
 
 
 class FullPipeline(BaseModel, extra="forbid"):
@@ -65,7 +64,6 @@ class FullPipeline(BaseModel, extra="forbid"):
     source: str
     name: str | None = None
     machine_config: MachineConfig
-    env_vars: dict[str, str] | None = None
 
 
 class Environment(BaseModel, extra="forbid"):
@@ -75,7 +73,8 @@ class Environment(BaseModel, extra="forbid"):
     load_balancers: dict[str, list[LoadBalancer]] | None = None
 
     @field_validator("load_balancers")
-    def validate_lb_endpoint(  # pylint: disable=no-self-argument
+    @classmethod
+    def validate_lb_endpoint(
         cls, value: dict[str, list[LoadBalancer]] | None
     ) -> None | dict[str, list[LoadBalancer]]:
         """Validates Load balancer endpoints.

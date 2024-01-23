@@ -63,8 +63,8 @@ class DatasetConsumer:
 
     Attributes:
         consumer: Kafka consumer object
-        cached: if the high watermark offset has been cached
-            (updated when message consumed)
+        cached: if the high watermark offset has been cached (updated when
+            message consumed)
 
     Methods:
         consume: reads a message from the dataset

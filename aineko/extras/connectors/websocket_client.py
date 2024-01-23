@@ -1,27 +1,26 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Extra module for connecting to a WebSocket."""
+"""Extra module for connecting to a WebSockets."""
 
 import json
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import websocket
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
-from aineko.extras.connectors.secrets import inject_secrets
 
 
-class ParamsWebSocket(BaseModel):
+class ParamsWebSocketClient(BaseModel):
     """Connector params for WebSocket model."""
 
-    max_retries: int = 30
+    max_retries: int = -1
     retry_sleep: float = 5
     url: str
-    header: Optional[Dict[str, str]] = None
-    init_messages: List[Any] = []
-    metadata: Optional[Dict[str, Any]] = None
+    header: dict[str, str] | None = None
+    init_messages: list[Any] = []
+    metadata: dict[str, Any] | None = None
 
     @field_validator("url")
     @classmethod
@@ -37,7 +36,7 @@ class ParamsWebSocket(BaseModel):
 
 
 # pylint: disable=anomalous-backslash-in-string
-class WebSocket(AbstractNode):
+class WebSocketClient(AbstractNode):
     """Node for ingesting data from a WebSocket.
 
     This node is a wrapper around the
@@ -55,30 +54,30 @@ class WebSocket(AbstractNode):
         metadata (optional): A dictionary of metadata to attach to outgoing
             messages. Defaults to None.
         max_retries (optional): The maximum number of times to retry
-            connecting to the WebSocket. Defaults to 30.
+            connecting to the WebSocket. Defaults to -1 (retry forever).
         retry_sleep (optional): The number of seconds to wait between retries.
             Defaults to 5.
 
     Secrets can be injected (from environment) into the `url`, `header`, and
     `init_messages` fields by passing a string with the following format:
-    `{$SCRET_NAME}`. For example, if you have a secret named `SCRET_NAME`
-    with value `SCRET_VALUE`, you can inject it into the url field by passing
-    `wss://example.com?secret={$SCRET_NAME}` as the url. The connector will
-    then replace `{$SCRET_NAME}` with `SCRET_VALUE` before connecting to the
+    `{$SECRET_NAME}`. For example, if you have a secret named `SECRET_NAME`
+    with value `SECRET_VALUE`, you can inject it into the url field by passing
+    `wss://example.com?secret={$SECRET_NAME}` as the url. The connector will
+    then replace `{$SECRET_NAME}` with `SECRET_VALUE` before connecting to the
     WebSocket.
 
     Example usage in pipeline.yml:
     ```yaml title="pipeline.yml"
     pipeline:
       nodes:
-        WebSocket:
-          class: aineko.extras.WebSocket
+        WebSocketClient:
+          class: aineko.extras.WebSocketClient
           outputs:
             - test_websocket
           node_params:
             url: "wss://example.com"
             header:
-              auth: "Bearer {$SCRET_NAME}"
+              auth: "Bearer {$SECRET_NAME}"
             init_messages:
                 - {"Greeting": "Hello, world!"}
     ```
@@ -87,11 +86,15 @@ class WebSocket(AbstractNode):
     retry_count = 0
 
     def _pre_loop_hook(self, params: dict | None = None) -> None:
-        """Initalize the WebSocket connection."""
-        # Cast params to ParamsWebSocket type
+        """Initialize the WebSocket connection.
+
+        Raises:
+            ValueError: If the params are invalid.
+        """
+        # Cast params to ParamsWebSocketClient type
         try:
             if params is not None:
-                self.ws_params = ParamsWebSocket(**params)
+                self.ws_params = ParamsWebSocketClient(**params)
             else:
                 raise ValueError(
                     "No params provided to WebSocket connector. "
@@ -101,23 +104,32 @@ class WebSocket(AbstractNode):
             # Cast pydantic validation error to ValueError
             # so that it can be properly caught by the node
             # Note: this is required because pydantic errors
-            # are not pickleable
+            # are not picklable
             raise ValueError(
-                "Failed to cast params to ParamsWebSocket type. "
+                "Failed to cast params to ParamsWebSocketClient type. "
                 f"The following error occurred: {err}"
             ) from err
-        self.ws_params.header = inject_secrets(self.ws_params.header)
-        self.ws_params.init_messages = inject_secrets(
-            self.ws_params.init_messages
-        )
-        self.ws_params.url = inject_secrets(self.ws_params.url)
+
+        # Ensure only one output dataset is provided
+        output_datasets = [d for d in self.producers.keys() if d != "logging"]
+        if len(output_datasets) > 1:
+            raise ValueError(
+                "Only one output dataset is allowed for the "
+                "WebSocketClient connector. "
+                f"{len(output_datasets)} datasets given."
+            )
+        self.output_dataset = output_datasets[0]
 
         # Create the websocket subscription
         self.ws = websocket.WebSocket()
         self.create_subscription()
 
     def _execute(self, params: dict | None = None) -> None:
-        """Polls and gets data from the WebSocket."""
+        """Polls and gets data from the WebSocket.
+
+        Raises:
+            ValueError: If the retry count exceeds the max retries.
+        """
         try:
             # Poll the websocket
             raw_message = self.ws.recv()
@@ -126,7 +138,7 @@ class WebSocket(AbstractNode):
             self.log(
                 "Websocket connection closed. "
                 f"Reconnecting in {self.ws_params.retry_sleep} "
-                f"seconds... The following error occured: {err}",
+                f"seconds... The following error occurred: {err}",
                 level="error",
             )
             time.sleep(self.ws_params.retry_sleep)
@@ -141,16 +153,14 @@ class WebSocket(AbstractNode):
                     "metadata": self.ws_params.metadata,
                     "data": message,
                 }
-            for dataset, producer in self.producers.items():
-                if dataset != "logging":
-                    producer.produce(message)
+            self.producers[self.output_dataset].produce(message)
             self.retry_count = 0
         except json.decoder.JSONDecodeError as err:
             if self.retry_count < self.ws_params.max_retries:
                 self.retry_count += 1
                 self.log(
                     f"Failed to parse message: {raw_message!r}. "
-                    f"The following error occured: {err} "
+                    f"The following error occurred: {err} "
                     f"Reconnecting in {self.ws_params.retry_sleep} "
                     "seconds...",
                     level="error",
@@ -166,7 +176,11 @@ class WebSocket(AbstractNode):
                 ) from err
 
     def create_subscription(self) -> None:
-        """Creates a subscription on the websocket."""
+        """Creates a subscription on the websocket.
+
+        Raises:
+            ValueError: If the retry count exceeds the max retries.
+        """
         try:
             self.log(f"Creating subscription to {self.ws_params.url}...")
             self.ws.connect(

@@ -32,4 +32,4 @@ integration-test:
 	poetry run pytest tests -m "integration"
 
 view-docs:
-	poetry run mkdocs serve
+	poetry run mkdocs serve --watch docs --watch aineko

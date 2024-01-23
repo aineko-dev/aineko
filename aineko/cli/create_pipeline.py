@@ -74,7 +74,7 @@ def create(
 
     Args:
         deployment_config: If True, include a deploy file when generating, else
-        do not include.
+            do not include.
         output_dir: Directory to create pipeline in. Defaults to current.
         no_input: If True, do not prompt for parameters and use defaults.
         repo: GitHub repo to create pipeline from. Link should contain branch

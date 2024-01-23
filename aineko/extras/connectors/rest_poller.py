@@ -10,10 +10,9 @@ import requests
 from pydantic import BaseModel, field_validator
 
 from aineko import AbstractNode
-from aineko.extras.connectors.secrets import inject_secrets
 
 
-class ParamsREST(BaseModel):
+class ParamsRESTPoller(BaseModel):
     """Connector params for REST model."""
 
     timeout: int = 10
@@ -39,8 +38,8 @@ class ParamsREST(BaseModel):
         return url
 
 
-class REST(AbstractNode):
-    """Connects to an REST endpoint via HTTPS."""
+class RESTPoller(AbstractNode):
+    """Connects to an REST endpoint via HTTPS and polls."""
 
     # Poll settings
     last_poll_time = time.time()
@@ -51,7 +50,7 @@ class REST(AbstractNode):
         # Cast params to ParamsREST type
         try:
             if params is not None:
-                self.rest_params = ParamsREST(**params)
+                self.rest_params = ParamsRESTPoller(**params)
             else:
                 raise ValueError(
                     "No params provided to REST connector. "
@@ -66,9 +65,16 @@ class REST(AbstractNode):
                 "Failed to cast params to ParamsREST type. "
                 f"The following error occurred: {err}"
             ) from err
-        self.rest_params.headers = inject_secrets(self.rest_params.headers)
-        self.rest_params.url = inject_secrets(self.rest_params.url)
-        self.rest_params.data = inject_secrets(self.rest_params.data)
+
+        # Ensure only one output dataset is provided
+        output_datasets = [d for d in self.producers.keys() if d != "logging"]
+        if len(output_datasets) > 1:
+            raise ValueError(
+                "Only one output dataset is allowed for the "
+                "RESTPoller connector. "
+                f"{len(output_datasets)} datasets given."
+            )
+        self.output_dataset = output_datasets[0]
 
         # Create a session
         self.log(
@@ -134,7 +140,7 @@ class REST(AbstractNode):
                     self.retry_count += 1
                     self.log(
                         f"Failed to parse message: {raw_message}. "
-                        f"The following error occured: {err} "
+                        f"The following error occurred: {err} "
                         f"Will retry in {self.rest_params.retry_sleep} "
                         "seconds...",
                         level="error",
@@ -145,7 +151,7 @@ class REST(AbstractNode):
                         "Retry count exceeded max retries "
                         f"({self.rest_params.max_retries}). "
                         f"Failed to parse message: {raw_message}. "
-                        f"The following error occured: {err}"
+                        f"The following error occurred: {err}"
                     ) from err
         else:
             # If it is not time to poll, sleep

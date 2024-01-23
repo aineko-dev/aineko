@@ -15,8 +15,7 @@ def import_from_string(  # type: ignore[no-untyped-def]
     """Get a function from a string.
 
     Args:
-        attr: String to import (e.g. ...module.function or
-              ...module.Class)
+        attr: String to import (e.g. ...module.function or ...module.Class)
         kind: Kind of object to import (function or class)
         reqd_params: Required parameters of a function or class
         ret_type: Return type of a function (ignored if kind is class)
@@ -25,6 +24,7 @@ def import_from_string(  # type: ignore[no-untyped-def]
         imported_func: Imported function
 
     Raises:
+        AttributeError: If attr does not exist
         ValueError: If kind is not a valid kind
         ValueError: If attr is not in the correct format
         ValueError: If attr is not a function

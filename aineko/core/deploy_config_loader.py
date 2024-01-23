@@ -30,7 +30,8 @@ def generate_deploy_config_from_file(
 
     Args:
         user_config_file: path to the deployment config file
-        type: `full` or `user`. If `full`, returns the full deployment config
+        config_type: `full` or `user`. If `full`, returns the full deployment
+            config.
 
     Returns:
         Full or user deployment configuration.
@@ -46,8 +47,10 @@ def generate_deploy_config(
     """Generates full or user deployment config from the input user config dict.
 
     Args:
-        user_config: deployment configuration in the user-friendly
-            format. See DeploymentConfig for expected schema.
+        user_config: deployment configuration in the user-friendly format. See
+            DeploymentConfig for expected schema.
+        config_type: `full` or `user`. If `full`, returns the full deployment
+            config.
 
     Returns:
         Full or user deployment configuration.
@@ -76,8 +79,8 @@ def _generate_full_config(
     then override with all environment-specific config.
 
     Args:
-        user_config: deployment configuration in the user-friendly format.
-        See DeploymentConfig for expected schema.
+        user_config: deployment configuration in the user-friendly format. See
+            DeploymentConfig for expected schema.
 
     Returns:
         Full deployment configuration.
