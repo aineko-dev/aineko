@@ -4,6 +4,7 @@
 import asyncio
 import json
 import time
+from typing import Dict, Optional
 
 import pytest
 import ray
@@ -36,9 +37,12 @@ async def send_messages_periodically(sleep):
                 "message": "Hello World!",
                 "timestamp": time.time(),
             }
-            message = json.dumps(message)
+            formatted_message = json.dumps(message)
             await asyncio.gather(
-                *(client.send(message) for client in CONNECTED_CLIENTS)
+                *(
+                    client.send(formatted_message)
+                    for client in CONNECTED_CLIENTS
+                )
             )
         await asyncio.sleep(sleep)
 
@@ -54,15 +58,18 @@ async def start_test_websocket_server(host, port, sleep):
 class WebSocketServer(AbstractNode):
     """Node that creates a test WebSocket server."""
 
-    def _pre_loop_hook(self, params: dict | None = None) -> None:
+    def _pre_loop_hook(self, params: Optional[Dict] = None) -> None:
         """Creates a test WebSocket server."""
+        if not params:
+            raise ValueError("No params provided to WebSocketServer node.")
+
         asyncio.run(
             start_test_websocket_server(
                 host=params["host"], port=params["port"], sleep=params["sleep"]
             )
         )
 
-    def _execute(self, params: dict):
+    def _execute(self, params: Dict):
         """Does nothing."""
         pass
 
@@ -70,7 +77,7 @@ class WebSocketServer(AbstractNode):
 class WebSocketClientChecker(AbstractNode):
     """Node that checks that the WebSocketClient is running."""
 
-    def _execute(self, params: dict):
+    def _execute(self, params: Dict):
         """Checks that the WebSocketClient is running."""
         results = {}
         for msg_num in range(5):

@@ -16,19 +16,40 @@ workflows:
   continuous-integration:
     jobs:
       - python-checks:
+          matrix:
+            parameters:
+              python_version:
+                - "3.8"
+                - "3.9"
+                - "3.10"
+                - "3.11"
+          python_version: << matrix.python_version >>
           filters:
             branches:
               ignore: develop
           prj_dir: aineko
-          python_version: << pipeline.parameters.python_version >>
           markers: "not integration"
       - integration-tests:
+          matrix:
+            parameters:
+              python_version:
+                - "3.8"
+                - "3.9"
+                - "3.10"
+                - "3.11"
           prj_dir: aineko
-          python_version: << pipeline.parameters.python_version >>
           markers: integration
           requires:
             - python-checks
       - test-aineko-create:
+          matrix:
+            parameters:
+              python_version:
+                - "3.8"
+                - "3.9"
+                - "3.10"
+                - "3.11"
+          python_version: << matrix.python_version >>
           requires:
             - python-checks
 
@@ -98,7 +119,7 @@ jobs:
 
     steps:
       - checkout
-      - run: poetry install --with test --no-interaction --quiet --all-extras
+      - run: poetry install --with test --no-interaction --all-extras --no-ansi
       - run: >
           poetry run pytest << parameters.test_dir >>
           -m "<< parameters.markers >>"
@@ -127,7 +148,7 @@ jobs:
 
     steps:
       - checkout
-      - run: poetry install --with dev,test --no-interaction --quiet --all-extras
+      - run: poetry install --with dev,test --no-interaction --all-extras --no-ansi
       - run: poetry run isort << parameters.prj_dir >>
       - run: >
           poetry run black << parameters.prj_dir >> --check --exclude
@@ -201,8 +222,13 @@ jobs:
   test-aineko-create:
     description: This job tests the aineko create command by creating a new project
       and running the tests from the newly created project.
+    parameters:
+      python_version:
+        type: string
+        default: "3.10"
+        description: Version of python to use
     docker:
-      - image: cimg/python:<< pipeline.parameters.python_version >>
+      - image: cimg/python:<< parameters.python_version >>
     steps:
       - checkout
       - run:
@@ -220,7 +246,7 @@ jobs:
           name: Test installing the newly created project
           command: |
             cd $original_cwd/my_awesome_pipeline
-            poetry add git+https://github.com/aineko-dev/aineko#<< pipeline.git.branch >>  --no-interaction --no-ansi
+            poetry add git+https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME#<< pipeline.git.branch >>  --no-interaction --no-ansi
             poetry install --no-interaction --no-ansi
       - run:
           name: Run the tests from the newly created project

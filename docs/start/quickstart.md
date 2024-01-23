@@ -8,7 +8,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 1. [Docker](https://www.docker.com/get-started/) or [Docker Desktop](htps://www.docker.com/products/docker-desktop)
 2. [Poetry](https://python-poetry.org/docs/#installation) (a python dependency manager)
-3. [Python](https://www.python.org/downloads/) (version 3.10)
+3. [Python](https://www.python.org/downloads/) (versions 3.8, 3.9, 3.10 & 3.11 are supported)
 4. [Pip](https://pip.pypa.io/en/stable/installation/) (a python package manager)
 
 ??? note "Check your dependencies before starting"
@@ -30,7 +30,7 @@ description: Fastest way to get an Aineko pipeline up and running
 
 ??? tip "Having trouble getting the correct version of python?"
 
-    We recommend using [pyenv](https://github.com/pyenv/pyenv?tab=readme-ov-file#getting-pyenv) to manage your Python versions. Once you have pyenv installed, you can run the following commands in your project directory to install Python 3.10.
+    We recommend using [pyenv](https://github.com/pyenv/pyenv?tab=readme-ov-file#getting-pyenv) to manage your Python versions. Once you have pyenv installed, you can run the following commands in your project directory to install one the supported versions. For example:
 
     ```bash
     pyenv install 3.10

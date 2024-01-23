@@ -50,7 +50,7 @@ A node requires:
 **`_execute`** is the main logic that run recurrently. As of writing, user should explicitly produce and consume within this method like so:
 
 ```python
-def _execute(self, params: dict | None = None):
+def _execute(self, params: Optional[dict] = None):
     """This node takes an input number and increments it by 1."""
     input_number = self.consumers["my_input_dataset"].next()
     # if we want the most recent message, we can use .last()

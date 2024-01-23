@@ -12,6 +12,9 @@ explicitly injected into the config so all pipelines are explicitly defined.
 This config represents the source of truth for all deployments of aineko
 pipelines.
 """
+
+from typing import Dict, Optional
+
 from pydantic import BaseModel, field_validator
 
 from aineko.models.deploy_config_schema_internal import (
@@ -25,13 +28,12 @@ class DeploymentConfig(BaseModel, extra="forbid"):
     """User deployment configuration (Schema for deploy.yml)."""
 
     version: str
-    defaults: ParameterizableDefaults | None = None
-    pipelines: dict[str, GenericPipeline]
-    environments: dict[str, Environment]
+    defaults: Optional[ParameterizableDefaults] = None
+    pipelines: Dict[str, GenericPipeline]
+    environments: Dict[str, Environment]
 
     @field_validator("version")
-    @classmethod
-    def semver(cls, v: str) -> str:
+    def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that versioning follow semver convention."""
         if len(v.split(".")) != 3:
             raise ValueError("Version must be in the form `1.2.3`")
@@ -42,11 +44,10 @@ class FullDeploymentConfig(BaseModel):
     """Full deployment configuration (Schema for deploy.yml)."""
 
     version: str
-    environments: dict[str, Environment]
+    environments: Dict[str, Environment]
 
     @field_validator("version")
-    @classmethod
-    def semver(cls, v: str) -> str:
+    def semver(cls, v: str) -> str:  # pylint: disable=no-self-argument
         """Validates that versioning follow semver convention."""
         if len(v.split(".")) != 3:
             raise ValueError("Version must be in the form `1.2.3`")

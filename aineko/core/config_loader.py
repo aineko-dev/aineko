@@ -4,7 +4,7 @@
 import logging
 import os
 import re
-from typing import overload
+from typing import Dict, List, Optional, Union, overload
 
 from pydantic import ValidationError
 
@@ -13,8 +13,6 @@ from aineko.models.config_schema import Config
 from aineko.utils.io import load_yaml
 
 logger = logging.getLogger(__name__)
-
-NodeParamTypes = dict | list | str | int | float | bool | None
 
 
 class ConfigLoader:
@@ -95,10 +93,13 @@ class ConfigLoader:
         ...
 
     @overload
-    def inject_env_vars(self, node_params: None) -> None:
+    def inject_env_vars(self, node_params: Optional[None]) -> None:
         ...
 
-    def inject_env_vars(self, node_params: NodeParamTypes) -> NodeParamTypes:
+    def inject_env_vars(
+        self,
+        node_params: Optional[Union[Dict, List, str, int, float, bool]] = None,
+    ) -> Optional[Union[Dict, List, str, int, float, bool]]:
         """Inject environment variables into node params.
 
         This function is used to recursively inject environment variables
