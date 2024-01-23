@@ -20,7 +20,7 @@ e.g. message:
 """
 import json
 import logging
-from typing import Any, Literal
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
@@ -63,8 +63,8 @@ class DatasetConsumer:
 
     Attributes:
         consumer: Kafka consumer object
-        cached: if the high watermark offset has been cached
-            (updated when message consumed)
+        cached: if the high watermark offset has been cached (updated when
+            message consumed)
 
     Methods:
         consume: reads a message from the dataset
@@ -75,9 +75,9 @@ class DatasetConsumer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: dict[str, Any],
-        bootstrap_servers: str | None = None,
-        prefix: str | None = None,
+        dataset_config: Dict[str, Any],
+        bootstrap_servers: Optional[str] = None,
+        prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ):
         """Initialize the consumer."""
@@ -116,8 +116,8 @@ class DatasetConsumer:
 
     def _validate_message(
         self,
-        raw_message: Message | None = None,
-    ) -> MessageData | None:
+        raw_message: Optional[Message] = None,
+    ) -> Optional[MessageData]:
         """Checks if a message is valid and converts it to appropriate format.
 
         Args:
@@ -188,8 +188,8 @@ class DatasetConsumer:
     def consume(
         self,
         how: Literal["next", "last"] = "next",
-        timeout: float | None = None,
-    ) -> MessageData | None:
+        timeout: Optional[float] = None,
+    ) -> Optional[MessageData]:
         """Polls a message from the dataset.
 
         If the consume method is last but the method encounters
@@ -235,7 +235,7 @@ class DatasetConsumer:
         return self._validate_message(wrapped_message)
 
     def _consume_message(
-        self, how: Literal["next", "last"], timeout: float | None = None
+        self, how: Literal["next", "last"], timeout: Optional[float] = None
     ) -> MessageData:
         """Calls the consume method and blocks until a message is returned.
 
@@ -304,7 +304,7 @@ class DatasetConsumer:
             )
         return self._consume_message(how="last", timeout=timeout)
 
-    def consume_all(self, end_message: str | dict) -> list[MessageData]:
+    def consume_all(self, end_message: Union[str, dict]) -> List[MessageData]:
         """Reads all messages from the dataset until a specific one is found.
 
         Args:
@@ -349,8 +349,8 @@ class DatasetProducer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: dict[str, Any],
-        prefix: str | None = None,
+        dataset_config: Dict[str, Any],
+        prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ):
         """Initialize the producer."""
@@ -396,7 +396,9 @@ class DatasetProducer:
         if err is not None:
             logger.error("Message %s delivery failed: %s", message, err)
 
-    def produce(self, message: dict | str, key: str | None = None) -> None:
+    def produce(
+        self, message: Union[dict, str], key: Optional[str] = None
+    ) -> None:
         """Produce a message to the dataset.
 
         Args:
@@ -461,8 +463,8 @@ class FakeDatasetConsumer:
     def consume(
         self,
         how: Literal["next", "last"] = "next",
-        timeout: float | None = None,
-    ) -> MessageData | None:
+        timeout: Optional[float] = None,
+    ) -> Optional[MessageData]:
         """Reads a message from the dataset.
 
         Args:
@@ -496,7 +498,7 @@ class FakeDatasetConsumer:
 
         return None
 
-    def next(self) -> MessageData | None:
+    def next(self) -> Optional[MessageData]:
         """Wraps `consume(how="next")`, blocks until available.
 
         Returns:
@@ -504,7 +506,7 @@ class FakeDatasetConsumer:
         """
         return self.consume(how="next")
 
-    def last(self, timeout: float = 1) -> MessageData | None:
+    def last(self, timeout: float = 1) -> Optional[MessageData]:
         """Wraps `consume(how="last")`, blocks until available.
 
         Returns:
@@ -537,7 +539,7 @@ class FakeDatasetProducer:
         self.source_pipeline = source_pipeline
         self.values = []  # type: ignore
 
-    def produce(self, message: dict | str) -> None:
+    def produce(self, message: Union[dict, str]) -> None:
         """Stores message in self.values.
 
         Args:

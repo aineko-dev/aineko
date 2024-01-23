@@ -13,6 +13,7 @@ of truth in which infrastructure should be deployed from.
 """
 
 from collections import defaultdict
+from typing import Optional
 
 from pydantic.v1.utils import deep_update
 
@@ -30,7 +31,8 @@ def generate_deploy_config_from_file(
 
     Args:
         user_config_file: path to the deployment config file
-        type: `full` or `user`. If `full`, returns the full deployment config
+        config_type: `full` or `user`. If `full`, returns the full deployment
+            config.
 
     Returns:
         Full or user deployment configuration.
@@ -46,8 +48,10 @@ def generate_deploy_config(
     """Generates full or user deployment config from the input user config dict.
 
     Args:
-        user_config: deployment configuration in the user-friendly
-            format. See DeploymentConfig for expected schema.
+        user_config: deployment configuration in the user-friendly format. See
+            DeploymentConfig for expected schema.
+        config_type: `full` or `user`. If `full`, returns the full deployment
+            config.
 
     Returns:
         Full or user deployment configuration.
@@ -67,7 +71,7 @@ def generate_deploy_config(
 
 
 def _generate_full_config(
-    user_config: DeploymentConfig | None = None,
+    user_config: Optional[DeploymentConfig] = None,
 ) -> FullDeploymentConfig:
     """Generates a full deployment config from the user config.
 
@@ -76,8 +80,8 @@ def _generate_full_config(
     then override with all environment-specific config.
 
     Args:
-        user_config: deployment configuration in the user-friendly format.
-        See DeploymentConfig for expected schema.
+        user_config: deployment configuration in the user-friendly format. See
+            DeploymentConfig for expected schema.
 
     Returns:
         Full deployment configuration.

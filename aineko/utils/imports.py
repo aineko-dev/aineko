@@ -3,20 +3,19 @@
 """Import utilities."""
 import importlib
 import inspect
-from typing import Any
+from typing import Any, Optional
 
 
 def import_from_string(  # type: ignore[no-untyped-def]
     attr: str,
     kind: str,
-    reqd_params: list | None = None,
-    ret_type: Any | None = None,
+    reqd_params: Optional[list] = None,
+    ret_type: Optional[Any] = None,
 ):
     """Get a function from a string.
 
     Args:
-        attr: String to import (e.g. ...module.function or
-              ...module.Class)
+        attr: String to import (e.g. ...module.function or ...module.Class)
         kind: Kind of object to import (function or class)
         reqd_params: Required parameters of a function or class
         ret_type: Return type of a function (ignored if kind is class)

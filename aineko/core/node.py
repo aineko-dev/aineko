@@ -17,7 +17,7 @@ that users should override with their own implementation.
 import time
 import traceback
 from abc import ABC, abstractmethod
-from collections.abc import Generator
+from typing import Dict, Generator, List, Optional, Tuple
 
 import ray
 
@@ -81,18 +81,18 @@ class AbstractNode(ABC):
 
     def __init__(
         self,
-        node_name: str | None,
         pipeline_name: str,
-        poison_pill: ray.actor.ActorHandle | None = None,
+        node_name: Optional[str] = None,
+        poison_pill: Optional[ray.actor.ActorHandle] = None,
         test: bool = False,
     ) -> None:
         """Initialize the node."""
         self.name = node_name or self.__class__.__name__
         self.pipeline_name = pipeline_name
         self.last_heartbeat = time.time()
-        self.consumers: dict = {}
-        self.producers: dict = {}
-        self.params: dict = {}
+        self.consumers: Dict = {}
+        self.producers: Dict = {}
+        self.params: Dict = {}
         self.test = test
         self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")
         self.poison_pill = poison_pill
@@ -103,21 +103,23 @@ class AbstractNode(ABC):
 
     def setup_datasets(
         self,
-        datasets: dict[str, dict],
-        inputs: list[str] | None = None,
-        outputs: list[str] | None = None,
-        prefix: str | None = None,
+        datasets: Dict[str, dict],
+        inputs: Optional[List[str]] = None,
+        outputs: Optional[List[str]] = None,
+        prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ) -> None:
         """Setup the consumer and producer for a node.
 
         Args:
             datasets: dataset configuration
+            node: name of the node
+            pipeline: name of the pipeline
             inputs: list of dataset names for the inputs to the node
             outputs: list of dataset names for the outputs of the node
             prefix: prefix for topic name (`<prefix>.<dataset_name>`)
             has_pipeline_prefix: whether the dataset name has pipeline name
-            prefix
+                prefix
         """
         inputs = inputs or []
         self.consumers.update(
@@ -151,16 +153,16 @@ class AbstractNode(ABC):
 
     def setup_test(
         self,
-        inputs: dict | None = None,
-        outputs: list | None = None,
-        params: dict | None = None,
+        inputs: Optional[dict] = None,
+        outputs: Optional[list] = None,
+        params: Optional[dict] = None,
     ) -> None:
         """Setup the node for testing.
 
         Args:
             inputs: inputs to the node, format should be {"dataset": [1, 2, 3]}
-            outputs: outputs of the node, format should be
-                ["dataset_1", "dataset_2", ...]
+            outputs: outputs of the node, format should be ["dataset_1",
+                "dataset_2", ...]
             params: dictionary of parameters to make accessible to _execute
 
         Raises:
@@ -219,7 +221,7 @@ class AbstractNode(ABC):
         exc_info = traceback.format_exc()
         self.log(exc_info, level="debug")
 
-    def execute(self, params: dict | None = None) -> None:
+    def execute(self, params: Optional[dict] = None) -> None:
         """Execute the node.
 
         Wrapper for _execute method to be implemented by subclasses.
@@ -253,7 +255,7 @@ class AbstractNode(ABC):
             ray.get(self.poison_pill.activate.remote())
 
     @abstractmethod
-    def _execute(self, params: dict) -> bool | None:
+    def _execute(self, params: dict) -> Optional[bool]:
         """Execute the node.
 
         Args:
@@ -267,7 +269,7 @@ class AbstractNode(ABC):
         """
         raise NotImplementedError("_execute method not implemented")
 
-    def run_test(self, runtime: int | None = None) -> dict:
+    def run_test(self, runtime: Optional[int] = None) -> dict:
         """Execute the node in testing mode.
 
         Runs the steps in execute that involves the user defined methods.
@@ -310,8 +312,8 @@ class AbstractNode(ABC):
         }
 
     def run_test_yield(
-        self, runtime: int | None = None
-    ) -> Generator[tuple[dict, dict, "AbstractNode"], None, None]:
+        self, runtime: Optional[int] = None
+    ) -> Generator[Tuple[dict, dict, "AbstractNode"], None, None]:
         """Execute the node in testing mode, yielding at each iteration.
 
         This method is an alternative to `run_test`. Instead of returning the
@@ -375,7 +377,7 @@ class AbstractNode(ABC):
 
         self._post_loop_hook(self.params)
 
-    def _pre_loop_hook(self, params: dict | None = None) -> None:
+    def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
         """Hook to be called before the node loop. User overrideable.
 
         Args:
@@ -386,7 +388,7 @@ class AbstractNode(ABC):
         """
         pass
 
-    def _post_loop_hook(self, params: dict | None = None) -> None:
+    def _post_loop_hook(self, params: Optional[dict] = None) -> None:
         """Hook to be called after the node loop. User overrideable.
 
         Args:

@@ -49,7 +49,7 @@ Next, update the create Aineko project to use the local Aineko repository. Go to
 :   
     ```bash title="pyproject.toml" linenums="8" hl_lines="3"
     [tool.poetry.dependencies]
-    python = ">=3.10,<3.11"
+    python = ">=3.8,<3.12"
     aineko = { path = "<path/to/Aineko/git/repo>", develop=true}
     ```
 

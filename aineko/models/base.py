@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Base models for Aineko."""
 import datetime
+from typing import Union
 
 from pydantic import BaseModel, Field
 
@@ -16,7 +17,7 @@ class MessageData(BaseModel):
     itself, along with metadata about the message.
     """
 
-    message: dict | str = Field(..., description="Message payload")
+    message: Union[dict, str] = Field(..., description="Message payload")
     timestamp: str = Field(
         default_factory=lambda: datetime.datetime.now().strftime(
             AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")

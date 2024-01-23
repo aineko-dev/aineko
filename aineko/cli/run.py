@@ -4,6 +4,7 @@
 import logging
 import time
 import traceback
+from typing import Optional
 
 import click
 
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 )
 def run(
     pipeline_config_file: str,
-    pipeline_name: str | None = None,
+    pipeline_name: Optional[str] = None,
     retry: bool = False,
 ) -> None:
     """Main function to run a pipeline from the command line.\f
