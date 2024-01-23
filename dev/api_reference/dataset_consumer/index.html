@@ -1712,9 +1712,9 @@
     <span class="n">dataset_name</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span>
     <span class="n">node_name</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span>
     <span class="n">pipeline_name</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span>
-    <span class="n">dataset_config</span><span class="p">:</span> <span class="n">dict</span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">],</span>
-    <span class="n">bootstrap_servers</span><span class="p">:</span> <span class="n">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="n">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dataset_config</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">],</span>
+    <span class="n">bootstrap_servers</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">has_pipeline_prefix</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -1791,7 +1791,7 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
         <tr>
           <td><code>dataset_config</code></td>
           <td>
-                <code>dict[str, <span title="typing.Any">Any</span>]</code>
+                <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1805,7 +1805,7 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
         <tr>
           <td><code>bootstrap_servers</code></td>
           <td>
-                <code>str | None</code>
+                <code><span title="typing.Optional">Optional</span>[str]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1819,7 +1819,7 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
         <tr>
           <td><code>prefix</code></td>
           <td>
-                <code>str | None</code>
+                <code><span title="typing.Optional">Optional</span>[str]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1956,9 +1956,9 @@ message consumed)</p>
     <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">pipeline_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">dataset_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">bootstrap_servers</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dataset_config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">bootstrap_servers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">has_pipeline_prefix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the consumer.&quot;&quot;&quot;</span>
@@ -2189,8 +2189,8 @@ message consumed)</p>
 </h3>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">consume</span><span class="p">(</span>
     <span class="n">how</span><span class="p">:</span> <span class="n"><span title="typing.Literal">Literal</span></span><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;last&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;next&quot;</span><span class="p">,</span>
-    <span class="n">timeout</span><span class="p">:</span> <span class="n">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dict</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">timeout</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">dict</span><span class="p">]</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2232,7 +2232,7 @@ poll and return None.</p>
         <tr>
           <td><code>timeout</code></td>
           <td>
-                <code>float | None</code>
+                <code><span title="typing.Optional">Optional</span>[float]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2260,7 +2260,7 @@ If using how="last", set to bigger than 0.</p>
     <tbody>
         <tr>
           <td>
-                <code>dict | None</code>
+                <code><span title="typing.Optional">Optional</span>[dict]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2347,8 +2347,8 @@ If using how="last", set to bigger than 0.</p>
 <span class="normal">220</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">consume</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">how</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;last&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;next&quot;</span><span class="p">,</span>
-    <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Polls a message from the dataset.</span>
 
 <span class="sd">    If the consume method is last but the method encounters</span>
@@ -2408,7 +2408,7 @@ If using how="last", set to bigger than 0.</p>
 
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">consume_all</span><span class="p">(</span><span class="n">end_message</span><span class="p">:</span> <span class="n">str</span> <span class="o">|</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">list</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">consume_all</span><span class="p">(</span><span class="n">end_message</span><span class="p">:</span> <span class="n"><span title="typing.Union">Union</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">list</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2431,7 +2431,7 @@ If using how="last", set to bigger than 0.</p>
         <tr>
           <td><code>end_message</code></td>
           <td>
-                <code>str | bool</code>
+                <code><span title="typing.Union">Union</span>[str, bool]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2488,7 +2488,7 @@ If using how="last", set to bigger than 0.</p>
 <span class="normal">306</span>
 <span class="normal">307</span>
 <span class="normal">308</span>
-<span class="normal">309</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">consume_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="normal">309</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">consume_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_message</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reads all messages from the dataset until a specific one is found.</span>
 
 <span class="sd">    Args:</span>
