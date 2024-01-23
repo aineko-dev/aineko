@@ -167,6 +167,17 @@ In cases where you might require more low-level control over consumption pattern
 
 The timeout argument in these methods signify the duration in which the method has to return a message otherwise it will re-poll for a new one.
 
+#### Consuming Messages
+
+When consuming a message, the original message is wrapped in a `MessageData` object. This object contains metadata about the message and the message itself. You can read about the attributes in the [MessageData](../api_reference/message_data.md) documentation.  
+
+You can access the message itself by reading the `message` attribute of the `MessageData` object. For example, to print the message from the next message in the dataset named `dataset`
+
+:   
+    ```python
+    msg = self.consumers["dataset"].next()
+    print(msg.message)
+    ```
 
 ### Logging
 
