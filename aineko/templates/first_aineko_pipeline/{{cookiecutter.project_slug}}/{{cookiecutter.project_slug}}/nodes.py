@@ -23,7 +23,7 @@ class MySequencerNode(AbstractNode):
         """
         self.current_val += params.get("increment", 1)
         time.sleep(5)
-        self.producers["test_sequence"].produce(self.current_val)
+        self.producers["test_sequence"].produce({"value": self.current_val})
 
 
 class PrintInput(AbstractNode):
@@ -35,7 +35,7 @@ class PrintInput(AbstractNode):
             if msg is None:
                 continue
             print(
-                f"Node {params['name']} received message: {msg['message']} from {dataset}"
+                f"Node {params['name']} received message: {msg.message} from {dataset}"
             )
 
 
@@ -56,6 +56,6 @@ class MySumNode(AbstractNode):
         msg = self.consumers["test_sequence"].consume(how="next")
         if msg is None:
             return
-        self.log(f"Received: {msg['message']}. Adding {params['increment']}...")
-        self.state = int(msg["message"]) + int(params["increment"])
-        self.producers["test_sum"].produce(self.state)
+        self.log(f"Received: {msg.message}. Adding {params['increment']}...")
+        self.state = int(msg.message["value"]) + int(params["increment"])
+        self.producers["test_sum"].produce({"value": self.state})

@@ -13,13 +13,16 @@ def test_mynode():
         pipeline_name="test_pipeline",
         test=True
     )
+    inputs = [{"value": 1}, {"value": 2}, {"value": 3}]
     mynode.setup_test(
         inputs={
-            "test_sequence": [1, 2, 3]
+            "test_sequence": inputs,
         },  # input a list of elements to be consumed
         outputs=["test_sum"],  # list of dataset names that are produced to
         params={"initial_state": 0, "increment": 1},
     )
     outputs = mynode.run_test()
-    assert outputs["test_sum"] == [2, 3, 4]
+    for produced_message, input_values in zip(outputs["test_sum"], inputs):
+        assert produced_message["value"] == input_values["value"] + 1
+
     assert mynode.state == 4
