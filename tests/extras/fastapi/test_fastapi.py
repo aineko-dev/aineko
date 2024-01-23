@@ -57,6 +57,6 @@ def test_fastapi_node(start_service):
             has_pipeline_prefix=True,
         )
         test_results = consumer.next()
-        assert test_results["message"]["produce"] == 200
-        assert test_results["message"]["next"]["message"] == 1
-        assert test_results["message"]["last"]["message"] == 3
+        assert test_results.message["produce"] == 200
+        assert test_results.message["next"]["message"]["value"] == 1
+        assert test_results.message["last"]["message"]["value"] == 3

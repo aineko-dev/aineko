@@ -21,7 +21,7 @@ async def assignment():
 
 @app.get("/produce", status_code=200)
 async def produce():
-    producers["messages"].produce(1)
-    producers["messages"].produce(2)
-    producers["messages"].produce(3)
+    producers["messages"].produce({"value": 1})
+    producers["messages"].produce({"value": 2})
+    producers["messages"].produce({"value": 3})
     return
