@@ -15,7 +15,7 @@ from aineko import AbstractNode
 class ParamsWebSocketClient(BaseModel):
     """Connector params for WebSocket model."""
 
-    max_retries: int = 30
+    max_retries: int = -1
     retry_sleep: float = 5
     url: str
     header: dict[str, str] | None = None
@@ -54,7 +54,7 @@ class WebSocketClient(AbstractNode):
         metadata (optional): A dictionary of metadata to attach to outgoing
             messages. Defaults to None.
         max_retries (optional): The maximum number of times to retry
-            connecting to the WebSocket. Defaults to 30.
+            connecting to the WebSocket. Defaults to -1 (retry forever).
         retry_sleep (optional): The number of seconds to wait between retries.
             Defaults to 5.
 
