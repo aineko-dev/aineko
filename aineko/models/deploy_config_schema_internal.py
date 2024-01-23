@@ -33,7 +33,6 @@ class ParameterizableDefaults(BaseModel, extra="forbid"):
     """Parameters that can be set in the defaults block."""
 
     machine_config: MachineConfig | None = None
-    env_vars: dict[str, str] | None = None
 
 
 class GenericPipeline(BaseModel, extra="forbid"):
@@ -42,7 +41,6 @@ class GenericPipeline(BaseModel, extra="forbid"):
     source: str
     name: str | None = None
     machine_config: MachineConfig | None = None
-    env_vars: dict[str, str] | None = None
 
 
 class LoadBalancer(BaseModel, extra="forbid"):
@@ -58,7 +56,6 @@ class SpecificPipeline(BaseModel, extra="forbid"):
     source: str | None = None  # Pipeline config file path
     name: str | None = None  # Pipeline name
     machine_config: MachineConfig | None = None
-    env_vars: dict[str, str] | None = None
 
 
 class FullPipeline(BaseModel, extra="forbid"):
@@ -67,7 +64,6 @@ class FullPipeline(BaseModel, extra="forbid"):
     source: str
     name: str | None = None
     machine_config: MachineConfig
-    env_vars: dict[str, str] | None = None
 
 
 class Environment(BaseModel, extra="forbid"):

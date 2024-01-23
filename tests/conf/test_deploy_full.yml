@@ -10,17 +10,12 @@ environments:
             type: ec2
             mem_gib: 8
             vcpu: 2
-          env_vars:
-            var_1: aineko_test
-            env: develop
           source: ./tests/conf/test_pipeline.yml
       - simple_example:
           machine_config:
             type: ec2
             mem_gib: 16
             vcpu: 4
-          env_vars:
-            var_1: aineko_test
           source: ./tests/conf/test_pipeline.yml
 
     load_balancers:
