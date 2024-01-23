@@ -28,7 +28,6 @@ workflows:
             branches:
               ignore: develop
           prj_dir: aineko
-          # python_version: << matrix.python_version >>
           markers: "not integration"
       - integration-tests:
           matrix:
@@ -38,7 +37,6 @@ workflows:
                 - "3.9"
                 - "3.10"
                 - "3.11"
-          # python_version: << matrix.python_version >>
           prj_dir: aineko
           markers: integration
           requires:
