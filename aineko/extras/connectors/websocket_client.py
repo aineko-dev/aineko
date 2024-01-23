@@ -4,7 +4,7 @@
 
 import json
 import time
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 import websocket
 from pydantic import BaseModel, field_validator
@@ -18,9 +18,9 @@ class ParamsWebSocketClient(BaseModel):
     max_retries: int = -1
     retry_sleep: float = 5
     url: str
-    header: dict[str, str] | None = None
-    init_messages: list[Any] = []
-    metadata: dict[str, Any] | None = None
+    header: Optional[Dict[str, str]] = None
+    init_messages: List[Any] = []
+    metadata: Optional[Dict[str, Any]] = None
 
     @field_validator("url")
     @classmethod
@@ -85,7 +85,7 @@ class WebSocketClient(AbstractNode):
 
     retry_count = 0
 
-    def _pre_loop_hook(self, params: dict | None = None) -> None:
+    def _pre_loop_hook(self, params: Optional[Dict] = None) -> None:
         """Initialize the WebSocket connection.
 
         Raises:
@@ -124,7 +124,7 @@ class WebSocketClient(AbstractNode):
         self.ws = websocket.WebSocket()
         self.create_subscription()
 
-    def _execute(self, params: dict | None = None) -> None:
+    def _execute(self, params: Optional[Dict] = None) -> None:
         """Polls and gets data from the WebSocket.
 
         Raises:

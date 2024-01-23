@@ -13,6 +13,7 @@ of truth in which infrastructure should be deployed from.
 """
 
 from collections import defaultdict
+from typing import Optional
 
 from pydantic.v1.utils import deep_update
 
@@ -70,7 +71,7 @@ def generate_deploy_config(
 
 
 def _generate_full_config(
-    user_config: DeploymentConfig | None = None,
+    user_config: Optional[DeploymentConfig] = None,
 ) -> FullDeploymentConfig:
     """Generates a full deployment config from the user config.
 

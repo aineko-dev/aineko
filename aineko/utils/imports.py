@@ -3,14 +3,14 @@
 """Import utilities."""
 import importlib
 import inspect
-from typing import Any
+from typing import Any, Optional
 
 
 def import_from_string(  # type: ignore[no-untyped-def]
     attr: str,
     kind: str,
-    reqd_params: list | None = None,
-    ret_type: Any | None = None,
+    reqd_params: Optional[list] = None,
+    ret_type: Optional[Any] = None,
 ):
     """Get a function from a string.
 
