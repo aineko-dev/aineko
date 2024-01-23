@@ -79,6 +79,7 @@ plugins:
               - griffe_typingdoc
             preload_modules:
               - pydantic
+            merge_init_into_class: true
             separate_signature: true
             show_if_no_docstring: true
             show_root_heading: true
