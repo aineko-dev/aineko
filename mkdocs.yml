@@ -77,7 +77,15 @@ plugins:
           options:
             extension:
               - griffe_typingdoc
+            preload_modules:
+              - pydantic
+            separate_signature: true
+            show_if_no_docstring: true
             show_root_heading: true
+            show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
 
 nav:
   - Aineko Framework:
