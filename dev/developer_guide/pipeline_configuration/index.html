@@ -716,6 +716,28 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aineko.core.config_loader.ConfigLoader.inject_env_vars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        inject_env_vars
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="inject_env_vars">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#datasets" class="md-nav__link">
     <span class="md-ellipsis">
@@ -736,11 +758,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -865,6 +882,8 @@
       
         
       
+        
+      
     
     
     
@@ -946,6 +965,33 @@
     
   
     FastAPI Node
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/websocket.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    None
   
 
     
@@ -1483,6 +1529,28 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aineko.core.config_loader.ConfigLoader.inject_env_vars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        inject_env_vars
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="inject_env_vars">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#datasets" class="md-nav__link">
     <span class="md-ellipsis">
@@ -1503,11 +1571,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1745,7 +1808,7 @@ For the sake of simplicity, we reference a truncated version of the pipeline def
 <td><code>node_params</code></td>
 <td>N</td>
 <td>map</td>
-<td>Defines any arbitrary parameters relevant for node's application logic. In the example above, we defined <code>initial_state</code> and <code>increment</code> parameters, which are both integers.</td>
+<td>Defines any arbitrary parameters relevant for node's application logic. In the example above, we defined <code>initial_state</code> and <code>increment</code> parameters, which are both integers. Environment variables can be injected into <code>node_params</code> by passing in strings that match the pattern <code>{$ENV_VAR}</code> where ENV_VAR is the environment variable to inject.</td>
 </tr>
 <tr>
 <td><code>num_cpus</code></td>
@@ -1755,6 +1818,219 @@ For the sake of simplicity, we reference a truncated version of the pipeline def
 </tr>
 </tbody>
 </table>
+<details class="question">
+<summary>How are environment variables injected?</summary>
+<p>The following method is used to inject environment variables into <code>node_params</code>:</p>
+<div class="mkdocstrings">
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="aineko.core.config_loader.ConfigLoader.inject_env_vars" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">aineko</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">config_loader</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">node_params</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Inject environment variables into node params.</p>
+<p>This function is used to recursively inject environment variables
+into strings passed through node params via the pipeline config.
+We only recursively parse strings, dicts, and lists, as these are
+the only types that can contain environment variables (i.e.
+excluding ints, floats, and Nones).</p>
+<p>Environment variables are identified in strings by the pattern
+{$ENV_VAR} where ENV_VAR is the name of the environment variable
+to inject. For example, given the following environment variables:</p>
+<div class="highlight"><pre><span></span><code>$ export SECRET1=secret1
+$ export SECRET2=secret2
+</code></pre></div>
+<p>The following node params dict:</p>
+<pre><code>```
+{
+    "key1": "A string with a {$SECRET1} and a {$SECRET2}.",
+    "key2": {
+        "key3": "A string with a {$SECRET1} and a {$SECRET2}.",
+        "key4": [
+            "A string with a {$SECRET1} and a {$SECRET2}.",
+            "A string with a {$SECRET1} and a {$SECRET2}."
+        ]
+    }
+}
+```
+</code></pre>
+<p>Will be transformed to:</p>
+<pre><code>    ```
+    {
+        "key1": "A string with a secret1 and a secret2.",
+        "key2": {
+            "key3": "A string with a secret1 and a secret2.",
+            "key4": [
+                "A string with a secret1 and a secret2.",
+                "A string with a secret1 and a secret2."
+            ]
+        }
+    }
+    ```
+</code></pre>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="n">NodeParamTypes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeParamTypes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inject environment variables into node params.</span>
+
+<span class="sd">    This function is used to recursively inject environment variables</span>
+<span class="sd">    into strings passed through node params via the pipeline config.</span>
+<span class="sd">    We only recursively parse strings, dicts, and lists, as these are</span>
+<span class="sd">    the only types that can contain environment variables (i.e.</span>
+<span class="sd">    excluding ints, floats, and Nones).</span>
+
+<span class="sd">    Environment variables are identified in strings by the pattern</span>
+<span class="sd">    {$ENV_VAR} where ENV_VAR is the name of the environment variable</span>
+<span class="sd">    to inject. For example, given the following environment variables:</span>
+
+<span class="sd">    ```</span>
+<span class="sd">    $ export SECRET1=secret1</span>
+<span class="sd">    $ export SECRET2=secret2</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    The following node params dict:</span>
+
+<span class="sd">        ```</span>
+<span class="sd">        {</span>
+<span class="sd">            &quot;key1&quot;: &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;,</span>
+<span class="sd">            &quot;key2&quot;: {</span>
+<span class="sd">                &quot;key3&quot;: &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;,</span>
+<span class="sd">                &quot;key4&quot;: [</span>
+<span class="sd">                    &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;,</span>
+<span class="sd">                    &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;</span>
+<span class="sd">                ]</span>
+<span class="sd">            }</span>
+<span class="sd">        }</span>
+<span class="sd">        ```</span>
+
+<span class="sd">    Will be transformed to:</span>
+
+<span class="sd">            ```</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;key1&quot;: &quot;A string with a secret1 and a secret2.&quot;,</span>
+<span class="sd">                &quot;key2&quot;: {</span>
+<span class="sd">                    &quot;key3&quot;: &quot;A string with a secret1 and a secret2.&quot;,</span>
+<span class="sd">                    &quot;key4&quot;: [</span>
+<span class="sd">                        &quot;A string with a secret1 and a secret2.&quot;,</span>
+<span class="sd">                        &quot;A string with a secret1 and a secret2.&quot;</span>
+<span class="sd">                    ]</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+<span class="sd">            ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_params</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">node_params</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_params</span><span class="p">):</span>
+            <span class="n">node_params</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_params</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">env_var_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\{\$.*?\}&quot;</span>
+        <span class="n">env_var_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">env_var_pattern</span><span class="p">,</span> <span class="n">node_params</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">env_var_match</span><span class="p">:</span>
+            <span class="n">env_var_env_str</span> <span class="o">=</span> <span class="n">env_var_match</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+            <span class="n">env_var_value</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span>
+                <span class="n">env_var_env_str</span><span class="p">[</span><span class="mi">2</span><span class="p">:][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">env_var_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed to inject environment variable. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env_var_env_str</span><span class="p">[</span><span class="mi">2</span><span class="p">:][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> was not found.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">node_params</span> <span class="o">=</span> <span class="n">node_params</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="n">env_var_env_str</span><span class="p">,</span> <span class="n">env_var_value</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">node_params</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">node_params</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div><h2 class="doc doc-heading" data-role="function" id="aineko.core.config_loader.ConfigLoader.inject_env_vars"></h2>
+</div>
+</details>
 <h4 id="datasets"><code>datasets</code></h4>
 <p>This section defines the datasets for a pipeline.</p>
 <table>

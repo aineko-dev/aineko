@@ -91,6 +91,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.aineko.dev/dev/extras/websocket_client/</loc>
+         <lastmod>2024-01-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.aineko.dev/dev/start/quickstart/</loc>
          <lastmod>2024-01-23</lastmod>
          <changefreq>daily</changefreq>

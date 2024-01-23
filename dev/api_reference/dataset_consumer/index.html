@@ -705,6 +705,8 @@
       
         
       
+        
+      
     
     
     
@@ -786,6 +788,33 @@
     
   
     FastAPI Node
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/websocket.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    None
   
 
     
@@ -977,7 +1006,7 @@
   <a href="#aineko.DatasetConsumer.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       
-        __init__()
+        __init__
       
     </span>
   </a>
@@ -988,7 +1017,7 @@
   <a href="#aineko.DatasetConsumer.consume" class="md-nav__link">
     <span class="md-ellipsis">
       
-        consume()
+        consume
       
     </span>
   </a>
@@ -999,7 +1028,7 @@
   <a href="#aineko.DatasetConsumer.consume_all" class="md-nav__link">
     <span class="md-ellipsis">
       
-        consume_all()
+        consume_all
       
     </span>
   </a>
@@ -1010,7 +1039,7 @@
   <a href="#aineko.DatasetConsumer.last" class="md-nav__link">
     <span class="md-ellipsis">
       
-        last()
+        last
       
     </span>
   </a>
@@ -1021,7 +1050,7 @@
   <a href="#aineko.DatasetConsumer.next" class="md-nav__link">
     <span class="md-ellipsis">
       
-        next()
+        next
       
     </span>
   </a>
@@ -1385,7 +1414,7 @@
   <a href="#aineko.DatasetConsumer.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       
-        __init__()
+        __init__
       
     </span>
   </a>
@@ -1396,7 +1425,7 @@
   <a href="#aineko.DatasetConsumer.consume" class="md-nav__link">
     <span class="md-ellipsis">
       
-        consume()
+        consume
       
     </span>
   </a>
@@ -1407,7 +1436,7 @@
   <a href="#aineko.DatasetConsumer.consume_all" class="md-nav__link">
     <span class="md-ellipsis">
       
-        consume_all()
+        consume_all
       
     </span>
   </a>
@@ -1418,7 +1447,7 @@
   <a href="#aineko.DatasetConsumer.last" class="md-nav__link">
     <span class="md-ellipsis">
       
-        last()
+        last
       
     </span>
   </a>
@@ -1429,7 +1458,7 @@
   <a href="#aineko.DatasetConsumer.next" class="md-nav__link">
     <span class="md-ellipsis">
       
-        next()
+        next
       
     </span>
   </a>
@@ -1517,7 +1546,6 @@
 
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -1669,7 +1697,7 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
     </thead>
     <tbody>
         <tr>
-          <td><code>consumer</code></td>
+          <td><code><span title="aineko.DatasetConsumer.consumer">consumer</span></code></td>
           <td>
           </td>
           <td>
@@ -1679,7 +1707,7 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
           </td>
         </tr>
         <tr>
-          <td><code>cached</code></td>
+          <td><code><span title="aineko.DatasetConsumer.cached">cached</span></code></td>
           <td>
           </td>
           <td>
@@ -1704,7 +1732,7 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
     </thead>
     <tbody>
           <tr>
-            <td><code>consume</code></td>
+            <td><code><a class="autorefs autorefs-internal" title="aineko.DatasetConsumer.consume" href="#aineko.DatasetConsumer.consume">consume</a></code></td>
             <td>
               <div class="doc-md-description">
                 <p>reads a message from the dataset</p>
@@ -2275,7 +2303,6 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
 
 
 
-
 <h3 id="aineko.DatasetConsumer.__init__" class="doc doc-heading">
           <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="p">,</span> <span class="n">dataset_config</span><span class="p">,</span> <span class="n">bootstrap_servers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">has_pipeline_prefix</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
@@ -2381,7 +2408,6 @@ be <code>test.my_pipeline.my_dataset</code>.</p>
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -2601,7 +2627,6 @@ If using how="last", set to bigger than 0.</p>
 
 
 
-
 <h3 id="aineko.DatasetConsumer.consume_all" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">consume_all</span><span class="p">(</span><span class="n">end_message</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
@@ -2711,7 +2736,6 @@ If using how="last", set to bigger than 0.</p>
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -2888,7 +2912,6 @@ Must be &gt;0.</p>
 
 
 
-
 <h3 id="aineko.DatasetConsumer.next" class="doc doc-heading">
           <code class="highlight language-python"><span class="nb">next</span><span class="p">()</span></code>
 
@@ -2974,6 +2997,7 @@ to often return <code>None</code>.</p>
   </div>
 
   </div>
+
 
 </div>
 

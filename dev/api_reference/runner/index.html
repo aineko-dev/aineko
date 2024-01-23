@@ -705,6 +705,8 @@
       
         
       
+        
+      
     
     
     
@@ -786,6 +788,33 @@
     
   
     FastAPI Node
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/websocket.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    None
   
 
     
@@ -1085,7 +1114,7 @@
   <a href="#aineko.Runner.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       
-        __init__()
+        __init__
       
     </span>
   </a>
@@ -1096,7 +1125,7 @@
   <a href="#aineko.Runner.load_pipeline_config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        load_pipeline_config()
+        load_pipeline_config
       
     </span>
   </a>
@@ -1107,7 +1136,7 @@
   <a href="#aineko.Runner.prepare_datasets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        prepare_datasets()
+        prepare_datasets
       
     </span>
   </a>
@@ -1118,7 +1147,7 @@
   <a href="#aineko.Runner.prepare_nodes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        prepare_nodes()
+        prepare_nodes
       
     </span>
   </a>
@@ -1129,7 +1158,7 @@
   <a href="#aineko.Runner.run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        run()
+        run
       
     </span>
   </a>
@@ -1385,7 +1414,7 @@
   <a href="#aineko.Runner.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       
-        __init__()
+        __init__
       
     </span>
   </a>
@@ -1396,7 +1425,7 @@
   <a href="#aineko.Runner.load_pipeline_config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        load_pipeline_config()
+        load_pipeline_config
       
     </span>
   </a>
@@ -1407,7 +1436,7 @@
   <a href="#aineko.Runner.prepare_datasets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        prepare_datasets()
+        prepare_datasets
       
     </span>
   </a>
@@ -1418,7 +1447,7 @@
   <a href="#aineko.Runner.prepare_nodes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        prepare_nodes()
+        prepare_nodes
       
     </span>
   </a>
@@ -1429,7 +1458,7 @@
   <a href="#aineko.Runner.run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        run()
+        run
       
     </span>
   </a>
@@ -1517,7 +1546,6 @@
 
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -1618,7 +1646,7 @@
     </thead>
     <tbody>
         <tr>
-          <td><code>pipeline_config_file</code></td>
+          <td><code><span title="aineko.Runner.pipeline_config_file">pipeline_config_file</span></code></td>
           <td>
                 <code>str</code>
           </td>
@@ -1629,7 +1657,7 @@
           </td>
         </tr>
         <tr>
-          <td><code>pipeline_name</code></td>
+          <td><code><span title="aineko.Runner.pipeline_name">pipeline_name</span></code></td>
           <td>
                 <code>str</code>
           </td>
@@ -1640,7 +1668,7 @@
           </td>
         </tr>
         <tr>
-          <td><code>kafka_config</code></td>
+          <td><code><span title="aineko.Runner.kafka_config">kafka_config</span></code></td>
           <td>
                 <code>dict</code>
           </td>
@@ -1651,7 +1679,7 @@
           </td>
         </tr>
         <tr>
-          <td><code>pipeline_name</code></td>
+          <td><code><span title="aineko.Runner.pipeline_name">pipeline_name</span></code></td>
           <td>
                 <code>str</code>
           </td>
@@ -1662,7 +1690,7 @@
           </td>
         </tr>
         <tr>
-          <td><code>dataset_prefix</code></td>
+          <td><code><span title="aineko.Runner.dataset_prefix">dataset_prefix</span></code></td>
           <td>
                 <code>Optional[str]</code>
           </td>
@@ -2226,7 +2254,6 @@
 
 
 
-
 <h3 id="aineko.Runner.__init__" class="doc doc-heading">
           <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">pipeline_config_file</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kafka_config</span><span class="o">=</span><span class="n">DEFAULT_KAFKA_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;BROKER_CONFIG&#39;</span><span class="p">),</span> <span class="n">metrics_export_port</span><span class="o">=</span><span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RAY_METRICS_PORT&#39;</span><span class="p">),</span> <span class="n">dataset_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
@@ -2274,7 +2301,6 @@
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -2343,7 +2369,6 @@
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -2669,7 +2694,6 @@ found in: https://kafka.apache.org/documentation.html#topicconfigs</p>
 
 
 
-
 <h3 id="aineko.Runner.prepare_nodes" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">prepare_nodes</span><span class="p">(</span><span class="n">pipeline_config</span><span class="p">,</span> <span class="n">poison_pill</span><span class="p">)</span></code>
 
@@ -2924,7 +2948,6 @@ found in: https://kafka.apache.org/documentation.html#topicconfigs</p>
 
 
 
-
 <h3 id="aineko.Runner.run" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">run</span><span class="p">()</span></code>
 
@@ -3037,6 +3060,7 @@ found in: https://kafka.apache.org/documentation.html#topicconfigs</p>
   </div>
 
   </div>
+
 
 </div>
 
