@@ -98,7 +98,7 @@ jobs:
 
     steps:
       - checkout
-      - run: poetry install --with test --no-interaction --quiet --all-extras
+      - run: poetry install --with test --all-extras --no-interaction --no-ansi
       - run: >
           poetry run pytest << parameters.test_dir >>
           -m "<< parameters.markers >>" -svv
@@ -172,7 +172,7 @@ jobs:
       - checkout
       - run: poetry add git+ssh://git@github.com/squidfunk/mkdocs-material-insiders.git#<<
           pipeline.parameters.mkdocs_material_version >> --group docs --no-interaction
-          --quiet
+          --no-ansi
       - run: poetry install --with docs --no-interaction --quiet
       - run: git config user.name aineko-ci
       - run: git config user.email engineering-admins@convexlabs.xyz
@@ -220,7 +220,7 @@ jobs:
           name: Test installing the newly created project
           command: |
             cd $original_cwd/my_awesome_pipeline
-            poetry add git+https://github.com/aineko-dev/aineko#<< pipeline.git.branch >>  --no-interaction --no-ansi
+            poetry add git+https://github.com/aineko-dev/aineko#<< pipeline.git.branch >> --no-interaction --no-ansi
             poetry install --no-interaction --no-ansi
       - run:
           name: Run the tests from the newly created project
