@@ -1075,19 +1075,30 @@
   <a href="#aineko.ConfigLoader" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ConfigLoader
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ConfigLoader
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ConfigLoader">
+    <nav class="md-nav" aria-label=" ConfigLoader">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.__init__" class="md-nav__link">
+  <a href="#aineko.ConfigLoader.config_schema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        __init__
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;config_schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.ConfigLoader.pipeline_config_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;pipeline_config_file
       
     </span>
   </a>
@@ -1098,7 +1109,7 @@
   <a href="#aineko.ConfigLoader.inject_env_vars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        inject_env_vars
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;inject_env_vars
       
     </span>
   </a>
@@ -1109,7 +1120,7 @@
   <a href="#aineko.ConfigLoader.load_config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        load_config
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;load_config
       
     </span>
   </a>
@@ -1380,19 +1391,30 @@
   <a href="#aineko.ConfigLoader" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ConfigLoader
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ConfigLoader
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ConfigLoader">
+    <nav class="md-nav" aria-label=" ConfigLoader">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.__init__" class="md-nav__link">
+  <a href="#aineko.ConfigLoader.config_schema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        __init__
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;config_schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.ConfigLoader.pipeline_config_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;pipeline_config_file
       
     </span>
   </a>
@@ -1403,7 +1425,7 @@
   <a href="#aineko.ConfigLoader.inject_env_vars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        inject_env_vars
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;inject_env_vars
       
     </span>
   </a>
@@ -1414,7 +1436,7 @@
   <a href="#aineko.ConfigLoader.load_config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        load_config
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;load_config
       
     </span>
   </a>
@@ -1506,11 +1528,12 @@
 
 
 <h2 id="aineko.ConfigLoader" class="doc doc-heading">
-          <code>aineko.ConfigLoader</code>
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">aineko.ConfigLoader</span>
 
 
 </h2>
-
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">ConfigLoader</span><span class="p">(</span><span class="n">pipeline_config_file</span><span class="p">:</span> <span class="n">str</span><span class="p">)</span>
+</code></pre></div>
 
   <div class="doc doc-contents first">
 
@@ -1537,7 +1560,8 @@
           </td>
           <td>
             <div class="doc-md-description">
-              <p>path of pipeline config file. Defaults</p>
+              <p>path of pipeline config file. Defaults
+to <code>DEFAULT_PIPELINE_CONFIG</code>.</p>
             </div>
           </td>
           <td>
@@ -1560,7 +1584,7 @@
     </thead>
     <tbody>
         <tr>
-          <td><code><span title="aineko.ConfigLoader.pipeline_config_file">pipeline_config_file</span></code></td>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.ConfigLoader.pipeline_config_file" href="#aineko.ConfigLoader.pipeline_config_file">pipeline_config_file</a></code></td>
           <td>
                 <code>str</code>
           </td>
@@ -1571,7 +1595,7 @@
           </td>
         </tr>
         <tr>
-          <td><code><span title="aineko.ConfigLoader.config_schema">config_schema</span></code></td>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.ConfigLoader.config_schema" href="#aineko.ConfigLoader.config_schema">config_schema</a></code></td>
           <td>
                 <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config" href="../config/#aineko.models.config_schema.Config">Config</a></code>
           </td>
@@ -1613,349 +1637,12 @@
           </tr>
     </tbody>
   </table>
-
-            <details class="quote">
-              <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 20</span>
-<span class="normal"> 21</span>
-<span class="normal"> 22</span>
-<span class="normal"> 23</span>
-<span class="normal"> 24</span>
-<span class="normal"> 25</span>
-<span class="normal"> 26</span>
-<span class="normal"> 27</span>
-<span class="normal"> 28</span>
-<span class="normal"> 29</span>
-<span class="normal"> 30</span>
-<span class="normal"> 31</span>
-<span class="normal"> 32</span>
-<span class="normal"> 33</span>
-<span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ConfigLoader</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read yaml config files.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        pipeline_config_file: path of pipeline config file. Defaults</span>
-<span class="sd">        to `DEFAULT_PIPELINE_CONFIG`.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        pipeline_config_file (str): path to the pipeline configuration file</span>
-<span class="sd">        config_schema (Config): Pydantic model to validate a pipeline config</span>
-
-<span class="sd">    Methods:</span>
-<span class="sd">        load_config: loads and validates the pipeline config from a yaml file</span>
-<span class="sd">        inject_env_vars: injects environment variables into node params</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pipeline_config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize ConfigLoader.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span> <span class="o">=</span> <span class="n">pipeline_config_file</span> <span class="ow">or</span> <span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;DEFAULT_PIPELINE_CONFIG&quot;</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Setup config schema</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config_schema</span> <span class="o">=</span> <span class="n">Config</span>
-
-    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load and validate the pipeline config.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            ValidationError: If the config does not match the schema</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            The pipeline config as a dictionary</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">)</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">Config</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                <span class="s2">&quot;Schema validation failed for pipeline `</span><span class="si">%s</span><span class="s2">` loaded from </span><span class="si">%s</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;See detailed error below.&quot;</span><span class="p">,</span>
-                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">raise</span> <span class="n">e</span>
-
-        <span class="c1"># Inject environment variables into node params</span>
-        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="k">if</span> <span class="s2">&quot;node_params&quot;</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">and</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;node_params&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node</span><span class="p">[</span><span class="s2">&quot;node_params&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;node_params&quot;</span><span class="p">])</span>
-
-        <span class="k">return</span> <span class="n">config</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_params</span><span class="p">:</span> <span class="n">NodeParamTypes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeParamTypes</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inject environment variables into node params.</span>
-
-<span class="sd">        This function is used to recursively inject environment variables</span>
-<span class="sd">        into strings passed through node params via the pipeline config.</span>
-<span class="sd">        We only recursively parse strings, dicts, and lists, as these are</span>
-<span class="sd">        the only types that can contain environment variables (i.e.</span>
-<span class="sd">        excluding ints, floats, and Nones).</span>
-
-<span class="sd">        Environment variables are identified in strings by the pattern</span>
-<span class="sd">        {$ENV_VAR} where ENV_VAR is the name of the environment variable</span>
-<span class="sd">        to inject. For example, given the following environment variables:</span>
-
-<span class="sd">        ```</span>
-<span class="sd">        $ export SECRET1=secret1</span>
-<span class="sd">        $ export SECRET2=secret2</span>
-<span class="sd">        ```</span>
-
-<span class="sd">        The following node params dict:</span>
-
-<span class="sd">            ```</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;key1&quot;: &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;,</span>
-<span class="sd">                &quot;key2&quot;: {</span>
-<span class="sd">                    &quot;key3&quot;: &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;,</span>
-<span class="sd">                    &quot;key4&quot;: [</span>
-<span class="sd">                        &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;,</span>
-<span class="sd">                        &quot;A string with a {$SECRET1} and a {$SECRET2}.&quot;</span>
-<span class="sd">                    ]</span>
-<span class="sd">                }</span>
-<span class="sd">            }</span>
-<span class="sd">            ```</span>
-
-<span class="sd">        Will be transformed to:</span>
-
-<span class="sd">                ```</span>
-<span class="sd">                {</span>
-<span class="sd">                    &quot;key1&quot;: &quot;A string with a secret1 and a secret2.&quot;,</span>
-<span class="sd">                    &quot;key2&quot;: {</span>
-<span class="sd">                        &quot;key3&quot;: &quot;A string with a secret1 and a secret2.&quot;,</span>
-<span class="sd">                        &quot;key4&quot;: [</span>
-<span class="sd">                            &quot;A string with a secret1 and a secret2.&quot;,</span>
-<span class="sd">                            &quot;A string with a secret1 and a secret2.&quot;</span>
-<span class="sd">                        ]</span>
-<span class="sd">                    }</span>
-<span class="sd">                }</span>
-<span class="sd">                ```</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_params</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-                <span class="n">node_params</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_params</span><span class="p">):</span>
-                <span class="n">node_params</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_params</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">env_var_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\{\$.*?\}&quot;</span>
-            <span class="n">env_var_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">env_var_pattern</span><span class="p">,</span> <span class="n">node_params</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">env_var_match</span><span class="p">:</span>
-                <span class="n">env_var_env_str</span> <span class="o">=</span> <span class="n">env_var_match</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
-                <span class="n">env_var_value</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span>
-                    <span class="n">env_var_env_str</span><span class="p">[</span><span class="mi">2</span><span class="p">:][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
-                <span class="p">)</span>
-                <span class="k">if</span> <span class="n">env_var_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Failed to inject environment variable. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env_var_env_str</span><span class="p">[</span><span class="mi">2</span><span class="p">:][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> was not found.&quot;</span>
-                    <span class="p">)</span>
-                <span class="n">node_params</span> <span class="o">=</span> <span class="n">node_params</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                    <span class="n">env_var_env_str</span><span class="p">,</span> <span class="n">env_var_value</span>
-                <span class="p">)</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">node_params</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">node_params</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h3 id="aineko.ConfigLoader.__init__" class="doc doc-heading">
-          <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">pipeline_config_file</span><span class="p">)</span></code>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
   
       <p>Initialize ConfigLoader.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+                <details class="quote">
+                  <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
 <span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
@@ -1977,10 +1664,63 @@
     <span class="c1"># Setup config schema</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">config_schema</span> <span class="o">=</span> <span class="n">Config</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+                </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.ConfigLoader.config_schema" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">config_schema</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">config_schema</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config" href="../config/#aineko.models.config_schema.Config">Config</a></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
   </div>
 
 </div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.ConfigLoader.pipeline_config_file" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">pipeline_config_file</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">pipeline_config_file</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.core.config_loader.ConfigLoader.pipeline_config_file" href="#aineko.ConfigLoader.pipeline_config_file">pipeline_config_file</a></span> <span class="ow">or</span> <span class="n"><span title="aineko.config.AINEKO_CONFIG.get">get</span></span><span class="p">(</span>
+    <span class="s2">&quot;DEFAULT_PIPELINE_CONFIG&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+
 
 
 <div class="doc doc-object doc-function">
@@ -1988,10 +1728,14 @@
 
 
 <h3 id="aineko.ConfigLoader.inject_env_vars" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">node_params</span><span class="p">)</span></code>
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">inject_env_vars</span>
+
 
 </h3>
-
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">inject_env_vars</span><span class="p">(</span>
+    <span class="n">node_params</span><span class="p">:</span> <span class="n"><span title="aineko.core.config_loader.NodeParamTypes">NodeParamTypes</span></span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="aineko.core.config_loader.NodeParamTypes">NodeParamTypes</span></span>
+</code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -2195,10 +1939,12 @@ $ export SECRET2=secret2
 
 
 <h3 id="aineko.ConfigLoader.load_config" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">load_config</span><span class="p">()</span></code>
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">load_config</span>
+
 
 </h3>
-
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">load_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">dict</span>
+</code></pre></div>
 
   <div class="doc doc-contents ">
   
