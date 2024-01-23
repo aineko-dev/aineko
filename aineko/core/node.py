@@ -117,7 +117,7 @@ class AbstractNode(ABC):
             outputs: list of dataset names for the outputs of the node
             prefix: prefix for topic name (`<prefix>.<dataset_name>`)
             has_pipeline_prefix: whether the dataset name has pipeline name
-            prefix
+                prefix
         """
         inputs = inputs or []
         self.consumers.update(
@@ -159,8 +159,8 @@ class AbstractNode(ABC):
 
         Args:
             inputs: inputs to the node, format should be {"dataset": [1, 2, 3]}
-            outputs: outputs of the node, format should be
-                ["dataset_1", "dataset_2", ...]
+            outputs: outputs of the node, format should be ["dataset_1",
+                "dataset_2", ...]
             params: dictionary of parameters to make accessible to _execute
 
         Raises:

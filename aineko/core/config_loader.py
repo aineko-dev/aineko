@@ -22,7 +22,7 @@ class ConfigLoader:
 
     Args:
         pipeline_config_file: path of pipeline config file. Defaults
-        to `DEFAULT_PIPELINE_CONFIG`.
+            to `DEFAULT_PIPELINE_CONFIG`.
 
     Attributes:
         pipeline_config_file (str): path to the pipeline configuration file
