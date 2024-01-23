@@ -28,7 +28,7 @@ class Runner:
         pipeline_name (str): Name of the pipeline
         kafka_config (dict): Config for kafka broker
         dataset_prefix (Optional[str]): Prefix for dataset names.
-        Kafka topics will be called <prefix>.<pipeline>.<dataset_name>.
+            Kafka topics will be called `<prefix>.<pipeline>.<dataset_name>`.
 
     Attributes:
         pipeline_config_file (str): Path to pipeline config file
@@ -119,14 +119,16 @@ class Runner:
 
         Args:
             config: dataset configuration found in pipeline config
-            Should follow the schema
-                {
-                    "dataset_name": {
-                        "type": str ("kafka_stream"),
-                        "params": dict
-                }
+                Should follow the schema below:
+                ```python
+                    {
+                        "dataset_name": {
+                            "type": str ("kafka_stream"),
+                            "params": dict
+                    }
+                ```
             user_dataset_prefix: prefix only for datasets defined by the user.
-            i.e. <prefix>.<user_dataset_prefix>.<dataset_name>
+                i.e. `<prefix>.<user_dataset_prefix>.<dataset_name>`
 
         Returns:
             True if successful
@@ -224,6 +226,9 @@ class Runner:
         Returns:
             dict: mapping of node names to actor handles
             list: list of ray objects
+
+        Raises:
+            ValueError: if error occurs while initializing actor from config
         """
         # Collect all  actor futures
         results = []
@@ -232,9 +237,18 @@ class Runner:
 
         for node_name, node_config in pipeline_config["nodes"].items():
             # Initialize actor from specified class in config
-            target_class = imports.import_from_string(
-                attr=node_config["class"], kind="class"
-            )
+            try:
+                target_class = imports.import_from_string(
+                    attr=node_config["class"], kind="class"
+                )
+            except AttributeError as exc:
+                raise ValueError(
+                    "Invalid node class name specified in config for node '"
+                    f"{node_name}'. Please check your config file at: "
+                    f"{self.pipeline_config_file}\n"
+                    f"Error: {exc}"
+                ) from None
+
             actor_params = {
                 **default_node_config,
                 **node_config.get("node_settings", {}),

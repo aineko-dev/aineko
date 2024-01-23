@@ -43,8 +43,8 @@ def visualize(
         config_path: file path to pipeline yaml file
         direction: direction of the graph.
         legend: include a legend in the graph.
-        browser: Whether to render graph in browser. Prints
-        graph to stdout otherwise.
+        browser: Whether to render graph in browser. Prints graph to stdout
+            otherwise.
     """
     graph = build_mermaid_from_yaml(
         config_path=config_path, direction=direction, legend=legend
