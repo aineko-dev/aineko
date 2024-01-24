@@ -4,7 +4,7 @@
 
 import json
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 
 import requests
 from pydantic import BaseModel, field_validator
@@ -24,6 +24,7 @@ class ParamsRESTPoller(BaseModel):
     max_retries: int = 30
     metadata: Optional[Dict[str, Any]] = None
     retry_sleep: float = 5
+    success_codes: Optional[List[int]] = list(range(200, 300))
 
     @field_validator("url")
     @classmethod
@@ -98,7 +99,7 @@ class RESTPoller(AbstractNode):
                     data=self.rest_params.data,
                 )
                 # Check if the request was successful
-                if response.status_code != 200:
+                if response.status_code not in self.rest_params.success_codes:
                     # pylint: disable=broad-exception-raised
                     raise Exception(
                         f"Request to url {self.rest_params.url} "
