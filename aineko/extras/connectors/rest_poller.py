@@ -29,7 +29,7 @@ class ParamsRESTPoller(BaseModel):
     @field_validator("url")
     @classmethod
     def supported_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
-        """Validates that the url is a valid HTTPS URL."""
+        """Validates that the url is a valid HTTP or HTTPS URL."""
         if not (url.startswith("https://") or url.startswith("http://")):
             raise ValueError(
                 "Invalid url provided to HTTPS params. "
@@ -40,7 +40,7 @@ class ParamsRESTPoller(BaseModel):
 
 
 class RESTPoller(AbstractNode):
-    """Connects to an REST endpoint via HTTPS and polls."""
+    """Connects to an REST endpoint via HTTP or HTTPS and polls."""
 
     # Poll settings
     last_poll_time = time.time()
@@ -84,7 +84,7 @@ class RESTPoller(AbstractNode):
         self.session = requests.Session()
 
     def _execute(self, params: dict | None = None) -> None:
-        """Polls and gets data from the HTTPS endpoint."""
+        """Polls and gets data from the HTTP or HTTPS endpoint."""
         # Check if it is time to poll
         if time.time() - self.last_poll_time >= self.rest_params.poll_interval:
             # Update the last poll time
@@ -132,9 +132,7 @@ class RESTPoller(AbstractNode):
                         "metadata": self.rest_params.metadata,
                         "data": message,
                     }
-                for dataset, producer in self.producers.items():
-                    if dataset != "logging":
-                        producer.produce(message)
+                self.producers[self.output_dataset].produce(message)
                 self.retry_count = 0
             except json.decoder.JSONDecodeError as err:
                 if self.retry_count < self.rest_params.max_retries:
