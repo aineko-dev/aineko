@@ -24,7 +24,7 @@ class ParamsWebSocketClient(BaseModel):
 
     @field_validator("url")
     @classmethod
-    def supported_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
+    def supported_url(cls, url: str) -> str:
         """Validates that the url is a valid WebSocket URL."""
         if not (url.startswith("wss://") or url.startswith("ws://")):
             raise ValueError(
