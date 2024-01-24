@@ -35,14 +35,13 @@ class ParamsWebSocketClient(BaseModel):
         return url
 
 
-# pylint: disable=anomalous-backslash-in-string
 class WebSocketClient(AbstractNode):
     """Node for ingesting data from a WebSocket.
 
     This node is a wrapper around the
     [websocket-client](
         https://websocket-client.readthedocs.io/en/latest/index.html
-        ){:target="\_blank"} library.
+        ){:target="_blank"} library.
 
     `node_params` should be a dictionary with the following keys:
 
