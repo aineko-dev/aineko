@@ -19,7 +19,7 @@ class ParamsRESTPoller(BaseModel):
     url: str
     headers: Optional[Dict[str, Any]] = None
     data: Optional[Dict[str, Any]] = None
-    poll_interval: int = 5
+    poll_interval: float = 5.0
     max_retries: int = -1
     metadata: Optional[Dict[str, Any]] = None
     retry_sleep: float = 5
@@ -129,10 +129,10 @@ class RESTPoller(AbstractNode):
     If the REST endpoint requires headers or data to be sent, it is
     you should set the `headers` and `data` fields in `node_params`.
 
-    By default, this node will not attach metadata to outgoing messages. This
-    can be changed by setting the `metadata` field in `node_params`. If you
-    want to attach metadata to outgoing messages, you should set the
-    `metadata` field in `node_params`.
+    By default, this node will timeout after 10 seconds. This can be changed
+    by setting the `timeout` field in `node_params`. If the REST endpoint is
+    expected to take a long time to respond, it is recommended to increase
+    `timeout` to prevent the node from timing out.
     """
 
     # Poll settings
@@ -215,6 +215,7 @@ class RESTPoller(AbstractNode):
                     level="error",
                 )
                 time.sleep(self.rest_params.poll_interval)
+                self.retry_count += 1
                 # Reset the session
                 self.log(
                     "Creating new session to REST endpoint "
