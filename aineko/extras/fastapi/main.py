@@ -68,7 +68,6 @@ consumers = Consumers()
 producers = Producers()
 
 
-# pylint: disable=anomalous-backslash-in-string
 class FastAPI(AbstractNode):
     """Node for creating a FastAPI app with a gunicorn server.
 
@@ -100,7 +99,7 @@ class FastAPI(AbstractNode):
             port: 8000
     ```
     where the app points to a FastAPI app. See
-    [FastAPI documentation](https://fastapi.tiangolo.com/){:target="\_blank"}
+    [FastAPI documentation](https://fastapi.tiangolo.com/){:target="_blank"}
     on how to create a FastAPI app.
 
     Example usage in FastAPI app:

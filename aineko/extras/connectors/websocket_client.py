@@ -1,6 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Extra module for connecting to a WebSockets."""
+"""Extra module for connecting to a WebSocket server."""
 
 import json
 import time
@@ -24,7 +24,7 @@ class ParamsWebSocketClient(BaseModel):
 
     @field_validator("url")
     @classmethod
-    def supported_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
+    def supported_url(cls, url: str) -> str:
         """Validates that the url is a valid WebSocket URL."""
         if not (url.startswith("wss://") or url.startswith("ws://")):
             raise ValueError(
@@ -35,14 +35,13 @@ class ParamsWebSocketClient(BaseModel):
         return url
 
 
-# pylint: disable=anomalous-backslash-in-string
 class WebSocketClient(AbstractNode):
     """Node for ingesting data from a WebSocket.
 
     This node is a wrapper around the
     [websocket-client](
         https://websocket-client.readthedocs.io/en/latest/index.html
-        ){:target="\_blank"} library.
+        ){:target="_blank"} library.
 
     `node_params` should be a dictionary with the following keys:
 

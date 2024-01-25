@@ -113,8 +113,6 @@ class AbstractNode(ABC):
 
         Args:
             datasets: dataset configuration
-            node: name of the node
-            pipeline: name of the pipeline
             inputs: list of dataset names for the inputs to the node
             outputs: list of dataset names for the outputs of the node
             prefix: prefix for topic name (`<prefix>.<dataset_name>`)
