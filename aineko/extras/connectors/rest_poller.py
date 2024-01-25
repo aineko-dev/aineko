@@ -23,7 +23,7 @@ class ParamsRESTPoller(BaseModel):
     max_retries: int = -1
     metadata: Optional[Dict[str, Any]] = None
     retry_sleep: float = 5
-    success_codes: Optional[List[int]] = [
+    success_codes: List[int] = [
         200,
         201,
         202,
@@ -139,7 +139,7 @@ class RESTPoller(AbstractNode):
     last_poll_time = time.time()
     retry_count = 0
 
-    def _pre_loop_hook(self, params: dict | None = None) -> None:
+    def _pre_loop_hook(self, params: Optional[Dict] = None) -> None:
         """Initializes connection to API."""
         # Cast params to ParamsREST type
         try:
@@ -178,7 +178,7 @@ class RESTPoller(AbstractNode):
         )
         self.session = requests.Session()
 
-    def _execute(self, params: dict | None = None) -> None:
+    def _execute(self, params: Optional[Dict] = None) -> None:
         """Polls and gets data from the HTTP or HTTPS endpoint.
 
         Raises:
