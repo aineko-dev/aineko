@@ -14,17 +14,12 @@ The FastAPI extra node can be used by adding the following to `pyproject.toml`
 
 # Health Check Endpoint
 
-A health check endpoint can be imported and added to the FastAPI app as follows:
+Aineko comes with a light weight helper function as follows:
 
-```python title="" hl_lines="2 6"
-from fastapi import FastAPI
-from aineko.extras.fastapi import health_router
+::: aineko.extras.fastapi.health.read_health
 
-app = FastAPI()
+## Authentication Considerations
 
-app.include_router(health_router)
-```
+By default, the Aineko health endpoint does not contain authentication. 
 
-The health check endpoint is available via a GET request to the `/health` route and returns a 200 response if the server is active.
-
-For example, if the FastAPI app is running locally on `http://localhost:8000`, the health check endpoint can be accessed via a GET request query to `http://localhost:8000/health`.
+One method to add authentication is to use security middleware at the app level for FastAPI. This will handle adding authentication to the health endpoint without having to add custom dependencies.
