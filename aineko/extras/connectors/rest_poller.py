@@ -20,10 +20,10 @@ class ParamsRESTPoller(BaseModel):
     headers: Optional[Dict[str, Any]] = None
     data: Optional[Dict[str, Any]] = None
     poll_interval: int = 5
-    max_retries: int = 30
+    max_retries: int = -1
     metadata: Optional[Dict[str, Any]] = None
     retry_sleep: float = 5
-    success_codes: Optional[List[int]] = list(range(200, 300))
+    success_codes: Optional[List[int]] = [200, 201, 202, 203, 204, 205, 206, 207, 208, 226]
 
     @field_validator("url")
     @classmethod
@@ -39,7 +39,85 @@ class ParamsRESTPoller(BaseModel):
 
 
 class RESTPoller(AbstractNode):
-    """Connects to an REST endpoint via HTTP or HTTPS and polls."""
+    """Connects to an REST endpoint via HTTP or HTTPS and polls.
+    
+    This node is a wrapper around the [requests](https://docs.python-requests.org/en/master/){:target="\_blank"} library.
+
+    `node_params` should be a dictionary with the following keys:
+    
+            url: The REST URL to connect to
+            headers (optional): A dictionary of headers to send to the REST endpoint.
+                Defaults to None.
+            data (optional): A dictionary of data to send to the REST endpoint.
+                Defaults to None.
+            poll_interval (optional): The number of seconds to wait between polls.
+                Defaults to 5.
+            max_retries (optional): The maximum number of times to retry connecting
+                to the REST endpoint. Defaults to -1.
+            retry_sleep (optional): The number of seconds to wait between retries.
+                Defaults to 5.
+            metadata (optional): A dictionary of metadata to attach to outgoing
+                messages. Defaults to None.
+            success_codes (optional): A list of HTTP status codes that indicate
+                success. Defaults to [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
+    
+    Secrets can be injected (from environment) into the `url`, `headers`, and
+    `data` fields by passing a string with the following format: `{$SECRET_NAME}`. 
+    For example, if you have a secret named `SECRET_NAME` that contains the value
+    `SECRET_VALUE`, you can inject it into the url field by passing 
+    `https://example.com?secret={$SECRET_NAME}` as the url. The connector will
+    then replace `{$SECRET_NAME}` with `SECRET_VALUE` before connecting to the
+    REST endpoint.
+
+    Example usage in pipeline.yml:
+    ```yaml title="pipeline.yml"
+    pipeline:
+      nodes:
+        RestPoller:
+          class: aineko.extras.RestPoller
+          outputs:
+            - test_rest
+          node_params:
+            url: "https://example.com"
+            headers:
+              auth: "Bearer {$SECRET_NAME}"
+            data: {"Greeting": "Hello, world!"}
+    ```
+
+    By default, this node will poll the REST endpoint every 5 seconds. This can
+    be changed by setting the `poll_interval` field in `node_params`. If the
+    REST endpoint is not expected to be available at all times, it is
+    recommended to increase `poll_interval` to reduce the number of requests
+    sent to the endpoint.
+
+    By default, this node will retry connecting to the REST endpoint forever
+    if the connection fails. This can be changed by setting the `max_retries`
+    field in `node_params`. If the REST endpoint is not expected to be
+    available at all times, it is recommended to set `max_retries` to a
+    finite number to prevent the node from retrying forever.
+
+    By default, this node will retry connecting to the REST endpoint every 5
+    seconds if the connection fails. This can be changed by setting the
+    `retry_sleep` field in `node_params`. If the REST endpoint is not expected
+    to be available at all times, it is recommended to increase `retry_sleep`
+    to reduce the number of requests sent to the endpoint.
+
+    By default, this node will consider any HTTP status code in the 200s to be
+    a success code. This can be changed by setting the `success_codes` field
+    in `node_params`. If the REST endpoint returns a non-200 status code on
+    success, it is recommended to add the status code to the `success_codes`
+    list.
+
+    By default, this node will not attach headers or data to the request. This
+    can be changed by setting the `headers` and `data` fields in `node_params`.
+    If the REST endpoint requires headers or data to be sent, it is
+    you should set the `headers` and `data` fields in `node_params`.
+
+    By default, this node will not attach metadata to outgoing messages. This
+    can be changed by setting the `metadata` field in `node_params`. If you
+    want to attach metadata to outgoing messages, you should set the
+    `metadata` field in `node_params`.
+    """
 
     # Poll settings
     last_poll_time = time.time()
@@ -85,7 +163,11 @@ class RESTPoller(AbstractNode):
         self.session = requests.Session()
 
     def _execute(self, params: dict | None = None) -> None:
-        """Polls and gets data from the HTTP or HTTPS endpoint."""
+        """Polls and gets data from the HTTP or HTTPS endpoint.
+
+        Raises:
+            Exception: If the retry count exceeds the max retries.
+        """
         # Check if it is time to poll
         if time.time() - self.last_poll_time >= self.rest_params.poll_interval:
             # Update the last poll time

@@ -181,7 +181,7 @@ class WebSocketClient(AbstractNode):
         """Creates a subscription on the websocket.
 
         Raises:
-            ValueError: If the retry count exceeds the max retries.
+            Exception: If the retry count exceeds the max retries.
         """
         try:
             self.log(f"Creating subscription to {self.ws_params.url}...")
@@ -218,7 +218,7 @@ class WebSocketClient(AbstractNode):
                 time.sleep(self.ws_params.retry_sleep)
                 self.create_subscription()
             else:
-                raise ValueError(
+                raise Exception(
                     "Retry count exceeded max retries. "
                     "Failed to create subscription to "
                     f"{self.ws_params.url}. "
