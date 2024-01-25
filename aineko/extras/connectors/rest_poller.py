@@ -20,7 +20,6 @@ class ParamsRESTPoller(BaseModel):
     headers: Optional[Dict[str, Any]] = None
     data: Optional[Dict[str, Any]] = None
     poll_interval: int = 5
-    poll_throttle: float = 0.1
     max_retries: int = 30
     metadata: Optional[Dict[str, Any]] = None
     retry_sleep: float = 5
@@ -148,7 +147,7 @@ class RESTPoller(AbstractNode):
                     )
                     time.sleep(self.rest_params.retry_sleep)
                 else:
-                    raise ValueError(
+                    raise Exception(  # pylint: disable=broad-except
                         "Retry count exceeded max retries "
                         f"({self.rest_params.max_retries}). "
                         f"Failed to parse message: {raw_message}. "
@@ -156,4 +155,7 @@ class RESTPoller(AbstractNode):
                     ) from err
         else:
             # If it is not time to poll, sleep
-            time.sleep(self.rest_params.poll_throttle)
+            time.sleep(
+                self.rest_params.poll_interval
+                - (time.time() - self.last_poll_time)
+            )
