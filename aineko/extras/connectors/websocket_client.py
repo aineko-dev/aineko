@@ -113,7 +113,7 @@ class WebSocketClient(AbstractNode):
         # Ensure only one output dataset is provided
         output_datasets = [
             dataset for dataset in self.producers.keys() if dataset != "logging"
-            ]
+        ]
         if len(output_datasets) > 1:
             raise ValueError(
                 "Only one output dataset is allowed for the "
@@ -218,7 +218,7 @@ class WebSocketClient(AbstractNode):
                 time.sleep(self.ws_params.retry_sleep)
                 self.create_subscription()
             else:
-                raise Exception(
+                raise Exception(  # pylint: disable=broad-exception-raised
                     "Retry count exceeded max retries. "
                     "Failed to create subscription to "
                     f"{self.ws_params.url}. "

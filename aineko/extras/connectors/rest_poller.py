@@ -4,7 +4,7 @@
 
 import json
 import time
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List, Optional
 
 import requests
 from pydantic import BaseModel, field_validator
@@ -23,7 +23,18 @@ class ParamsRESTPoller(BaseModel):
     max_retries: int = -1
     metadata: Optional[Dict[str, Any]] = None
     retry_sleep: float = 5
-    success_codes: Optional[List[int]] = [200, 201, 202, 203, 204, 205, 206, 207, 208, 226]
+    success_codes: Optional[List[int]] = [
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        226,
+    ]
 
     @field_validator("url")
     @classmethod
@@ -38,36 +49,41 @@ class ParamsRESTPoller(BaseModel):
         return url
 
 
+# pylint: disable=anomalous-backslash-in-string
 class RESTPoller(AbstractNode):
     """Connects to an REST endpoint via HTTP or HTTPS and polls.
-    
-    This node is a wrapper around the [requests](https://docs.python-requests.org/en/master/){:target="\_blank"} library.
+
+    This node is a wrapper around the
+    [requests](
+        https://docs.python-requests.org/en/master/
+        ){:target="\_blank"} library.
 
     `node_params` should be a dictionary with the following keys:
-    
+
             url: The REST URL to connect to
-            headers (optional): A dictionary of headers to send to the REST endpoint.
-                Defaults to None.
+            headers (optional): A dictionary of headers to send to the REST
+                endpoint. Defaults to None.
             data (optional): A dictionary of data to send to the REST endpoint.
                 Defaults to None.
-            poll_interval (optional): The number of seconds to wait between polls.
-                Defaults to 5.
-            max_retries (optional): The maximum number of times to retry connecting
-                to the REST endpoint. Defaults to -1.
-            retry_sleep (optional): The number of seconds to wait between retries.
-                Defaults to 5.
+            poll_interval (optional): The number of seconds to wait between
+                polls. Defaults to 5.
+            max_retries (optional): The maximum number of times to retry
+                connecting to the REST endpoint. Defaults to -1.
+            retry_sleep (optional): The number of seconds to wait between
+                retries. Defaults to 5.
             metadata (optional): A dictionary of metadata to attach to outgoing
                 messages. Defaults to None.
             success_codes (optional): A list of HTTP status codes that indicate
-                success. Defaults to [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
-    
+                success. Defaults to
+                    [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
+
     Secrets can be injected (from environment) into the `url`, `headers`, and
-    `data` fields by passing a string with the following format: `{$SECRET_NAME}`. 
-    For example, if you have a secret named `SECRET_NAME` that contains the value
-    `SECRET_VALUE`, you can inject it into the url field by passing 
-    `https://example.com?secret={$SECRET_NAME}` as the url. The connector will
-    then replace `{$SECRET_NAME}` with `SECRET_VALUE` before connecting to the
-    REST endpoint.
+    `data` fields by passing a string with the following format:
+    `{$SECRET_NAME}`. For example, if you have a secret named `SECRET_NAME`
+    that contains the value `SECRET_VALUE`, you can inject it into the url
+    field by passing `https://example.com?secret={$SECRET_NAME}` as the url.
+    The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE` before
+    connecting to the REST endpoint.
 
     Example usage in pipeline.yml:
     ```yaml title="pipeline.yml"
@@ -147,7 +163,7 @@ class RESTPoller(AbstractNode):
         # Ensure only one output dataset is provided
         output_datasets = [
             dataset for dataset in self.producers.keys() if dataset != "logging"
-            ]
+        ]
         if len(output_datasets) > 1:
             raise ValueError(
                 "Only one output dataset is allowed for the "
@@ -229,7 +245,7 @@ class RESTPoller(AbstractNode):
                     )
                     time.sleep(self.rest_params.retry_sleep)
                 else:
-                    raise Exception(  # pylint: disable=broad-except
+                    raise Exception(  # pylint: disable=broad-exception-raised
                         "Retry count exceeded max retries "
                         f"({self.rest_params.max_retries}). "
                         f"Failed to parse message: {raw_message}. "
