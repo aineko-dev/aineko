@@ -28,7 +28,7 @@ class ParamsRESTPoller(BaseModel):
 
     @field_validator("url")
     @classmethod
-    def supported_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
+    def supported_url(cls, url: str) -> str:
         """Validates that the url is a valid HTTP or HTTPS URL."""
         if not (url.startswith("https://") or url.startswith("http://")):
             raise ValueError(
@@ -68,7 +68,9 @@ class RESTPoller(AbstractNode):
             ) from err
 
         # Ensure only one output dataset is provided
-        output_datasets = [d for d in self.producers.keys() if d != "logging"]
+        output_datasets = [
+            dataset for dataset in self.producers.keys() if dataset != "logging"
+            ]
         if len(output_datasets) > 1:
             raise ValueError(
                 "Only one output dataset is allowed for the "

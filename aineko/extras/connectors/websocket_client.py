@@ -24,7 +24,7 @@ class ParamsWebSocketClient(BaseModel):
 
     @field_validator("url")
     @classmethod
-    def supported_url(cls, url: str) -> str:  # pylint: disable=no-self-argument
+    def supported_url(cls, url: str) -> str:
         """Validates that the url is a valid WebSocket URL."""
         if not (url.startswith("wss://") or url.startswith("ws://")):
             raise ValueError(
@@ -111,7 +111,9 @@ class WebSocketClient(AbstractNode):
             ) from err
 
         # Ensure only one output dataset is provided
-        output_datasets = [d for d in self.producers.keys() if d != "logging"]
+        output_datasets = [
+            dataset for dataset in self.producers.keys() if dataset != "logging"
+            ]
         if len(output_datasets) > 1:
             raise ValueError(
                 "Only one output dataset is allowed for the "

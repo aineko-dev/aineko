@@ -35,9 +35,8 @@ uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
 # extras: websocket_client
 websocket-client = { version = "^1.7.0", optional = true }
 websockets = { version = "^12.0", optional = true }
-# extras: rest
+# extras: rest_poller
 requests = { version = "^2.31.0", optional = true }
-types-requests = { version = "^2.31.0", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 # aineko_style = "^0.0.1"
@@ -69,7 +68,7 @@ pytest-subtests = "^0.11.0"
 
 [tool.poetry.extras]
 fastapi = ["fastapi", "uvicorn"]
-rest = ["requests", "types-requests"]
+rest_poller = ["requests"]
 websocket_client = ["websocket-client", "websockets"]
 
 [build-system]
