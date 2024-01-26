@@ -12,7 +12,7 @@ def import_from_string(  # type: ignore[no-untyped-def]
     reqd_params: Optional[list] = None,
     ret_type: Optional[Any] = None,
 ):
-    """Get a function from a string.
+    """Get a function or class from a string.
 
     Args:
         attr: String to import (e.g. ...module.function or ...module.Class)
