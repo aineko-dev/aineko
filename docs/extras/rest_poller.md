@@ -10,4 +10,4 @@ The RestPoller extra node can be used by adding the following to `pyproject.toml
 
 ## API Reference
 
-::: aineko.extras.connectors.rest_poller.RestPoller
+::: aineko.extras.connectors.rest_poller.RESTPoller
