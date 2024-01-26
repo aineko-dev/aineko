@@ -144,7 +144,6 @@ class RESTPoller(AbstractNode):
 
     def _pre_loop_hook(self, params: Optional[Dict] = None) -> None:
         """Initializes connection to API."""
-        # Cast params to ParamsREST type
         try:
             if params is not None:
                 self.rest_params = ParamsRESTPoller(**params)

@@ -95,7 +95,6 @@ class WebSocketClient(AbstractNode):
         Raises:
             ValueError: If the params are invalid.
         """
-        # Cast params to ParamsWebSocketClient type
         try:
             if params is not None:
                 self.ws_params = ParamsWebSocketClient(**params)
