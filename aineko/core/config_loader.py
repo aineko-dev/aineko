@@ -39,32 +39,32 @@ class ConfigLoader:
             "DEFAULT_PIPELINE_CONFIG"
         )
 
-    def load_config(self) -> dict:
+    def load_config(self) -> Config:
         """Load and validate the pipeline config.
 
         Raises:
             ValidationError: If the config does not match the schema
 
         Returns:
-            The pipeline config as a dictionary
+            The validated pipeline config as a Pydantic Config object
         """
-        config = load_yaml(self.pipeline_config_file)
+        raw_config = load_yaml(self.pipeline_config_file)
 
         try:
-            Config(**config)
+            config = Config(**raw_config)
         except ValidationError as e:
             logger.error(
                 "Schema validation failed for pipeline `%s` loaded from %s. "
                 "See detailed error below.",
-                config["pipeline"]["name"],
+                raw_config["pipeline"]["name"],
                 self.pipeline_config_file,
             )
             raise e
 
         # Inject environment variables into node params
-        for node in config["pipeline"]["nodes"].values():
-            if "node_params" in node and node["node_params"] is not None:
-                node["node_params"] = self.inject_env_vars(node["node_params"])
+        for node in config.pipeline.nodes.values():
+            if node.node_params is not None:
+                node.node_params = self.inject_env_vars(node.node_params)
 
         return config
 
