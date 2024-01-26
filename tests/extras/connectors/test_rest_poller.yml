@@ -10,7 +10,7 @@ pipeline:
     fastapi:
       class: aineko.extras.FastAPI
       node_params:
-        app: tests.extras.connectors.main:app
+        app: tests.extras.connectors.test_rest_server:app
 
     rest_poller:
       class: aineko.extras.RESTPoller
