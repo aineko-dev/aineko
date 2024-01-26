@@ -29,7 +29,7 @@ class Config(BaseModel):
             outputs: Optional[list] = None
 
         name: str
-        default_node_settings: Optional[dict]
+        default_node_settings: Optional[dict] = None
         nodes: Dict[str, Node]
         datasets: Dict[str, Dataset]
 
