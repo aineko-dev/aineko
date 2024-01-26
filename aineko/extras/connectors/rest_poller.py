@@ -49,14 +49,13 @@ class ParamsRESTPoller(BaseModel):
         return url
 
 
-# pylint: disable=anomalous-backslash-in-string
 class RESTPoller(AbstractNode):
     """Connects to an REST endpoint via HTTP or HTTPS and polls.
 
     This node is a wrapper around the
     [requests](
         https://docs.python-requests.org/en/master/
-        ){:target="\_blank"} library.
+        ){:target="_blank"} library.
 
     `node_params` should be a dictionary with the following keys:
 
