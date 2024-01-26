@@ -4,10 +4,10 @@
 
 from fastapi import APIRouter
 
-router = APIRouter()
+health_router = APIRouter()
 
 
-@router.get("/health", status_code=200)
+@health_router.get("/health", status_code=200)
 async def read_health() -> dict:
     """Return the health status of the Aineko FastAPI server.
 
