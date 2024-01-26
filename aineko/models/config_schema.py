@@ -6,17 +6,18 @@ from typing import Dict, Optional
 from pydantic import BaseModel, Field
 
 
+class Dataset(BaseModel):
+    """Dataset model."""
+
+    type: str
+    params: Optional[dict] = None
+
+
 class Config(BaseModel):
     """Config model."""
 
     class Pipeline(BaseModel):
         """Pipeline model."""
-
-        class Dataset(BaseModel):
-            """Dataset model."""
-
-            type: str
-            params: Optional[dict] = None
 
         class Node(BaseModel):
             """Node model."""
