@@ -81,6 +81,10 @@ class WebSocketClient(AbstractNode):
             init_messages:
                 - {"Greeting": "Hello, world!"}
     ```
+
+    Note that the `outputs` field is required and must contain exactly one
+    output dataset. The output dataset will contain the data returned by the
+    WebSocket.
     """
 
     retry_count = 0

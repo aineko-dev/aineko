@@ -99,6 +99,10 @@ class RESTPoller(AbstractNode):
             data: {"Greeting": "Hello, world!"}
     ```
 
+    Note that the `outputs` field is required and must contain exactly one
+    output dataset. The output dataset will contain the data returned by the
+    REST endpoint.
+
     By default, this node will poll the REST endpoint every 5 seconds. This can
     be changed by setting the `poll_interval` field in `node_params`. If the
     REST endpoint is not expected to be available at all times, it is
