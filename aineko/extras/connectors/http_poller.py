@@ -1,6 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Extra module for connecting to a REST endpoint."""
+"""Extra module for connecting to an HTTP endpoint."""
 
 import json
 import time
@@ -12,8 +12,8 @@ from pydantic import BaseModel, field_validator
 from aineko import AbstractNode
 
 
-class ParamsRESTPoller(BaseModel):
-    """Connector params for REST model."""
+class ParamsHTTPPoller(BaseModel):
+    """Connector params for HTTP model."""
 
     timeout: int = 10
     url: str
@@ -49,8 +49,8 @@ class ParamsRESTPoller(BaseModel):
         return url
 
 
-class RESTPoller(AbstractNode):
-    """Connects to an REST endpoint via HTTP or HTTPS and polls.
+class HTTPPoller(AbstractNode):
+    """Connects to an endpoint via HTTP or HTTPS and polls.
 
     This node is a wrapper around the
     [requests](
@@ -59,15 +59,15 @@ class RESTPoller(AbstractNode):
 
     `node_params` should be a dictionary with the following keys:
 
-            url: The REST URL to connect to
-            headers (optional): A dictionary of headers to send to the REST
+            url: The HTTP URL to connect to
+            headers (optional): A dictionary of headers to send to the HTTP
                 endpoint. Defaults to None.
-            data (optional): A dictionary of data to send to the REST endpoint.
+            data (optional): A dictionary of data to send to the HTTP endpoint.
                 Defaults to None.
             poll_interval (optional): The number of seconds to wait between
                 polls. Defaults to 5.
             max_retries (optional): The maximum number of times to retry
-                connecting to the REST endpoint. Defaults to -1.
+                connecting to the HTTP endpoint. Defaults to -1.
             retry_sleep (optional): The number of seconds to wait between
                 retries. Defaults to 5.
             metadata (optional): A dictionary of metadata to attach to outgoing
@@ -82,16 +82,16 @@ class RESTPoller(AbstractNode):
     `SECRET_NAME`that contains the value `SECRET_VALUE`, you can inject it into 
     the url field by passing `https://example.com?secret={$SECRET_NAME}` as the 
     url. The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE` 
-    before connecting to the REST endpoint.
+    before connecting to the HTTP endpoint.
 
     Example usage in pipeline.yml:
     ```yaml title="pipeline.yml"
     pipeline:
       nodes:
-        RestPoller:
-          class: aineko.extras.RESTPoller
+        HTTPoller:
+          class: aineko.extras.HTTPoller
           outputs:
-            - test_rest
+            - test_http
           node_params:
             url: "https://example.com"
             headers:
@@ -101,39 +101,39 @@ class RESTPoller(AbstractNode):
 
     Note that the `outputs` field is required and must contain exactly one
     output dataset. The output dataset will contain the data returned by the
-    REST endpoint.
+    HTTP endpoint.
 
-    By default, this node will poll the REST endpoint every 5 seconds. This can
+    By default, this node will poll the HTTP endpoint every 5 seconds. This can
     be changed by setting the `poll_interval` field in `node_params`. If the
-    REST endpoint is not expected to be available at all times, it is
+    HTTP endpoint is not expected to be available at all times, it is
     recommended to increase `poll_interval` to reduce the number of requests
     sent to the endpoint.
 
-    By default, this node will retry connecting to the REST endpoint forever
+    By default, this node will retry connecting to the HTTP endpoint forever
     if the connection fails. This can be changed by setting the `max_retries`
-    field in `node_params`. If the REST endpoint is not expected to be
+    field in `node_params`. If the HTTP endpoint is not expected to be
     available at all times, it is recommended to set `max_retries` to a
     finite number to prevent the node from retrying forever.
 
-    By default, this node will retry connecting to the REST endpoint every 5
+    By default, this node will retry connecting to the HTTP endpoint every 5
     seconds if the connection fails. This can be changed by setting the
-    `retry_sleep` field in `node_params`. If the REST endpoint is not expected
+    `retry_sleep` field in `node_params`. If the HTTP endpoint is not expected
     to be available at all times, it is recommended to increase `retry_sleep`
     to reduce the number of requests sent to the endpoint.
 
     By default, this node will consider any HTTP status code in the 200s to be
     a success code. This can be changed by setting the `success_codes` field
-    in `node_params`. If the REST endpoint returns a non-200 status code on
+    in `node_params`. If the HTTP endpoint returns a non-200 status code on
     success, it is recommended to add the status code to the `success_codes`
     list.
 
     By default, this node will not attach headers or data to the request. This
     can be changed by setting the `headers` and `data` fields in `node_params`.
-    If the REST endpoint requires headers or data to be sent, it is
+    If the HTTP endpoint requires headers or data to be sent, it is
     you should set the `headers` and `data` fields in `node_params`.
 
     By default, this node will timeout after 10 seconds. This can be changed
-    by setting the `timeout` field in `node_params`. If the REST endpoint is
+    by setting the `timeout` field in `node_params`. If the HTTP endpoint is
     expected to take a long time to respond, it is recommended to increase
     `timeout` to prevent the node from timing out.
     """
@@ -146,10 +146,10 @@ class RESTPoller(AbstractNode):
         """Initializes connection to API."""
         try:
             if params is not None:
-                self.rest_params = ParamsRESTPoller(**params)
+                self.http_poller_params = ParamsHTTPPoller(**params)
             else:
                 raise ValueError(
-                    "No params provided to REST connector. "
+                    "No params provided to HTTPPoller connector. "
                     "Node requires at least a url param."
                 )
         except Exception as err:  # pylint: disable=broad-except
@@ -158,7 +158,7 @@ class RESTPoller(AbstractNode):
             # Note: this is required because pydantic errors
             # are not pickleable
             raise ValueError(
-                "Failed to cast params to ParamsREST type. "
+                "Failed to cast params to ParamsHTTPPoller type. "
                 f"The following error occurred: {err}"
             ) from err
 
@@ -169,14 +169,14 @@ class RESTPoller(AbstractNode):
         if len(output_datasets) > 1:
             raise ValueError(
                 "Only one output dataset is allowed for the "
-                "RESTPoller connector. "
+                "HTTPoller connector. "
                 f"{len(output_datasets)} datasets given."
             )
         self.output_dataset = output_datasets[0]
 
         # Create a session
         self.log(
-            f"Creating new session to REST endpoint {self.rest_params.url}."
+            f"Creating new session to HTTP endpoint {self.http_poller_params.url}."
         )
         self.session = requests.Session()
 
@@ -187,23 +187,23 @@ class RESTPoller(AbstractNode):
             Exception: If the retry count exceeds the max retries.
         """
         # Check if it is time to poll
-        if time.time() - self.last_poll_time >= self.rest_params.poll_interval:
+        if time.time() - self.last_poll_time >= self.http_poller_params.poll_interval:
             # Update the last poll time
             self.last_poll_time = time.time()
 
             try:
-                # Poll REST api
+                # Poll HTTP endpoint
                 response = self.session.get(
-                    self.rest_params.url,
-                    timeout=self.rest_params.timeout,
-                    headers=self.rest_params.headers,
-                    data=self.rest_params.data,
+                    self.http_poller_params.url,
+                    timeout=self.http_poller_params.timeout,
+                    headers=self.http_poller_params.headers,
+                    data=self.http_poller_params.data,
                 )
                 # Check if the request was successful
-                if response.status_code not in self.rest_params.success_codes:
+                if response.status_code not in self.http_poller_params.success_codes:
                     # pylint: disable=broad-exception-raised
                     raise Exception(
-                        f"Request to url {self.rest_params.url} "
+                        f"Request to url {self.http_poller_params.url} "
                         "failed with status code: "
                         f"{response.status_code}"
                     )
@@ -212,16 +212,16 @@ class RESTPoller(AbstractNode):
                 # If request fails, log the error and sleep
                 self.log(
                     "Request failed. "
-                    f"Sleeping for {self.rest_params.poll_interval} seconds. "
+                    f"Sleeping for {self.http_poller_params.poll_interval} seconds. "
                     f"Error: {err}",
                     level="error",
                 )
-                time.sleep(self.rest_params.poll_interval)
+                time.sleep(self.http_poller_params.poll_interval)
                 self.retry_count += 1
                 # Reset the session
                 self.log(
-                    "Creating new session to REST endpoint "
-                    f"{self.rest_params.url}."
+                    "Creating new session to HTTP endpoint "
+                    f"{self.http_poller_params.url}."
                 )
                 self.session = requests.Session()
                 return
@@ -229,34 +229,34 @@ class RESTPoller(AbstractNode):
             try:
                 # Parse the message and emit to producers
                 message = json.loads(raw_message)
-                if self.rest_params.metadata is not None:
+                if self.http_poller_params.metadata is not None:
                     message = {
-                        "metadata": self.rest_params.metadata,
+                        "metadata": self.http_poller_params.metadata,
                         "data": message,
                     }
                 self.producers[self.output_dataset].produce(message)
                 self.retry_count = 0
             except json.decoder.JSONDecodeError as err:
-                if self.retry_count < self.rest_params.max_retries:
+                if self.retry_count < self.http_poller_params.max_retries:
                     self.retry_count += 1
                     self.log(
                         f"Failed to parse message: {raw_message}. "
                         f"The following error occurred: {err} "
-                        f"Will retry in {self.rest_params.retry_sleep} "
+                        f"Will retry in {self.http_poller_params.retry_sleep} "
                         "seconds...",
                         level="error",
                     )
-                    time.sleep(self.rest_params.retry_sleep)
+                    time.sleep(self.http_poller_params.retry_sleep)
                 else:
                     raise Exception(  # pylint: disable=broad-exception-raised
                         "Retry count exceeded max retries "
-                        f"({self.rest_params.max_retries}). "
+                        f"({self.http_poller_params.max_retries}). "
                         f"Failed to parse message: {raw_message}. "
                         f"The following error occurred: {err}"
                     ) from err
         else:
             # If it is not time to poll, sleep
             time.sleep(
-                self.rest_params.poll_interval
+                self.http_poller_params.poll_interval
                 - (time.time() - self.last_poll_time)
             )

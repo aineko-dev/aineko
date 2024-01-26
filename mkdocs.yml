@@ -105,7 +105,7 @@ nav:
           - extras/intro.md
           - extras/fastapi.md
           - extras/websocket_client.md
-          - extras/rest_poller.md
+          - extras/http_poller.md
       - API Documentation:
           - 'api_reference/abstract_node.md'
           - 'api_reference/dataset_consumer.md'
