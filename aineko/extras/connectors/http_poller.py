@@ -4,7 +4,7 @@
 
 import json
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union, Tuple
 
 import requests
 from pydantic import BaseModel, field_validator
@@ -19,6 +19,9 @@ class ParamsHTTPPoller(BaseModel):
     url: str
     headers: Optional[Dict[str, Any]] = None
     data: Optional[Dict[str, Any]] = None
+    params: Optional[Union[Dict[str, Any], List[tuple], bytes]] = None
+    json_: Optional[Dict[str, Any]] = None
+    auth: Optional[Tuple[str]] = None
     poll_interval: float = 5.0
     max_retries: int = -1
     metadata: Optional[Dict[str, Any]] = None
@@ -198,6 +201,9 @@ class HTTPPoller(AbstractNode):
                     timeout=self.http_poller_params.timeout,
                     headers=self.http_poller_params.headers,
                     data=self.http_poller_params.data,
+                    params=self.http_poller_params.params,
+                    json=self.http_poller_params.json_,
+                    auth=self.http_poller_params.auth,
                 )
                 # Check if the request was successful
                 if response.status_code not in self.http_poller_params.success_codes:
