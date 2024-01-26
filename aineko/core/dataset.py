@@ -359,7 +359,7 @@ class DatasetProducer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: Dict[str, Any],
+        dataset_config: Union[Dict, Dataset],
         prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ):
@@ -384,11 +384,14 @@ class DatasetProducer:
         # Set producer parameters
         producer_config = self.kafka_config.get("PRODUCER_CONFIG")
 
+        if isinstance(dataset_config, dict):
+            dataset_config = Dataset(**dataset_config)
+
         # Override default config with dataset specific config
-        if "params" in dataset_config:
+        if dataset_config.params:
             for param in self.kafka_config.get("PRODUCER_OVERRIDABLES"):
-                if param in dataset_config["params"]:
-                    producer_config[param] = dataset_config["params"][param]
+                if param in dataset_config.params:
+                    producer_config[param] = dataset_config.params[param]
 
         # Create producer
         self.producer = Producer(producer_config)
