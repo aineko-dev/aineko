@@ -32,6 +32,7 @@ from confluent_kafka import (  # type: ignore
 )
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
+from aineko.models.config_schema import Config
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +76,7 @@ class DatasetConsumer:
         dataset_name: str,
         node_name: str,
         pipeline_name: str,
-        dataset_config: Dict[str, Any],
+        dataset_config: Union[Dict[str, Any], Config.Pipeline.Dataset],
         bootstrap_servers: Optional[str] = None,
         prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
@@ -86,6 +87,9 @@ class DatasetConsumer:
         self.prefix = prefix
         self.has_pipeline_prefix = has_pipeline_prefix
         self.cached = False
+
+        if isinstance(dataset_config, Config.Pipeline.Dataset):
+            dataset_config = dataset_config.model_dump()
 
         consumer_config = self.kafka_config.get("CONSUMER_CONFIG")
         # Overwrite bootstrap server with broker if provided
