@@ -78,18 +78,18 @@ class RESTPoller(AbstractNode):
 
     Secrets can be injected (from environment) into the `url`, `headers`, and
     `data` fields by passing a string with the following format:
-    `{$SECRET_NAME}`. For example, if you have a secret named `SECRET_NAME`
-    that contains the value `SECRET_VALUE`, you can inject it into the url
-    field by passing `https://example.com?secret={$SECRET_NAME}` as the url.
-    The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE` before
-    connecting to the REST endpoint.
+    `{$SECRET_NAME}`. For example, if you have an environment variable named 
+    `SECRET_NAME`that contains the value `SECRET_VALUE`, you can inject it into 
+    the url field by passing `https://example.com?secret={$SECRET_NAME}` as the 
+    url. The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE` 
+    before connecting to the REST endpoint.
 
     Example usage in pipeline.yml:
     ```yaml title="pipeline.yml"
     pipeline:
       nodes:
         RestPoller:
-          class: aineko.extras.RestPoller
+          class: aineko.extras.RESTPoller
           outputs:
             - test_rest
           node_params:
