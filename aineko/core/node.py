@@ -32,6 +32,7 @@ from aineko.core.dataset import (
     FakeDatasetConsumer,
     FakeDatasetProducer,
 )
+from aineko.models.config_schema import Dataset
 
 
 class PoisonPill:
@@ -103,7 +104,7 @@ class AbstractNode(ABC):
 
     def setup_datasets(
         self,
-        datasets: Dict[str, dict],
+        datasets: Dict[str, Dataset],
         inputs: Optional[List[str]] = None,
         outputs: Optional[List[str]] = None,
         prefix: Optional[str] = None,
@@ -128,7 +129,10 @@ class AbstractNode(ABC):
                     dataset_name=dataset_name,
                     node_name=self.name,
                     pipeline_name=self.pipeline_name,
-                    dataset_config=datasets.get(dataset_name, {}),
+                    dataset_config=datasets.get(
+                        dataset_name,
+                        Dataset(type="kafka_stream"),
+                    ),
                     prefix=prefix,
                     has_pipeline_prefix=has_pipeline_prefix,
                 )
@@ -143,7 +147,10 @@ class AbstractNode(ABC):
                     dataset_name=dataset_name,
                     node_name=self.name,
                     pipeline_name=self.pipeline_name,
-                    dataset_config=datasets.get(dataset_name, {}),
+                    dataset_config=datasets.get(
+                        dataset_name,
+                        Dataset(type="kafka_stream"),
+                    ),
                     prefix=prefix,
                     has_pipeline_prefix=has_pipeline_prefix,
                 )
