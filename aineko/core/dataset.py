@@ -88,16 +88,22 @@ class DatasetConsumer:
         self.has_pipeline_prefix = has_pipeline_prefix
         self.cached = False
 
-        if isinstance(dataset_config, Dataset):
-            dataset_config = dataset_config.model_dump()
+        if isinstance(dataset_config, dict):
+            if "type" not in dataset_config:
+                dataset_config["type"] = "kafka_stream"
+
+            dataset_config = Dataset(**dataset_config)
 
         consumer_config = self.kafka_config.get("CONSUMER_CONFIG")
         # Overwrite bootstrap server with broker if provided
         if bootstrap_servers:
             consumer_config["bootstrap.servers"] = bootstrap_servers
 
+        if dataset_config.params is None:
+            dataset_config.params = {}
+
         # Override default config with dataset specific config
-        for param, value in dataset_config.get("params", {}).items():
+        for param, value in dataset_config.params.items():
             consumer_config[param] = value
 
         topic_name = dataset_name
