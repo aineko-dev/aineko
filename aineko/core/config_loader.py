@@ -24,7 +24,6 @@ class ConfigLoader:
 
     Attributes:
         pipeline_config_file (str): path to the pipeline configuration file
-        config_schema (Config): Pydantic model to validate a pipeline config
 
     Methods:
         load_config: loads and validates the pipeline config from a yaml file
@@ -39,9 +38,6 @@ class ConfigLoader:
         self.pipeline_config_file = pipeline_config_file or AINEKO_CONFIG.get(
             "DEFAULT_PIPELINE_CONFIG"
         )
-
-        # Setup config schema
-        self.config_schema = Config
 
     def load_config(self) -> dict:
         """Load and validate the pipeline config.
