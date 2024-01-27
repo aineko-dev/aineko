@@ -30,7 +30,7 @@ from confluent_kafka import (  # type: ignore
     Producer,
 )
 
-from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 from aineko.models.base import MessageData
 from aineko.models.config_schema import Dataset
 
@@ -90,7 +90,7 @@ class DatasetConsumer:
 
         if isinstance(dataset_config, dict):
             if "type" not in dataset_config:
-                dataset_config["type"] = "kafka_stream"
+                dataset_config["type"] = AINEKO_CONFIG.get("KAFKA_STREAM_TYPE")
 
             dataset_config = Dataset(**dataset_config)
 

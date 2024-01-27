@@ -131,7 +131,7 @@ class AbstractNode(ABC):
                     pipeline_name=self.pipeline_name,
                     dataset_config=datasets.get(
                         dataset_name,
-                        Dataset(type="kafka_stream"),
+                        Dataset(type=AINEKO_CONFIG.get("KAFKA_STREAM_TYPE")),
                     ),
                     prefix=prefix,
                     has_pipeline_prefix=has_pipeline_prefix,
@@ -149,7 +149,7 @@ class AbstractNode(ABC):
                     pipeline_name=self.pipeline_name,
                     dataset_config=datasets.get(
                         dataset_name,
-                        Dataset(type="kafka_stream"),
+                        Dataset(type=AINEKO_CONFIG.get("KAFKA_STREAM_TYPE")),
                     ),
                     prefix=prefix,
                     has_pipeline_prefix=has_pipeline_prefix,
