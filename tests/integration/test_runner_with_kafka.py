@@ -101,16 +101,19 @@ def test_write_read_to_kafka(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="messages",
-            node_name="consumer",
-            pipeline_name="integration_test_write",
-            dataset_config={},
-            has_pipeline_prefix=True,
-        )
-        count_messages = consumer.consume_all(end_message="END")
-        count_values = [msg["message"] for msg in count_messages]
-        assert count_values == MESSAGES
+        # This is expected because we activated the poison pill
+        pass
+
+    consumer = DatasetConsumer(
+        dataset_name="messages",
+        node_name="consumer",
+        pipeline_name="integration_test_write",
+        dataset_config={},
+        has_pipeline_prefix=True,
+    )
+    count_messages = consumer.consume_all(end_message="END")
+    count_values = [msg["message"] for msg in count_messages]
+    assert count_values == MESSAGES
 
     runner = Runner(
         pipeline_config_file="tests/conf/integration_test_read.yml",
@@ -118,17 +121,20 @@ def test_write_read_to_kafka(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="integration_test_read",
-            dataset_config={},
-            has_pipeline_prefix=True,
-        )
-        count_messages = consumer.consume_all(end_message="END")
-        assert count_messages[0]["source_pipeline"] == "integration_test_read"
-        assert count_messages[0]["message"] == "TEST PASSED"
+        # This is expected because we activated the poison pill
+        pass
 
-        # Test consume.last functionality
-        last_message = consumer.last(timeout=10)
-        assert last_message["message"] == "END"
+    consumer = DatasetConsumer(
+        dataset_name="test_result",
+        node_name="consumer",
+        pipeline_name="integration_test_read",
+        dataset_config={},
+        has_pipeline_prefix=True,
+    )
+    count_messages = consumer.consume_all(end_message="END")
+    assert count_messages[0]["source_pipeline"] == "integration_test_read"
+    assert count_messages[0]["message"] == "TEST PASSED"
+
+    # Test consume.last functionality
+    last_message = consumer.last(timeout=10)
+    assert last_message["message"] == "END"
