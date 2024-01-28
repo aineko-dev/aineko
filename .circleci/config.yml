@@ -193,7 +193,7 @@ jobs:
       - checkout
       - run: poetry add git+ssh://git@github.com/squidfunk/mkdocs-material-insiders.git#<<
           pipeline.parameters.mkdocs_material_version >> --group docs --no-interaction
-          --no-ansi
+          --quiet
       - run: poetry install --with docs --no-interaction --quiet
       - run: git config user.name aineko-ci
       - run: git config user.email engineering-admins@convexlabs.xyz
