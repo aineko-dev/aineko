@@ -3,7 +3,7 @@
 """Submodule that handles the running of a pipeline from config."""
 import logging
 import time
-from typing import Optional
+from typing import Dict, Optional
 
 import ray
 from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
@@ -15,6 +15,7 @@ from aineko.config import (
 )
 from aineko.core.config_loader import ConfigLoader
 from aineko.core.node import PoisonPill
+from aineko.models.config_schema import Config
 from aineko.utils import imports
 
 logger = logging.getLogger(__name__)
@@ -66,11 +67,11 @@ class Runner:
         """
         # Load pipeline config
         pipeline_config = self.load_pipeline_config()
-        self.pipeline_name = self.pipeline_name or pipeline_config["name"]
+        self.pipeline_name = self.pipeline_name or pipeline_config.name
 
         # Create the necessary datasets
         self.prepare_datasets(
-            config=pipeline_config["datasets"],
+            config=pipeline_config.datasets,
             user_dataset_prefix=self.pipeline_name,
         )
 
@@ -85,9 +86,9 @@ class Runner:
         poison_pill = ray.remote(PoisonPill).remote()
 
         # Add Node Manager to pipeline config
-        pipeline_config["nodes"][
+        pipeline_config.nodes[
             NODE_MANAGER_CONFIG.get("NAME")
-        ] = NODE_MANAGER_CONFIG.get("NODE_CONFIG")
+        ] = Config.Pipeline.Node(**NODE_MANAGER_CONFIG.get("NODE_CONFIG"))
 
         # Create each node (actor)
         results = self.prepare_nodes(
@@ -97,7 +98,7 @@ class Runner:
 
         ray.get(results)
 
-    def load_pipeline_config(self) -> dict:
+    def load_pipeline_config(self) -> Config.Pipeline:
         """Loads the config for a given pipeline.
 
         Returns:
@@ -107,10 +108,12 @@ class Runner:
             pipeline_config_file=self.pipeline_config_file,
         ).load_config()
 
-        return config["pipeline"]
+        return config.pipeline
 
     def prepare_datasets(
-        self, config: dict, user_dataset_prefix: Optional[str] = None
+        self,
+        config: Dict[str, Config.Pipeline.Dataset],
+        user_dataset_prefix: Optional[str] = None,
     ) -> bool:
         """Creates the required datasets for a given pipeline.
 
@@ -155,10 +158,12 @@ class Runner:
                 )
 
         # Add logging dataset to catalog
-        config[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")] = {
-            "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
-            "params": DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-        }
+        config[
+            DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
+        ] = Config.Pipeline.Dataset(
+            type=AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
+            params=DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
+        )
 
         # Create all dataset defined in the catalog
         dataset_list = []
@@ -167,11 +172,14 @@ class Runner:
                 "Creating dataset: %s: %s", dataset_name, dataset_config
             )
             # Create dataset for kafka streams
-            if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
+            if dataset_config.type == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
                 # User defined
+                if not dataset_config.params:
+                    dataset_config.params = {}
+
                 dataset_params = {
                     **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-                    **dataset_config.get("params", {}),
+                    **dataset_config.params,
                 }
 
                 # Configure dataset
@@ -216,7 +224,9 @@ class Runner:
         return datasets
 
     def prepare_nodes(
-        self, pipeline_config: dict, poison_pill: ray.actor.ActorHandle
+        self,
+        pipeline_config: Config.Pipeline,
+        poison_pill: ray.actor.ActorHandle,
     ) -> list:
         """Prepare actor handles for all nodes.
 
@@ -232,14 +242,20 @@ class Runner:
         """
         # Collect all  actor futures
         results = []
+        if pipeline_config.default_node_settings:
+            default_node_config = pipeline_config.default_node_settings
+        else:
+            default_node_config = {}
 
-        default_node_config = pipeline_config.get("default_node_settings", {})
-
-        for node_name, node_config in pipeline_config["nodes"].items():
+        for node_name, node_config in pipeline_config.nodes.items():
+            if node_config.node_settings:
+                node_settings = node_config.node_settings
+            else:
+                node_settings = {}
             # Initialize actor from specified class in config
             try:
                 target_class = imports.import_from_string(
-                    attr=node_config["class"], kind="class"
+                    attr=node_config.class_name, kind="class"
                 )
             except AttributeError as exc:
                 raise ValueError(
@@ -251,7 +267,7 @@ class Runner:
 
             actor_params = {
                 **default_node_config,
-                **node_config.get("node_settings", {}),
+                **node_settings,
                 "name": node_name,
                 "namespace": self.pipeline_name,
             }
@@ -264,26 +280,33 @@ class Runner:
                 poison_pill=poison_pill,
             )
 
+            if node_config.outputs:
+                outputs = node_config.outputs
+            else:
+                outputs = []
+
+            if node_config.inputs:
+                inputs = node_config.inputs
+            else:
+                inputs = None
             # Setup input and output datasets
-            outputs = node_config.get("outputs", [])
+
             actor_handle.setup_datasets.remote(
-                inputs=node_config.get("inputs", None),
+                inputs=inputs,
                 outputs=outputs,
-                datasets=pipeline_config["datasets"],
+                datasets=pipeline_config.datasets,
                 has_pipeline_prefix=True,
             )
 
             # Setup internal datasets like logging, without pipeline prefix
             actor_handle.setup_datasets.remote(
                 outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
-                datasets=pipeline_config["datasets"],
+                datasets=pipeline_config.datasets,
             )
 
             # Create actor future (for execute method)
             results.append(
-                actor_handle.execute.remote(
-                    params=node_config.get("node_params", None)
-                )
+                actor_handle.execute.remote(params=node_config.node_params)
             )
 
         return results
