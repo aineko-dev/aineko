@@ -1084,17 +1084,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.config_schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;config_schema
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aineko.ConfigLoader.pipeline_config_file" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1400,17 +1389,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.ConfigLoader.config_schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;config_schema
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aineko.ConfigLoader.pipeline_config_file" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1594,17 +1572,6 @@ to <code>DEFAULT_PIPELINE_CONFIG</code>.</p>
             </div>
           </td>
         </tr>
-        <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.ConfigLoader.config_schema" href="#aineko.ConfigLoader.config_schema">config_schema</a></code></td>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config" href="../config/#aineko.models.config_schema.Config">Config</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Pydantic model to validate a pipeline config</p>
-            </div>
-          </td>
-        </tr>
     </tbody>
   </table>
 
@@ -1642,17 +1609,14 @@ to <code>DEFAULT_PIPELINE_CONFIG</code>.</p>
 
                 <details class="quote">
                   <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+<span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
 <span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">pipeline_config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">):</span>
@@ -1660,9 +1624,6 @@ to <code>DEFAULT_PIPELINE_CONFIG</code>.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span> <span class="o">=</span> <span class="n">pipeline_config_file</span> <span class="ow">or</span> <span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
         <span class="s2">&quot;DEFAULT_PIPELINE_CONFIG&quot;</span>
     <span class="p">)</span>
-
-    <span class="c1"># Setup config schema</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">config_schema</span> <span class="o">=</span> <span class="n">Config</span>
 </code></pre></div></td></tr></table></div>
                 </details>
 
@@ -1675,27 +1636,6 @@ to <code>DEFAULT_PIPELINE_CONFIG</code>.</p>
 
 
 
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.ConfigLoader.config_schema" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">config_schema</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">config_schema</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config" href="../config/#aineko.models.config_schema.Config">Config</a></span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
 
 <div class="doc doc-object doc-attribute">
 
@@ -1784,7 +1724,11 @@ $ export SECRET2=secret2
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
@@ -1855,11 +1799,7 @@ $ export SECRET2=secret2
 <span class="normal">167</span>
 <span class="normal">168</span>
 <span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span>
+<span class="normal">170</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">inject_env_vars</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">node_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
@@ -1951,7 +1891,7 @@ $ export SECRET2=secret2
 
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">load_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">dict</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">load_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config" href="../config/#aineko.models.config_schema.Config">Config</a></span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1995,11 +1935,11 @@ $ export SECRET2=secret2
     <tbody>
         <tr>
           <td>
-                <code>dict</code>
+                <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config" href="../config/#aineko.models.config_schema.Config">Config</a></code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>The pipeline config as a dictionary</p>
+              <p>The validated pipeline config as a Pydantic Config object</p>
             </div>
           </td>
         </tr>
@@ -2008,7 +1948,11 @@ $ export SECRET2=secret2
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/config_loader.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
 <span class="normal">47</span>
 <span class="normal">48</span>
 <span class="normal">49</span>
@@ -2031,36 +1975,32 @@ $ export SECRET2=secret2
 <span class="normal">66</span>
 <span class="normal">67</span>
 <span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and validate the pipeline config.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValidationError: If the config does not match the schema</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The pipeline config as a dictionary</span>
+<span class="sd">        The validated pipeline config as a Pydantic Config object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">)</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">Config</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s2">&quot;Schema validation failed for pipeline `</span><span class="si">%s</span><span class="s2">` loaded from </span><span class="si">%s</span><span class="s2">. &quot;</span>
             <span class="s2">&quot;See detailed error below.&quot;</span><span class="p">,</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="n">raw_config</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_config_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="n">e</span>
 
     <span class="c1"># Inject environment variables into node params</span>
-    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-        <span class="k">if</span> <span class="s2">&quot;node_params&quot;</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">and</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;node_params&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">node</span><span class="p">[</span><span class="s2">&quot;node_params&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;node_params&quot;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">node_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">node_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject_env_vars</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_params</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">config</span>
 </code></pre></div></td></tr></table></div>
