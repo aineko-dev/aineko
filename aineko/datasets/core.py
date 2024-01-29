@@ -17,7 +17,7 @@ import time
 import datetime
 import abc
 import json
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel
 from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
@@ -30,6 +30,8 @@ from confluent_kafka import (  # type: ignore
 )
 
 from aineko.utils.imports import import_from_string
+from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
+
 
 
 class DatasetError(Exception):
@@ -42,6 +44,9 @@ class DatasetError(Exception):
 
     pass
 
+class KafkaDatasetError(DatasetError):
+    """General Exception for KafkaDataset errors."""
+    pass
 
 class AbstractDatasetConfig(BaseModel):
     """Dataset configuration model."""
@@ -133,8 +138,9 @@ class AbstractDataset(abc.ABC):
 
     @abc.abstractmethod
     def _describe(self) -> str:
-        """Describe the dataset."""
-        raise NotImplementedError
+        """Describe the dataset metadata."""
+        return f"Dataset name: {self.name}"
+
 
 
 class KafkaCredentials(BaseModel):
@@ -160,7 +166,7 @@ class KafkaDataset(AbstractDataset):
         self._create_admin_client()
         
 
-    def _create(self,dataset_name:str) -> None:
+    def _create(self, dataset_name:str) -> None:
         """Create the dataset storage layer.
         
         This method creates the dataset topic in the Kafka cluster.
@@ -216,6 +222,8 @@ class KafkaDataset(AbstractDataset):
             message: message to produce to the dataset
             key: key to use for the message
         """
+        # Note, this will be re-written to use the dataset's schema,
+        # without added metadata.
         message = {
             "timestamp": datetime.datetime.now().strftime(
                 AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
@@ -246,6 +254,7 @@ class KafkaDataset(AbstractDataset):
         return describe_string
 
     def _create_admin_client(self):
+        """Creates Kafka AdminClient."""
         self._admin_client = AdminClient(
             bootstrap_servers=self.credentials.bootstrap_servers,
             security_protocol=self.credentials.security_protocol,
@@ -255,6 +264,7 @@ class KafkaDataset(AbstractDataset):
         )
         
     def _create_consumer(self):
+        """Creates Kafka Consumer and subscribes to the dataset topic."""
         self._consumer = Consumer(
             self.topic_name,
             bootstrap_servers=self.credentials.bootstrap_servers,
@@ -267,6 +277,7 @@ class KafkaDataset(AbstractDataset):
         self._consumer.subscribe([self.topic_name])
 
     def _create_producer(self):
+        """Creates Kafka Producer."""
         self._producer = Producer(
             bootstrap_servers=self.credentials.bootstrap_servers,
             security_protocol=self.credentials.security_protocol,
