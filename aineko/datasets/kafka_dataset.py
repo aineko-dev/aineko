@@ -45,44 +45,23 @@ class KafkaDataset(AbstractDataset):
         self._producer = None
         self._create_admin_client()
 
-    def _create(self, dataset_name: str) -> None:
+    def _create(self, 
+                create_topic:bool = False, 
+                create_consumer:bool = False, 
+                create_producer:bool = False) -> None:
         """Create the dataset storage layer.
 
         This method creates the dataset topic in the Kafka cluster.
+
+        Return status of dataset creation.
         """
-        dataset_params = {
-            **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            **dataset_config.get("params", {}),
-        }
-
-        # Configure dataset
-        if self.dataset_prefix:
-            topic_name = f"{self.dataset_prefix}.{dataset_name}"
-        else:
-            topic_name = dataset_name
-
-        new_dataset = NewTopic(
-            topic=topic_name,
-            num_partitions=dataset_params.get("num_partitions"),
-            replication_factor=dataset_params.get("replication_factor"),
-            config=dataset_params.get("config"),
-        )
-        topic_to_future_map = self._admin_client.create_topics([new_dataset])
-        cur_time = time.time()
-        while True:
-            if all(future.done() for future in topic_to_future_map.values()):
-                # logger.info("{topic_name} created.")
-                break
-            if time.time() - cur_time > AINEKO_CONFIG.get(
-                "DATASET_CREATION_TIMEOUT"
-            ):
-                raise TimeoutError(
-                    "Timeout while creating Kafka datasets. "
-                    "Please check your Kafka cluster."
-                )
-
-        self._create_consumer()
-        self._create_producer()
+        
+        if create_topic:
+            self._create_topic()
+        if create_consumer:
+            self._create_consumer()
+        if create_producer:
+            self._create_producer()
 
     def _delete(self) -> None:
         """Delete the dataset."""
@@ -92,6 +71,14 @@ class KafkaDataset(AbstractDataset):
         """Read the dataset."""
         self.consumer.consume()
         # next, last?
+
+    def next(self) -> Any:
+        """Return the next message from the topic."""
+        raise NotImplementedError
+    
+    def last(self) -> Any:
+        """Return the last message from the topic."""
+        raise NotImplementedError
 
     def _write(self, message: dict, key: Optional[str] = None) -> None:
         """Produce a message to the dataset.
@@ -141,17 +128,45 @@ class KafkaDataset(AbstractDataset):
             **self.credentials.dict(),
         )
 
-    def _create_consumer(self):
+    def _create_consumer(self) -> DatasetCreateStatus:
         """Creates Kafka Consumer and subscribes to the dataset topic."""
         self._consumer = Consumer(
             self.topic_name,
             **self.credentials.dict(),
         )
-
         self._consumer.subscribe([self.topic_name])
+        dataset_create_status = DatasetCreateStatus(dataset_name=f"{self.topic_name}_consumer")
+        return dataset_create_status
 
-    def _create_producer(self):
+    def _create_producer(self) -> DatasetCreateStatus:
         """Creates Kafka Producer."""
         self._producer = Producer(
             **self.credentials.dict(),
         )
+        dataset_create_status = DatasetCreateStatus(dataset_name=f"{self.topic_name}_producer")
+        return dataset_create_status
+
+    def _create_topic(self, dataset_name: str) -> DatasetCreateStatus:
+        """Creates Kafka topic for the dataset."""
+        dataset_params = {
+            **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
+            **dataset_config.get("params", {}),
+        }
+
+        # Configure dataset
+        if self.dataset_prefix:
+            topic_name = f"{self.dataset_prefix}.{dataset_name}"
+        else:
+            topic_name = dataset_name
+
+        new_dataset = NewTopic(
+            topic=topic_name,
+            num_partitions=dataset_params.get("num_partitions"),
+            replication_factor=dataset_params.get("replication_factor"),
+            config=dataset_params.get("config"),
+        )
+        topic_to_future_map = self._admin_client.create_topics([new_dataset])
+        dataset_create_status = DatasetCreateStatus(dataset_name, 
+                                                    kafka_topic_to_future=topic_to_future_map)
+        return dataset_create_status
+        

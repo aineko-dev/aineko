@@ -150,7 +150,7 @@ class Runner:
         datasets.append(LoggingDataset())
 
         # Create all datasets
-        dataset_create_status = [dataset.create() for dataset in datasets]
+        dataset_create_status = [dataset.create(create_topic=True) for dataset in datasets]
         cur_time = time.time()
         while True:
             if all(future.done() for future in dataset_create_status.values()):

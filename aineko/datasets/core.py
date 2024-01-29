@@ -43,11 +43,21 @@ class AbstractDatasetConfig(BaseModel):
 class DatasetCreateStatus:
     """Object representing staus of dataset creation."""
 
-    def __init__(self, dataset_name: str):
+    def __init__(self, dataset_name: str, kafka_topic_to_future: dict[str, Any] | None = None):
         self.dataset_name = dataset_name
-        self.status = None
+        self.kafka_topic_to_future = kafka_topic_to_future
 
-
+    def done(self) -> bool:
+        """Return status of dataset creation."""
+        if self.kafka_topic_to_future is None:
+            return True
+        else:
+            return all(
+                [
+                    future.done()
+                    for future in self.kafka_topic_to_future.values()
+                ]
+            )
 class AbstractDataset(abc.ABC):
     @classmethod
     def from_config(
