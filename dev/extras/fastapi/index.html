@@ -1570,7 +1570,104 @@ on how to create a FastAPI app.</p>
   </div>
 
 
-</div>
+</div><h1 id="health-check-endpoint">Health Check Endpoint</h1>
+<p>A common use case with an API server is to check its operational health status. For Aineko specifically, it is useful to know if the pipeline and API node are operational as well. Aineko comes with a light weight helper function as follows:</p>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="aineko.extras.fastapi.health.read_health" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>          <span class="doc doc-object-name doc-function-name">aineko.extras.fastapi.health.read_health</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">read_health</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">dict</span>
+</code></pre></div>
+
+  <div class="doc doc-contents first">
+  
+      <p>Return the health status of the Aineko FastAPI server.</p>
+<p>Health router can be imported by an Aineko FastAPI server and added
+to the app as a router.</p>
+<p>The health check endpoint is available via a GET request to the <code>/health</code>
+route and returns a 200 response if the server is active.</p>
+<p>For example, if the FastAPI app is running locally on
+<code>http://localhost:8000</code>, the health check endpoint can be accessed via
+a GET request query to <code>http://localhost:8000/health</code>.</p>
+
+<details class="example-usage-in-fastapi-app" open>
+  <summary>Example usage in FastAPI app</summary>
+  <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">aineko.extras.fastapi</span> <span class="kn">import</span> <span class="n">health_router</span>
+</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">health_router</span><span class="p">)</span>
+</span></code></pre></div>
+</details>
+          <details class="quote">
+            <summary>Source code in <code>aineko/extras/fastapi/health.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@health_router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/health&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">read_health</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the health status of the Aineko FastAPI server.</span>
+
+<span class="sd">    Health router can be imported by an Aineko FastAPI server and added</span>
+<span class="sd">    to the app as a router.</span>
+
+<span class="sd">    The health check endpoint is available via a GET request to the `/health`</span>
+<span class="sd">    route and returns a 200 response if the server is active.</span>
+
+<span class="sd">    For example, if the FastAPI app is running locally on</span>
+<span class="sd">    `http://localhost:8000`, the health check endpoint can be accessed via</span>
+<span class="sd">    a GET request query to `http://localhost:8000/health`.</span>
+
+<span class="sd">    Example usage in FastAPI app:</span>
+<span class="sd">        ```python hl_lines=&quot;2 5&quot;</span>
+<span class="sd">        from fastapi import FastAPI</span>
+<span class="sd">        from aineko.extras.fastapi import health_router</span>
+
+<span class="sd">        app = FastAPI()</span>
+<span class="sd">        app.include_router(health_router)</span>
+<span class="sd">        ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;healthy&quot;</span><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div><h2 id="authentication-considerations">Authentication Considerations</h2>
+<p>By default, the <code>/health</code> endpoint does not contain authentication. </p>
+<p>One method to add authentication is to use security middleware at the app level for FastAPI. This will handle adding authentication to the health endpoint without having to add custom dependencies.</p>
+<p>For more information about security with FastAPI, check out the documentation <a href="https://fastapi.tiangolo.com/advanced/security/">here</a>.</p>
 
 
 
