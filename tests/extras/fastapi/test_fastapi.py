@@ -29,6 +29,9 @@ class FastAPIChecker(AbstractNode):
         response = requests.get("http://localhost:8000/last")
         results["last"] = response.json()
 
+        response = requests.get("http://localhost:8000/health")
+        results["health"] = response.status_code
+
         self.producers["test_result"].produce(results)
 
         self.activate_poison_pill()
@@ -63,3 +66,4 @@ def test_fastapi_node(start_service):
     assert test_results["message"]["produce"] == 200
     assert test_results["message"]["next"]["message"] == 1
     assert test_results["message"]["last"]["message"] == 3
+    assert test_results["message"]["health"] == 200
