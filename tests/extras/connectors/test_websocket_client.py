@@ -103,18 +103,21 @@ def test_websocket_client_node(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="test_websocket_client",
-            dataset_config={},
-            has_pipeline_prefix=True,
-        )
-        test_results = consumer.next()
-        assert test_results["message"] == {
-            "message_0": "Hello World!",
-            "message_1": "Hello World!",
-            "message_2": "Hello World!",
-            "message_3": "Hello World!",
-            "message_4": "Hello World!",
-        }
+        # This is expected because we activated the poison pill
+        pass
+
+    consumer = DatasetConsumer(
+        dataset_name="test_result",
+        node_name="consumer",
+        pipeline_name="test_websocket_client",
+        dataset_config={},
+        has_pipeline_prefix=True,
+    )
+    test_results = consumer.next()
+    assert test_results["message"] == {
+        "message_0": "Hello World!",
+        "message_1": "Hello World!",
+        "message_2": "Hello World!",
+        "message_3": "Hello World!",
+        "message_4": "Hello World!",
+    }

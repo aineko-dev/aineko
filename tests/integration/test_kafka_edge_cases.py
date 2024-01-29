@@ -26,7 +26,7 @@ class ConsumerNode(AbstractNode):
 
 
 @pytest.mark.integration
-def test_consume_empty_datasets():
+def test_consume_empty_datasets(start_service):
     """Integration test that checks that empty datasets do not cause errors.
 
     If a dataset is empty, dataset consumer methods should not error out.

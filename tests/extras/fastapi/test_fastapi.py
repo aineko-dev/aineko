@@ -52,15 +52,18 @@ def test_fastapi_node(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="test_fastapi",
-            dataset_config={},
-            has_pipeline_prefix=True,
-        )
-        test_results = consumer.next()
-        assert test_results["message"]["produce"] == 200
-        assert test_results["message"]["next"]["message"] == 1
-        assert test_results["message"]["last"]["message"] == 3
-        assert test_results["message"]["health"] == 200
+        # This is expected because we activated the poison pill
+        pass
+
+    consumer = DatasetConsumer(
+        dataset_name="test_result",
+        node_name="consumer",
+        pipeline_name="test_fastapi",
+        dataset_config={},
+        has_pipeline_prefix=True,
+    )
+    test_results = consumer.next()
+    assert test_results["message"]["produce"] == 200
+    assert test_results["message"]["next"]["message"] == 1
+    assert test_results["message"]["last"]["message"] == 3
+    assert test_results["message"]["health"] == 200
