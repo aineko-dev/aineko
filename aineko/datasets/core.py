@@ -13,14 +13,12 @@ Example dataset configuration:
                 param_1: bar
     ```
 """
-import time
-import datetime
 import abc
+import datetime
 import json
+import time
 from typing import Any, Optional
 
-from pydantic import BaseModel
-from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
     Consumer,
@@ -28,10 +26,11 @@ from confluent_kafka import (  # type: ignore
     Message,
     Producer,
 )
+from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
+from pydantic import BaseModel
 
-from aineko.utils.imports import import_from_string
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
-
+from aineko.utils.imports import import_from_string
 
 
 class DatasetError(Exception):
@@ -44,9 +43,12 @@ class DatasetError(Exception):
 
     pass
 
+
 class KafkaDatasetError(DatasetError):
     """General Exception for KafkaDataset errors."""
+
     pass
+
 
 class AbstractDatasetConfig(BaseModel):
     """Dataset configuration model."""
@@ -54,6 +56,14 @@ class AbstractDatasetConfig(BaseModel):
     type: str
     target: str
     params: dict[str, Any] = {}
+
+
+class DatasetCreateStatus:
+    """Object representing staus of dataset creation."""
+
+    def __init__(self, dataset_name: str):
+        self.dataset_name = dataset_name
+        self.status = None
 
 
 class AbstractDataset(abc.ABC):
@@ -79,7 +89,7 @@ class AbstractDataset(abc.ABC):
     def read(self) -> Any:
         """Read the dataset."""
         try:
-            self._read()
+            return self._read()
         except DatasetError:
             raise
         except Exception as e:
@@ -89,7 +99,7 @@ class AbstractDataset(abc.ABC):
     def write(self) -> None:
         """Write the dataset."""
         try:
-            self._write()
+            return self._write()
         except DatasetError:
             raise
         except Exception as e:
@@ -99,7 +109,7 @@ class AbstractDataset(abc.ABC):
     def create(self) -> None:
         """Create the dataset."""
         try:
-            self._create()
+            return self._create()
         except DatasetError:
             raise
         except Exception as e:
@@ -109,7 +119,7 @@ class AbstractDataset(abc.ABC):
     def delete(self) -> None:
         """Delete the dataset."""
         try:
-            self._delete()
+            return self._delete()
         except DatasetError:
             raise
         except Exception as e:
@@ -142,7 +152,6 @@ class AbstractDataset(abc.ABC):
         return f"Dataset name: {self.name}"
 
 
-
 class KafkaCredentials(BaseModel):
     """Kafka credentials model."""
 
@@ -164,11 +173,10 @@ class KafkaDataset(AbstractDataset):
         self._consumer = None
         self._producer = None
         self._create_admin_client()
-        
 
-    def _create(self, dataset_name:str) -> None:
+    def _create(self, dataset_name: str) -> None:
         """Create the dataset storage layer.
-        
+
         This method creates the dataset topic in the Kafka cluster.
         """
         dataset_params = {
@@ -201,10 +209,9 @@ class KafkaDataset(AbstractDataset):
                     "Timeout while creating Kafka datasets. "
                     "Please check your Kafka cluster."
                 )
-            
+
         self._create_consumer()
         self._create_producer()
-
 
     def _delete(self) -> None:
         """Delete the dataset."""
@@ -213,7 +220,7 @@ class KafkaDataset(AbstractDataset):
     def _read(self) -> Any:
         """Read the dataset."""
         self.consumer.consume()
-        #next, last?
+        # next, last?
 
     def _write(self, message: dict, key: Optional[str] = None) -> None:
         """Produce a message to the dataset.
@@ -248,8 +255,12 @@ class KafkaDataset(AbstractDataset):
     def _describe(self) -> str:
         """Describe the dataset metadata."""
         describe_string = super()._describe()
-        kafka_describe = "\n".join([f"Kafka topic: {self.topic_name}",
-                                    f"bootstrap_servers: {self.credentials.bootstrap_servers}",])
+        kafka_describe = "\n".join(
+            [
+                f"Kafka topic: {self.topic_name}",
+                f"bootstrap_servers: {self.credentials.bootstrap_servers}",
+            ]
+        )
         describe_string += f"\n{kafka_describe}"
         return describe_string
 
@@ -262,16 +273,12 @@ class KafkaDataset(AbstractDataset):
             sasl_plain_username=self.credentials.sasl_plain_username,
             sasl_plain_password=self.credentials.sasl_plain_password,
         )
-        
+
     def _create_consumer(self):
         """Creates Kafka Consumer and subscribes to the dataset topic."""
         self._consumer = Consumer(
             self.topic_name,
-            bootstrap_servers=self.credentials.bootstrap_servers,
-            security_protocol=self.credentials.security_protocol,
-            sasl_mechanism=self.credentials.sasl_mechanism,
-            sasl_plain_username=self.credentials.sasl_plain_username,
-            sasl_plain_password=self.credentials.sasl_plain_password,
+            **self.credentials.dict(),
         )
 
         self._consumer.subscribe([self.topic_name])

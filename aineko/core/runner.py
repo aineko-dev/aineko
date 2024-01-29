@@ -15,6 +15,7 @@ from aineko.config import (
 )
 from aineko.core.config_loader import ConfigLoader
 from aineko.core.node import PoisonPill
+from aineko.datasets.core import AbstractDataset
 from aineko.utils import imports
 
 logger = logging.getLogger(__name__)
@@ -136,84 +137,109 @@ class Runner:
         Raises:
             ValueError: if dataset "logging" is defined in the catalog
         """
-        # Connect to kafka cluster
-        kafka_client = AdminClient(self.kafka_config)
-
-        # Add prefix to user defined datasets
-        if user_dataset_prefix:
-            config = {
-                f"{user_dataset_prefix}.{dataset_name}": dataset_config
-                for dataset_name, dataset_config in config.items()
-            }
-
-        # Fail if reserved dataset names are defined in catalog
-        for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
-            if reserved_dataset in config:
-                raise ValueError(
-                    f"Unable to create dataset `{reserved_dataset}`. "
-                    "Reserved for internal use."
-                )
-
-        # Add logging dataset to catalog
-        config[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")] = {
-            "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
-            "params": DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-        }
-
-        # Create all dataset defined in the catalog
-        dataset_list = []
+        # Create all configured dataset objects
+        datasets = []
         for dataset_name, dataset_config in config.items():
             logger.info(
                 "Creating dataset: %s: %s", dataset_name, dataset_config
             )
-            # Create dataset for kafka streams
-            if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
-                # User defined
-                dataset_params = {
-                    **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-                    **dataset_config.get("params", {}),
-                }
+            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+            datasets.append(dataset)
 
-                # Configure dataset
-                if self.dataset_prefix:
-                    topic_name = f"{self.dataset_prefix}.{dataset_name}"
-                else:
-                    topic_name = dataset_name
+        # Create logging dataset
+        datasets.append(LoggingDataset())
 
-                new_dataset = NewTopic(
-                    topic=topic_name,
-                    num_partitions=dataset_params.get("num_partitions"),
-                    replication_factor=dataset_params.get("replication_factor"),
-                    config=dataset_params.get("config"),
-                )
-
-                # Add dataset to appropriate list
-                dataset_list.append(new_dataset)
-
-            else:
-                raise ValueError(
-                    "Unknown dataset type. Expected: "
-                    f"{AINEKO_CONFIG.get('STREAM_TYPES')}."
-                )
-
-        # Create all configured datasets
-        datasets = kafka_client.create_topics(dataset_list)
-
-        # Block until all datasets finish creation
+        # Create all datasets
+        dataset_create_status = [dataset.create() for dataset in datasets]
         cur_time = time.time()
         while True:
-            if all(future.done() for future in datasets.values()):
+            if all(future.done() for future in dataset_create_status.values()):
                 logger.info("All datasets created.")
                 break
             if time.time() - cur_time > AINEKO_CONFIG.get(
                 "DATASET_CREATION_TIMEOUT"
             ):
-                raise TimeoutError(
-                    "Timeout while creating Kafka datasets. "
-                    "Please check your Kafka cluster."
-                )
+                raise TimeoutError("Timeout while creating datasets.")
 
         return datasets
+
+        # # Connect to kafka cluster
+        # kafka_client = AdminClient(self.kafka_config)
+
+        # # Add prefix to user defined datasets
+        # if user_dataset_prefix:
+        #     config = {
+        #         f"{user_dataset_prefix}.{dataset_name}": dataset_config
+        #         for dataset_name, dataset_config in config.items()
+        #     }
+
+        # # Fail if reserved dataset names are defined in catalog
+        # for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
+        #     if reserved_dataset in config:
+        #         raise ValueError(
+        #             f"Unable to create dataset `{reserved_dataset}`. "
+        #             "Reserved for internal use."
+        #         )
+
+        # # Add logging dataset to catalog
+        # config[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")] = {
+        #     "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
+        #     "params": DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
+        # }
+
+        # # Create all dataset defined in the catalog
+        # dataset_list = []
+        # for dataset_name, dataset_config in config.items():
+        #     logger.info(
+        #         "Creating dataset: %s: %s", dataset_name, dataset_config
+        #     )
+        #     # Create dataset for kafka streams
+        #     if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
+        #         # User defined
+        #         dataset_params = {
+        #             **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
+        #             **dataset_config.get("params", {}),
+        #         }
+
+        #         # Configure dataset
+        #         if self.dataset_prefix:
+        #             topic_name = f"{self.dataset_prefix}.{dataset_name}"
+        #         else:
+        #             topic_name = dataset_name
+
+        #         new_dataset = NewTopic(
+        #             topic=topic_name,
+        #             num_partitions=dataset_params.get("num_partitions"),
+        #             replication_factor=dataset_params.get("replication_factor"),
+        #             config=dataset_params.get("config"),
+        #         )
+
+        #         # Add dataset to appropriate list
+        #         dataset_list.append(new_dataset)
+
+        #     else:
+        #         raise ValueError(
+        #             "Unknown dataset type. Expected: "
+        #             f"{AINEKO_CONFIG.get('STREAM_TYPES')}."
+        #         )
+
+        # # Create all configured datasets
+        # datasets = kafka_client.create_topics(dataset_list)
+
+        # # Block until all datasets finish creation
+        # cur_time = time.time()
+        # while True:
+        #     if all(future.done() for future in datasets.values()):
+        #         logger.info("All datasets created.")
+        #         break
+        #     if time.time() - cur_time > AINEKO_CONFIG.get(
+        #         "DATASET_CREATION_TIMEOUT"
+        #     ):
+        #         raise TimeoutError(
+        #             "Timeout while creating Kafka datasets. "
+        #             "Please check your Kafka cluster."
+        #         )
+        # return datasets
 
     def prepare_nodes(
         self, pipeline_config: dict, poison_pill: ray.actor.ActorHandle
