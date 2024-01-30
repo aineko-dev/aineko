@@ -16,31 +16,28 @@ class ParamsHTTPPoller(BaseModel):
     """Parameters for the HTTPPoller node.
 
     Attributes:
-        timeout (int): The number of seconds to wait for the HTTP endpoint to
+        timeout: The number of seconds to wait for the endpoint to 
             respond. Defaults to 10.
-        url (str): The HTTP URL to connect to.
-        headers (Optional[Dict[str, Any]]): A dictionary of headers to send to
-            the HTTP endpoint. Defaults to None.
-        data (Optional[Dict[str, Any]]): A dictionary of data to send to the
-            HTTP endpoint. Defaults to None.
-        params (Optional[Union[Dict[str, Any], List[tuple], bytes]]): A
-            dictionary, list of tuples, bytes, or file-like object to send in
-            the body of the HTTP request. Defaults to None.
-        json_ (Optional[Dict[str, Any]]): A JSON serializable Python object to
-            send in the body of the HTTP request. Defaults to None.
-        auth (Optional[Tuple[str, str]]): A tuple of username and password to
-            use for Basic HTTP authentication. Defaults to None.
-        poll_interval (float): The number of seconds to wait between polls.
-            Defaults to 5.0.
-        max_retries (int): The maximum number of times to retry connecting to
-            the HTTP endpoint. Defaults to -1.
-        metadata (Optional[Dict[str, Any]]): A dictionary of metadata to attach
-            to outgoing messages. Defaults to None.
-        retry_sleep (float): The number of seconds to wait between retries.
-            Defaults to 5.0.
-        success_codes (List[int]): A list of HTTP status codes that indicate
-            success. Defaults to
-                [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
+        url: The URL to connect to.
+        headers: A dictionary of headers to send to the endpoint. Defaults 
+            to None.
+        data: A dictionary of data to send to the endpoint. Defaults to None.
+        params: A dictionary, list of tuples, bytes, or file-like object to 
+            send in the body of the request. Defaults to None.
+        json_: A JSON serializable Python object to send in the body of the 
+            request. Defaults to None.
+        auth: A tuple of username and password to use for Basic authentication. 
+            Defaults to None.
+        poll_interval: The number of seconds to wait between polls. Defaults to 
+            5.0.
+        max_retries: The maximum number of times to retry connecting to the 
+            endpoint. Defaults to -1.
+        metadata: A dictionary of metadata to attach to outgoing messages. 
+            Defaults to None.
+        retry_sleep: The number of seconds to wait between retries. Defaults to 
+            5.0.
+        success_codes: A list of status codes that indicate success. Defaults to
+            [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
 
     Raises:
         ValueError: If the url is not a valid HTTP or HTTPS URL.
