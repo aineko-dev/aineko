@@ -11,3 +11,5 @@ The HTTPPoller extra node can be used by adding the following to `pyproject.toml
 ## API Reference
 
 ::: aineko.extras.connectors.http_poller.HTTPPoller
+
+::: aineko.extras.connectors.http_poller.ParamsHTTPPoller

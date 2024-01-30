@@ -13,8 +13,38 @@ from aineko import AbstractNode
 
 
 class ParamsHTTPPoller(BaseModel):
-    """Connector params for HTTP model."""
-
+    """Parameters for the HTTPPoller node.
+    
+    Attributes:
+        timeout (int): The number of seconds to wait for the HTTP endpoint to
+            respond. Defaults to 10.
+        url (str): The HTTP URL to connect to.
+        headers (Optional[Dict[str, Any]]): A dictionary of headers to send to
+            the HTTP endpoint. Defaults to None.
+        data (Optional[Dict[str, Any]]): A dictionary of data to send to the
+            HTTP endpoint. Defaults to None.
+        params (Optional[Union[Dict[str, Any], List[tuple], bytes]]): A
+            dictionary, list of tuples, bytes, or file-like object to send in
+            the body of the HTTP request. Defaults to None.
+        json_ (Optional[Dict[str, Any]]): A JSON serializable Python object to
+            send in the body of the HTTP request. Defaults to None.
+        auth (Optional[Tuple[str]]): A tuple of username and password to use
+            for Basic HTTP authentication. Defaults to None.
+        poll_interval (float): The number of seconds to wait between polls.
+            Defaults to 5.0.
+        max_retries (int): The maximum number of times to retry connecting to
+            the HTTP endpoint. Defaults to -1.
+        metadata (Optional[Dict[str, Any]]): A dictionary of metadata to attach
+            to outgoing messages. Defaults to None.
+        retry_sleep (float): The number of seconds to wait between retries.
+            Defaults to 5.0.
+        success_codes (List[int]): A list of HTTP status codes that indicate
+            success. Defaults to
+                [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
+    
+    Raises:
+        ValueError: If the url is not a valid HTTP or HTTPS URL.
+    """
     timeout: int = 10
     url: str
     headers: Optional[Dict[str, Any]] = None
@@ -60,39 +90,12 @@ class HTTPPoller(AbstractNode):
         https://docs.python-requests.org/en/master/
         ){:target="_blank"} library.
 
-    `node_params` should be a dictionary with the following keys:
-
-            url: The HTTP URL to connect to
-            headers (optional): A dictionary of headers to send to the HTTP
-                endpoint. Defaults to None.
-            data (optional): A dictionary of data to send to the HTTP endpoint.
-                Defaults to None.
-            poll_interval (optional): The number of seconds to wait between
-                polls. Defaults to 5.
-            max_retries (optional): The maximum number of times to retry
-                connecting to the HTTP endpoint. Defaults to -1.
-            retry_sleep (optional): The number of seconds to wait between
-                retries. Defaults to 5.
-            metadata (optional): A dictionary of metadata to attach to outgoing
-                messages. Defaults to None.
-            success_codes (optional): A list of HTTP status codes that indicate
-                success. Defaults to
-                    [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
-
-    Secrets can be injected (from environment) into the `url`, `headers`, and
-    `data` fields by passing a string with the following format:
-    `{$SECRET_NAME}`. For example, if you have an environment variable named 
-    `SECRET_NAME`that contains the value `SECRET_VALUE`, you can inject it into 
-    the url field by passing `https://example.com?secret={$SECRET_NAME}` as the 
-    url. The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE` 
-    before connecting to the HTTP endpoint.
-
     Example usage in pipeline.yml:
     ```yaml title="pipeline.yml"
     pipeline:
       nodes:
         HTTPoller:
-          class: aineko.extras.HTTPoller
+          class: aineko.extras.HTTPPoller
           outputs:
             - test_http
           node_params:
@@ -102,45 +105,23 @@ class HTTPPoller(AbstractNode):
             data: {"Greeting": "Hello, world!"}
     ```
 
+    Secrets can be injected (from environment) into the `url`, `headers`, and
+    `data` fields by passing a string with the following format:
+    `{$SECRET_NAME}`. For example, if you have an environment variable named 
+    `SECRET_NAME`that contains the value `SECRET_VALUE`, you can inject it into 
+    the url field by passing `https://example.com?secret={$SECRET_NAME}` as the 
+    url. The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE` 
+    before connecting to the HTTP endpoint.
+
     Note that the `outputs` field is required and must contain exactly one
     output dataset. The output dataset will contain the data returned by the
-    HTTP endpoint.
+    endpoint.
 
-    By default, this node will poll the HTTP endpoint every 5 seconds. This can
-    be changed by setting the `poll_interval` field in `node_params`. If the
-    HTTP endpoint is not expected to be available at all times, it is
-    recommended to increase `poll_interval` to reduce the number of requests
-    sent to the endpoint.
-
-    By default, this node will retry connecting to the HTTP endpoint forever
-    if the connection fails. This can be changed by setting the `max_retries`
-    field in `node_params`. If the HTTP endpoint is not expected to be
-    available at all times, it is recommended to set `max_retries` to a
-    finite number to prevent the node from retrying forever.
-
-    By default, this node will retry connecting to the HTTP endpoint every 5
-    seconds if the connection fails. This can be changed by setting the
-    `retry_sleep` field in `node_params`. If the HTTP endpoint is not expected
-    to be available at all times, it is recommended to increase `retry_sleep`
-    to reduce the number of requests sent to the endpoint.
-
-    By default, this node will consider any HTTP status code in the 200s to be
-    a success code. This can be changed by setting the `success_codes` field
-    in `node_params`. If the HTTP endpoint returns a non-200 status code on
-    success, it is recommended to add the status code to the `success_codes`
-    list.
-
-    By default, this node will not attach headers or data to the request. This
-    can be changed by setting the `headers` and `data` fields in `node_params`.
-    If the HTTP endpoint requires headers or data to be sent, it is
-    you should set the `headers` and `data` fields in `node_params`.
-
-    By default, this node will timeout after 10 seconds. This can be changed
-    by setting the `timeout` field in `node_params`. If the HTTP endpoint is
-    expected to take a long time to respond, it is recommended to increase
-    `timeout` to prevent the node from timing out.
+    By default, this node will poll the endpoint every 5 seconds and timeout 
+    after 10 seconds. If the request fails, it will retry every 5 seconds 
+    forever. Status codes in the 200s are considered success codes and no 
+    headers, data, auth, params, or json will be attached to the request.
     """
-
     # Poll settings
     last_poll_time = time.time()
     retry_count = 0
@@ -190,7 +171,10 @@ class HTTPPoller(AbstractNode):
             Exception: If the retry count exceeds the max retries.
         """
         # Check if it is time to poll
-        if time.time() - self.last_poll_time >= self.http_poller_params.poll_interval:
+        if (
+            time.time() - self.last_poll_time >= 
+            self.http_poller_params.poll_interval
+            ):
             # Update the last poll time
             self.last_poll_time = time.time()
 
