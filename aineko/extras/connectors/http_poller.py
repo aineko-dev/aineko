@@ -31,7 +31,7 @@ class ParamsHTTPPoller(BaseModel):
         poll_interval: The number of seconds to wait between polls. Defaults to 
             5.0.
         max_retries: The maximum number of times to retry connecting to the 
-            endpoint. Defaults to -1.
+            endpoint. Defaults to -1 (retry forever).
         metadata: A dictionary of metadata to attach to outgoing messages. 
             Defaults to None.
         retry_sleep: The number of seconds to wait between retries. Defaults to 
