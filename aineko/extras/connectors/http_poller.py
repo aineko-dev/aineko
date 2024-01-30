@@ -76,8 +76,8 @@ class ParamsHTTPPoller(BaseModel):
         """Validates that the url is a valid HTTP or HTTPS URL."""
         if not (url.startswith("https://") or url.startswith("http://")):
             raise ValueError(
-                "Invalid url provided to HTTPS params. "
-                'Expected url to start with "https://". '
+                "Invalid url provided to HTTPPoller. "
+                'Expected url to start with "https://" or "http://". '
                 f"Provided url was: {url}"
             )
         return url
