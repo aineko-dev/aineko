@@ -81,7 +81,7 @@ class MessageReader(AbstractNode):
 
 
 @pytest.mark.integration
-def test_write_read_to_kafka(start_service):
+def test_write_read_to_kafka(start_service, subtests):
     """Integration test to check that nodes can write to kafka.
 
     First set up the integration test pipeline run it, making use
@@ -95,12 +95,16 @@ def test_write_read_to_kafka(start_service):
     that reads from the created dataset and checks that the messages
     are as expected.
     """
-    runner = Runner(
-        pipeline_config_file="tests/conf/integration_test_write.yml",
-    )
-    try:
-        runner.run()
-    except ray.exceptions.RayActorError:
+    with subtests.test("Test writing to Kafka."):
+        runner = Runner(
+            pipeline_config_file="tests/conf/integration_test_write.yml",
+        )
+        try:
+            runner.run()
+        except ray.exceptions.RayActorError:
+            # This is expected because we activated the poison pill
+            pass
+
         consumer = DatasetConsumer(
             dataset_name="messages",
             node_name="consumer",
@@ -112,12 +116,16 @@ def test_write_read_to_kafka(start_service):
         count_values = [msg["message"] for msg in count_messages]
         assert count_values == MESSAGES
 
-    runner = Runner(
-        pipeline_config_file="tests/conf/integration_test_read.yml",
-    )
-    try:
-        runner.run()
-    except ray.exceptions.RayActorError:
+    with subtests.test("Test reading from Kafka"):
+        runner = Runner(
+            pipeline_config_file="tests/conf/integration_test_read.yml",
+        )
+        try:
+            runner.run()
+        except ray.exceptions.RayActorError:
+            # This is expected because we activated the poison pill
+            pass
+
         consumer = DatasetConsumer(
             dataset_name="test_result",
             node_name="consumer",
@@ -129,6 +137,7 @@ def test_write_read_to_kafka(start_service):
         assert count_messages[0]["source_pipeline"] == "integration_test_read"
         assert count_messages[0]["message"] == "TEST PASSED"
 
+    with subtests.test("Test the consume.last functionality"):
         # Test consume.last functionality
         last_message = consumer.last(timeout=10)
         assert last_message["message"] == "END"

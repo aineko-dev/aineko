@@ -18,12 +18,14 @@ class MachineConfig(BaseModel, extra="forbid"):
     vcpu: int
 
     @field_validator("mem_gib")
-    def memory(cls, value: int) -> int:  # pylint: disable=no-self-argument
+    @classmethod
+    def memory(cls, value: int) -> int:
         """Validates that memory is a power of 2."""
         return check_power_of_2(value)
 
     @field_validator("vcpu")
-    def power_of_2(cls, value: int) -> int:  # pylint: disable=no-self-argument
+    @classmethod
+    def power_of_2(cls, value: int) -> int:
         """Validates that vcpu is a power of 2."""
         return check_power_of_2(value)
 
@@ -72,7 +74,8 @@ class Environment(BaseModel, extra="forbid"):
     load_balancers: Optional[Dict[str, List[LoadBalancer]]] = None
 
     @field_validator("load_balancers")
-    def validate_lb_endpoint(  # pylint: disable=no-self-argument
+    @classmethod
+    def validate_lb_endpoint(
         cls, value: Optional[Dict[str, List[LoadBalancer]]]
     ) -> Optional[Dict[str, List[LoadBalancer]]]:
         """Validates Load balancer endpoints.

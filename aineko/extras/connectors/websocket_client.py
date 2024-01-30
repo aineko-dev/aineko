@@ -1,6 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Extra module for connecting to a WebSockets."""
+"""Extra module for connecting to a WebSocket server."""
 
 import json
 import time
@@ -52,7 +52,6 @@ class ParamsWebSocketClient(BaseModel):
         return url
 
 
-# pylint: disable=anomalous-backslash-in-string
 class WebSocketClient(AbstractNode):
     """Node for ingesting data from a WebSocket.
 
