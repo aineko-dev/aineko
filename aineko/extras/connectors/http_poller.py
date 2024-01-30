@@ -164,11 +164,7 @@ class HTTPPoller(AbstractNode):
         self.session = requests.Session()
 
     def _execute(self, params: Optional[Dict] = None) -> None:
-        """Polls and gets data from the HTTP or HTTPS endpoint.
-
-        Raises:
-            Exception: If the retry count exceeds the max retries.
-        """
+        """Polls and gets data from the HTTP or HTTPS endpoint."""
         # Check if it is time to poll
         if (
             time.time() - self.last_poll_time
@@ -191,7 +187,11 @@ class HTTPPoller(AbstractNode):
             )
 
     def poll_endpoint(self) -> Optional[str]:
-        """Polls the endpoint for data."""
+        """Polls the endpoint for data.
+        
+        Raises:
+            Exception: If the request fails.
+        """
         try:
             # Poll the endpoint
             response = self.session.get(
@@ -234,7 +234,15 @@ class HTTPPoller(AbstractNode):
             return None
 
     def parse_data(self, raw_data: str) -> Optional[Dict[str, Any]]:
-        """Parses raw endpoint response using JSON parser."""
+        """Parses raw endpoint response using JSON parser.
+
+        Args:
+            raw_data: The raw unprocessed data returned by the endpoint. This
+                is the result of calling `response.text` on the response object.
+        
+        Raises:
+            Exception: If the retry count exceeds the max retries.
+        """
         try:
             data = json.loads(raw_data)
             if self.http_poller_params.metadata is not None:
