@@ -11,5 +11,4 @@ The WebSocketClient extra node can be used by adding the following to `pyproject
 ## API Reference
 
 ::: aineko.extras.connectors.websocket_client.WebSocketClient
-
 ::: aineko.extras.connectors.websocket_client.ParamsWebSocketClient
