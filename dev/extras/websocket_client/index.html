@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/dev/extras/websocket/">
+        <link rel="canonical" href="https://docs.aineko.dev/dev/extras/websocket_client/">
       
       
         <link rel="prev" href="../fastapi/">
       
       
-        <link rel="next" href="../../api_reference/abstract_node/">
+        <link rel="next" href="../http_poller/">
       
       
         
@@ -72,17 +72,15 @@
     
     
    <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
-        html.glightbox-open { overflow: initial; height: 100%; }
-        .gslide-title { margin-top: 0px; user-select: text; }
-        .gslide-desc { color: #666; user-select: text; }
-        .gslide-image img { background: white; }
-        
-            .gscrollbar-fixer { padding-right: 15px; }
-            .gdesc-inner { font-size: 0.75rem; }
-            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
-            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
-            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
-            </style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -709,6 +707,8 @@
       
         
       
+        
+      
     
     
     
@@ -917,10 +917,131 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ParamsWebSocketClient
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" ParamsWebSocketClient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.init_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;init_messages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.max_retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;max_retries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.retry_sleep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;retry_sleep
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;url
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.supported_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;supported_url
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../http_poller/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTPPoller Node
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1426,6 +1547,100 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ParamsWebSocketClient
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" ParamsWebSocketClient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.init_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;init_messages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.max_retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;max_retries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.retry_sleep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;retry_sleep
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;url
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.supported_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;supported_url
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1489,7 +1704,7 @@
                   
 
   
-    <a href="https://github.com/aineko-dev/aineko/edit/develop/docs/extras/websocket.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/aineko-dev/aineko/edit/develop/docs/extras/websocket_client.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
     </a>
@@ -1534,26 +1749,6 @@
       <p>Node for ingesting data from a WebSocket.</p>
 <p>This node is a wrapper around the
 <a href="https://websocket-client.readthedocs.io/en/latest/index.html" target="_blank">websocket-client</a> library.</p>
-<p><code>node_params</code> should be a dictionary with the following keys:</p>
-<pre><code>url: The WebSocket URL to connect to
-header (optional): A dictionary of headers to send to the WebSocket.
-    Defaults to None.
-init_messages (optional): A list of messages to send to the WebSocket
-    upon connection. Defaults to [].
-metadata (optional): A dictionary of metadata to attach to outgoing
-    messages. Defaults to None.
-max_retries (optional): The maximum number of times to retry
-    connecting to the WebSocket. Defaults to -1 (retry forever).
-retry_sleep (optional): The number of seconds to wait between retries.
-    Defaults to 5.
-</code></pre>
-<p>Secrets can be injected (from environment) into the <code>url</code>, <code>header</code>, and
-<code>init_messages</code> fields by passing a string with the following format:
-<code>{$SECRET_NAME}</code>. For example, if you have a secret named <code>SECRET_NAME</code>
-with value <code>SECRET_VALUE</code>, you can inject it into the url field by passing
-<code>wss://example.com?secret={$SECRET_NAME}</code> as the url. The connector will
-then replace <code>{$SECRET_NAME}</code> with <code>SECRET_VALUE</code> before connecting to the
-WebSocket.</p>
 <p>Example usage in pipeline.yml:
 <div class="highlight"><span class="filename">pipeline.yml</span><pre><span></span><code><span class="nt">pipeline</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">nodes</span><span class="p">:</span>
@@ -1568,6 +1763,19 @@ WebSocket.</p>
 <span class="w">        </span><span class="nt">init_messages</span><span class="p">:</span>
 <span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;Greeting&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Hello,</span><span class="nv"> </span><span class="s">world!&quot;</span><span class="p p-Indicator">}</span>
 </code></pre></div></p>
+<p>Note that the <code>outputs</code> field is required and must contain exactly one
+output dataset. The output dataset will contain the data returned by the
+WebSocket.</p>
+<p>Secrets can be injected (from environment) into the <code>url</code>, <code>header</code>, and
+<code>init_messages</code> fields by passing a string with the following format:
+<code>{$SECRET_NAME}</code>. For example, if you have a secret named <code>SECRET_NAME</code>
+with value <code>SECRET_VALUE</code>, you can inject it into the url field by passing
+<code>wss://example.com?secret={$SECRET_NAME}</code> as the url. The connector will
+then replace <code>{$SECRET_NAME}</code> with <code>SECRET_VALUE</code> before connecting to the
+WebSocket.</p>
+<p>By default, if the WebSocket connection is closed or an error occurs, the
+connector will retry connecting to the WebSocket indefinitely every 5
+seconds. No headers or initialization messages are sent to the WebSocket.</p>
   
       <p>Initialize the node.</p>
 
@@ -1673,7 +1881,7 @@ WebSocket.</p>
     <tbody>
         <tr>
           <td>
-                <code>ValueError</code>
+                <code>Exception</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1686,19 +1894,7 @@ WebSocket.</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/extras/connectors/websocket_client.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">189</span>
 <span class="normal">190</span>
 <span class="normal">191</span>
 <span class="normal">192</span>
@@ -1732,11 +1928,23 @@ WebSocket.</p>
 <span class="normal">220</span>
 <span class="normal">221</span>
 <span class="normal">222</span>
-<span class="normal">223</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">create_subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">create_subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a subscription on the websocket.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        ValueError: If the retry count exceeds the max retries.</span>
+<span class="sd">        Exception: If the retry count exceeds the max retries.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating subscription to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ws_params</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
@@ -1773,12 +1981,377 @@ WebSocket.</p>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ws_params</span><span class="o">.</span><span class="n">retry_sleep</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_subscription</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>  <span class="c1"># pylint: disable=broad-exception-raised</span>
                 <span class="s2">&quot;Retry count exceeded max retries. &quot;</span>
                 <span class="s2">&quot;Failed to create subscription to &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ws_params</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">. &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;The following error occurred: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">aineko.extras.connectors.websocket_client.ParamsWebSocketClient</span>
+
+
+</h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">ParamsWebSocketClient</span><span class="p">(</span><span class="n">__pydantic_self__</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">:</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+  
+      <p>Parameters for the WebSocketClient node.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.max_retries" href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.max_retries">max_retries</a></code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum number of times to retry connecting to the
+WebSocket. Defaults to -1 (retry forever).</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.retry_sleep" href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.retry_sleep">retry_sleep</a></code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of seconds to wait between retries. Defaults
+to 5.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.url" href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.url">url</a></code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The WebSocket URL to connect to.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.header" href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.header">header</a></code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, str]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A dictionary of headers to send to the WebSocket. Defaults to
+None.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.init_messages" href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.init_messages">init_messages</a></code></td>
+          <td>
+                <code><span title="typing.List">List</span>[<span title="typing.Any">Any</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A list of messages to send to the WebSocket upon
+connection. Defaults to [].</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.metadata" href="#aineko.extras.connectors.websocket_client.ParamsWebSocketClient.metadata">metadata</a></code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A dictionary of metadata to attach to outgoing messages.
+Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>ValueError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the url is not a valid WebSocket URL.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  
+      <p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>__init__</code> uses <code>__pydantic_self__</code> instead of the more common <code>self</code> for the first arg to
+allow <code>self</code> as a field name.</p>
+
+                <details class="quote">
+                  <summary>Source code in <code>pydantic/main.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">__pydantic_self__</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new model by parsing and validating input data from keyword arguments.</span>
+
+<span class="sd">    Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be</span>
+<span class="sd">    validated to form a valid model.</span>
+
+<span class="sd">    `__init__` uses `__pydantic_self__` instead of the more common `self` for the first arg to</span>
+<span class="sd">    allow `self` as a field name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># `__tracebackhide__` tells pytest and some other tools to omit this function from tracebacks</span>
+    <span class="n">__tracebackhide__</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">__pydantic_self__</span><span class="o">.</span><span class="n">__pydantic_validator__</span><span class="o">.</span><span class="n">validate_python</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">self_instance</span><span class="o">=</span><span class="n">__pydantic_self__</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+                </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.header" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">header</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">header</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.init_messages" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">init_messages</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">init_messages</span><span class="p">:</span> <span class="n"><span title="typing.List">List</span></span><span class="p">[</span><span class="n"><span title="typing.Any">Any</span></span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.max_retries" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">max_retries</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">max_retries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.metadata" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">metadata</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">metadata</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.retry_sleep" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">retry_sleep</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">retry_sleep</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="mi">5</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.url" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">url</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">url</span><span class="p">:</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.extras.connectors.websocket_client.ParamsWebSocketClient.supported_url" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">supported_url</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">supported_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Validates that the url is a valid WebSocket URL.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/extras/connectors/websocket_client.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">)</span>
+<span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">supported_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validates that the url is a valid WebSocket URL.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;wss://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ws://&quot;</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Invalid url provided to WebSocket params. &quot;</span>
+            <span class="s1">&#39;Expected url to start with &quot;wss://&quot; or &quot;ws://&quot;. &#39;</span>
+            <span class="sa">f</span><span class="s2">&quot;Provided url was: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">url</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -1847,13 +2420,13 @@ WebSocket.</p>
         
         
           
-          <a href="../../api_reference/abstract_node/" class="md-footer__link md-footer__link--next" aria-label="Next: AbstractNode">
+          <a href="../http_poller/" class="md-footer__link md-footer__link--next" aria-label="Next: HTTPPoller Node">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                AbstractNode
+                HTTPPoller Node
               </div>
             </div>
             <div class="md-footer__button md-icon">
