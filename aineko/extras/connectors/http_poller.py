@@ -188,7 +188,7 @@ class HTTPPoller(AbstractNode):
 
     def poll_endpoint(self) -> Optional[str]:
         """Polls the endpoint for data.
-        
+
         Raises:
             Exception: If the request fails.
         """
@@ -239,7 +239,7 @@ class HTTPPoller(AbstractNode):
         Args:
             raw_data: The raw unprocessed data returned by the endpoint. This
                 is the result of calling `response.text` on the response object.
-        
+
         Raises:
             Exception: If the retry count exceeds the max retries.
         """
