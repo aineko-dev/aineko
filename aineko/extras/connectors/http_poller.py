@@ -174,81 +174,91 @@ class HTTPPoller(AbstractNode):
             time.time() - self.last_poll_time
             >= self.http_poller_params.poll_interval
         ):
-            # Update the last poll time
             self.last_poll_time = time.time()
-
-            try:
-                # Poll HTTP endpoint
-                response = self.session.get(
-                    self.http_poller_params.url,
-                    timeout=self.http_poller_params.timeout,
-                    headers=self.http_poller_params.headers,
-                    data=self.http_poller_params.data,
-                    params=self.http_poller_params.params,
-                    json=self.http_poller_params.json_,
-                    auth=self.http_poller_params.auth,
-                )
-                # Check if the request was successful
-                if (
-                    response.status_code
-                    not in self.http_poller_params.success_codes
-                ):
-                    # pylint: disable=broad-exception-raised
-                    raise Exception(
-                        f"Request to url {self.http_poller_params.url} "
-                        "failed with status code: "
-                        f"{response.status_code}"
-                    )
-                raw_message = response.text
-            except Exception as err:  # pylint: disable=broad-except
-                # If request fails, log the error and sleep
-                self.log(
-                    "Request failed. "
-                    f"Sleeping for {self.http_poller_params.retry_sleep} "
-                    f"seconds. Error: {err}",
-                    level="error",
-                )
-                time.sleep(self.http_poller_params.retry_sleep)
-                self.retry_count += 1
-                # Reset the session
-                self.log(
-                    "Creating new session to HTTP endpoint "
-                    f"{self.http_poller_params.url}."
-                )
-                self.session = requests.Session()
+            raw_data = self.poll_endpoint()
+            if not raw_data:
                 return
-
-            try:
-                # Parse the message and emit to producers
-                message = json.loads(raw_message)
-                if self.http_poller_params.metadata is not None:
-                    message = {
-                        "metadata": self.http_poller_params.metadata,
-                        "data": message,
-                    }
-                self.producers[self.output_dataset].produce(message)
-                self.retry_count = 0
-            except json.decoder.JSONDecodeError as err:
-                if self.retry_count < self.http_poller_params.max_retries:
-                    self.retry_count += 1
-                    self.log(
-                        f"Failed to parse message: {raw_message}. "
-                        f"The following error occurred: {err} "
-                        f"Will retry in {self.http_poller_params.retry_sleep} "
-                        "seconds...",
-                        level="error",
-                    )
-                    time.sleep(self.http_poller_params.retry_sleep)
-                else:
-                    raise Exception(  # pylint: disable=broad-exception-raised
-                        "Retry count exceeded max retries "
-                        f"({self.http_poller_params.max_retries}). "
-                        f"Failed to parse message: {raw_message}. "
-                        f"The following error occurred: {err}"
-                    ) from err
+            parsed_data = self.parse_data(raw_data)
+            if not parsed_data:
+                return
+            self.producers[self.output_dataset].produce(parsed_data)
+            self.retry_count = 0
         else:
             # If it is not time to poll, sleep
             time.sleep(
                 self.http_poller_params.poll_interval
                 - (time.time() - self.last_poll_time)
             )
+
+    def poll_endpoint(self) -> Optional[str]:
+        """Polls the endpoint for data."""
+        try:
+            # Poll the endpoint
+            response = self.session.get(
+                self.http_poller_params.url,
+                timeout=self.http_poller_params.timeout,
+                headers=self.http_poller_params.headers,
+                data=self.http_poller_params.data,
+                params=self.http_poller_params.params,
+                json=self.http_poller_params.json_,
+                auth=self.http_poller_params.auth,
+            )
+            # Check if the request was successful
+            if (
+                response.status_code
+                not in self.http_poller_params.success_codes
+            ):
+                # pylint: disable=broad-exception-raised
+                raise Exception(
+                    f"Request to url {self.http_poller_params.url} "
+                    "failed with status code: "
+                    f"{response.status_code}"
+                )
+            return response.text
+        except Exception as err:  # pylint: disable=broad-except
+            # If request fails, log the error and sleep
+            self.log(
+                "Request failed. "
+                f"Sleeping for {self.http_poller_params.retry_sleep} "
+                f"seconds. Error: {err}",
+                level="error",
+            )
+            time.sleep(self.http_poller_params.retry_sleep)
+            self.retry_count += 1
+            # Reset the session
+            self.log(
+                "Creating new session to HTTP endpoint "
+                f"{self.http_poller_params.url}."
+            )
+            self.session = requests.Session()
+            return None
+
+    def parse_data(self, raw_data) -> Optional[Dict[str, Any]]:
+        """Parses raw endpoint response using JSON parser."""
+        try:
+            data = json.loads(raw_data)
+            if self.http_poller_params.metadata is not None:
+                data = {
+                    "metadata": self.http_poller_params.metadata,
+                    "data": data,
+                }
+            return data
+        except json.decoder.JSONDecodeError as err:
+            if self.retry_count < self.http_poller_params.max_retries:
+                self.retry_count += 1
+                self.log(
+                    f"Failed to parse data: {raw_data}. "
+                    f"The following error occurred: {err} "
+                    f"Will retry in {self.http_poller_params.retry_sleep} "
+                    "seconds...",
+                    level="error",
+                )
+                time.sleep(self.http_poller_params.retry_sleep)
+                return None
+            else:
+                raise Exception(  # pylint: disable=broad-exception-raised
+                    "Retry count exceeded max retries "
+                    f"({self.http_poller_params.max_retries}). "
+                    f"Failed to parse data: {raw_data}. "
+                    f"The following error occurred: {err}"
+                ) from err
