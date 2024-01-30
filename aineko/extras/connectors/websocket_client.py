@@ -13,7 +13,24 @@ from aineko import AbstractNode
 
 
 class ParamsWebSocketClient(BaseModel):
-    """Connector params for WebSocket model."""
+    """Parameters for the WebSocketClient node.
+
+    Attributes:
+        max_retries: The maximum number of times to retry connecting to the
+            WebSocket. Defaults to -1 (retry forever).
+        retry_sleep: The number of seconds to wait between retries. Defaults
+            to 5.
+        url: The WebSocket URL to connect to.
+        header: A dictionary of headers to send to the WebSocket. Defaults to
+            None.
+        init_messages: A list of messages to send to the WebSocket upon
+            connection. Defaults to [].
+        metadata: A dictionary of metadata to attach to outgoing messages.
+            Defaults to None.
+
+    Raises:
+        ValueError: If the url is not a valid WebSocket URL.
+    """
 
     max_retries: int = -1
     retry_sleep: float = 5
@@ -43,28 +60,6 @@ class WebSocketClient(AbstractNode):
         https://websocket-client.readthedocs.io/en/latest/index.html
         ){:target="_blank"} library.
 
-    `node_params` should be a dictionary with the following keys:
-
-        url: The WebSocket URL to connect to
-        header (optional): A dictionary of headers to send to the WebSocket.
-            Defaults to None.
-        init_messages (optional): A list of messages to send to the WebSocket
-            upon connection. Defaults to [].
-        metadata (optional): A dictionary of metadata to attach to outgoing
-            messages. Defaults to None.
-        max_retries (optional): The maximum number of times to retry
-            connecting to the WebSocket. Defaults to -1 (retry forever).
-        retry_sleep (optional): The number of seconds to wait between retries.
-            Defaults to 5.
-
-    Secrets can be injected (from environment) into the `url`, `header`, and
-    `init_messages` fields by passing a string with the following format:
-    `{$SECRET_NAME}`. For example, if you have a secret named `SECRET_NAME`
-    with value `SECRET_VALUE`, you can inject it into the url field by passing
-    `wss://example.com?secret={$SECRET_NAME}` as the url. The connector will
-    then replace `{$SECRET_NAME}` with `SECRET_VALUE` before connecting to the
-    WebSocket.
-
     Example usage in pipeline.yml:
     ```yaml title="pipeline.yml"
     pipeline:
@@ -80,6 +75,22 @@ class WebSocketClient(AbstractNode):
             init_messages:
                 - {"Greeting": "Hello, world!"}
     ```
+
+    Note that the `outputs` field is required and must contain exactly one
+    output dataset. The output dataset will contain the data returned by the
+    WebSocket.
+
+    Secrets can be injected (from environment) into the `url`, `header`, and
+    `init_messages` fields by passing a string with the following format:
+    `{$SECRET_NAME}`. For example, if you have a secret named `SECRET_NAME`
+    with value `SECRET_VALUE`, you can inject it into the url field by passing
+    `wss://example.com?secret={$SECRET_NAME}` as the url. The connector will
+    then replace `{$SECRET_NAME}` with `SECRET_VALUE` before connecting to the
+    WebSocket.
+
+    By default, if the WebSocket connection is closed or an error occurs, the
+    connector will retry connecting to the WebSocket indefinitely every 5
+    seconds. No headers or initialization messages are sent to the WebSocket.
     """
 
     retry_count = 0
@@ -90,7 +101,6 @@ class WebSocketClient(AbstractNode):
         Raises:
             ValueError: If the params are invalid.
         """
-        # Cast params to ParamsWebSocketClient type
         try:
             if params is not None:
                 self.ws_params = ParamsWebSocketClient(**params)
@@ -110,7 +120,9 @@ class WebSocketClient(AbstractNode):
             ) from err
 
         # Ensure only one output dataset is provided
-        output_datasets = [d for d in self.producers.keys() if d != "logging"]
+        output_datasets = [
+            dataset for dataset in self.producers.keys() if dataset != "logging"
+        ]
         if len(output_datasets) > 1:
             raise ValueError(
                 "Only one output dataset is allowed for the "
@@ -178,7 +190,7 @@ class WebSocketClient(AbstractNode):
         """Creates a subscription on the websocket.
 
         Raises:
-            ValueError: If the retry count exceeds the max retries.
+            Exception: If the retry count exceeds the max retries.
         """
         try:
             self.log(f"Creating subscription to {self.ws_params.url}...")
@@ -215,7 +227,7 @@ class WebSocketClient(AbstractNode):
                 time.sleep(self.ws_params.retry_sleep)
                 self.create_subscription()
             else:
-                raise ValueError(
+                raise Exception(  # pylint: disable=broad-exception-raised
                     "Retry count exceeded max retries. "
                     "Failed to create subscription to "
                     f"{self.ws_params.url}. "
