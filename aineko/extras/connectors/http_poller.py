@@ -16,25 +16,25 @@ class ParamsHTTPPoller(BaseModel):
     """Parameters for the HTTPPoller node.
 
     Attributes:
-        timeout: The number of seconds to wait for the endpoint to 
+        timeout: The number of seconds to wait for the endpoint to
             respond. Defaults to 10.
         url: The URL to connect to.
-        headers: A dictionary of headers to send to the endpoint. Defaults 
+        headers: A dictionary of headers to send to the endpoint. Defaults
             to None.
         data: A dictionary of data to send to the endpoint. Defaults to None.
-        params: A dictionary, list of tuples, bytes, or file-like object to 
+        params: A dictionary, list of tuples, bytes, or file-like object to
             send in the body of the request. Defaults to None.
-        json_: A JSON serializable Python object to send in the body of the 
+        json_: A JSON serializable Python object to send in the body of the
             request. Defaults to None.
-        auth: A tuple of username and password to use for Basic authentication. 
+        auth: A tuple of username and password to use for Basic authentication.
             Defaults to None.
-        poll_interval: The number of seconds to wait between polls. Defaults to 
+        poll_interval: The number of seconds to wait between polls. Defaults to
             5.0.
-        max_retries: The maximum number of times to retry connecting to the 
+        max_retries: The maximum number of times to retry connecting to the
             endpoint. Defaults to -1 (retry forever).
-        metadata: A dictionary of metadata to attach to outgoing messages. 
+        metadata: A dictionary of metadata to attach to outgoing messages.
             Defaults to None.
-        retry_sleep: The number of seconds to wait between retries. Defaults to 
+        retry_sleep: The number of seconds to wait between retries. Defaults to
             5.0.
         success_codes: A list of status codes that indicate success. Defaults to
             [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
@@ -233,7 +233,7 @@ class HTTPPoller(AbstractNode):
             self.session = requests.Session()
             return None
 
-    def parse_data(self, raw_data) -> Optional[Dict[str, Any]]:
+    def parse_data(self, raw_data: str) -> Optional[Dict[str, Any]]:
         """Parses raw endpoint response using JSON parser."""
         try:
             data = json.loads(raw_data)
