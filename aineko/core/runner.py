@@ -16,9 +16,8 @@ from aineko.config import (
 from aineko.core.config_loader import ConfigLoader
 from aineko.core.node import PoisonPill
 from aineko.datasets.core import AbstractDataset
-from aineko.utils import imports
-
 from aineko.datasets.kafka import Kafka
+from aineko.utils import imports
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +152,9 @@ class Runner:
         datasets.append(LoggingDataset)
 
         # Create all datasets
-        dataset_create_status = [dataset.create(create_topic=True) for dataset in datasets]
+        dataset_create_status = [
+            dataset.create(create_topic=True,connection_params=topic_config) for dataset in datasets
+        ]
         cur_time = time.time()
         while True:
             if all(future.done() for future in dataset_create_status):
