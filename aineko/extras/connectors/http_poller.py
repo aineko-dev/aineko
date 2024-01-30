@@ -92,7 +92,7 @@ class HTTPPoller(AbstractNode):
     ```yaml title="pipeline.yml"
     pipeline:
       nodes:
-        HTTPoller:
+        HTTPPoller:
           class: aineko.extras.HTTPPoller
           outputs:
             - test_http
