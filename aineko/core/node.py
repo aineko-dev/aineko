@@ -32,6 +32,7 @@ from aineko.core.dataset import (
     FakeDatasetConsumer,
     FakeDatasetProducer,
 )
+from aineko.datasets.core import AbstractDataset
 
 
 class PoisonPill:
@@ -121,35 +122,69 @@ class AbstractNode(ABC):
             has_pipeline_prefix: whether the dataset name has pipeline name
                 prefix
         """
+
+        """
+        New Datasets setup using AbstractDataset
+
+
+
+        """
         inputs = inputs or []
-        self.consumers.update(
-            {
-                dataset_name: DatasetConsumer(
-                    dataset_name=dataset_name,
-                    node_name=self.name,
-                    pipeline_name=self.pipeline_name,
-                    dataset_config=datasets.get(dataset_name, {}),
-                    prefix=prefix,
-                    has_pipeline_prefix=has_pipeline_prefix,
-                )
-                for dataset_name in inputs
-            }
-        )
+        # initialize the datasets:
+        self.inputs = {
+            dataset_name: AbstractDataset.from_config(
+                name=dataset_name, config=datasets.get(dataset_name, {})
+            )
+            for dataset_name in inputs
+        }
 
         outputs = outputs or []
-        self.producers.update(
-            {
-                dataset_name: DatasetProducer(
-                    dataset_name=dataset_name,
-                    node_name=self.name,
-                    pipeline_name=self.pipeline_name,
-                    dataset_config=datasets.get(dataset_name, {}),
-                    prefix=prefix,
-                    has_pipeline_prefix=has_pipeline_prefix,
-                )
-                for dataset_name in outputs
-            }
-        )
+        self.outputs = {
+            dataset_name: AbstractDataset.from_config(
+                name=dataset_name, config=datasets.get(dataset_name, {})
+            )
+            for dataset_name in outputs
+        }
+
+        # topics have already been created from runner.
+
+        # now create the producers and consumers (connections to the dataset storage):
+        for dataset_name, dataset_instance in self.inputs.items():
+            if dataset_instance.type == "kafka":
+                self.inputs[dataset_name].create(create_consumer=True,connection_params=consumer_config)
+        for dataset_name, dataset_instance in self.outputs.items():
+            if dataset_instance.type == "kafka":
+                self.outputs[dataset_name].create(create_producer=True,connection_params=producer_config)
+
+        # inputs = inputs or []
+        # self.consumers.update(
+        #     {
+        #         dataset_name: DatasetConsumer(
+        #             dataset_name=dataset_name,
+        #             node_name=self.name,
+        #             pipeline_name=self.pipeline_name,
+        #             dataset_config=datasets.get(dataset_name, {}),
+        #             prefix=prefix,
+        #             has_pipeline_prefix=has_pipeline_prefix,
+        #         )
+        #         for dataset_name in inputs
+        #     }
+        # )
+
+        # outputs = outputs or []
+        # self.producers.update(
+        #     {
+        #         dataset_name: DatasetProducer(
+        #             dataset_name=dataset_name,
+        #             node_name=self.name,
+        #             pipeline_name=self.pipeline_name,
+        #             dataset_config=datasets.get(dataset_name, {}),
+        #             prefix=prefix,
+        #             has_pipeline_prefix=has_pipeline_prefix,
+        #         )
+        #         for dataset_name in outputs
+        #     }
+        # )
 
     def setup_test(
         self,
