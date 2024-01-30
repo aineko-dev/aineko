@@ -1,7 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 pipeline:
-  name: test_rest_poller
+  name: test_http_poller
 
   default_node_settings:
     num_cpus: 0.5
@@ -10,10 +10,10 @@ pipeline:
     fastapi:
       class: aineko.extras.FastAPI
       node_params:
-        app: tests.extras.connectors.test_rest_server:app
+        app: tests.extras.connectors.test_http_server:app
 
-    rest_poller:
-      class: aineko.extras.RESTPoller
+    http_poller:
+      class: aineko.extras.HTTPPoller
       node_params:
         url: "http://localhost:8000/hello-world"
         max_retries: 3
@@ -21,8 +21,8 @@ pipeline:
       outputs:
         - test_messages
 
-    rest_poller_checker:
-      class: tests.extras.connectors.test_rest_poller.RESTPollerChecker
+    http_poller_checker:
+      class: tests.extras.connectors.test_http_poller.HTTPPollerChecker
       inputs:
         - test_messages
       outputs:

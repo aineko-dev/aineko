@@ -4,7 +4,7 @@
 
 import json
 import time
-from typing import Any, Dict, List, Optional, Union, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import requests
 from pydantic import BaseModel, field_validator
@@ -14,7 +14,7 @@ from aineko import AbstractNode
 
 class ParamsHTTPPoller(BaseModel):
     """Parameters for the HTTPPoller node.
-    
+
     Attributes:
         timeout (int): The number of seconds to wait for the HTTP endpoint to
             respond. Defaults to 10.
@@ -28,8 +28,8 @@ class ParamsHTTPPoller(BaseModel):
             the body of the HTTP request. Defaults to None.
         json_ (Optional[Dict[str, Any]]): A JSON serializable Python object to
             send in the body of the HTTP request. Defaults to None.
-        auth (Optional[Tuple[str]]): A tuple of username and password to use
-            for Basic HTTP authentication. Defaults to None.
+        auth (Optional[Tuple[str, str]]): A tuple of username and password to
+            use for Basic HTTP authentication. Defaults to None.
         poll_interval (float): The number of seconds to wait between polls.
             Defaults to 5.0.
         max_retries (int): The maximum number of times to retry connecting to
@@ -41,17 +41,18 @@ class ParamsHTTPPoller(BaseModel):
         success_codes (List[int]): A list of HTTP status codes that indicate
             success. Defaults to
                 [200, 201, 202, 203, 204, 205, 206, 207, 208, 226].
-    
+
     Raises:
         ValueError: If the url is not a valid HTTP or HTTPS URL.
     """
+
     timeout: int = 10
     url: str
     headers: Optional[Dict[str, Any]] = None
     data: Optional[Dict[str, Any]] = None
     params: Optional[Union[Dict[str, Any], List[tuple], bytes]] = None
     json_: Optional[Dict[str, Any]] = None
-    auth: Optional[Tuple[str]] = None
+    auth: Optional[Tuple[str, str]] = None
     poll_interval: float = 5.0
     max_retries: int = -1
     metadata: Optional[Dict[str, Any]] = None
@@ -107,21 +108,22 @@ class HTTPPoller(AbstractNode):
 
     Secrets can be injected (from environment) into the `url`, `headers`, and
     `data` fields by passing a string with the following format:
-    `{$SECRET_NAME}`. For example, if you have an environment variable named 
-    `SECRET_NAME`that contains the value `SECRET_VALUE`, you can inject it into 
-    the url field by passing `https://example.com?secret={$SECRET_NAME}` as the 
-    url. The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE` 
+    `{$SECRET_NAME}`. For example, if you have an environment variable named
+    `SECRET_NAME`that contains the value `SECRET_VALUE`, you can inject it into
+    the url field by passing `https://example.com?secret={$SECRET_NAME}` as the
+    url. The connector will then replace `{$SECRET_NAME}` with `SECRET_VALUE`
     before connecting to the HTTP endpoint.
 
     Note that the `outputs` field is required and must contain exactly one
     output dataset. The output dataset will contain the data returned by the
     endpoint.
 
-    By default, this node will poll the endpoint every 5 seconds and timeout 
-    after 10 seconds. If the request fails, it will retry every 5 seconds 
-    forever. Status codes in the 200s are considered success codes and no 
+    By default, this node will poll the endpoint every 5 seconds and timeout
+    after 10 seconds. If the request fails, it will retry every 5 seconds
+    forever. Status codes in the 200s are considered success codes and no
     headers, data, auth, params, or json will be attached to the request.
     """
+
     # Poll settings
     last_poll_time = time.time()
     retry_count = 0
@@ -160,7 +162,7 @@ class HTTPPoller(AbstractNode):
 
         # Create a session
         self.log(
-            f"Creating new session to HTTP endpoint {self.http_poller_params.url}."
+            f"Creating new session to endpoint {self.http_poller_params.url}."
         )
         self.session = requests.Session()
 
@@ -172,9 +174,9 @@ class HTTPPoller(AbstractNode):
         """
         # Check if it is time to poll
         if (
-            time.time() - self.last_poll_time >= 
-            self.http_poller_params.poll_interval
-            ):
+            time.time() - self.last_poll_time
+            >= self.http_poller_params.poll_interval
+        ):
             # Update the last poll time
             self.last_poll_time = time.time()
 
@@ -190,7 +192,10 @@ class HTTPPoller(AbstractNode):
                     auth=self.http_poller_params.auth,
                 )
                 # Check if the request was successful
-                if response.status_code not in self.http_poller_params.success_codes:
+                if (
+                    response.status_code
+                    not in self.http_poller_params.success_codes
+                ):
                     # pylint: disable=broad-exception-raised
                     raise Exception(
                         f"Request to url {self.http_poller_params.url} "
@@ -202,8 +207,8 @@ class HTTPPoller(AbstractNode):
                 # If request fails, log the error and sleep
                 self.log(
                     "Request failed. "
-                    f"Sleeping for {self.http_poller_params.poll_interval} seconds. "
-                    f"Error: {err}",
+                    f"Sleeping for {self.http_poller_params.poll_interval} "
+                    f"seconds. Error: {err}",
                     level="error",
                 )
                 time.sleep(self.http_poller_params.poll_interval)

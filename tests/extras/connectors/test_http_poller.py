@@ -1,6 +1,6 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
-"""Tests that a pipeline with the RESTPoller runs correctly."""
+"""Tests that a pipeline with the HTTPPoller runs correctly."""
 import time
 from typing import Dict, Optional
 
@@ -10,11 +10,11 @@ import ray
 from aineko import AbstractNode, DatasetConsumer, Runner
 
 
-class RESTPollerChecker(AbstractNode):
-    """Node that checks that the RESTPoller is running."""
+class HTTPPollerChecker(AbstractNode):
+    """Node that checks that the HTTPPoller is running."""
 
     def _execute(self, params: Dict):
-        """Checks that the RESTPoller is running."""
+        """Checks that the HTTPPoller is running."""
         results = {}
         for msg_num in range(5):
             test_message = self.consumers["test_messages"].next()
@@ -25,15 +25,15 @@ class RESTPollerChecker(AbstractNode):
 
 
 @pytest.mark.integration
-def test_rest_poller_node(start_service):
-    """Integration test to check that RESTPoller node works.
+def test_http_poller_node(start_service):
+    """Integration test to check that HTTPPoller node works.
 
-    Spin up a pipeline containing the RESTPoller node and a FastAPI node that
-    creates a test REST API server. The RESTPoller node connects to the server,
+    Spin up a pipeline containing the HTTPPoller node and a FastAPI node that
+    creates a test an API server. The HTTPPoller node connects to the server,
     sends requests for data, and produces results to the test_messages dataset.
     """
     runner = Runner(
-        pipeline_config_file="tests/extras/connectors/test_rest_poller.yml",
+        pipeline_config_file="tests/extras/connectors/test_http_poller.yml",
     )
     try:
         runner.run()
@@ -41,7 +41,7 @@ def test_rest_poller_node(start_service):
         consumer = DatasetConsumer(
             dataset_name="test_result",
             node_name="consumer",
-            pipeline_name="test_rest_poller",
+            pipeline_name="test_http_poller",
             dataset_config={},
             has_pipeline_prefix=True,
         )
