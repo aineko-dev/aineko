@@ -204,11 +204,11 @@ class HTTPPoller(AbstractNode):
                 # If request fails, log the error and sleep
                 self.log(
                     "Request failed. "
-                    f"Sleeping for {self.http_poller_params.poll_interval} "
+                    f"Sleeping for {self.http_poller_params.retry_sleep} "
                     f"seconds. Error: {err}",
                     level="error",
                 )
-                time.sleep(self.http_poller_params.poll_interval)
+                time.sleep(self.http_poller_params.retry_sleep)
                 self.retry_count += 1
                 # Reset the session
                 self.log(
