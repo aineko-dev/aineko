@@ -92,6 +92,8 @@ class AbstractNode(ABC):
         self.last_heartbeat = time.time()
         self.consumers: Dict = {}
         self.producers: Dict = {}
+        self.inputs: dict = {}
+        self.outputs: dict = {}
         self.params: Dict = {}
         self.test = test
         self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")

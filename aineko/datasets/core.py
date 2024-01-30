@@ -15,11 +15,14 @@ Example dataset configuration:
 """
 import abc
 
-from typing import Any, Optional
+from typing import Any, Optional,TypeVar, Type
+
 
 from pydantic import BaseModel
 
 from aineko.utils.imports import import_from_string
+
+T = TypeVar('T', bound='AbstractDataset')
 
 
 class DatasetError(Exception):
@@ -43,26 +46,32 @@ class AbstractDatasetConfig(BaseModel):
 class DatasetCreateStatus:
     """Object representing staus of dataset creation."""
 
-    def __init__(self, dataset_name: str, kafka_topic_to_future: dict[str, Any] | None = None):
+    def __init__(self, 
+                 dataset_name: str, 
+                 kafka_topic_to_future: dict[str, Any] | None = None,
+                 status_list: list[Any] | None = None):
         self.dataset_name = dataset_name
         self.kafka_topic_to_future = kafka_topic_to_future
+        self.status_list = status_list
 
     def done(self) -> bool:
         """Return status of dataset creation."""
-        if self.kafka_topic_to_future is None:
+        if not any([self.kafka_topic_to_future, self.status_list]):
             return True
-        else:
+        if self.kafka_topic_to_future:
             return all(
                 [
                     future.done()
                     for future in self.kafka_topic_to_future.values()
                 ]
             )
+        if self.status_list:
+            return all(status.done() for status in self.status_list)
 class AbstractDataset(abc.ABC):
     @classmethod
     def from_config(
-        cls: type, name: str, config: dict[str, Any]
-    ) -> AbstractDataset:
+        cls: Type[T], name: str, config: dict[str, Any]
+    ) -> T:
         """Create a dataset from a configuration dictionary.
 
         Args:
