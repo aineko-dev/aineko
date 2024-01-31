@@ -465,3 +465,117 @@ class Kafka(AbstractDataset):
             dataset_name, kafka_topic_to_future=topic_to_future_map
         )
         return dataset_create_status
+
+# pylint: enable=too-few-public-methods
+# pylint: disable=unused-argument
+class FakeDatasetInput:
+    """Fake dataset Input (consumer) for testing purposes.
+
+    The class will store in its state the list of values to feed the node,
+    and pop each value everytime the consume method is called.
+
+    Args:
+        dataset_name: name of the dataset
+        node_name: name of the node that is consuming the dataset
+        values: list of values to feed the node
+
+    Attributes:
+        dataset_name (str): name of the dataset
+        node_name (str): name of the node that is consuming the dataset
+        values (list): list of mock data values to feed the node
+        empty (bool): True if the list of values is empty, False otherwise
+    """
+
+    def __init__(self, dataset_name: str, node_name: str, values: list):
+        """Initialize the consumer."""
+        self.dataset_name = dataset_name
+        self.node_name = node_name
+        self.values = values
+        self.empty = False
+
+    def read(
+        self,
+        how: str = "next",
+        timeout: Optional[float] = None,
+    ) -> Optional[dict]:
+        """Reads a message from the dataset.
+
+        Args:
+            how: how to read the message
+                "next": read the next message in the queue
+                ":last": read the last message in the queue
+
+        Returns:
+            next or last value in self.values
+
+        Raises:
+            ValueError: if how is not "next" or "last"
+        """
+        if how not in ["next", "last"]:
+            raise ValueError(f"Invalid how: {how}. Expected 'next' or 'last'.")
+
+        if how == "next":
+            remaining = len(self.values)
+            if remaining > 0:
+                if remaining == 1:
+                    self.empty = True
+                return {
+                    "timestamp": datetime.datetime.now().strftime(
+                        AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
+                    ),
+                    "message": self.values.pop(0),
+                    "source_node": "test",
+                    "source_pipeline": "test",
+                }
+        if how == "last":
+            if self.values:
+                return self.values[-1]
+
+        return None
+
+    def next(self) -> Optional[dict]:
+        """Wraps `consume(how="next")`, blocks until available.
+
+        Returns:
+            msg: message from the dataset
+        """
+        return self.read(how="next")
+
+    def last(self, timeout: float = 1) -> Optional[dict]:
+        """Wraps `consume(how="last")`, blocks until available.
+
+        Returns:
+            msg: message from the dataset
+        """
+        return self.read(how="last", timeout=timeout)
+    
+
+class FakeDatasetOutput:
+    """Fake dataset Output (producer) for testing purposes.
+
+    The class will store in its state the list of values produced
+    by the node.
+
+    Args:
+        dataset_name: name of the dataset
+        node_name: name of the node that is producing the dataset
+
+    Attributes:
+        dataset_name (str): name of the dataset
+        node_name (str): name of the node that is producing the dataset
+        values (list): list of mock data values produced by the node
+    """
+
+    def __init__(self, dataset_name: str, node_name: str):
+        """Initialize the producer."""
+        self.dataset_name = dataset_name
+        self.node_name = node_name
+        self.values = []  # type: ignore
+
+    def write(self, message: Any) -> None:
+        """Stores message in self.values.
+
+        Args:
+            message: message to produce.
+        """
+        self.values.append(message)
