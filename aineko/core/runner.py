@@ -140,10 +140,24 @@ class Runner:
         """
         # Create all configured dataset objects
         datasets = []
+        if user_dataset_prefix:
+            config = {
+                f"{user_dataset_prefix}.{dataset_name}": dataset_config
+                for dataset_name, dataset_config in config.items()
+            }
+
+        for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
+            if reserved_dataset in config:
+                raise ValueError(
+                    f"Unable to create dataset `{reserved_dataset}`. "
+                    "Reserved for internal use."
+                )
+            
         for dataset_name, dataset_config in config.items():
             logger.info(
                 "Creating dataset: %s: %s", dataset_name, dataset_config
             )
+            # update dataset config here:
             dataset = AbstractDataset.from_config(dataset_name, dataset_config)
             datasets.append(dataset)
 
@@ -153,7 +167,7 @@ class Runner:
 
         # Create all datasets
         dataset_create_status = [
-            dataset.create(create_topic=True, connection_params=topic_config)
+            dataset.create(create_topic=True,connection_params={'dataset_prefix':self.dataset_prefix})
             for dataset in datasets
         ]
         cur_time = time.time()

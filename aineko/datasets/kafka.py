@@ -52,7 +52,8 @@ class Kafka(AbstractDataset):
         self.topic_name = name
         self.params = params
         self.type = "kafka"
-        self.credentials = KafkaCredentials(**params)
+        self.credentials = KafkaCredentials(**params.get('kafka_credentials', {}))
+        self.dataset_config = params
         self._consumer = None
         self._producer = None
         self._create_admin_client()
@@ -77,7 +78,7 @@ class Kafka(AbstractDataset):
 
         if create_topic:
             return self._create_topic(
-                dataset_name=self.name, dataset_config=connection_params
+                dataset_name=self.name, dataset_config=self.dataset_config
             )
 
         status_list = []
@@ -349,7 +350,7 @@ class Kafka(AbstractDataset):
         """Creates Kafka Consumer and subscribes to the dataset topic.
 
         consumer_params is a dict of the form:
-        {   "name":str,
+        {   "dataset_name":str,
             "node_name":str,
             "pipeline_name":str,
             "prefix":Optional[str],
@@ -358,7 +359,7 @@ class Kafka(AbstractDataset):
         }
         """
         # build topic name from prefix + pipeline_name + name, depending on consumer params:
-        dataset_name = consumer_params.get("name")
+        dataset_name = consumer_params.get("dataset_name")
         node_name = consumer_params.get("node_name")
         pipeline_name = consumer_params.get("pipeline_name")
         prefix = consumer_params.get("prefix")
@@ -383,10 +384,6 @@ class Kafka(AbstractDataset):
             self._consumer = Consumer(consumer_config)
             self._consumer.subscribe([self.topic_name])
 
-        self.topic_name = ...
-
-        # self._consumer = Consumer(self.topic_name, **consumer_config)
-        # self._consumer.subscribe([self.topic_name])
         dataset_create_status = DatasetCreateStatus(
             dataset_name=f"{self.topic_name}_consumer"
         )
@@ -399,7 +396,7 @@ class Kafka(AbstractDataset):
 
         Producer params is a dict of the form:
         {
-            name:str,
+            dataset_name:str,
             pipeline_name:str,
             prefix:Optional[str],
             has_pipeline_prefix:bool,
@@ -408,7 +405,7 @@ class Kafka(AbstractDataset):
         """
         has_pipeline_prefix = producer_params.get("has_pipeline_prefix")
         pipeline_name = producer_params.get("pipeline_name")
-        dataset_name = producer_params.get("name")
+        dataset_name = producer_params.get("dataset_name")
         prefix = producer_params.get("prefix")
         # create topic name here:
         topic_name = dataset_name
@@ -432,14 +429,19 @@ class Kafka(AbstractDataset):
         self, dataset_name: str, dataset_config: dict[str, Any]
     ) -> DatasetCreateStatus:
         """Creates Kafka topic for the dataset."""
+        if "dataset_prefix" in dataset_config:
+            dataset_prefix = dataset_config.pop("dataset_prefix")
+        else:
+            dataset_prefix = None
+
         dataset_params = {
             **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
             **dataset_config.get("params", {}),
         }
 
         # Configure dataset
-        if self.dataset_prefix:
-            topic_name = f"{self.dataset_prefix}.{dataset_name}"
+        if dataset_prefix:
+            topic_name = f"{dataset_prefix}.{dataset_name}"
         else:
             topic_name = dataset_name
 

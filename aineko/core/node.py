@@ -149,13 +149,27 @@ class AbstractNode(ABC):
         # topics have already been created from runner.
 
         # now create the producers and consumers (connections to the dataset storage):
+        
         for dataset_name, dataset_instance in self.inputs.items():
             if dataset_instance.type == "kafka":
+                consumer_config = {"dataset_name":dataset_name, 
+                           "node_name":self.name,
+                           "pipeline_name":self.pipeline_name,
+                           "prefix":prefix,
+                           "has_pipeline_prefix":has_pipeline_prefix,
+                           "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG")}
                 self.inputs[dataset_name].create(
                     create_consumer=True, connection_params=consumer_config
                 )
         for dataset_name, dataset_instance in self.outputs.items():
             if dataset_instance.type == "kafka":
+                producer_config = {
+                    "dataset_name":dataset_name,
+                    "pipeline_name":self.pipeline_name,
+                    "prefix":prefix,
+                    "has_pipeline_prefix":has_pipeline_prefix,
+                    "producer_config":DEFAULT_KAFKA_CONFIG.get("PRODUCER_CONFIG"),
+                }
                 self.outputs[dataset_name].create(
                     create_producer=True, connection_params=producer_config
                 )
