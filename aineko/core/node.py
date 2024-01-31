@@ -26,14 +26,8 @@ from aineko.config import (
     DEFAULT_KAFKA_CONFIG,
     TESTING_NODE_CONFIG,
 )
-from aineko.core.dataset import (
-    DatasetConsumer,
-    DatasetProducer,
-    FakeDatasetConsumer,
-    FakeDatasetProducer,
-)
 from aineko.datasets.core import AbstractDataset
-
+from aineko.datasets.kafka import FakeDatasetInput, FakeDatasetOutput
 
 class PoisonPill:
     """Global variable accessible to every node in pipeline.
@@ -121,13 +115,8 @@ class AbstractNode(ABC):
             prefix: prefix for topic name (`<prefix>.<dataset_name>`)
             has_pipeline_prefix: whether the dataset name has pipeline name
                 prefix
-        """
 
-        """
-        New Datasets setup using AbstractDataset
-
-
-
+        TODO: update docstring
         """
         inputs = inputs or []
         # initialize the datasets:
@@ -148,27 +137,33 @@ class AbstractNode(ABC):
 
         # topics have already been created from runner.
 
-        # now create the producers and consumers (connections to the dataset storage):
-        
+        # now create the producers and consumers connections:
+
         for dataset_name, dataset_instance in self.inputs.items():
             if dataset_instance.type == "kafka":
-                consumer_config = {"dataset_name":dataset_name, 
-                           "node_name":self.name,
-                           "pipeline_name":self.pipeline_name,
-                           "prefix":prefix,
-                           "has_pipeline_prefix":has_pipeline_prefix,
-                           "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG")}
+                consumer_config = {
+                    "dataset_name": dataset_name,
+                    "node_name": self.name,
+                    "pipeline_name": self.pipeline_name,
+                    "prefix": prefix,
+                    "has_pipeline_prefix": has_pipeline_prefix,
+                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
+                        "CONSUMER_CONFIG"
+                    ),
+                }
                 self.inputs[dataset_name].create(
                     create_consumer=True, connection_params=consumer_config
                 )
         for dataset_name, dataset_instance in self.outputs.items():
             if dataset_instance.type == "kafka":
                 producer_config = {
-                    "dataset_name":dataset_name,
-                    "pipeline_name":self.pipeline_name,
-                    "prefix":prefix,
-                    "has_pipeline_prefix":has_pipeline_prefix,
-                    "producer_config":DEFAULT_KAFKA_CONFIG.get("PRODUCER_CONFIG"),
+                    "dataset_name": dataset_name,
+                    "pipeline_name": self.pipeline_name,
+                    "prefix": prefix,
+                    "has_pipeline_prefix": has_pipeline_prefix,
+                    "producer_config": DEFAULT_KAFKA_CONFIG.get(
+                        "PRODUCER_CONFIG"
+                    ),
                 }
                 self.outputs[dataset_name].create(
                     create_producer=True, connection_params=producer_config
@@ -228,23 +223,42 @@ class AbstractNode(ABC):
             )
 
         inputs = inputs or {}
-        self.consumers = {
-            dataset_name: FakeDatasetConsumer(
+        # self.consumers = {
+        #     dataset_name: FakeDatasetConsumer(
+        #         dataset_name=dataset_name,
+        #         node_name=self.__class__.__name__,
+        #         values=values,
+        #     )
+        #     for dataset_name, values in inputs.items()
+        # }
+        self.inputs = {
+            dataset_name: FakeDatasetInput(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
                 values=values,
             )
             for dataset_name, values in inputs.items()
         }
+        print('inputs are...',self.inputs)
+
         outputs = outputs or []
         outputs.extend(TESTING_NODE_CONFIG.get("DATASETS"))
-        self.producers = {
-            dataset_name: FakeDatasetProducer(
+        # self.producers = {
+        #     dataset_name: FakeDatasetProducer(
+        #         dataset_name=dataset_name,
+        #         node_name=self.__class__.__name__,
+        #     )
+        #     for dataset_name in outputs
+        # }
+        self.outputs = {
+            dataset_name: FakeDatasetOutput(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
             )
             for dataset_name in outputs
         }
+        print('outputs are...',self.outputs)
+
         self.params = params or {}
 
     def log(self, message: str, level: str = "info") -> None:
@@ -263,9 +277,10 @@ class AbstractNode(ABC):
                 f"{', '.join(self.log_levels)}"
             )
         out_msg = {"log": message, "level": level}
-        self.producers[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].produce(
-            out_msg
-        )
+        # self.producers[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].produce(
+        #     out_msg
+        # )
+        self.outputs[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].write(out_msg)
 
     def _log_traceback(self) -> None:
         """Logs the traceback of an exception."""
@@ -350,16 +365,22 @@ class AbstractNode(ABC):
                     continue
 
             # End loop if all consumers are empty
-            if self.consumers and all(
-                consumer.empty for consumer in self.consumers.values()
+            # if self.consumers and all(
+            #     consumer.empty for consumer in self.consumers.values()
+            # ):
+            #     run_loop = False
+            
+            if self.inputs and all(
+                input.empty for input in self.inputs.values()
             ):
                 run_loop = False
+
 
         self._post_loop_hook(self.params)
 
         return {
-            dataset_name: producer.values
-            for dataset_name, producer in self.producers.items()
+            dataset_name: output.values
+            for dataset_name, output in self.outputs.items()
         }
 
     def run_test_yield(
@@ -400,9 +421,9 @@ class AbstractNode(ABC):
             last_consumed_values = {}
 
             # Capture last consumed values
-            for dataset_name, consumer in self.consumers.items():
-                if consumer.values:
-                    last_value = consumer.values[0]
+            for dataset_name, input in self.inputs.items():
+                if input.values:
+                    last_value = input.values[0]
                     last_consumed_values[dataset_name] = last_value
 
             run_loop = self._execute(self.params)  # type: ignore
@@ -413,15 +434,20 @@ class AbstractNode(ABC):
                     continue
 
             # End loop if all consumers are empty
-            if self.consumers and all(
-                consumer.empty for consumer in self.consumers.values()
+            # if self.consumers and all(
+            #     consumer.empty for consumer in self.consumers.values()
+            # ):
+            #     run_loop = False
+
+            if self.inputs and all(
+                input.empty for input in self.inputs.values()
             ):
                 run_loop = False
 
             # Capture last produced values
-            for dataset_name, producer in self.producers.items():
-                if producer.values:
-                    last_value = producer.values[-1]
+            for dataset_name, output in self.outputs.items():
+                if output.values:
+                    last_value = output.values[-1]
                     last_produced_values[dataset_name] = last_value
 
             yield (last_consumed_values, last_produced_values, self)
