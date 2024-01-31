@@ -1,3 +1,5 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
 import datetime
 import json
 import logging
@@ -45,11 +47,7 @@ class KafkaCredentials(BaseModel):
 class Kafka(AbstractDataset):
     """Kafka dataset."""
 
-    def __init__(
-        self,
-        name: str,
-        params: dict[str, Any]
-    ):
+    def __init__(self, name: str, params: dict[str, Any]):
         self.name = name
         self.topic_name = name
         self.params = params
@@ -183,7 +181,8 @@ class Kafka(AbstractDataset):
             # including rebalancing and empty topic. Default to -1.
             if high_offset == OFFSET_INVALID:
                 logger.error(
-                    "Invalid offset received for consumer: %s", self.consumer_name
+                    "Invalid offset received for consumer: %s",
+                    self.consumer_name,
                 )
                 partition.offset = -1
             else:
@@ -239,7 +238,7 @@ class Kafka(AbstractDataset):
         self.cached = True
 
         return self._validate_message(message)
-    
+
     @staticmethod
     def _validate_message(
         message: Optional[Message] = None,
@@ -348,7 +347,7 @@ class Kafka(AbstractDataset):
         self, consumer_params: dict[str, Any]
     ) -> DatasetCreateStatus:
         """Creates Kafka Consumer and subscribes to the dataset topic.
-        
+
         consumer_params is a dict of the form:
         {   "name":str,
             "node_name":str,
@@ -364,8 +363,10 @@ class Kafka(AbstractDataset):
         pipeline_name = consumer_params.get("pipeline_name")
         prefix = consumer_params.get("prefix")
         has_pipeline_prefix = consumer_params.get("has_pipeline_prefix")
-        consumer_config = consumer_params.get("consumer_config", DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"))
-        
+        consumer_config = consumer_params.get(
+            "consumer_config", DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG")
+        )
+
         if has_pipeline_prefix:
             self.topic_name = f"{pipeline_name}.{dataset_name}"
         else:
@@ -381,9 +382,9 @@ class Kafka(AbstractDataset):
             consumer_config["group.id"] = f"{pipeline_name}.{node_name}"
             self._consumer = Consumer(consumer_config)
             self._consumer.subscribe([self.topic_name])
-        
+
         self.topic_name = ...
-        
+
         # self._consumer = Consumer(self.topic_name, **consumer_config)
         # self._consumer.subscribe([self.topic_name])
         dataset_create_status = DatasetCreateStatus(
@@ -395,7 +396,7 @@ class Kafka(AbstractDataset):
         self, producer_params: dict[str, Any]
     ) -> DatasetCreateStatus:
         """Creates Kafka Producer.
-        
+
         Producer params is a dict of the form:
         {
             name:str,
@@ -416,7 +417,9 @@ class Kafka(AbstractDataset):
         if prefix:
             topic_name = f"{prefix}.{topic_name}"
         self.topic_name = topic_name
-        producer_config = producer_params.get("producer_config", DEFAULT_KAFKA_CONFIG.get("PRODUCER_CONFIG"))
+        producer_config = producer_params.get(
+            "producer_config", DEFAULT_KAFKA_CONFIG.get("PRODUCER_CONFIG")
+        )
         self._producer = Producer(
             **producer_config,
         )

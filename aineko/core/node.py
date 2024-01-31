@@ -151,10 +151,14 @@ class AbstractNode(ABC):
         # now create the producers and consumers (connections to the dataset storage):
         for dataset_name, dataset_instance in self.inputs.items():
             if dataset_instance.type == "kafka":
-                self.inputs[dataset_name].create(create_consumer=True,connection_params=consumer_config)
+                self.inputs[dataset_name].create(
+                    create_consumer=True, connection_params=consumer_config
+                )
         for dataset_name, dataset_instance in self.outputs.items():
             if dataset_instance.type == "kafka":
-                self.outputs[dataset_name].create(create_producer=True,connection_params=producer_config)
+                self.outputs[dataset_name].create(
+                    create_producer=True, connection_params=producer_config
+                )
 
         # inputs = inputs or []
         # self.consumers.update(

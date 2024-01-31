@@ -153,7 +153,8 @@ class Runner:
 
         # Create all datasets
         dataset_create_status = [
-            dataset.create(create_topic=True,connection_params=topic_config) for dataset in datasets
+            dataset.create(create_topic=True, connection_params=topic_config)
+            for dataset in datasets
         ]
         cur_time = time.time()
         while True:
