@@ -48,16 +48,12 @@ class Kafka(AbstractDataset):
     def __init__(
         self,
         name: str,
-        params: dict[str, Any],
-        prefix: Optional[str] = None,
-        has_pipeline_prefix: bool = False,
+        params: dict[str, Any]
     ):
         self.name = name
         self.topic_name = name
         self.params = params
         self.type = "kafka"
-        self.prefix = prefix
-        self.has_pipeline_prefix = has_pipeline_prefix
         self.credentials = KafkaCredentials(**params)
         self._consumer = None
         self._producer = None
