@@ -6,7 +6,6 @@ import time
 from typing import Optional
 
 import ray
-from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
 
 from aineko.config import (
     AINEKO_CONFIG,
@@ -152,7 +151,7 @@ class Runner:
                     f"Unable to create dataset `{reserved_dataset}`. "
                     "Reserved for internal use."
                 )
-            
+
         for dataset_name, dataset_config in config.items():
             logger.info(
                 "Creating dataset: %s: %s", dataset_name, dataset_config
@@ -162,12 +161,15 @@ class Runner:
             datasets.append(dataset)
 
         # Create logging dataset
-        LoggingDataset = Kafka(name="logging", params={})
-        datasets.append(LoggingDataset)
+        logging_dataset = Kafka(name="logging", params={})
+        datasets.append(logging_dataset)
 
         # Create all datasets
         dataset_create_status = [
-            dataset.create(create_topic=True,connection_params={'dataset_prefix':self.dataset_prefix})
+            dataset.create(
+                create_topic=True,
+                connection_params={"dataset_prefix": self.dataset_prefix},
+            )
             for dataset in datasets
         ]
         cur_time = time.time()

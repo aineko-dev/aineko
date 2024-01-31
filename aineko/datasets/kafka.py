@@ -1,9 +1,13 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
+"""Kafka Dataset.
+
+Contains implmentation of Kafka dataset, which is a subclass of
+AbstractDataset.
+"""
 import datetime
 import json
 import logging
-import time
 from typing import Any, Literal, Optional, Union
 
 from confluent_kafka import (  # type: ignore
@@ -48,11 +52,14 @@ class Kafka(AbstractDataset):
     """Kafka dataset."""
 
     def __init__(self, name: str, params: dict[str, Any]):
+        """Initialize the dataset."""
         self.name = name
         self.topic_name = name
         self.params = params
         self.type = "kafka"
-        self.credentials = KafkaCredentials(**params.get('kafka_credentials', {}))
+        self.credentials = KafkaCredentials(
+            **params.get("kafka_credentials", {})
+        )
         self.dataset_config = params
         self._consumer = None
         self._producer = None
@@ -63,7 +70,7 @@ class Kafka(AbstractDataset):
         create_topic: bool = False,
         create_consumer: bool = False,
         create_producer: bool = False,
-        connection_params: dict[str, Any] = {},
+        connection_params: dict[str, Any] | None = None,
     ) -> DatasetCreateStatus:
         """Create the dataset storage layer.
 
@@ -71,6 +78,7 @@ class Kafka(AbstractDataset):
 
         Return status of dataset creation.
         """
+        connection_params = connection_params or {}
         if create_topic and any([create_consumer, create_producer]):
             raise KafkaDatasetError(
                 "Cannot create topic and consumer/producer at the same time."
@@ -358,7 +366,8 @@ class Kafka(AbstractDataset):
             "consumer_config:" DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
         }
         """
-        # build topic name from prefix + pipeline_name + name, depending on consumer params:
+        # build topic name from prefix + pipeline_name + name,
+        # depending on consumer params:
         dataset_name = consumer_params.get("dataset_name")
         node_name = consumer_params.get("node_name")
         pipeline_name = consumer_params.get("pipeline_name")
