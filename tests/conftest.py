@@ -74,8 +74,10 @@ def dummy_node():
 
         def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
             """Consumes message from input and outputs it to output."""
-            msg = self.consumers["input"].consume(how="next", timeout=0)
-            self.producers["output"].produce(msg)
+            print(self.inputs)
+            print(self.outputs)
+            msg = self.inputs["input"].read(how="next", timeout=0)
+            self.outputs["output"].write(msg)
 
     return DummyNode
 
@@ -116,7 +118,7 @@ def test_sequencer_node():
                 return False
 
             # Write message to producer
-            self.producers["integer_sequence"].produce(self.cur_integer)
+            self.outputs["integer_sequence"].write(self.cur_integer)
             self.log(f"Produced {self.cur_integer}", level="info")
             self.log("Just a red herring", level="error")
             self.num_messages += 1
@@ -155,7 +157,7 @@ def test_doubler_node():
                 return False
 
             # Read message from consumer
-            cur_integer = self.consumers["integer_sequence"].next()
+            cur_integer = self.inputs["integer_sequence"].next()
 
             # Calculate latency
             latency = (
@@ -177,7 +179,7 @@ def test_doubler_node():
             self.cur_integer = cur_integer
 
             # Write message to producer
-            self.producers["integer_doubles"].produce(cur_integer * 2)
+            self.outputs["integer_doubles"].write(cur_integer * 2)
             self.log(f"Produced {cur_integer * 2}", level="info")
 
     return TestDoubler
@@ -199,7 +201,7 @@ def test_internal_value_setter_node():
             """Consumes message from input and sets content to internal value."""
 
             # Read message from consumer
-            cur_integer = self.consumers["integer_sequence"].consume(
+            cur_integer = self.inputs["integer_sequence"].read(
                 how="next", timeout=0
             )
             # Validate message
