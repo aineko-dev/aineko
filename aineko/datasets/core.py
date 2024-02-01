@@ -46,9 +46,9 @@ class AbstractDatasetConfig(BaseModel):
 
 class DatasetCreateStatus:
     """Object representing staus of dataset creation.
-    
+
     Represents creation status of dataset (such as a kafka topic)
-    or its connections (such as producers and consumers linked 
+    or its connections (such as producers and consumers linked
     to the topic).
 
     Can be used to ensure all datasets have been created.
@@ -77,7 +77,7 @@ class DatasetCreateStatus:
 
     def done(self) -> bool:
         """Return status of dataset creation.
-            
+
         For kafka topics, the status is represented by a dictionary
         of kafka topics to futures. For kafka producers and consumers,
         the status is represented by a list of status objects.

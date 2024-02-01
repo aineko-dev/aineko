@@ -490,7 +490,7 @@ class Kafka(AbstractDataset):
         self, consumer_params: ConsumerParams
     ) -> DatasetCreateStatus:
         """Creates Kafka Consumer and subscribes to the dataset topic.
-        
+
         Used to read (consume) messages from the dataset topic.
         """
         dataset_name = consumer_params.dataset_name
@@ -526,7 +526,7 @@ class Kafka(AbstractDataset):
         self, producer_params: ProducerParams
     ) -> DatasetCreateStatus:
         """Creates Kafka Producer.
-        
+
         Used to write (produce) messages to the dataset topic.
         """
         has_pipeline_prefix = producer_params.has_pipeline_prefix
