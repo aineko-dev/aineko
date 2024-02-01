@@ -161,9 +161,10 @@ class Runner:
             datasets.append(dataset)
 
         # Create logging dataset
-        logging_dataset = Kafka(name="logging", params={})
-        datasets.append(logging_dataset)
-
+        logging_config = {'target': 'kafka','type': 'aineko.datasets.kafka.Kafka'}
+        logger.info(f"Creating dataset: logging:{logging_config}")
+        logging_dataset = AbstractDataset.from_config("logging", logging_config)
+        # datasets.append(logging_dataset)
         # Create all datasets
         dataset_create_status = [
             dataset.create(
@@ -172,6 +173,10 @@ class Runner:
             )
             for dataset in datasets
         ]
+        logging_create_status = logging_dataset.create(create_topic=True)
+        datasets.append(logging_dataset)
+        print('initialized datasets are...',[d.name for d in datasets])
+        dataset_create_status.append(logging_create_status)
         cur_time = time.time()
         while True:
             if all(future.done() for future in dataset_create_status):
@@ -181,7 +186,6 @@ class Runner:
                 "DATASET_CREATION_TIMEOUT"
             ):
                 raise TimeoutError("Timeout while creating datasets.")
-
         return datasets
 
         # # Connect to kafka cluster
@@ -277,6 +281,7 @@ class Runner:
         Raises:
             ValueError: if error occurs while initializing actor from config
         """
+        print('########entering prepare_nodes##########')
         # Collect all  actor futures
         results = []
 
@@ -284,6 +289,7 @@ class Runner:
 
         for node_name, node_config in pipeline_config["nodes"].items():
             # Initialize actor from specified class in config
+            print('building node ',node_name)
             try:
                 target_class = imports.import_from_string(
                     attr=node_config["class"], kind="class"
@@ -321,10 +327,20 @@ class Runner:
             )
 
             # Setup internal datasets like logging, without pipeline prefix
+            print('TRYING TO ADD LOGGING DATASET')
+            # actor_handle.setup_datasets.remote(
+            #     outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
+            #     datasets=pipeline_config["datasets"],
+            # )
             actor_handle.setup_datasets.remote(
                 outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
-                datasets=pipeline_config["datasets"],
+                datasets={"logging": {"type": "aineko.datasets.kafka.Kafka", "target": "kafka"}},
             )
+
+            print('FINSIHED TRYING TO ADD LOGGING DATASET')
+            # print('setting up actor...')
+            # print(actor_handle)
+            # print(actor_handle.__dict__.keys())
 
             # Create actor future (for execute method)
             results.append(
@@ -332,5 +348,6 @@ class Runner:
                     params=node_config.get("node_params", None)
                 )
             )
-
+            print('built node ',node_name)
+        print('node results are ',results)
         return results

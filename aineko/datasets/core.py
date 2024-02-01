@@ -88,30 +88,30 @@ class AbstractDataset(abc.ABC):
 
         return class_obj(name, dataset_config.params)
 
-    def read(self) -> Any:
+    def read(self,*args,**kwargs) -> Any:
         """Read the dataset."""
         try:
-            return self._read()
+            return self._read(*args,**kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to read dataset {self.name}."
             raise DatasetError(message) from e
 
-    def write(self) -> None:
+    def write(self,*args,**kwargs) -> None:
         """Write the dataset."""
         try:
-            return self._write()
+            return self._write(*args,**kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to write dataset {self.name}."
             raise DatasetError(message) from e
 
-    def create(self) -> None:
+    def create(self,*args,**kwargs) -> None:
         """Create the dataset."""
         try:
-            return self._create()
+            return self._create(*args,**kwargs)
         except DatasetError:
             raise
         except Exception as e:

@@ -29,6 +29,7 @@ from aineko.config import (
 from aineko.datasets.core import AbstractDataset
 from aineko.datasets.kafka import FakeDatasetInput, FakeDatasetOutput
 
+
 class PoisonPill:
     """Global variable accessible to every node in pipeline.
 
@@ -120,27 +121,26 @@ class AbstractNode(ABC):
         """
         inputs = inputs or []
         # initialize the datasets:
-        self.inputs = {
+        self.inputs.update({
             dataset_name: AbstractDataset.from_config(
                 name=dataset_name, config=datasets.get(dataset_name, {})
             )
             for dataset_name in inputs
-        }
+        })
 
         outputs = outputs or []
-        self.outputs = {
+        self.outputs.update({
             dataset_name: AbstractDataset.from_config(
                 name=dataset_name, config=datasets.get(dataset_name, {})
             )
             for dataset_name in outputs
-        }
-
+        })
         # topics have already been created from runner.
 
         # now create the producers and consumers connections:
 
-        for dataset_name, dataset_instance in self.inputs.items():
-            if dataset_instance.type == "kafka":
+        for dataset_name in inputs:
+            if self.inputs[dataset_name].type == "kafka":
                 consumer_config = {
                     "dataset_name": dataset_name,
                     "node_name": self.name,
@@ -154,8 +154,8 @@ class AbstractNode(ABC):
                 self.inputs[dataset_name].create(
                     create_consumer=True, connection_params=consumer_config
                 )
-        for dataset_name, dataset_instance in self.outputs.items():
-            if dataset_instance.type == "kafka":
+        for dataset_name in outputs:
+            if self.outputs[dataset_name].type == "kafka":
                 producer_config = {
                     "dataset_name": dataset_name,
                     "pipeline_name": self.pipeline_name,
@@ -239,8 +239,6 @@ class AbstractNode(ABC):
             )
             for dataset_name, values in inputs.items()
         }
-        print('inputs are...',self.inputs)
-
         outputs = outputs or []
         outputs.extend(TESTING_NODE_CONFIG.get("DATASETS"))
         # self.producers = {
@@ -257,8 +255,6 @@ class AbstractNode(ABC):
             )
             for dataset_name in outputs
         }
-        print('outputs are...',self.outputs)
-
         self.params = params or {}
 
     def log(self, message: str, level: str = "info") -> None:
@@ -369,12 +365,11 @@ class AbstractNode(ABC):
             #     consumer.empty for consumer in self.consumers.values()
             # ):
             #     run_loop = False
-            
+
             if self.inputs and all(
                 input.empty for input in self.inputs.values()
             ):
                 run_loop = False
-
 
         self._post_loop_hook(self.params)
 
