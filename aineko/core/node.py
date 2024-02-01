@@ -27,7 +27,12 @@ from aineko.config import (
     TESTING_NODE_CONFIG,
 )
 from aineko.datasets.core import AbstractDataset
-from aineko.datasets.kafka import FakeDatasetInput, FakeDatasetOutput
+from aineko.datasets.kafka import (
+    ConsumerParams,
+    FakeDatasetInput,
+    FakeDatasetOutput,
+    ProducerParams,
+)
 
 
 class PoisonPill:
@@ -61,8 +66,15 @@ class AbstractNode(ABC):
     The _execute method is where the node logic is implemented by the user.
 
     Attributes:
+        name (str): name of the node
+        pipeline_name (str): name of the pipeline
+        params (dict): dict of parameters to be used by the node
         consumers (dict): dict of DatasetConsumer objects for inputs to node
         producers (dict): dict of DatasetProducer objects for outputs of node
+        inputs (dict): dict of AbstractDataset objects for inputs that node
+            can read / consume.
+        outputs (dict): dict of AbstractDataset objects for outputs that node
+            can write / produce.
         last_hearbeat (float): timestamp of the last heartbeat
         test (bool): True if node is in test mode else False
         log_levels (tuple): tuple of allowed log levels
@@ -86,8 +98,6 @@ class AbstractNode(ABC):
         self.name = node_name or self.__class__.__name__
         self.pipeline_name = pipeline_name
         self.last_heartbeat = time.time()
-        self.consumers: Dict = {}
-        self.producers: Dict = {}
         self.inputs: dict = {}
         self.outputs: dict = {}
         self.params: Dict = {}
@@ -145,63 +155,37 @@ class AbstractNode(ABC):
 
         for dataset_name in inputs:
             if self.inputs[dataset_name].type == "kafka":
-                consumer_config = {
-                    "dataset_name": dataset_name,
-                    "node_name": self.name,
-                    "pipeline_name": self.pipeline_name,
-                    "prefix": prefix,
-                    "has_pipeline_prefix": has_pipeline_prefix,
-                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
-                        "CONSUMER_CONFIG"
-                    ),
-                }
+                consumer_params = ConsumerParams(
+                    **{
+                        "dataset_name": dataset_name,
+                        "node_name": self.name,
+                        "pipeline_name": self.pipeline_name,
+                        "prefix": prefix,
+                        "has_pipeline_prefix": has_pipeline_prefix,
+                        "consumer_config": DEFAULT_KAFKA_CONFIG.get(
+                            "CONSUMER_CONFIG"
+                        ),
+                    }
+                )
                 self.inputs[dataset_name].create(
-                    create_consumer=True, connection_params=consumer_config
+                    create_consumer=True, connection_params=consumer_params
                 )
         for dataset_name in outputs:
             if self.outputs[dataset_name].type == "kafka":
-                producer_config = {
-                    "dataset_name": dataset_name,
-                    "pipeline_name": self.pipeline_name,
-                    "prefix": prefix,
-                    "has_pipeline_prefix": has_pipeline_prefix,
-                    "producer_config": DEFAULT_KAFKA_CONFIG.get(
-                        "PRODUCER_CONFIG"
-                    ),
-                }
-                self.outputs[dataset_name].create(
-                    create_producer=True, connection_params=producer_config
+                producer_params = ProducerParams(
+                    **{
+                        "dataset_name": dataset_name,
+                        "pipeline_name": self.pipeline_name,
+                        "prefix": prefix,
+                        "has_pipeline_prefix": has_pipeline_prefix,
+                        "producer_config": DEFAULT_KAFKA_CONFIG.get(
+                            "PRODUCER_CONFIG"
+                        ),
+                    }
                 )
-
-        # inputs = inputs or []
-        # self.consumers.update(
-        #     {
-        #         dataset_name: DatasetConsumer(
-        #             dataset_name=dataset_name,
-        #             node_name=self.name,
-        #             pipeline_name=self.pipeline_name,
-        #             dataset_config=datasets.get(dataset_name, {}),
-        #             prefix=prefix,
-        #             has_pipeline_prefix=has_pipeline_prefix,
-        #         )
-        #         for dataset_name in inputs
-        #     }
-        # )
-
-        # outputs = outputs or []
-        # self.producers.update(
-        #     {
-        #         dataset_name: DatasetProducer(
-        #             dataset_name=dataset_name,
-        #             node_name=self.name,
-        #             pipeline_name=self.pipeline_name,
-        #             dataset_config=datasets.get(dataset_name, {}),
-        #             prefix=prefix,
-        #             has_pipeline_prefix=has_pipeline_prefix,
-        #         )
-        #         for dataset_name in outputs
-        #     }
-        # )
+                self.outputs[dataset_name].create(
+                    create_producer=True, connection_params=producer_params
+                )
 
     def setup_test(
         self,
@@ -227,14 +211,7 @@ class AbstractNode(ABC):
             )
 
         inputs = inputs or {}
-        # self.consumers = {
-        #     dataset_name: FakeDatasetConsumer(
-        #         dataset_name=dataset_name,
-        #         node_name=self.__class__.__name__,
-        #         values=values,
-        #     )
-        #     for dataset_name, values in inputs.items()
-        # }
+
         self.inputs = {
             dataset_name: FakeDatasetInput(
                 dataset_name=dataset_name,
@@ -245,13 +222,7 @@ class AbstractNode(ABC):
         }
         outputs = outputs or []
         outputs.extend(TESTING_NODE_CONFIG.get("DATASETS"))
-        # self.producers = {
-        #     dataset_name: FakeDatasetProducer(
-        #         dataset_name=dataset_name,
-        #         node_name=self.__class__.__name__,
-        #     )
-        #     for dataset_name in outputs
-        # }
+
         self.outputs = {
             dataset_name: FakeDatasetOutput(
                 dataset_name=dataset_name,
@@ -364,12 +335,7 @@ class AbstractNode(ABC):
                 if time.time() - start_time < runtime:
                     continue
 
-            # End loop if all consumers are empty
-            # if self.consumers and all(
-            #     consumer.empty for consumer in self.consumers.values()
-            # ):
-            #     run_loop = False
-
+            # End loop if all inputs are empty
             if self.inputs and all(
                 input.empty for input in self.inputs.values()
             ):

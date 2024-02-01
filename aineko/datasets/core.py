@@ -71,9 +71,9 @@ class DatasetCreateStatus:
 
 
 class AbstractDataset(abc.ABC):
-    """Base class for defining new datasets.
+    """Base class for defining new Aineko datasets.
 
-    Subclass implementations can be defined and instantiated using
+    Subclass implementations can be instantiated using
     the `from_config` method.
 
     When defining a new dataset, the following methods must be implemented:
