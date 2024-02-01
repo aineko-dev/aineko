@@ -45,7 +45,24 @@ class AbstractDatasetConfig(BaseModel):
 
 
 class DatasetCreateStatus:
-    """Object representing staus of dataset creation."""
+    """Object representing staus of dataset creation.
+    
+    Represents creation status of dataset (such as a kafka topic)
+    or its connections (such as producers and consumers linked 
+    to the topic).
+
+    Can be used to ensure all datasets have been created.
+
+    Attributes:
+        dataset_name: Name of the dataset.
+        kafka_topic_to_future: Dictionary of kafka topics to futures.
+        status_list: List of status of dataset creation.
+
+    Args:
+        dataset_name: Name of the dataset.
+        kafka_topic_to_future: Dictionary of kafka topics to futures.
+        status_list: List of status of dataset creation.
+    """
 
     def __init__(
         self,
@@ -59,7 +76,15 @@ class DatasetCreateStatus:
         self.status_list = status_list
 
     def done(self) -> bool:
-        """Return status of dataset creation."""
+        """Return status of dataset creation.
+            
+        For kafka topics, the status is represented by a dictionary
+        of kafka topics to futures. For kafka producers and consumers,
+        the status is represented by a list of status objects.
+
+        Returns:
+            True if all futures are done, otherwise False.
+        """
         if not any([self.kafka_topic_to_future, self.status_list]):
             return True
         if self.kafka_topic_to_future:

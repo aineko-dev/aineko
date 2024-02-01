@@ -3,6 +3,11 @@
 """Kafka Dataset.
 
 Contains Kafka dataset, a subclass of AbstractDataset.
+
+The storage layer for a Kafka dataset is a Kafka topic.
+
+The connection layer for reading and writing to the topic
+is a Kafka consumer and producer, respectively.
 """
 import datetime
 import json
@@ -484,9 +489,10 @@ class Kafka(AbstractDataset):
     def _create_consumer(
         self, consumer_params: ConsumerParams
     ) -> DatasetCreateStatus:
-        """Creates Kafka Consumer and subscribes to the dataset topic."""
-        # build topic name from prefix + pipeline_name + name,
-        # depending on consumer params:
+        """Creates Kafka Consumer and subscribes to the dataset topic.
+        
+        Used to read (consume) messages from the dataset topic.
+        """
         dataset_name = consumer_params.dataset_name
         node_name = consumer_params.node_name
         pipeline_name = consumer_params.pipeline_name
@@ -519,7 +525,10 @@ class Kafka(AbstractDataset):
     def _create_producer(
         self, producer_params: ProducerParams
     ) -> DatasetCreateStatus:
-        """Creates Kafka Producer."""
+        """Creates Kafka Producer.
+        
+        Used to write (produce) messages to the dataset topic.
+        """
         has_pipeline_prefix = producer_params.has_pipeline_prefix
         pipeline_name = producer_params.pipeline_name
         dataset_name = producer_params.dataset_name
