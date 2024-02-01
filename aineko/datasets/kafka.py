@@ -140,9 +140,9 @@ class Kafka(AbstractDataset):
             "timestamp": datetime.datetime.now().strftime(
                 AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
             ),
-            "dataset": self.dataset,
-            "source_pipeline": self.source_pipeline,
-            "source_node": self.source_node,
+            "dataset": self.name,
+            # "source_pipeline": self.source_pipeline,
+            # "source_node": self.source_node,
             "message": message,
         }
         self._producer.poll(0)
@@ -153,7 +153,7 @@ class Kafka(AbstractDataset):
             topic=self.topic_name,
             key=key_bytes,
             value=json.dumps(message).encode("utf-8"),
-            callback=self._delivery_report,
+            # callback=self._delivery_report,
         )
         self._producer.flush()
 
@@ -226,7 +226,7 @@ class Kafka(AbstractDataset):
         if how not in ["next", "last"]:
             raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
 
-        timeout = timeout or self.kafka_config.get("CONSUMER_TIMEOUT")
+        timeout = timeout or DEFAULT_KAFKA_CONFIG.get("CONSUMER_TIMEOUT")
         if how == "next":
             # next unread message from queue
             message = self._consumer.poll(timeout=timeout)
@@ -466,6 +466,7 @@ class Kafka(AbstractDataset):
         )
         return dataset_create_status
 
+
 # pylint: enable=too-few-public-methods
 # pylint: disable=unused-argument
 class FakeDatasetInput:
@@ -548,7 +549,7 @@ class FakeDatasetInput:
             msg: message from the dataset
         """
         return self.read(how="last", timeout=timeout)
-    
+
 
 class FakeDatasetOutput:
     """Fake dataset Output (producer) for testing purposes.
