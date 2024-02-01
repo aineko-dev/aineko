@@ -1,10 +1,10 @@
-
-
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
 import datetime
 import json
 import time
 from typing import Any, Optional
-from pydantic import BaseModel
+
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
     Consumer,
@@ -13,9 +13,15 @@ from confluent_kafka import (  # type: ignore
     Producer,
 )
 from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
-from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
+from pydantic import BaseModel
 
-from aineko.datasets.core import AbstractDataset, DatasetError, DatasetCreateStatus
+from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
+from aineko.datasets.core import (
+    AbstractDataset,
+    DatasetCreateStatus,
+    DatasetError,
+)
+
 
 class KafkaDatasetError(DatasetError):
     """General Exception for KafkaDataset errors."""
@@ -45,17 +51,19 @@ class KafkaDataset(AbstractDataset):
         self._producer = None
         self._create_admin_client()
 
-    def _create(self, 
-                create_topic:bool = False, 
-                create_consumer:bool = False, 
-                create_producer:bool = False) -> None:
+    def _create(
+        self,
+        create_topic: bool = False,
+        create_consumer: bool = False,
+        create_producer: bool = False,
+    ) -> None:
         """Create the dataset storage layer.
 
         This method creates the dataset topic in the Kafka cluster.
 
         Return status of dataset creation.
         """
-        
+
         if create_topic:
             self._create_topic()
         if create_consumer:
@@ -75,7 +83,7 @@ class KafkaDataset(AbstractDataset):
     def next(self) -> Any:
         """Return the next message from the topic."""
         raise NotImplementedError
-    
+
     def last(self) -> Any:
         """Return the last message from the topic."""
         raise NotImplementedError
@@ -135,7 +143,9 @@ class KafkaDataset(AbstractDataset):
             **self.credentials.dict(),
         )
         self._consumer.subscribe([self.topic_name])
-        dataset_create_status = DatasetCreateStatus(dataset_name=f"{self.topic_name}_consumer")
+        dataset_create_status = DatasetCreateStatus(
+            dataset_name=f"{self.topic_name}_consumer"
+        )
         return dataset_create_status
 
     def _create_producer(self) -> DatasetCreateStatus:
@@ -143,7 +153,9 @@ class KafkaDataset(AbstractDataset):
         self._producer = Producer(
             **self.credentials.dict(),
         )
-        dataset_create_status = DatasetCreateStatus(dataset_name=f"{self.topic_name}_producer")
+        dataset_create_status = DatasetCreateStatus(
+            dataset_name=f"{self.topic_name}_producer"
+        )
         return dataset_create_status
 
     def _create_topic(self, dataset_name: str) -> DatasetCreateStatus:
@@ -166,7 +178,7 @@ class KafkaDataset(AbstractDataset):
             config=dataset_params.get("config"),
         )
         topic_to_future_map = self._admin_client.create_topics([new_dataset])
-        dataset_create_status = DatasetCreateStatus(dataset_name, 
-                                                    kafka_topic_to_future=topic_to_future_map)
+        dataset_create_status = DatasetCreateStatus(
+            dataset_name, kafka_topic_to_future=topic_to_future_map
+        )
         return dataset_create_status
-        

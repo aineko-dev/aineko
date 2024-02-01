@@ -14,7 +14,6 @@ Example dataset configuration:
     ```
 """
 import abc
-
 from typing import Any, Optional
 
 from pydantic import BaseModel
@@ -32,6 +31,7 @@ class DatasetError(Exception):
 
     pass
 
+
 class AbstractDatasetConfig(BaseModel):
     """Dataset configuration model."""
 
@@ -43,7 +43,11 @@ class AbstractDatasetConfig(BaseModel):
 class DatasetCreateStatus:
     """Object representing staus of dataset creation."""
 
-    def __init__(self, dataset_name: str, kafka_topic_to_future: dict[str, Any] | None = None):
+    def __init__(
+        self,
+        dataset_name: str,
+        kafka_topic_to_future: dict[str, Any] | None = None,
+    ):
         self.dataset_name = dataset_name
         self.kafka_topic_to_future = kafka_topic_to_future
 
@@ -58,11 +62,13 @@ class DatasetCreateStatus:
                     for future in self.kafka_topic_to_future.values()
                 ]
             )
+
+
 class AbstractDataset(abc.ABC):
     @classmethod
     def from_config(
         cls: type, name: str, config: dict[str, Any]
-    ) -> AbstractDataset:
+    ) -> "AbstractDataset":
         """Create a dataset from a configuration dictionary.
 
         Args:
@@ -78,67 +84,82 @@ class AbstractDataset(abc.ABC):
 
         return class_obj(name, dataset_config.params)
 
-    def read(self) -> Any:
+    def read(self, **kwargs) -> Any:
         """Read the dataset."""
         try:
-            return self._read()
+            return self._read(**kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to read dataset {self.name}."
             raise DatasetError(message) from e
 
-    def write(self) -> None:
+    def write(self, **kwargs) -> None:
         """Write the dataset."""
         try:
-            return self._write()
+            return self._write(**kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to write dataset {self.name}."
             raise DatasetError(message) from e
 
-    def create(self) -> None:
+    def create(self, **kwargs) -> None:
         """Create the dataset."""
         try:
-            return self._create()
+            return self._create(**kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to create dataset {self.name}."
             raise DatasetError(message) from e
 
-    def delete(self) -> None:
+    def delete(self, **kwargs) -> None:
         """Delete the dataset."""
         try:
-            return self._delete()
+            return self._delete(**kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to delete dataset {self.name}."
             raise DatasetError(message) from e
 
+    def exists(self, **kwargs) -> bool:
+        """Check if the dataset exists."""
+        try:
+            return self._exists(**kwargs)
+        except DatasetError:
+            raise
+        except Exception as e:
+            message = f"Failed to check if dataset {self.name} exists."
+            raise DatasetError(message) from e
+
     @abc.abstractmethod
-    def _read(self) -> Any:
+    def _read(self, **kwargs) -> Any:
         """Read the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _write(self) -> None:
+    def _write(self, **kwargs) -> None:
         """Write the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _create(self) -> None:
+    def _create(self, **kwargs) -> None:
         """Create the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _delete(self) -> None:
+    def _delete(self, **kwargs) -> None:
         """Delete the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _describe(self) -> str:
+    def _describe(self, **kwargs) -> str:
         """Describe the dataset metadata."""
         return f"Dataset name: {self.name}"
+
+    @abc.abstractmethod
+    def _exists(self, **kwargs) -> bool:
+        """Check if the dataset exists."""
+        raise NotImplementedError

@@ -35,6 +35,9 @@ uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
 # extras: websocket_client
 websocket-client = { version = "^1.7.0", optional = true }
 websockets = { version = "^12.0", optional = true }
+# extras: postgres
+psycopg2-binary = { version = "^2.9.9", optional = true }
+boto3 = { version = "^1.34.30", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 # aineko_style = "^0.0.1"
@@ -67,6 +70,7 @@ pytest-subtests = "^0.11.0"
 [tool.poetry.extras]
 fastapi = ["fastapi", "uvicorn"]
 websocket_client = ["websocket-client", "websockets"]
+postgres = ["psycopg2-binary", "boto3"]
 
 [build-system]
 requires = ["poetry-core"]
