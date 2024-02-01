@@ -81,9 +81,9 @@ class WebSocketClientChecker(AbstractNode):
         """Checks that the WebSocketClient is running."""
         results = {}
         for msg_num in range(5):
-            test_message = self.consumers["test_messages"].next()
+            test_message = self.inputs["test_messages"].next()
             results[f"message_{msg_num}"] = test_message["message"]["message"]
-        self.producers["test_result"].produce(results)
+        self.outputs["test_result"].write(results)
         self.activate_poison_pill()
         time.sleep(5)
 
