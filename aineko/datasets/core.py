@@ -14,7 +14,7 @@ Example dataset configuration:
     ```
 """
 import abc
-from typing import Any, Optional, Type, TypeVar
+from typing import Any, Type, TypeVar
 
 from pydantic import BaseModel
 
@@ -24,7 +24,9 @@ T = TypeVar("T", bound="AbstractDataset")
 
 
 class DatasetError(Exception):
-    """``DatasetError`` raised by ``AbstractDataset`` implementations
+    """Generic Dataset Error.
+
+    ``DatasetError`` raised by ``AbstractDataset`` implementations
     in case of failure of input/output methods.
 
     ``AbstractDataset`` implementations should provide instructive
@@ -51,6 +53,7 @@ class DatasetCreateStatus:
         kafka_topic_to_future: dict[str, Any] | None = None,
         status_list: list[Any] | None = None,
     ):
+        """Creation status of dataset or its components."""
         self.dataset_name = dataset_name
         self.kafka_topic_to_future = kafka_topic_to_future
         self.status_list = status_list
@@ -61,16 +64,62 @@ class DatasetCreateStatus:
             return True
         if self.kafka_topic_to_future:
             return all(
-                [
-                    future.done()
-                    for future in self.kafka_topic_to_future.values()
-                ]
+                future.done() for future in self.kafka_topic_to_future.values()
             )
         if self.status_list:
             return all(status.done() for status in self.status_list)
 
 
 class AbstractDataset(abc.ABC):
+    """Base class for defining new datasets.
+
+    Subclass implementations can be defined and instantiated using
+    the `from_config` method.
+
+    When defining a new dataset, the following methods must be implemented:
+    - `_read`
+    - `_write`
+    - `_create`
+    - `_delete`
+    - `_describe`
+
+    Example:
+    ```python
+    class MyDataset(AbstractDataset):
+        def _read(self, *args, **kwargs) -> Any:
+            pass
+
+        def _write(self, *args, **kwargs) -> None:
+            pass
+
+        def _create(self, *args, **kwargs) -> None:
+            pass
+
+        def _delete(self, *args, **kwargs) -> None:
+            pass
+
+        def _describe(self, *args, **kwargs) -> str:
+            pass
+    ```
+
+    If `MyDataset` was defined in the file
+    `./aineko/datasets/mydataset.py`, a new dataset
+    can be created using the `from_config` method:
+
+        ```python
+        dataset = AbstractDataset.from_config(
+            name="my_dataset_instance",
+            config={
+                "type": "aineko.datasets.mydataset.MyDataset",
+                "target": "foo",
+                "params": {
+                    "param_1": "bar"
+                }
+            }
+        )
+        ```
+    """
+
     @classmethod
     def from_config(cls: Type[T], name: str, config: dict[str, Any]) -> T:
         """Create a dataset from a configuration dictionary.
@@ -88,30 +137,30 @@ class AbstractDataset(abc.ABC):
 
         return class_obj(name, dataset_config.params)
 
-    def read(self,*args,**kwargs) -> Any:
+    def read(self, *args, **kwargs) -> Any:
         """Read the dataset."""
         try:
-            return self._read(*args,**kwargs)
+            return self._read(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to read dataset {self.name}."
             raise DatasetError(message) from e
 
-    def write(self,*args,**kwargs) -> None:
+    def write(self, *args, **kwargs) -> None:
         """Write the dataset."""
         try:
-            return self._write(*args,**kwargs)
+            return self._write(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to write dataset {self.name}."
             raise DatasetError(message) from e
 
-    def create(self,*args,**kwargs) -> None:
+    def create(self, *args, **kwargs) -> None:
         """Create the dataset."""
         try:
-            return self._create(*args,**kwargs)
+            return self._create(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
@@ -129,26 +178,26 @@ class AbstractDataset(abc.ABC):
             raise DatasetError(message) from e
 
     @abc.abstractmethod
-    def _read(self) -> Any:
+    def _read(self, *args, **kwargs) -> Any:
         """Read the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _write(self) -> None:
+    def _write(self, *args, **kwargs) -> None:
         """Write the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _create(self) -> None:
+    def _create(self, *args, **kwargs) -> None:
         """Create the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _delete(self) -> None:
+    def _delete(self, *args, **kwargs) -> None:
         """Delete the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _describe(self) -> str:
+    def _describe(self, *args, **kwargs) -> str:
         """Describe the dataset metadata."""
         return f"Dataset name: {self.name}"

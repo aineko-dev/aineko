@@ -15,7 +15,6 @@ from aineko.config import (
 from aineko.core.config_loader import ConfigLoader
 from aineko.core.node import PoisonPill
 from aineko.datasets.core import AbstractDataset
-from aineko.datasets.kafka import Kafka
 from aineko.utils import imports
 
 logger = logging.getLogger(__name__)
@@ -124,7 +123,8 @@ class Runner:
                 ```python
                     {
                         "dataset_name": {
-                            "type": str ("kafka_stream"),
+                            "type": str ("aineko.datasets.kafka.Kafka"),
+                            "target": str ("kafka"),
                             "params": dict
                     }
                 ```
@@ -161,10 +161,17 @@ class Runner:
             datasets.append(dataset)
 
         # Create logging dataset
-        logging_config = {'target': 'kafka','type': 'aineko.datasets.kafka.Kafka'}
-        logger.info(f"Creating dataset: logging:{logging_config}")
-        logging_dataset = AbstractDataset.from_config("logging", logging_config)
-        # datasets.append(logging_dataset)
+        logging_config = {
+            "target": "kafka",
+            "type": "aineko.datasets.kafka.Kafka",
+        }
+        logging_dataset_name = DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
+        logger.info(
+            "Creating dataset: %s: %s", logging_dataset_name, logging_config
+        )
+        logging_dataset = AbstractDataset.from_config(
+            logging_dataset_name, logging_config
+        )
         # Create all datasets
         dataset_create_status = [
             dataset.create(
@@ -175,7 +182,7 @@ class Runner:
         ]
         logging_create_status = logging_dataset.create(create_topic=True)
         datasets.append(logging_dataset)
-        print('initialized datasets are...',[d.name for d in datasets])
+
         dataset_create_status.append(logging_create_status)
         cur_time = time.time()
         while True:
@@ -187,84 +194,6 @@ class Runner:
             ):
                 raise TimeoutError("Timeout while creating datasets.")
         return datasets
-
-        # # Connect to kafka cluster
-        # kafka_client = AdminClient(self.kafka_config)
-
-        # # Add prefix to user defined datasets
-        # if user_dataset_prefix:
-        #     config = {
-        #         f"{user_dataset_prefix}.{dataset_name}": dataset_config
-        #         for dataset_name, dataset_config in config.items()
-        #     }
-
-        # # Fail if reserved dataset names are defined in catalog
-        # for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
-        #     if reserved_dataset in config:
-        #         raise ValueError(
-        #             f"Unable to create dataset `{reserved_dataset}`. "
-        #             "Reserved for internal use."
-        #         )
-
-        # # Add logging dataset to catalog
-        # config[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")] = {
-        #     "type": AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"),
-        #     "params": DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-        # }
-
-        # # Create all dataset defined in the catalog
-        # dataset_list = []
-        # for dataset_name, dataset_config in config.items():
-        #     logger.info(
-        #         "Creating dataset: %s: %s", dataset_name, dataset_config
-        #     )
-        #     # Create dataset for kafka streams
-        #     if dataset_config["type"] == AINEKO_CONFIG.get("KAFKA_STREAM_TYPE"):
-        #         # User defined
-        #         dataset_params = {
-        #             **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-        #             **dataset_config.get("params", {}),
-        #         }
-
-        #         # Configure dataset
-        #         if self.dataset_prefix:
-        #             topic_name = f"{self.dataset_prefix}.{dataset_name}"
-        #         else:
-        #             topic_name = dataset_name
-
-        #         new_dataset = NewTopic(
-        #             topic=topic_name,
-        #             num_partitions=dataset_params.get("num_partitions"),
-        #             replication_factor=dataset_params.get("replication_factor"),
-        #             config=dataset_params.get("config"),
-        #         )
-
-        #         # Add dataset to appropriate list
-        #         dataset_list.append(new_dataset)
-
-        #     else:
-        #         raise ValueError(
-        #             "Unknown dataset type. Expected: "
-        #             f"{AINEKO_CONFIG.get('STREAM_TYPES')}."
-        #         )
-
-        # # Create all configured datasets
-        # datasets = kafka_client.create_topics(dataset_list)
-
-        # # Block until all datasets finish creation
-        # cur_time = time.time()
-        # while True:
-        #     if all(future.done() for future in datasets.values()):
-        #         logger.info("All datasets created.")
-        #         break
-        #     if time.time() - cur_time > AINEKO_CONFIG.get(
-        #         "DATASET_CREATION_TIMEOUT"
-        #     ):
-        #         raise TimeoutError(
-        #             "Timeout while creating Kafka datasets. "
-        #             "Please check your Kafka cluster."
-        #         )
-        # return datasets
 
     def prepare_nodes(
         self, pipeline_config: dict, poison_pill: ray.actor.ActorHandle
@@ -281,7 +210,6 @@ class Runner:
         Raises:
             ValueError: if error occurs while initializing actor from config
         """
-        print('########entering prepare_nodes##########')
         # Collect all  actor futures
         results = []
 
@@ -289,7 +217,6 @@ class Runner:
 
         for node_name, node_config in pipeline_config["nodes"].items():
             # Initialize actor from specified class in config
-            print('building node ',node_name)
             try:
                 target_class = imports.import_from_string(
                     attr=node_config["class"], kind="class"
@@ -327,20 +254,16 @@ class Runner:
             )
 
             # Setup internal datasets like logging, without pipeline prefix
-            print('TRYING TO ADD LOGGING DATASET')
-            # actor_handle.setup_datasets.remote(
-            #     outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
-            #     datasets=pipeline_config["datasets"],
-            # )
+            logging_dataset_name = DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
             actor_handle.setup_datasets.remote(
                 outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
-                datasets={"logging": {"type": "aineko.datasets.kafka.Kafka", "target": "kafka"}},
+                datasets={
+                    logging_dataset_name: {
+                        "type": "aineko.datasets.kafka.Kafka",
+                        "target": "kafka",
+                    }
+                },
             )
-
-            print('FINSIHED TRYING TO ADD LOGGING DATASET')
-            # print('setting up actor...')
-            # print(actor_handle)
-            # print(actor_handle.__dict__.keys())
 
             # Create actor future (for execute method)
             results.append(
@@ -348,6 +271,4 @@ class Runner:
                     params=node_config.get("node_params", None)
                 )
             )
-            print('built node ',node_name)
-        print('node results are ',results)
         return results

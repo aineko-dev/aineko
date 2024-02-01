@@ -2,8 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Kafka Dataset.
 
-Contains implmentation of Kafka dataset, which is a subclass of
-AbstractDataset.
+Contains Kafka dataset, a subclass of AbstractDataset.
 """
 import datetime
 import json
@@ -49,7 +48,38 @@ class KafkaCredentials(BaseModel):
 
 
 class Kafka(AbstractDataset):
-    """Kafka dataset."""
+    """Kafka dataset.
+
+    Dataset storage layer is a Kafka topic.
+
+    `_read` and `_write` methods are Kafka consumer and producer methods.
+
+    `_create` method creates the dataset topic in the Kafka cluster.
+    `_create` method can also be used to create a consumer or producer.
+
+    `_delete` method deletes the dataset topic in the Kafka cluster.
+
+    `_describe` method describes the dataset metadata.
+
+    Args:
+        name: name of the dataset
+        params: dataset configuration parameters
+
+    Attributes:
+        name (str): name of the dataset
+        topic_name (str): name of the Kafka topic
+        params (dict): dataset configuration parameters
+        type (str): type of the dataset
+        credentials (KafkaCredentials): Kafka credentials
+        dataset_config (dict): dataset configuration
+        _consumer (Consumer): Kafka consumer
+        _producer (Producer): Kafka producer
+        _admin_client (AdminClient): Kafka AdminClient
+        cached (bool): True if the consumer has been polled, False otherwise
+
+    Raises:
+        KafkaDatasetError: if an error occurs while creating the dataset
+    """
 
     def __init__(self, name: str, params: dict[str, Any]):
         """Initialize the dataset."""
@@ -72,9 +102,27 @@ class Kafka(AbstractDataset):
         create_producer: bool = False,
         connection_params: dict[str, Any] | None = None,
     ) -> DatasetCreateStatus:
-        """Create the dataset storage layer.
+        """Create the dataset storage layer or connection to it.
 
-        This method creates the dataset topic in the Kafka cluster.
+        This method can be called in 3 different ways:
+
+            1. `self._create(create_topic=True, ...)`:
+                creates the dataset topic in the Kafka cluster.
+            2. `self._create(create_consumer=True, ...)`:
+                creates a Kafka Consumer and subscribes to the
+                dataset topic.
+            3. `self._create(create_producer=True, ...)`:
+                creates a Kafka Producer.
+
+        Only one of the three create_ options can be set to True at a time.
+        Each option also uses a different set of connection_params.
+
+        Args:
+            create_topic: create the dataset topic in the Kafka cluster
+            create_consumer: create a Kafka Consumer and subscribe to the
+                dataset topic
+            create_producer: create a Kafka Producer
+            connection_params: connection parameters for the dataset
 
         Return status of dataset creation.
         """
@@ -103,8 +151,13 @@ class Kafka(AbstractDataset):
         )
 
     def _delete(self) -> None:
-        """Delete the dataset."""
-        self._admin_client.delete_topics([self.topic_name])
+        """Delete the dataset topic from the Kafka cluster."""
+        try:
+            self._admin_client.delete_topics([self.topic_name])
+        except Exception as err:
+            raise KafkaDatasetError(
+                f"Error deleting topic {self.topic_name}: {str(err)}"
+            ) from err
 
     def _read(
         self, how: Literal["next", "last"], timeout: Optional[float] = None
@@ -122,10 +175,12 @@ class Kafka(AbstractDataset):
                 message = self._consume(how=how, timeout=timeout)
                 if message is not None:
                     return message
-            except KafkaError as e:
-                if e.code() == "_MAX_POLL_EXCEEDED":
+            except KafkaError as err:
+                if err.code() == "_MAX_POLL_EXCEEDED":
                     continue
-                raise e
+                raise KafkaDatasetError(
+                    f"Error occurred while reading topic: {str(err)}"
+                ) from err
 
     def _write(self, message: dict, key: Optional[str] = None) -> None:
         """Produce a message to the dataset.
@@ -153,7 +208,7 @@ class Kafka(AbstractDataset):
             topic=self.topic_name,
             key=key_bytes,
             value=json.dumps(message).encode("utf-8"),
-            # callback=self._delivery_report,
+            callback=self._delivery_report,
         )
         self._producer.flush()
 
@@ -168,6 +223,19 @@ class Kafka(AbstractDataset):
         )
         describe_string += f"\n{kafka_describe}"
         return describe_string
+
+    @staticmethod
+    def _delivery_report(err: Any, message: Message) -> None:
+        """Called once for each message produced to indicate delivery result.
+
+        Triggered by poll() or flush().
+
+        Args:
+            err: error message
+            message: message object from Kafka
+        """
+        if err is not None:
+            logger.error("Message %s delivery failed: %s", message, err)
 
     def _update_offset_to_latest(self) -> None:
         """Updates offset to latest.
@@ -235,11 +303,11 @@ class Kafka(AbstractDataset):
             # last message from queue
             try:
                 self._update_offset_to_latest()
-            except KafkaError as e:
+            except KafkaError as err:
                 logger.error(
                     "Error updating offset to latest for consumer %s: %s",
                     self.consumer_name,
-                    e,
+                    err,
                 )
                 return None
             message = self._consumer.poll(timeout=timeout)
@@ -346,11 +414,19 @@ class Kafka(AbstractDataset):
     # Create methods
 
     def _create_admin_client(self):
-        """Creates Kafka AdminClient."""
-        # remove 'bootstrap.servers' from credentials
-        self._admin_client = AdminClient(
-            DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
-        )
+        """Creates Kafka AdminClient.
+
+        The AdminClient can be used to create and delete
+        Kafka topics.
+        """
+        try:
+            self._admin_client = AdminClient(
+                DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
+            )
+        except KafkaError as err:
+            raise KafkaDatasetError(
+                f"Error creating Kafka AdminClient: {str(err)}"
+            ) from err
 
     def _create_consumer(
         self, consumer_params: dict[str, Any]
@@ -377,21 +453,22 @@ class Kafka(AbstractDataset):
             "consumer_config", DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG")
         )
 
-        if has_pipeline_prefix:
-            self.topic_name = f"{pipeline_name}.{dataset_name}"
-        else:
-            self.topic_name = dataset_name
+        self.topic_name = (
+            f"{pipeline_name}.{dataset_name}"
+            if has_pipeline_prefix
+            else dataset_name
+        )
+
         if prefix:
             self.consumer_name = f"{prefix}.{pipeline_name}.{node_name}"
-            consumer_config["group.id"] = self.consumer_name
-            self._consumer = Consumer(consumer_config)
-            self._consumer.subscribe([f"{prefix}.{self.topic_name}"])
-
+            consumer_topic = f"{prefix}.{self.topic_name}"
         else:
             self.consumer_name = f"{pipeline_name}.{node_name}"
-            consumer_config["group.id"] = f"{pipeline_name}.{node_name}"
-            self._consumer = Consumer(consumer_config)
-            self._consumer.subscribe([self.topic_name])
+            consumer_topic = self.topic_name
+
+        consumer_config["group.id"] = self.consumer_name
+        self._consumer = Consumer(consumer_config)
+        self._consumer.subscribe([consumer_topic])
 
         dataset_create_status = DatasetCreateStatus(
             dataset_name=f"{self.topic_name}_consumer"

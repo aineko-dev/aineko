@@ -121,20 +121,24 @@ class AbstractNode(ABC):
         """
         inputs = inputs or []
         # initialize the datasets:
-        self.inputs.update({
-            dataset_name: AbstractDataset.from_config(
-                name=dataset_name, config=datasets.get(dataset_name, {})
-            )
-            for dataset_name in inputs
-        })
+        self.inputs.update(
+            {
+                dataset_name: AbstractDataset.from_config(
+                    name=dataset_name, config=datasets.get(dataset_name, {})
+                )
+                for dataset_name in inputs
+            }
+        )
 
         outputs = outputs or []
-        self.outputs.update({
-            dataset_name: AbstractDataset.from_config(
-                name=dataset_name, config=datasets.get(dataset_name, {})
-            )
-            for dataset_name in outputs
-        })
+        self.outputs.update(
+            {
+                dataset_name: AbstractDataset.from_config(
+                    name=dataset_name, config=datasets.get(dataset_name, {})
+                )
+                for dataset_name in outputs
+            }
+        )
         # topics have already been created from runner.
 
         # now create the producers and consumers connections:
@@ -416,9 +420,9 @@ class AbstractNode(ABC):
             last_consumed_values = {}
 
             # Capture last consumed values
-            for dataset_name, input in self.inputs.items():
-                if input.values:
-                    last_value = input.values[0]
+            for dataset_name, input_dataset in self.inputs.items():
+                if input_dataset.values:
+                    last_value = input_dataset.values[0]
                     last_consumed_values[dataset_name] = last_value
 
             run_loop = self._execute(self.params)  # type: ignore
