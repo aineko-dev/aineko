@@ -167,7 +167,7 @@ class AbstractNode(ABC):
                         ),
                     }
                 )
-                self.inputs[dataset_name].create(
+                self.inputs[dataset_name].initialize(
                     create_consumer=True, connection_params=consumer_params
                 )
         for dataset_name in outputs:
@@ -183,7 +183,7 @@ class AbstractNode(ABC):
                         ),
                     }
                 )
-                self.outputs[dataset_name].create(
+                self.outputs[dataset_name].initialize(
                     create_producer=True, connection_params=producer_params
                 )
 

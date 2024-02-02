@@ -176,16 +176,12 @@ class Runner:
         # Create all datasets
         dataset_create_status = [
             dataset.create(
-                create_topic=True,
-                # connection_params={"dataset_prefix": self.dataset_prefix},
-                connection_params=TopicParams(
-                    dataset_prefix=self.dataset_prefix
-                ),
+                topic_params=TopicParams(dataset_prefix=self.dataset_prefix),
             )
             for dataset in datasets
         ]
         logging_create_status = logging_dataset.create(
-            create_topic=True, connection_params=TopicParams()
+            topic_params=TopicParams()
         )
         datasets.append(logging_dataset)
 

@@ -106,6 +106,7 @@ class AbstractDataset(abc.ABC):
     - `_write`
     - `_create`
     - `_delete`
+    - `_initialize`
     - `_describe`
 
     Example:
@@ -121,6 +122,9 @@ class AbstractDataset(abc.ABC):
             pass
 
         def _delete(self, *args, **kwargs) -> None:
+            pass
+
+        def _initialize(self, *args, **kwargs) -> None:
             pass
 
         def _describe(self, *args, **kwargs) -> str:
@@ -202,6 +206,16 @@ class AbstractDataset(abc.ABC):
             message = f"Failed to delete dataset {self.name}."
             raise DatasetError(message) from e
 
+    def initialize(self, *args, **kwargs) -> None:
+        """Initialize the dataset query layer."""
+        try:
+            return self._initialize(*args, **kwargs)
+        except DatasetError:
+            raise
+        except Exception as e:
+            message = f"Failed to initialize dataset {self.name}."
+            raise DatasetError(message) from e
+
     @abc.abstractmethod
     def _read(self, *args, **kwargs) -> Any:
         """Read the dataset."""
@@ -214,12 +228,17 @@ class AbstractDataset(abc.ABC):
 
     @abc.abstractmethod
     def _create(self, *args, **kwargs) -> None:
-        """Create the dataset."""
+        """Create the dataset storage layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
     def _delete(self, *args, **kwargs) -> None:
         """Delete the dataset."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def _initialize(self, *args, **kwargs) -> None:
+        """Initialize the dataset query layer."""
         raise NotImplementedError
 
     @abc.abstractmethod

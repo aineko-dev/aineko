@@ -155,58 +155,62 @@ class Kafka(AbstractDataset):
 
     def _create(
         self,
-        create_topic: bool = False,
+        topic_params: Optional[TopicParams],
+    ) -> DatasetCreateStatus:
+        """Create the dataset storage layer kafka topic.
+
+        Args:
+            topic_params: initialization parameters for the dataset topic
+
+        Return status of dataset creation.
+        """
+        topic_params = topic_params or TopicParams()
+        return self._create_topic(
+            dataset_name=self.name, topic_params=topic_params
+        )
+
+    def _initialize(
+        self,
+        connection_params: ConsumerParams | ProducerParams,
         create_consumer: bool = False,
         create_producer: bool = False,
-        connection_params: dict[str, Any] | None = None,
-    ) -> DatasetCreateStatus:
-        """Create the dataset storage layer or connection to it.
+    ) -> None:
+        """Create query layer reader or writer for the dataset.
 
-        This method can be called in 3 different ways:
+        This method can be called in 2 different ways:
 
-            1. `self._create(create_topic=True, ...)`:
-                creates the dataset topic in the Kafka cluster.
-            2. `self._create(create_consumer=True, ...)`:
+            1. `self._initialize(create_consumer=True, ...)`:
                 creates a Kafka Consumer and subscribes to the
                 dataset topic.
-            3. `self._create(create_producer=True, ...)`:
+
+            2. `self._initialize(create_producer=True, ...)`:
                 creates a Kafka Producer.
 
         Only one of the three create_ options can be set to True at a time.
         Each option also uses a different set of connection_params.
 
         Args:
-            create_topic: create the dataset topic in the Kafka cluster
             create_consumer: create a Kafka Consumer and subscribe to the
                 dataset topic
             create_producer: create a Kafka Producer
             connection_params: connection parameters for the dataset
-
-        Return status of dataset creation.
         """
-        connection_params = connection_params or {}
-        if create_topic and any([create_consumer, create_producer]):
-            raise KafkaDatasetError(
-                "Cannot create topic and consumer/producer at the same time."
-            )
-
-        if create_topic:
-            return self._create_topic(
-                dataset_name=self.name, topic_params=connection_params
-            )
-
-        status_list = []
         if create_consumer:
-            status_list.append(
+            try:
                 self._create_consumer(consumer_params=connection_params)
-            )
+                logger.info("Consumer for %s created.", self.topic_name)
+            except KafkaError as err:
+                raise KafkaDatasetError(
+                    f"Error creating consumer for {self.topic_name}: {str(err)}"
+                ) from err
         if create_producer:
-            status_list.append(
+            try:
                 self._create_producer(producer_params=connection_params)
-            )
-        return DatasetCreateStatus(
-            dataset_name=self.name, status_list=status_list
-        )
+                logger.info("Producer for %s created.", self.topic_name)
+            except KafkaError as err:
+                raise KafkaDatasetError(
+                    f"Error creating producer for {self.topic_name}: {str(err)}"
+                ) from err
 
     def _delete(self) -> None:
         """Delete the dataset topic from the Kafka cluster."""
