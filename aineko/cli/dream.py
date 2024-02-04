@@ -62,11 +62,11 @@ def check_request_status(
         request_id: Request ID to check status for.
         timeout: Seconds to wait for successful project generation before timing out.
 
+    Returns:
+        Status message.
+
     Raises:
         click.ClickException: If there is an error checking the request status.
-
-    Returns:
-        Status
     """
     start_time = time.time()
     while True:
@@ -138,7 +138,14 @@ def dream() -> None:
     ),
 )
 def check(request_id: str, api_key: str, url: str, timeout: int) -> None:
-    """Check the status of a project generation request."""
+    """Check the status of a project generation request.
+
+    Args:
+        request_id: Request ID to check status for.
+        api_key: API key to use for the Aineko Dream API.
+        url: URL to use for the Aineko Dream API.
+        timeout: Seconds to wait for successful project generation before timing out.
+    """
     status = check_request_status(api_key, url, request_id, timeout)
     click.echo(status)
 
