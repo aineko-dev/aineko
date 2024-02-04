@@ -121,11 +121,13 @@ def dream() -> None:
 @click.option(
     "-k",
     "--api-key",
+    default="",
     help="API key to use for the Aineko Dream API.",
 )
 @click.option(
     "-u",
     "--url",
+    default="https://dream.ap-6d356ccd-bfba-4110-994a-fe164ab8bf77.aineko.app",
     help="API url to use for the Aineko Dream API.",
 )
 @click.option(
@@ -155,17 +157,19 @@ def check(request_id: str, api_key: str, url: str, timeout: int) -> None:
 @click.option(
     "-k",
     "--api-key",
+    default="",
     help="API key to use for the Aineko Dream API.",
 )
 @click.option(
     "-u",
     "--url",
+    default="https://dream.ap-6d356ccd-bfba-4110-994a-fe164ab8bf77.aineko.app",
     help="API url to use for the Aineko Dream API.",
 )
 def create(
     prompt: str = None,
     api_key: str = None,
-    url: str = "https://dream.ap-6d356ccd-bfba-4110-994a-fe164ab8bf77.aineko.app",
+    url: str,
 ) -> None:
     """Command to generate an aineko project using Aineko Dream.\f
 
