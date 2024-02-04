@@ -167,8 +167,8 @@ def check(request_id: str, api_key: str, url: str, timeout: int) -> None:
     help="API url to use for the Aineko Dream API.",
 )
 def create(
-    prompt: str = None,
-    api_key: str = None,
+    prompt: str,
+    api_key: str,
     url: str,
 ) -> None:
     """Command to generate an aineko project using Aineko Dream.\f
