@@ -7,7 +7,7 @@ Aineko Dream leverages the power of generative AI to create a starter Aineko pip
 To generate a project, invoke the Aineko Dream CLI with a prompt with:
 
 ```bash
-poetry run aineko dream "create a pipeline that scrapes twitter and analyses the results to identify trends" "API-KEY"
+poetry run aineko dream create --api-key API_KEY "create a pipeline that scrapes twitter and analyses the results to identify trends"
 ```
 
 replacing `API-KEY` with a valid Aineko Dream API key. Contact support@aineko.dev to get an API key to try this feature.
