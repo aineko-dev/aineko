@@ -24,3 +24,10 @@ poetry run aineko create --repo Convex-Labs/dream-catcher#12345
 
 where the argument after `--repo` should be the unique ID associated to your generated project. This will be output in the result of the previous section.
 
+## Checking on the status of your Aineko Dream request
+
+After sending a request to the Aineko Dream CLI, you will be provided with a request ID that looks like `2c8341b7-9cb4-41f1-87ad-f363925fd2fa`. To check on the status of the request, use the following Aineko Dream CLI command:
+
+```bash
+poetry run aineko dream check 2c8341b7-9cb4-41f1-87ad-f363925fd2fa
+```
