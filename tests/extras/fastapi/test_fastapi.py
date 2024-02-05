@@ -3,12 +3,12 @@
 """Tests that a pipeline with the FastAPI app runs correctly."""
 
 import time
+from typing import Dict
 
 import pytest
 import ray
 import requests
 
-from typing import Dict
 from aineko import AbstractNode, DatasetConsumer, Runner
 
 
