@@ -14,7 +14,7 @@ Example dataset configuration:
     ```
 """
 import abc
-from typing import Any, Type, TypeVar
+from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from pydantic import BaseModel
 
@@ -41,7 +41,7 @@ class AbstractDatasetConfig(BaseModel):
 
     type: str
     target: str
-    params: dict[str, Any] = {}
+    params: Dict[str, Any] = {}
 
 
 class DatasetCreateStatus:
@@ -67,8 +67,8 @@ class DatasetCreateStatus:
     def __init__(
         self,
         dataset_name: str,
-        kafka_topic_to_future: dict[str, Any] | None = None,
-        status_list: list[Any] | None = None,
+        kafka_topic_to_future: Optional[Dict[str, Any]] = None,
+        status_list: Optional[List[Any]] = None,
     ):
         """Creation status of dataset or its components."""
         self.dataset_name = dataset_name
@@ -107,27 +107,31 @@ class AbstractDataset(abc.ABC):
     - `_create`
     - `_delete`
     - `_initialize`
+    - `_exists`
     - `_describe`
 
     Example:
     ```python
     class MyDataset(AbstractDataset):
-        def _read(self, *args, **kwargs) -> Any:
+        def _read(self, **kwargs) -> Any:
             pass
 
-        def _write(self, *args, **kwargs) -> None:
+        def _write(self, **kwargs) -> None:
             pass
 
-        def _create(self, *args, **kwargs) -> None:
+        def _create(self, **kwargs) -> None:
             pass
 
-        def _delete(self, *args, **kwargs) -> None:
+        def _delete(self, **kwargs) -> None:
             pass
 
-        def _initialize(self, *args, **kwargs) -> None:
+        def _initialize(self, **kwargs) -> None:
             pass
 
-        def _describe(self, *args, **kwargs) -> str:
+        def _exists(self, **kwargs) -> bool:
+            pass
+
+        def _describe(self, **kwargs) -> str:
             pass
     ```
 
@@ -150,7 +154,7 @@ class AbstractDataset(abc.ABC):
     """
 
     @classmethod
-    def from_config(cls: Type[T], name: str, config: dict[str, Any]) -> T:
+    def from_config(cls: Type[T], name: str, config: Dict[str, Any]) -> T:
         """Create a dataset from a configuration dictionary.
 
         Args:
@@ -166,10 +170,10 @@ class AbstractDataset(abc.ABC):
 
         return class_obj(name, dataset_config.params)
 
-    def read(self, *args, **kwargs) -> Any:
+    def read(self, **kwargs) -> Any:
         """Read the dataset."""
         try:
-            return self._read(*args, **kwargs)
+            return self._read(**kwargs)
         except DatasetError:
             raise
         except Exception as e:
@@ -186,10 +190,10 @@ class AbstractDataset(abc.ABC):
             message = f"Failed to write dataset {self.name}."
             raise DatasetError(message) from e
 
-    def create(self, *args, **kwargs) -> None:
+    def create(self, **kwargs) -> None:
         """Create the dataset."""
         try:
-            return self._create(*args, **kwargs)
+            return self._create(**kwargs)
         except DatasetError:
             raise
         except Exception as e:
@@ -206,10 +210,20 @@ class AbstractDataset(abc.ABC):
             message = f"Failed to delete dataset {self.name}."
             raise DatasetError(message) from e
 
-    def initialize(self, *args, **kwargs) -> None:
+    def exists(self, **kwargs) -> bool:
+        """Check if the dataset exists."""
+        try:
+            return self._exists(**kwargs)
+        except DatasetError:
+            raise
+        except Exception as e:
+            message = f"Failed to check if dataset {self.name} exists."
+            raise DatasetError(message) from e
+
+    def initialize(self, **kwargs) -> None:
         """Initialize the dataset query layer."""
         try:
-            return self._initialize(*args, **kwargs)
+            return self._initialize(**kwargs)
         except DatasetError:
             raise
         except Exception as e:
@@ -217,31 +231,36 @@ class AbstractDataset(abc.ABC):
             raise DatasetError(message) from e
 
     @abc.abstractmethod
-    def _read(self, *args, **kwargs) -> Any:
+    def _read(self, **kwargs) -> Any:
         """Read the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _write(self, *args, **kwargs) -> None:
+    def _write(self, **kwargs) -> None:
         """Write the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _create(self, *args, **kwargs) -> None:
+    def _create(self, **kwargs) -> None:
         """Create the dataset storage layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _delete(self, *args, **kwargs) -> None:
+    def _delete(self, **kwargs) -> None:
         """Delete the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _initialize(self, *args, **kwargs) -> None:
+    def _initialize(self, **kwargs) -> None:
         """Initialize the dataset query layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _describe(self, *args, **kwargs) -> str:
+    def _describe(self, **kwargs) -> str:
         """Describe the dataset metadata."""
         return f"Dataset name: {self.name}"
+
+    @abc.abstractmethod
+    def _exists(self, **kwargs) -> bool:
+        """Check if the dataset exists."""
+        raise NotImplementedError
