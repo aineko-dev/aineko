@@ -12,7 +12,7 @@ is a Kafka consumer and producer, respectively.
 import datetime
 import json
 import logging
-from typing import Any, Literal, Optional, Union
+from typing import Any, Dict, Literal, Optional, Union
 
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
@@ -67,7 +67,7 @@ class ConsumerParams(BaseModel):
     pipeline_name: str
     prefix: Optional[str] = None
     has_pipeline_prefix: bool
-    consumer_config: dict[str, Any] = DEFAULT_KAFKA_CONFIG.get(
+    consumer_config: Dict[str, Any] = DEFAULT_KAFKA_CONFIG.get(
         "CONSUMER_CONFIG"
     )
 
@@ -86,7 +86,7 @@ class ProducerParams(BaseModel):
     pipeline_name: str
     prefix: Optional[str] = None
     has_pipeline_prefix: bool
-    producer_config: dict[str, Any] = DEFAULT_KAFKA_CONFIG.get(
+    producer_config: Dict[str, Any] = DEFAULT_KAFKA_CONFIG.get(
         "PRODUCER_CONFIG"
     )
 
@@ -102,7 +102,7 @@ class TopicParams(BaseModel):
     """
 
     dataset_prefix: Optional[str] = None
-    dataset_config: Optional[dict[str, Any]] = {}
+    dataset_config: Optional[Dict[str, Any]] = {}
 
 
 class Kafka(AbstractDataset):
@@ -139,7 +139,7 @@ class Kafka(AbstractDataset):
         KafkaDatasetError: if an error occurs while creating the dataset
     """
 
-    def __init__(self, name: str, params: dict[str, Any]):
+    def __init__(self, name: str, params: Dict[str, Any]):
         """Initialize the dataset."""
         self.name = name
         self.topic_name = name
@@ -171,7 +171,7 @@ class Kafka(AbstractDataset):
 
     def _initialize(
         self,
-        connection_params: ConsumerParams | ProducerParams,
+        connection_params: Union[ConsumerParams, ProducerParams],
         create_consumer: bool = False,
         create_producer: bool = False,
     ) -> None:

@@ -14,7 +14,7 @@ Example dataset configuration:
     ```
 """
 import abc
-from typing import Any, Type, TypeVar
+from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from pydantic import BaseModel
 
@@ -41,7 +41,7 @@ class AbstractDatasetConfig(BaseModel):
 
     type: str
     target: str
-    params: dict[str, Any] = {}
+    params: Dict[str, Any] = {}
 
 
 class DatasetCreateStatus:
@@ -67,8 +67,8 @@ class DatasetCreateStatus:
     def __init__(
         self,
         dataset_name: str,
-        kafka_topic_to_future: dict[str, Any] | None = None,
-        status_list: list[Any] | None = None,
+        kafka_topic_to_future: Optional[Dict[str, Any]] = None,
+        status_list: Optional[List[Any]] = None,
     ):
         """Creation status of dataset or its components."""
         self.dataset_name = dataset_name
@@ -150,7 +150,7 @@ class AbstractDataset(abc.ABC):
     """
 
     @classmethod
-    def from_config(cls: Type[T], name: str, config: dict[str, Any]) -> T:
+    def from_config(cls: Type[T], name: str, config: Dict[str, Any]) -> T:
         """Create a dataset from a configuration dictionary.
 
         Args:
