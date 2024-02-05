@@ -8,13 +8,14 @@ import pytest
 import ray
 import requests
 
+from typing import Dict
 from aineko import AbstractNode, DatasetConsumer, Runner
 
 
 class FastAPIChecker(AbstractNode):
     """Node that checks that the FastAPI server is running."""
 
-    def _execute(self, params: dict):
+    def _execute(self, params: Dict):
         """Checks that the FastAPI server is running."""
         results = {}
 
@@ -29,7 +30,7 @@ class FastAPIChecker(AbstractNode):
         response = requests.get("http://localhost:8000/last")
         results["last"] = response.json()
 
-        self.producers["test_result"].produce(results)
+        self.outputs["test_result"].write(results)
 
         self.activate_poison_pill()
 

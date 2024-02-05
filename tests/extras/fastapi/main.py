@@ -2,26 +2,26 @@
 # SPDX-License-Identifier: Apache-2.0
 from fastapi import FastAPI
 
-from aineko.extras.fastapi import consumers, producers
+from aineko.extras.fastapi import inputs, outputs
 
 app = FastAPI()
 
 
 @app.get("/next", status_code=200)
 async def query():
-    msg = consumers["messages"].next()
+    msg = inputs["messages"].next()
     return msg
 
 
 @app.get("/last", status_code=200)
 async def assignment():
-    msg = consumers["messages"].consume(how="last", timeout=1)
+    msg = inputs["messages"].read(how="last", timeout=1)
     return msg
 
 
 @app.get("/produce", status_code=200)
 async def produce():
-    producers["messages"].produce(1)
-    producers["messages"].produce(2)
-    producers["messages"].produce(3)
+    outputs["messages"].write(1)
+    outputs["messages"].write(2)
+    outputs["messages"].write(3)
     return
