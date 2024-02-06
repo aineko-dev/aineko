@@ -12,7 +12,7 @@ To install the dependencies of an extra node submodule, modify your `pyproject.t
     ```yaml title="pyproject.toml" hl_lines="3"
     [tool.poetry.dependencies]
     python = ">=3.8,<3.12"
-    aineko = {version = "^0.3.0", extras=["fastapi"]}
+    aineko = {version = "^0.3.1", extras=["fastapi"]}
     ```
 
 Once added, install the required dependencies using 
