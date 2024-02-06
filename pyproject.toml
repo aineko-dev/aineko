@@ -30,7 +30,7 @@ cookiecutter = "^2.4.0"
 click = "^8.1.7"
 pygithub = "~=2.1.1"
 # extras: fastapi
-fastapi = { version = ">0.101", optional = true }
+fastapi = { version = ">=0.109.1", optional = true }
 uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
 # extras: websocket_client
 websocket-client = { version = "^1.7.0", optional = true }
