@@ -3713,4 +3713,4 @@ websocket-client = ["websocket-client", "websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "b962f89a5df5acb54f399c51fa480c9ca48d994ab46df532b7573f8ef7d6cc37"
+content-hash = "5bc68d9b2f3114ac189a48b875f3f77307ac8eee17b1064b582dbf398d7dac09"
