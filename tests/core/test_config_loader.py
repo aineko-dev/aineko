@@ -38,14 +38,17 @@ EXPECTED_TEST_PIPELINE = {
         },
         "datasets": {
             "integer_sequence": {
-                "type": "kafka_stream",
+                "type": "aineko.datasets.kafka.Kafka",
+                "target": "None",
                 "params": {"retention.ms": 86400000},
             },
             "integer_doubles": {
-                "type": "kafka_stream",
+                "type": "aineko.datasets.kafka.Kafka",
+                "target": "None",
             },
             "env_var": {
-                "type": "kafka_stream",
+                "type": "aineko.datasets.kafka.Kafka",
+                "target": "None",
             },
         },
     }

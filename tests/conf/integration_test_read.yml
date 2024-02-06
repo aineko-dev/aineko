@@ -20,6 +20,8 @@ pipeline:
 
   datasets:
     messages:
-      type: kafka_stream
+      type: aineko.datasets.kafka.Kafka
+      target: None
     test_result:
-      type: kafka_stream
+      type: aineko.datasets.kafka.Kafka
+      target: None
