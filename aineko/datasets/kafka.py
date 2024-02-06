@@ -149,6 +149,7 @@ class Kafka(AbstractDataset):
             **params.get("kafka_credentials", {})
         )
         self.dataset_config = params
+        self.cached = False
         self._consumer = None
         self._producer = None
         self._create_admin_client()
@@ -222,12 +223,23 @@ class Kafka(AbstractDataset):
             ) from err
 
     def _read(
+        self,
+        how: Literal["next", "last"],
+        timeout: Optional[float] = None,
+        block: bool = False,
+    ) -> Dict:
+        if block:
+            return self._consume_message(how=how, timeout=timeout)
+        else:
+            return self._consume(how=how, timeout=timeout)
+
+    def _consume_message(
         self, how: Literal["next", "last"], timeout: Optional[float] = None
     ) -> Dict:
         """Calls the consume method and blocks until a message is returned.
 
         Args:
-            how: See `consume` method for available options.
+            how: See `_consume` method for available options.
 
         Returns:
             message from dataset
@@ -412,7 +424,7 @@ class Kafka(AbstractDataset):
     def next(self) -> Dict:
         """Consumes the next message from the dataset.
 
-        Wraps the `consume(how="next")` method. It implements a
+        Wraps the `_consume_message(how="next")` method. It implements a
         block that waits until a message is received before returning it.
         This method ensures that every message is consumed, but the consumed
         message may not be the most recent message if the consumer is slower
@@ -424,12 +436,12 @@ class Kafka(AbstractDataset):
         Returns:
             message from the dataset
         """
-        return self._read(how="next")
+        return self._consume_message(how="next")
 
     def last(self, timeout: int = 1) -> Dict:
         """Consumes the last message from the dataset.
 
-        Wraps the `consume(how="last")` method. It implements a
+        Wraps the `_consume_message(how="last")` method. It implements a
         block that waits until a message is received before returning it.
         This method ensures that the consumed message is always the most
         recent message. If the consumer is slower than the producer, messages
@@ -456,7 +468,7 @@ class Kafka(AbstractDataset):
             raise ValueError(
                 "Timeout must be > 0 when consuming the last message."
             )
-        return self._read(how="last", timeout=timeout)
+        return self._consume_message(how="last", timeout=timeout)
 
     def consume_all(self, end_message: Union[str, bool] = False) -> list:
         """Reads all messages from the dataset until a specific one is found.
