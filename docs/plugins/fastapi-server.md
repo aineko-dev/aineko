@@ -1,22 +1,24 @@
 # FastAPI Node
 
-The FastAPI extra node can be used by adding the following to `pyproject.toml`
+## Installation
+
+The FastAPI plugin can be installed using poetry with the following command `poetry add aineko[fastapi-server]` or by adding the following to `pyproject.toml` and running `poetry install`:
 
 :   
     ```yaml title="pyproject.toml" hl_lines="2"
     [tool.poetry.dependencies]
-    aineko = {version = "^0.3.1", extras=["fastapi"]}
+    aineko = {version = "^0.3.0", extras=["fastapi"]}
     ```
 
 ## API Reference
 
-::: aineko.extras.fastapi.main.FastAPI
+::: aineko_plugins.nodes.fastapi_server.FastAPI
 
 # Health Check Endpoint
 
 A common use case with an API server is to check its operational health status. For Aineko specifically, it is useful to know if the pipeline and API node are operational as well. Aineko comes with a light weight helper function as follows:
 
-::: aineko.extras.fastapi.health.read_health
+::: aineko_plugins.nodes.fastapi_server.health.read_health
 
 ## Authentication Considerations
 
