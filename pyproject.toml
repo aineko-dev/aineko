@@ -29,15 +29,11 @@ ray = { extras = ["default"], version = "^2.9.0" }
 cookiecutter = "^2.4.0"
 click = "^8.1.7"
 pygithub = "~=2.1.1"
-# extras: fastapi
-fastapi = { version = "~0.109.2", optional = true }
-uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
-# extras: websocket_client
-websocket-client = { version = "^1.7.0", optional = true }
-websockets = { version = "^12.0", optional = true }
-# extras: rest_poller
-requests = { version = "^2.31.0", optional = true }
 
+# Optional Aineko Plugins
+aineko-plugins-nodes-fastapi-server = { version = "0.0.1", optional = true }
+aineko-plugins-nodes-http-poller = { version = "0.0.1", optional = true }
+aineko-plugins-nodes-websocket-client = { version = "0.0.1", optional = true }
 [tool.poetry.group.dev.dependencies]
 # aineko_style = "^0.0.1"
 pylint = "^2.17.5"
@@ -56,6 +52,12 @@ mkdocs-glightbox = "^0.3.4"
 mkdocstrings = { extras = ["python"], version = "^0.23.0" }
 mkdocs-click = "^0.8.1"
 mike = "^2.0.0"
+aineko-plugins-nodes-fastapi-server = { version = "0.0.1" }
+aineko-plugins-nodes-http-poller = { version = "0.0.1" }
+aineko-plugins-nodes-websocket-client = { version = "0.0.1" }
+# aineko-plugins-nodes-fastapi-server = { path = "../aineko-plugins/aineko-plugins-nodes-fastapi-server", develop = true }     #"0.0.1"
+# aineko-plugins-nodes-http-poller = { path = "../aineko-plugins/aineko-plugins-nodes-http-poller", develop = true }           #"0.0.1"
+# aineko-plugins-nodes-websocket-client = { path = "../aineko-plugins/aineko-plugins-nodes-websocket-client", develop = true } #"0.0.1"
 
 [tool.poetry.group.test]
 optional = true
@@ -67,9 +69,9 @@ pytest-cov = "^4.1.0"
 pytest-subtests = "^0.11.0"
 
 [tool.poetry.extras]
-fastapi = ["fastapi", "uvicorn"]
-rest_poller = ["requests"]
-websocket_client = ["websocket-client", "websockets"]
+fastapi-server = ["aineko-plugins-nodes-fastapi-server"]
+http-poller = ["aineko-plugins-nodes-http-poller"]
+websocket-client = ["aineko-plugins-nodes-websocket-client"]
 
 [build-system]
 requires = ["poetry-core"]
