@@ -3,7 +3,7 @@
 """Submodule that handles the running of a pipeline from config."""
 import logging
 import time
-from typing import Optional
+from typing import List, Optional
 
 import ray
 
@@ -112,7 +112,7 @@ class Runner:
 
     def prepare_datasets(
         self, config: dict, user_dataset_prefix: Optional[str] = None
-    ) -> bool:
+    ) -> List[AbstractDataset]:
         """Creates the required datasets for a given pipeline.
 
         Datasets can be configured using the `params` key, using config keys

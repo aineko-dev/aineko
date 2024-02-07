@@ -19,11 +19,10 @@ e.g. message:
 }
 """
 
-import abc
 import datetime
 import json
 import logging
-from typing import Any, Dict, List, Literal, Optional, TypeVar, Union
+from typing import Any, Dict, Literal, Optional, Union
 
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
@@ -32,10 +31,8 @@ from confluent_kafka import (  # type: ignore
     Message,
     Producer,
 )
-from pydantic import BaseModel
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
-from aineko.utils.imports import import_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -527,78 +524,3 @@ class FakeDatasetProducer:
             message: message to produce.
         """
         self.values.append(message)
-
-
-T = TypeVar("T", bound="AbstractDataset")
-
-
-class DatasetError(Exception):
-    """Generic Dataset Error.
-
-    ``DatasetError`` raised by ``AbstractDataset`` implementations
-    in case of failure of input/output methods.
-
-    ``AbstractDataset`` implementations should provide instructive
-    information in case of failure.
-    """
-
-    pass
-
-
-class AbstractDatasetConfig(BaseModel):
-    """Dataset configuration model."""
-
-    type: str
-    target: str
-    params: Dict[str, Any] = {}
-
-
-class DatasetCreateStatus:
-    """Object representing staus of dataset creation.
-
-    Represents creation status of dataset (such as a kafka topic)
-    or its connections (such as producers and consumers linked
-    to the topic).
-
-    Can be used to ensure all datasets have been created.
-
-    Attributes:
-        dataset_name: Name of the dataset.
-        kafka_topic_to_future: Dictionary of kafka topics to futures.
-        status_list: List of status of dataset creation.
-
-    Args:
-        dataset_name: Name of the dataset.
-        kafka_topic_to_future: Dictionary of kafka topics to futures.
-        status_list: List of status of dataset creation.
-    """
-
-    def __init__(
-        self,
-        dataset_name: str,
-        kafka_topic_to_future: Optional[Dict[str, Any]] = None,
-        status_list: Optional[List[Any]] = None,
-    ):
-        """Creation status of dataset or its components."""
-        self.dataset_name = dataset_name
-        self.kafka_topic_to_future = kafka_topic_to_future
-        self.status_list = status_list
-
-    def done(self) -> bool:
-        """Return status of dataset creation.
-
-        For kafka topics, the status is represented by a dictionary
-        of kafka topics to futures. For kafka producers and consumers,
-        the status is represented by a list of status objects.
-
-        Returns:
-            True if all futures are done, otherwise False.
-        """
-        if not any([self.kafka_topic_to_future, self.status_list]):
-            return True
-        if self.kafka_topic_to_future:
-            return all(
-                future.done() for future in self.kafka_topic_to_future.values()
-            )
-        if self.status_list:
-            return all(status.done() for status in self.status_list)

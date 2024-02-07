@@ -150,14 +150,14 @@ class Kafka(AbstractDataset):
         )
         self.dataset_config = params
         self.cached = False
-        self._consumer = None
-        self._producer = None
+        self._consumer: Consumer
+        self._producer: Producer
         self._create_admin_client()
 
     def _create(
         self,
-        topic_params: Optional[TopicParams],
-    ) -> DatasetCreateStatus:
+        **kwargs: Any,
+    ) -> DatasetCreateStatus:  # type: ignore
         """Create the dataset storage layer kafka topic.
 
         Args:
@@ -165,16 +165,14 @@ class Kafka(AbstractDataset):
 
         Return status of dataset creation.
         """
-        topic_params = topic_params or TopicParams()
+        topic_params: TopicParams = kwargs.get("topic_params", TopicParams())
         return self._create_topic(
             dataset_name=self.name, topic_params=topic_params
         )
 
     def _initialize(
         self,
-        connection_params: Union[ConsumerParams, ProducerParams],
-        create_consumer: bool = False,
-        create_producer: bool = False,
+        **kwargs: Any,
     ) -> None:
         """Create query layer reader or writer for the dataset.
 
@@ -196,24 +194,46 @@ class Kafka(AbstractDataset):
             create_producer: create a Kafka Producer
             connection_params: connection parameters for the dataset
         """
+        create_consumer: bool = kwargs.get("create_consumer", False)
+        create_producer: bool = kwargs.get("create_producer", False)
+        if "connection_params" not in kwargs:
+            raise KafkaDatasetError(
+                "Must provide connection_params when initialziing query layer."
+            )
+        connection_params: Optional[
+            Union[ConsumerParams, ProducerParams]
+        ] = kwargs.get("connection_params")
+
         if create_consumer:
             try:
-                self._create_consumer(consumer_params=connection_params)
-                logger.info("Consumer for %s created.", self.topic_name)
+                if isinstance(connection_params, ConsumerParams):
+                    self._create_consumer(consumer_params=connection_params)
+                    logger.info("Consumer for %s created.", self.topic_name)
+                else:
+                    raise KafkaDatasetError(
+                        "connection_params must be of type `ConsumerParams` "
+                        "when initializing a consumer."
+                    )
             except KafkaError as err:
                 raise KafkaDatasetError(
                     f"Error creating consumer for {self.topic_name}: {str(err)}"
                 ) from err
         if create_producer:
             try:
-                self._create_producer(producer_params=connection_params)
-                logger.info("Producer for %s created.", self.topic_name)
+                if isinstance(connection_params, ProducerParams):
+                    self._create_producer(producer_params=connection_params)
+                    logger.info("Producer for %s created.", self.topic_name)
+                else:
+                    raise KafkaDatasetError(
+                        "connection_params must be of type `ProducerParams` "
+                        "when initializing a producer."
+                    )
             except KafkaError as err:
                 raise KafkaDatasetError(
                     f"Error creating producer for {self.topic_name}: {str(err)}"
                 ) from err
 
-    def _delete(self) -> None:
+    def _delete(self, **kwargs: Any) -> None:
         """Delete the dataset topic from the Kafka cluster."""
         try:
             self._admin_client.delete_topics([self.topic_name])
@@ -222,12 +242,13 @@ class Kafka(AbstractDataset):
                 f"Error deleting topic {self.topic_name}: {str(err)}"
             ) from err
 
-    def _read(
-        self,
-        how: Literal["next", "last"],
-        timeout: Optional[float] = None,
-        block: bool = False,
-    ) -> Dict:
+    def _read(self, **kwargs: Any) -> Optional[Dict]:
+        """Read the dataset message."""
+        how: Optional[Literal["next", "last"]] = kwargs.get("how")
+        if not how:
+            raise KafkaDatasetError("Must specify `how` for read operation.")
+        timeout: Optional[float] = kwargs.get("timeout")
+        block: bool = kwargs.get("block", False)
         if block:
             return self._consume_message(how=how, timeout=timeout)
         else:
@@ -256,13 +277,15 @@ class Kafka(AbstractDataset):
                     f"Error occurred while reading topic: {str(err)}"
                 ) from err
 
-    def _write(self, message: Dict, key: Optional[str] = None) -> None:
+    def _write(self, **kwargs: Any) -> None:
         """Produce a message to the dataset.
 
         Args:
             message: message to produce to the dataset
             key: key to use for the message
         """
+        msg: Dict = kwargs.get("message", {})
+        key: Optional[str] = kwargs.get("key")
         # Note, this will be re-written to use the dataset's schema,
         # without added metadata.
         message = {
@@ -272,7 +295,7 @@ class Kafka(AbstractDataset):
             "dataset": self.name,
             # "source_pipeline": self.source_pipeline,
             # "source_node": self.source_node,
-            "message": message,
+            "message": msg,
         }
         self._producer.poll(0)
 
@@ -286,7 +309,7 @@ class Kafka(AbstractDataset):
         )
         self._producer.flush()
 
-    def _describe(self) -> str:
+    def _describe(self, **kwargs: Dict[Any, Any]) -> str:
         """Describe the dataset metadata."""
         describe_string = super()._describe()
         kafka_describe = "\n".join(
@@ -298,7 +321,7 @@ class Kafka(AbstractDataset):
         describe_string += f"\n{kafka_describe}"
         return describe_string
 
-    def _exists(self) -> bool:
+    def _exists(self, **kwargs: Dict[Any, Any]) -> bool:
         """Check if the dataset exists."""
         return self.topic_name in self._admin_client.list_topics().topics
 
@@ -491,7 +514,7 @@ class Kafka(AbstractDataset):
 
     # Create methods
 
-    def _create_admin_client(self):
+    def _create_admin_client(self) -> None:
         """Creates Kafka AdminClient.
 
         The AdminClient can be used to create and delete

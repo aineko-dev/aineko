@@ -27,7 +27,9 @@ class QueryLayer(dict):
     Query layer connections are used for reading and writing to datasets.
     """
 
-    def __setitem__(self, key: Union[str, int, tuple], value: AbstractDataset):
+    def __setitem__(
+        self, key: Union[str, int, tuple], value: AbstractDataset
+    ) -> None:
         """Checks that item is of type AbstractDataset before setting.
 
         Args:
