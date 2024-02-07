@@ -5,7 +5,7 @@ The FastAPI extra node can be used by adding the following to `pyproject.toml`
 :   
     ```yaml title="pyproject.toml" hl_lines="2"
     [tool.poetry.dependencies]
-    aineko = {version = "^0.3.0", extras=["fastapi"]}
+    aineko = {version = "^0.3.1", extras=["fastapi"]}
     ```
 
 ## API Reference
