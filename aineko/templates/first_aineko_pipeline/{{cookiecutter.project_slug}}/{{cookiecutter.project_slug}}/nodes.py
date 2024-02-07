@@ -24,15 +24,15 @@ class MySequencerNode(AbstractNode):
         """
         self.current_val += params.get("increment", 1)
         time.sleep(5)
-        self.producers["test_sequence"].produce(self.current_val)
+        self.outputs["test_sequence"].write(self.current_val)
 
 
 class PrintInput(AbstractNode):
     """Prints input."""
 
     def _execute(self, params: Optional[dict] = None):
-        for dataset, consumer in self.consumers.items():
-            msg = consumer.consume(how="next")
+        for dataset, input_value in self.inputs.items():
+            msg = input_value.read(how="next")
             if msg is None:
                 continue
             print(
@@ -54,9 +54,9 @@ class MySumNode(AbstractNode):
         `self.producer`.
         Logs can be sent via the `self.log` method.
         """
-        msg = self.consumers["test_sequence"].consume(how="next")
+        msg = self.inputs["test_sequence"].read(how="next")
         if msg is None:
             return
         self.log(f"Received: {msg['message']}. Adding {params['increment']}...")
         self.state = int(msg["message"]) + int(params["increment"])
-        self.producers["test_sum"].produce(self.state)
+        self.outputs["test_sum"].write(self.state)
