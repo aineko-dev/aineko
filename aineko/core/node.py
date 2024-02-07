@@ -26,7 +26,7 @@ from aineko.config import (
     DEFAULT_KAFKA_CONFIG,
     TESTING_NODE_CONFIG,
 )
-from aineko.datasets.core import AbstractDataset
+from aineko.core.dataset import AbstractDataset
 from aineko.datasets.kafka import (
     ConsumerParams,
     FakeDatasetInput,

@@ -9,7 +9,7 @@ __author__ = "Convex Labs Engineering"
 import logging
 
 from aineko.core.config_loader import ConfigLoader
-from aineko.core.dataset import (
+from aineko.core.dataset_orig import (
     DatasetConsumer,
     DatasetProducer,
     FakeDatasetConsumer,

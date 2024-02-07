@@ -25,7 +25,7 @@ from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
 from pydantic import BaseModel
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
-from aineko.datasets.core import (
+from aineko.core.dataset import (
     AbstractDataset,
     DatasetCreateStatus,
     DatasetError,

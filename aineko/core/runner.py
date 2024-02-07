@@ -13,8 +13,8 @@ from aineko.config import (
     NODE_MANAGER_CONFIG,
 )
 from aineko.core.config_loader import ConfigLoader
+from aineko.core.dataset import AbstractDataset
 from aineko.core.node import PoisonPill
-from aineko.datasets.core import AbstractDataset
 from aineko.datasets.kafka import TopicParams
 from aineko.utils import imports
 
