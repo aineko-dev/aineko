@@ -277,14 +277,14 @@ class Kafka(AbstractDataset):
                     f"Error occurred while reading topic: {str(err)}"
                 ) from err
 
-    def _write(self, **kwargs: Any) -> None:
+    def _write(self, *args: Any, **kwargs: Any) -> None:
         """Produce a message to the dataset.
 
         Args:
             message: message to produce to the dataset
             key: key to use for the message
         """
-        msg: Dict = kwargs.get("message", {})
+        msg: Dict = kwargs.get("message", {}) or args[0]
         key: Optional[str] = kwargs.get("key")
         # Note, this will be re-written to use the dataset's schema,
         # without added metadata.

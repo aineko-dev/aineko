@@ -240,7 +240,7 @@ class AbstractDataset(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _write(self, **kwargs: Dict[Any, Any]) -> None:
+    def _write(self, *args: Any, **kwargs: Dict[Any, Any]) -> None:
         """Write the dataset."""
         raise NotImplementedError
 
