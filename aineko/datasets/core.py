@@ -21,7 +21,6 @@ from pydantic import BaseModel
 from aineko.utils.imports import import_from_string
 
 T = TypeVar("T", bound="AbstractDataset")
-U = TypeVar("U", bound="AbstractAsyncDataset")
 
 
 class DatasetError(Exception):
@@ -117,7 +116,7 @@ class AbstractDataset(abc.ABC):
         def _read(self, **kwargs) -> Any:
             pass
 
-        def _write(self, *args, **kwargs) -> None:
+        def _write(self, **kwargs) -> None:
             pass
 
         def _create(self, **kwargs) -> None:
@@ -264,175 +263,4 @@ class AbstractDataset(abc.ABC):
     @abc.abstractmethod
     def _exists(self, **kwargs) -> bool:
         """Check if the dataset exists."""
-        raise NotImplementedError
-
-
-class AbstractAsyncDataset(abc.ABC):
-    """Base class for defining new asynchronous Aineko datasets.
-
-    Subclass implementations can be instantiated using
-    the `from_config` async method.
-
-    When defining a new dataset, the following methods must be
-    implemented as async:
-    - `_read`
-    - `_write`
-    - `_create`
-    - `_delete`
-    - `_initialize`
-    - `_exists`
-    - `_describe`
-
-    Example:
-    ```python
-    class MyAsyncDataset(AbstractAsyncDataset):
-        async def _read(self, **kwargs) -> Any:
-            pass
-
-        async def _write(self, **kwargs) -> None:
-            pass
-
-        async def _create(self, **kwargs) -> None:
-            pass
-
-        async def _delete(self, **kwargs) -> None:
-            pass
-
-        async def _initialize(self, **kwargs) -> None:
-            pass
-
-        async def _exists(self, **kwargs) -> bool:
-            pass
-
-        async def _describe(self, **kwargs) -> str:
-            pass
-    ```
-
-    If `MyAsyncDataset` was defined in the file
-    `./aineko/datasets/myasyncdataset.py`, a new dataset
-    can be created using the `from_config` async method:
-
-        ```python
-        dataset = await AbstractAsyncDataset.from_config(
-            name="my_async_dataset_instance",
-            config={
-                "type": "aineko.datasets.myasyncdataset.MyAsyncDataset",
-                "target": "foo",
-                "params": {
-                    "param_1": "bar"
-                }
-            }
-        )
-        ```
-    """
-
-    @classmethod
-    async def from_config(cls: Type[U], name: str, config: Dict[str, Any]) -> U:
-        """Create a dataset from a configuration dictionary asynchronously.
-
-        Args:
-            name: The name of the dataset.
-            config: The configuration dictionary.
-
-        Returns:
-            Instance of an `AbstractAsyncDataset` subclass.
-        """
-        dataset_config = AbstractDatasetConfig(**config)
-        class_obj = await import_from_string(dataset_config.type, kind="class")
-
-        return class_obj(name, dataset_config.params)
-
-    async def read(self, **kwargs) -> Any:
-        """Read the dataset asynchronously."""
-        try:
-            return await self._read(**kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to read dataset {self.name}."
-            raise DatasetError(message) from e
-
-    async def write(self, *args, **kwargs) -> None:
-        """Write the dataset asynchronously."""
-        try:
-            return await self._write(*args, **kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to write dataset {self.name}."
-            raise DatasetError(message) from e
-
-    async def create(self, **kwargs) -> None:
-        """Create the dataset asynchronously."""
-        try:
-            return await self._create(**kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to create dataset {self.name}."
-            raise DatasetError(message) from e
-
-    async def delete(self) -> None:
-        """Delete the dataset asynchronously."""
-        try:
-            return await self._delete()
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to delete dataset {self.name}."
-            raise DatasetError(message) from e
-
-    async def exists(self, **kwargs) -> bool:
-        """Check if the dataset exists asynchronously."""
-        try:
-            return await self._exists(**kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to check if dataset {self.name} exists."
-            raise DatasetError(message) from e
-
-    async def initialize(self, **kwargs) -> None:
-        """Initialize the dataset query layer asynchronously."""
-        try:
-            return await self._initialize(**kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to initialize dataset {self.name}."
-            raise DatasetError(message) from e
-
-    @abc.abstractmethod
-    async def _read(self, **kwargs) -> Any:
-        """Read the dataset asynchronously."""
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    async def _write(self, **kwargs) -> None:
-        """Write the dataset asynchronously."""
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    async def _create(self, **kwargs) -> None:
-        """Create the dataset storage layer asynchronously."""
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    async def _delete(self, **kwargs) -> None:
-        """Delete the dataset asynchronously."""
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    async def _initialize(self, **kwargs) -> None:
-        """Initialize the dataset query layer asynchronously."""
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    async def _describe(self, **kwargs) -> str:
-        """Describe the dataset metadata asynchronously."""
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    async def _exists(self, **kwargs) -> bool:
-        """Check if the dataset exists asynchronously."""
         raise NotImplementedError
