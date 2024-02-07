@@ -16,20 +16,10 @@ class ConsumerNode(AbstractNode):
 
     def _execute(self, params: Optional[dict] = None) -> None:
         """Consumes message."""
-        print("inside execute")
-
-        print("trying next function")
         self.inputs["messages"].read(how="next", block=False)
-        print("finished first input")
-
         self.inputs["messages"].read(how="last", block=False)
-        print("finished second input")
-
         self.outputs["test_result"].write("OK")
-        print("finished first output")
         self.outputs["test_result"].write("END")
-        print("finsihed last output")
-        print("read and wrote")
         time.sleep(1)
         self.activate_poison_pill()
         return False
