@@ -8,7 +8,7 @@ Example dataset configuration:
     datasets:
         my_dataset:
             type: aineko.datasets.MemoryDataset
-            target: foo
+            location: foo
             params:
                 param_1: bar
     ```
@@ -40,7 +40,7 @@ class AbstractDatasetConfig(BaseModel):
     """Dataset configuration model."""
 
     type: str
-    target: str
+    location: Optional[str]
     params: Dict[str, Any] = {}
 
 
@@ -145,7 +145,7 @@ class AbstractDataset(abc.ABC):
             name="my_dataset_instance",
             config={
                 "type": "aineko.datasets.mydataset.MyDataset",
-                "target": "foo",
+                "location": "foo",
                 "params": {
                     "param_1": "bar"
                 }
