@@ -145,6 +145,10 @@ class Kafka(AbstractDataset):
         self.topic_name = name
         self.params = params
         self.type = "kafka"
+        self.location = self.params.get(
+            "location",
+            DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG").get("bootstrap.servers"),
+        )
         self.credentials = KafkaCredentials(
             **params.get("kafka_credentials", {})
         )
@@ -153,6 +157,7 @@ class Kafka(AbstractDataset):
         self._consumer: Consumer
         self._producer: Producer
         self._create_admin_client()
+        self._update_location()
 
     def _create(
         self,
@@ -622,6 +627,32 @@ class Kafka(AbstractDataset):
             dataset_name, kafka_topic_to_future=topic_to_future_map
         )
         return dataset_create_status
+
+    def _update_location(self) -> None:
+        """Updates the location of the dataset to `self.location`.
+
+        Updates the location for the DEFAULT_KAFKA_CONFIG
+        variable and the credentials to the `self.location` value.
+
+        If no location is provided in the dataset config, it uses
+        the default value from the DEFAULT_KAFKA_CONFIG.
+
+        DEFAULT_KAFKA_CONFIG uses the environment variable
+        KAFKA_CONFIG_BOOTSTRAP_SERVERS, or a default value.
+
+        Precedence is:
+          1. dataset config location >
+          2. environment variable >
+          3. default value (localhost:9092)
+        """
+        self.credentials.bootstrap_servers = self.location
+        DEFAULT_KAFKA_CONFIG.BROKER_CONFIG["bootstrap.servers"] = self.location
+        DEFAULT_KAFKA_CONFIG.CONSUMER_CONFIG[
+            "bootstrap.servers"
+        ] = self.location
+        DEFAULT_KAFKA_CONFIG.PRODUCER_CONFIG[
+            "bootstrap.servers"
+        ] = self.location
 
 
 # pylint: enable=too-few-public-methods
