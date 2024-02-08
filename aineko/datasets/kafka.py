@@ -118,6 +118,8 @@ class Kafka(AbstractDataset):
 
     `_delete` method deletes the dataset topic in the Kafka cluster.
 
+    `_exists` method checks if the dataset topic exists.
+
     `_describe` method describes the dataset metadata.
 
     Args:
@@ -135,6 +137,8 @@ class Kafka(AbstractDataset):
         _producer (Producer): Kafka producer
         _admin_client (AdminClient): Kafka AdminClient
         cached (bool): True if the consumer has been polled, False otherwise
+        location (str): location of the dataset
+        consumer_name (str): name of the consumer
 
     Raises:
         KafkaDatasetError: if an error occurs while creating the dataset
@@ -150,6 +154,7 @@ class Kafka(AbstractDataset):
             "location",
             DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG").get("bootstrap.servers"),
         )
+        self.consumer_name: Optional[str] = None
         self.credentials = KafkaCredentials(
             **params.get("kafka_credentials", {})
         )
@@ -169,7 +174,8 @@ class Kafka(AbstractDataset):
         Args:
             topic_params: initialization parameters for the dataset topic
 
-        Return status of dataset creation.
+        Returns:
+          status of dataset creation.
         """
         return self._create_topic(
             dataset_name=self.name, topic_params=topic_params
@@ -202,6 +208,10 @@ class Kafka(AbstractDataset):
                 dataset topic
             create_producer: create a Kafka Producer
             connection_params: connection parameters for the dataset
+
+        Raises:
+            KafkaDatasetError: if an error occurs while creating the consumer
+                or producer
         """
         if create_consumer and create_producer:
             raise KafkaDatasetError(
@@ -240,7 +250,11 @@ class Kafka(AbstractDataset):
         )
 
     def _delete(self) -> None:
-        """Delete the dataset topic from the Kafka cluster."""
+        """Delete the dataset topic from the Kafka cluster.
+
+        Raises:
+            KafkaDatasetError: if an error occurs while deleting the topic
+        """
         try:
             self._admin_client.delete_topics([self.topic_name])
         except Exception as err:
@@ -254,7 +268,22 @@ class Kafka(AbstractDataset):
         timeout: Optional[float] = None,
         block: bool = False,
     ) -> Optional[Dict]:
-        """Read the dataset message."""
+        """Read the dataset message via the query layer.
+
+        Args:
+            how: how to read the message
+                "next": read the next message in the queue
+                ":last": read the last message in the queue
+            timeout: seconds to poll for a response from kafka broker.
+                If using how="last", set to bigger than 0.
+            block: if True, block until a message is received
+
+        Returns:
+            message from the dataset
+
+        Raises:
+            ValueError: if how is not "next" or "last"
+        """
         if block:
             return self._consume_message(how=how, timeout=timeout)
         else:
@@ -270,6 +299,9 @@ class Kafka(AbstractDataset):
 
         Returns:
             message from dataset
+
+        Raises:
+            KafkaDatasetError: if an error occurs while reading the topic
         """
         while True:
             try:
@@ -289,6 +321,9 @@ class Kafka(AbstractDataset):
         Args:
             msg: message to produce to the dataset
             key: key to use for the message
+
+        Raises:
+            KafkaDatasetError: if an error occurs while writing to the topic
         """
         # Note, this will be re-written to use the dataset's schema,
         # without added metadata.
@@ -314,19 +349,27 @@ class Kafka(AbstractDataset):
         self._producer.flush()
 
     def _describe(self) -> str:
-        """Describe the dataset metadata."""
+        """Describe the dataset metadata.
+
+        Returns:
+            string with dataset metadata
+        """
         describe_string = super()._describe()
         kafka_describe = "\n".join(
             [
                 f"Kafka topic: {self.topic_name}",
-                f"bootstrap_servers: {self.credentials.bootstrap_servers}",
+                f"location: {self.location}",
             ]
         )
         describe_string += f"\n{kafka_describe}"
         return describe_string
 
     def _exists(self) -> bool:
-        """Check if the dataset exists."""
+        """Check if the dataset exists.
+
+        Returns:
+            True if the dataset topic exists, False otherwise
+        """
         return self.topic_name in self._admin_client.list_topics().topics
 
     @staticmethod
@@ -523,6 +566,10 @@ class Kafka(AbstractDataset):
 
         The AdminClient can be used to create and delete
         Kafka topics.
+
+        Raises:
+            KafkaDatasetError: if an error occurs while creating
+                the AdminClient
         """
         try:
             self._admin_client = AdminClient(
@@ -539,6 +586,12 @@ class Kafka(AbstractDataset):
         """Creates Kafka Consumer and subscribes to the dataset topic.
 
         Used to read (consume) messages from the dataset topic.
+
+        Args:
+            consumer_params: parameters for initializing the consumer
+
+        Returns:
+            status of dataset creation
         """
         dataset_name = consumer_params.dataset_name
         node_name = consumer_params.node_name
@@ -575,6 +628,12 @@ class Kafka(AbstractDataset):
         """Creates Kafka Producer.
 
         Used to write (produce) messages to the dataset topic.
+
+        Args:
+            producer_params: parameters for initializing the producer
+
+        Returns:
+            status of dataset creation
         """
         has_pipeline_prefix = producer_params.has_pipeline_prefix
         pipeline_name = producer_params.pipeline_name
@@ -599,7 +658,15 @@ class Kafka(AbstractDataset):
     def _create_topic(
         self, dataset_name: str, topic_params: TopicParams
     ) -> DatasetCreateStatus:
-        """Creates Kafka topic for the dataset."""
+        """Creates Kafka topic for the dataset storage layer.
+
+        Args:
+            dataset_name: name of the dataset
+            topic_params: initialization parameters for the dataset topic
+
+        Returns:
+            status of dataset creation
+        """
         dataset_prefix = topic_params.dataset_prefix
         dataset_config = topic_params.dataset_config
         if not dataset_config:
@@ -691,7 +758,10 @@ class FakeDatasetInput:
         Args:
             how: how to read the message
                 "next": read the next message in the queue
-                ":last": read the last message in the queue
+                "last": read the last message in the queue
+
+            timeout: seconds to poll for a response from kafka broker.
+                If using how="last", set to bigger than 0.
 
         Returns:
             next or last value in self.values
@@ -722,7 +792,7 @@ class FakeDatasetInput:
         return None
 
     def next(self) -> Optional[Dict]:
-        """Wraps `consume(how="next")`, blocks until available.
+        """Wraps `read(how="next")`, blocks until available.
 
         Returns:
             msg: message from the dataset
