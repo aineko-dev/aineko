@@ -9,9 +9,8 @@ from typing import Optional
 import pytest
 import ray
 
-from aineko import AbstractNode, Runner
+from aineko import AbstractDataset, AbstractNode, Runner
 from aineko.config import DEFAULT_KAFKA_CONFIG
-from aineko.core.dataset import AbstractDataset
 from aineko.datasets.kafka import ConsumerParams
 
 MESSAGES = [

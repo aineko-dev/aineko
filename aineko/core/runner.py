@@ -7,13 +7,13 @@ from typing import List, Optional
 
 import ray
 
+from aineko import AbstractDataset
 from aineko.config import (
     AINEKO_CONFIG,
     DEFAULT_KAFKA_CONFIG,
     NODE_MANAGER_CONFIG,
 )
 from aineko.core.config_loader import ConfigLoader
-from aineko.core.dataset import AbstractDataset
 from aineko.core.node import PoisonPill
 from aineko.datasets.kafka import TopicParams
 from aineko.utils import imports
@@ -158,7 +158,9 @@ class Runner:
                 "Creating dataset: %s: %s", dataset_name, dataset_config
             )
             # update dataset config here:
-            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+            dataset: AbstractDataset = AbstractDataset.from_config(
+                dataset_name, dataset_config
+            )
             datasets.append(dataset)
 
         # Create logging dataset
@@ -170,7 +172,7 @@ class Runner:
         logger.info(
             "Creating dataset: %s: %s", logging_dataset_name, logging_config
         )
-        logging_dataset = AbstractDataset.from_config(
+        logging_dataset: AbstractDataset = AbstractDataset.from_config(
             logging_dataset_name, logging_config
         )
         # Create all datasets

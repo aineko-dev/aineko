@@ -6,7 +6,7 @@ Contains Kafka dataset, a subclass of AbstractDataset.
 
 The storage layer for a Kafka dataset is a Kafka topic.
 
-The connection layer for reading and writing to the topic
+The query layer for reading and writing to the topic
 is a Kafka consumer and producer, respectively.
 """
 import datetime
@@ -24,12 +24,9 @@ from confluent_kafka import (  # type: ignore
 from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
 from pydantic import BaseModel
 
+from aineko import AbstractDataset
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
-from aineko.core.dataset import (
-    AbstractDataset,
-    DatasetCreateStatus,
-    DatasetError,
-)
+from aineko.core.dataset import DatasetCreateStatus, DatasetError
 
 logger = logging.getLogger(__name__)
 
@@ -96,8 +93,7 @@ class TopicParams(BaseModel):
 
     Passed in as connection_params when calling
         ```python
-        self._create(create_topic=True,
-                     connection_params=TopicParams(...))
+        self._create(topic_params=TopicParams(...))
         ```
     """
 
@@ -108,12 +104,17 @@ class TopicParams(BaseModel):
 class Kafka(AbstractDataset):
     """Kafka dataset.
 
-    Dataset storage layer is a Kafka topic.
+    Dataset Storage Layer is a Kafka topic.
 
-    `_read` and `_write` methods are Kafka consumer and producer methods.
+    Dataset Query Layer is a Kafka Consumer and Producer.
+
+    `_read` method consumes from a Kakfa topic.
+    
+    `_write` method produces to a Kafka topic.
 
     `_create` method creates the dataset topic in the Kafka cluster.
-    `_create` method can also be used to create a consumer or producer.
+
+    `_initialize` method can be used to create a consumer or producer.
 
     `_delete` method deletes the dataset topic in the Kafka cluster.
 
@@ -282,15 +283,15 @@ class Kafka(AbstractDataset):
                     f"Error occurred while reading topic: {str(err)}"
                 ) from err
 
-    def _write(self, *args: Any, **kwargs: Any) -> None:
+    def _write(
+        self, msg: Dict, key: Optional[str] = None
+    ) -> None:  # *args: Any, **kwargs: Any) -> None:
         """Produce a message to the dataset.
 
         Args:
-            message: message to produce to the dataset
+            msg: message to produce to the dataset
             key: key to use for the message
         """
-        msg: Dict = kwargs.get("message", {}) or args[0]
-        key: Optional[str] = kwargs.get("key")
         # Note, this will be re-written to use the dataset's schema,
         # without added metadata.
         message = {

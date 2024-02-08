@@ -17,8 +17,7 @@ from typing import Dict, Optional, Union
 
 import uvicorn
 
-from aineko import AbstractNode
-from aineko.core.dataset import AbstractDataset
+from aineko import AbstractDataset, AbstractNode
 
 
 class QueryLayer(dict):
