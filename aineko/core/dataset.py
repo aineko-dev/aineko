@@ -7,27 +7,28 @@ Example dataset configuration:
     ```yaml
     datasets:
         my_dataset:
-            type: aineko.datasets.MemoryDataset
-            location: foo
+            type: aineko.datasets.kafka.Kafka
+            location: localhost:9092
             params:
                 param_1: bar
     ```
 """
 import abc
-from typing import Any, Dict, List, Optional, Type, TypeVar
+from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
 
 from pydantic import BaseModel
 
 from aineko.utils.imports import import_from_string
 
-T = TypeVar("T", bound="AbstractDataset")
+A = TypeVar("A", bound="AbstractDataset")
+T = TypeVar("T")
 
 
 class DatasetError(Exception):
     """Generic Dataset Error.
 
     ``DatasetError`` raised by ``AbstractDataset`` implementations
-    in case of failure of input/output methods.
+    in case of failure of methods.
 
     ``AbstractDataset`` implementations should provide instructive
     information in case of failure.
@@ -96,7 +97,7 @@ class DatasetCreateStatus:
         return False
 
 
-class AbstractDataset(abc.ABC):
+class AbstractDataset(abc.ABC, Generic[T]):
     """Base class for defining new Aineko datasets.
 
     Subclass implementations can be instantiated using
@@ -157,7 +158,7 @@ class AbstractDataset(abc.ABC):
     name: str
 
     @classmethod
-    def from_config(cls: Type[T], name: str, config: Dict[str, Any]) -> T:
+    def from_config(cls: Type[A], name: str, config: Dict[str, Any]) -> A:
         """Create a dataset from a configuration dictionary.
 
         Args:
@@ -174,17 +175,17 @@ class AbstractDataset(abc.ABC):
         class_instance.name = name
         return class_instance
 
-    def read(self, **kwargs: Dict[Any, Any]) -> Any:
+    def read(self, *args: T, **kwargs: T) -> Any:
         """Read the dataset."""
         try:
-            return self._read(**kwargs)
+            return self._read(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to read dataset {self.name}."
             raise DatasetError(message) from e
 
-    def write(self, *args: Any, **kwargs: Dict[Any, Any]) -> None:
+    def write(self, *args: T, **kwargs: T) -> None:
         """Write the dataset."""
         try:
             return self._write(*args, **kwargs)
@@ -194,40 +195,40 @@ class AbstractDataset(abc.ABC):
             message = f"Failed to write dataset {self.name}."
             raise DatasetError(message) from e
 
-    def create(self, **kwargs: Any) -> Any:
+    def create(self, *args: T, **kwargs: T) -> Any:
         """Create the dataset."""
         try:
-            return self._create(**kwargs)
+            return self._create(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to create dataset {self.name}."
             raise DatasetError(message) from e
 
-    def delete(self) -> None:
+    def delete(self, *args: T, **kwargs: T) -> None:
         """Delete the dataset."""
         try:
-            return self._delete()
+            return self._delete(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to delete dataset {self.name}."
             raise DatasetError(message) from e
 
-    def exists(self, **kwargs: Dict[Any, Any]) -> bool:
+    def exists(self, *args: T, **kwargs: T) -> bool:
         """Check if the dataset exists."""
         try:
-            return self._exists(**kwargs)
+            return self._exists(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
             message = f"Failed to check if dataset {self.name} exists."
             raise DatasetError(message) from e
 
-    def initialize(self, **kwargs: Dict[Any, Any]) -> None:
+    def initialize(self, *args: T, **kwargs: T) -> None:
         """Initialize the dataset query layer."""
         try:
-            return self._initialize(**kwargs)
+            return self._initialize(*args, **kwargs)
         except DatasetError:
             raise
         except Exception as e:
@@ -235,36 +236,36 @@ class AbstractDataset(abc.ABC):
             raise DatasetError(message) from e
 
     @abc.abstractmethod
-    def _read(self, **kwargs: Dict[Any, Any]) -> Any:
+    def _read(self, *args: T, **kwargs: T) -> Any:
         """Read the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _write(self, *args: Any, **kwargs: Dict[Any, Any]) -> None:
+    def _write(self, *args: T, **kwargs: T) -> None:
         """Write the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _create(self, **kwargs: Any) -> Any:
+    def _create(self, *args: T, **kwargs: T) -> Any:
         """Create the dataset storage layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _delete(self, **kwargs: Dict[Any, Any]) -> None:
+    def _delete(self, *args: T, **kwargs: T) -> None:
         """Delete the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _initialize(self, **kwargs: Dict[Any, Any]) -> Any:
+    def _initialize(self, *args: T, **kwargs: T) -> Any:
         """Initialize the dataset query layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _describe(self, **kwargs: Dict[Any, Any]) -> str:
+    def _describe(self, *args: T, **kwargs: T) -> str:
         """Describe the dataset metadata."""
         return f"Dataset name: {self.name}"
 
     @abc.abstractmethod
-    def _exists(self, **kwargs: Dict[Any, Any]) -> bool:
+    def _exists(self, *args: T, **kwargs: T) -> bool:
         """Check if the dataset exists."""
         raise NotImplementedError
