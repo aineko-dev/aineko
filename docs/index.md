@@ -102,8 +102,8 @@ Supercharge your development by using pre-built nodes directly in your pipeline.
 ## API Documentation
 
 - [`AbstractNode`](./api_reference/abstract_node.md)
-- [`DatasetConsumer`](./api_reference/dataset_consumer.md)
-- [`DatasetProducer`](./api_reference/dataset_producer.md)
+- [`AbstractDataset`](./api_reference/abstract_dataset.md)
+- [`Kafka`](./api_reference/kafka_dataset.md)
 - [`Config`](./api_reference/config.md)
 - [`ConfigLoader`](./api_reference/config_loader.md)
 - [`Runner`](./api_reference/runner.md)
