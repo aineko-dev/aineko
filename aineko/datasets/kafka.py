@@ -635,7 +635,7 @@ class Kafka(AbstractDataset):
         variable and the credentials to the `self.location` value.
 
         If no location is provided in the dataset config, it uses
-        the default value from the DEFAULT_KAFKA_CONFIG.
+        the value from the DEFAULT_KAFKA_CONFIG.
 
         DEFAULT_KAFKA_CONFIG uses the environment variable
         KAFKA_CONFIG_BOOTSTRAP_SERVERS, or a default value.

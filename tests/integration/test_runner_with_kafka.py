@@ -9,7 +9,10 @@ from typing import Optional
 import pytest
 import ray
 
-from aineko import AbstractNode, DatasetConsumer, Runner
+from aineko import AbstractNode, Runner
+from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.core.dataset import AbstractDataset
+from aineko.datasets.kafka import ConsumerParams
 
 MESSAGES = [
     0,
@@ -101,14 +104,26 @@ def test_write_read_to_kafka(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="messages",
-            node_name="consumer",
-            pipeline_name="integration_test_write",
-            dataset_config={},
-            has_pipeline_prefix=True,
+        dataset_name = "messages"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.Kafka",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_write",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+            }
         )
-        count_messages = consumer.consume_all(end_message="END")
+        dataset.initialize(
+            create_consumer=True, connection_params=consumer_params
+        )
+        count_messages = dataset.consume_all(end_message="END")
         count_values = [msg["message"] for msg in count_messages]
         assert count_values == MESSAGES
 
@@ -118,14 +133,26 @@ def test_write_read_to_kafka(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="integration_test_read",
-            dataset_config={},
-            has_pipeline_prefix=True,
+        dataset_name = "test_result"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.Kafka",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_read",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+            }
         )
-        count_messages = consumer.consume_all(end_message="END")
+        dataset.initialize(
+            create_consumer=True, connection_params=consumer_params
+        )
+        count_messages = dataset.consume_all(end_message="END")
         print("count_messages are...")
         print(count_messages)
         print("...")
@@ -133,5 +160,5 @@ def test_write_read_to_kafka(start_service):
         assert count_messages[0]["message"] == "TEST PASSED"
 
         # Test consume.last functionality
-        last_message = consumer.last(timeout=10)
+        last_message = dataset.last(timeout=10)
         assert last_message["message"] == "END"

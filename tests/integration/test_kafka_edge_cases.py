@@ -8,7 +8,10 @@ from typing import Optional
 import pytest
 import ray
 
-from aineko import AbstractNode, DatasetConsumer, Runner
+from aineko import AbstractNode, Runner
+from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.core.dataset import AbstractDataset
+from aineko.datasets.kafka import ConsumerParams
 
 
 class ConsumerNode(AbstractNode):
@@ -40,12 +43,22 @@ def test_consume_empty_datasets(start_service):
         # This is expected because we activated the poison pill
         pass
 
-    consumer = DatasetConsumer(
-        dataset_name="test_result",
-        node_name="consumer",
-        pipeline_name="integration_test_kafka_edge_cases",
-        dataset_config={},
-        has_pipeline_prefix=True,
+    dataset_name = "test_result"
+    dataset_config = {
+        "type": "aineko.datasets.kafka.Kafka",
+        "location": "localhost:9092",
+    }
+    dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+    consumer_params = ConsumerParams(
+        **{
+            "dataset_name": dataset_name,
+            "node_name": "consumer",
+            "pipeline_name": "integration_test_kafka_edge_cases",
+            "prefix": None,
+            "has_pipeline_prefix": True,
+            "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+        }
     )
-    count_messages = consumer.consume_all(end_message="END")
+    dataset.initialize(create_consumer=True, connection_params=consumer_params)
+    count_messages = dataset.consume_all(end_message="END")
     assert count_messages[0]["message"] == "OK"

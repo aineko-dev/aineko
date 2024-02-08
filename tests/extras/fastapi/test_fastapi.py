@@ -9,7 +9,10 @@ import pytest
 import ray
 import requests
 
-from aineko import AbstractNode, DatasetConsumer, Runner
+from aineko import AbstractNode, Runner
+from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.core.dataset import AbstractDataset
+from aineko.datasets.kafka import ConsumerParams
 
 
 class FastAPIChecker(AbstractNode):
@@ -50,14 +53,26 @@ def test_fastapi_node(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="test_fastapi",
-            dataset_config={},
-            has_pipeline_prefix=True,
+        dataset_name = "test_result"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.Kafka",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "test_fastapi",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+            }
         )
-        test_results = consumer.next()
+        dataset.initialize(
+            create_consumer=True, connection_params=consumer_params
+        )
+        test_results = dataset.next()
         assert test_results["message"]["produce"] == 200
         assert test_results["message"]["next"]["message"] == 1
         assert test_results["message"]["last"]["message"] == 3
