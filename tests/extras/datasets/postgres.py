@@ -18,7 +18,7 @@ class TestAWSDatasetHelper:
 
 
 @pytest.fixture(scope="module")
-def postgres_table():
+def postgres_table() -> Postgres:
     """Create a postgres table for testing."""
     dataset = Postgres(
         name="test_table",
@@ -34,14 +34,39 @@ def postgres_table():
 class TestPostgres:
     """Tests for Postgres dataset."""
 
-    def test_create(self, postgres_table):
+    @pytest.mark.asyncio
+    async def test_create(self, postgres_table: Postgres):
         """Test create."""
-        postgres_table.create(
+        await postgres_table.connect()
+
+        await postgres_table.create(
             schema={"id": "SERIAL PRIMARY KEY", "name": "VARCHAR(255)"},
         )
-        assert postgres_table.exists()
+        assert await postgres_table.exists()
 
-    def test_delete(self, postgres_table):
+    @pytest.mark.asyncio
+    async def test_delete(self, postgres_table: Postgres):
         """Test delete."""
-        postgres_table.delete()
-        assert not postgres_table.exists()
+        await postgres_table.connect()
+
+        await postgres_table.delete()
+        assert await postgres_table.exists() is False
+
+    @pytest.mark.asyncio
+    async def test_exists(self, postgres_table: Postgres):
+        """Test exists."""
+        await postgres_table.connect()
+
+        await postgres_table.create(
+            schema={"id": "SERIAL PRIMARY KEY", "name": "VARCHAR(255)"},
+        )
+        assert await postgres_table.exists() is True
+
+        # assert await postgres_table.exists() is False
+        # await postgres_table.create(
+        #     schema={"id": "SERIAL PRIMARY KEY", "name": "VARCHAR(255)"},
+        # )
+        # assert await postgres_table.exists() is True
+        # await postgres_table.delete()
+        # assert await postgres_table.exists() is False
+        # print("Table created")

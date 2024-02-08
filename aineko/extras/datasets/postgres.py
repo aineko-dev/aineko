@@ -3,18 +3,17 @@
 """Dataset to connect to PostgreSQL databases."""
 
 import os
-from typing import Optional
+from typing import Dict, Union
 
 import boto3
-import psycopg2
-from botocore.config import Config
-from psycopg2 import sql
+from psycopg import sql
+from psycopg_pool import AsyncConnectionPool
 
-from aineko.datasets.core import AbstractDataset, DatasetError
+from aineko.core.dataset import AsyncAbstractDataset, DatasetError
 
 
 class AWSDatasetHelper:
-    """Utility class containing utility methods for connecting to datasets on AWS."""
+    """Utility class for connecting to datasets on AWS."""
 
     def __init__(
         self,
@@ -64,7 +63,7 @@ class AWSDatasetHelper:
         return db_instance["Endpoint"]["Address"]
 
 
-class Postgres(AbstractDataset):
+class Postgres(AsyncAbstractDataset):
     """Dataset to connect to a table in a PostgreSQL database."""
 
     def __init__(
@@ -81,13 +80,21 @@ class Postgres(AbstractDataset):
         self.user = user
         self.password = password
 
-        self.conn = None
-        self.cursor = None
+        self._pool = None
 
-    def _create(
+    async def connect(self):
+        """Connect to the PostgreSQL database."""
+        self._pool = AsyncConnectionPool(
+            f"dbname={self.dbname} user={self.user} password={self.password}"
+            f" host={self.host}",
+            open=False,
+        )
+        await self._pool.open()
+
+    async def create(
         self,
-        schema: dict[str, str],
-        extra_commands: Optional[str] = "",
+        schema: Dict[str, str],
+        extra_commands: str = "",
     ):
         """Create a new postgres table.
 
@@ -110,20 +117,27 @@ class Postgres(AbstractDataset):
             "CREATE TABLE {name} ({schema}) {extra_commands};"
         ).format(
             name=sql.Identifier(self.name),
-            schema=sql.SQL((",").join([f"{k} {v}" for k, v in schema.items()])),
+            schema=sql.SQL(
+                (",").join([f"{key} {value}" for key, value in schema.items()])
+            ),
             extra_commands=sql.SQL(extra_commands),
         )
-        self.execute_query(query)
+        await self.execute_query(query)
 
-    def _read(self, query):
-        self.cursor.execute(query)
-        return self.cursor.fetchall()
+    async def read(self, query):
+        raise NotImplementedError("Not yet implemented.")
 
-    def _write(self, query):
-        self.cursor.execute(query)
-        self.conn.commit()
+    #     # await self.execute_query
+    #     await self.acur.execute(query)
+    #     return self.acur.fetchall()
 
-    def _delete(self, if_exists: bool = False):
+    async def write(self, query):
+        raise NotImplementedError("Not yet implemented.")
+
+    #     await self.acur.execute(query)
+    #     await self.aconn.commit()
+
+    async def delete(self, if_exists: bool = False):
         """Drops the table from the Postgres database.
 
         Args:
@@ -135,34 +149,26 @@ class Postgres(AbstractDataset):
         else:
             query = "DROP TABLE {name};"
 
-        self.execute_query(
+        await self.execute_query(
             sql.SQL(query).format(name=sql.Identifier(self.name)),
         )
 
-    def _describe(self):
-        return "A PostgreSQL dataset."
-
-    def _exists(self):
+    async def exists(self):
         """Queries the database to check if the table exists."""
-        query = """
-            SELECT EXISTS (
-                SELECT FROM information_schema.tables
-                WHERE table_name = %(name)s);
-        """
-        self.execute_query(query, name=self.name)
-        return self.cursor.fetchone()[0]
+        async with self._pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    """
+                    SELECT EXISTS(
+                        SELECT FROM information_schema.tables
+                        WHERE table_name = %(name)s);
+                    """,
+                    {"name": self.name},
+                )
+                result = await cur.fetchone()
+                return result[0]
 
-    def connect(self):
-        """Connect to the PostgreSQL database."""
-        self.conn = psycopg2.connect(
-            dbname=self.dbname,
-            user=self.user,
-            password=self.password,
-            host=self.host,
-        )
-        self.cursor = self.conn.cursor()
-
-    def execute_query(self, query: str | sql.SQL, *args, **kwargs):
+    async def execute_query(self, query: Union[str, sql.SQL], *args, **kwargs):
         """Handles execution of PostgreSQL queries.
 
         Args:
@@ -172,20 +178,23 @@ class Postgres(AbstractDataset):
         """
         if args and kwargs:
             raise DatasetError("Please use only args or kwargs, not both.")
-        if not self.cursor:
-            self.connect()
-        try:
-            if args:
-                self.cursor.execute(query, args)
-            else:
-                self.cursor.execute(query, kwargs)
-            self.conn.commit()
-        except Exception as e:
-            self.conn.rollback()
-            raise DatasetError(f"Failed to execute query: {query}") from e
+        async with self._pool.connection() as conn:
+            async with conn.cursor() as cur:
+                try:
+                    if args:
+                        await cur.execute(query, args)
+                    else:
+                        await cur.execute(query, kwargs)
+                    await conn.commit()  # TODO check if we want autocommit or not
 
-    def close(self):
-        if self.cursor:
-            self.cursor.close()
-        if self.conn:
-            self.conn.close()
+                except Exception as exc:
+                    await conn.rollback()
+                    raise DatasetError(
+                        f"Failed to execute query: {query}"
+                    ) from exc
+
+    async def close(self):
+        """Close the connection to the PostgreSQL database."""
+        if self._pool.closed is False:
+            await self._pool.close()
+            print(f"closed {self._pool.closed}")
