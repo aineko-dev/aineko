@@ -6,34 +6,30 @@ version = "0.0.1"
 description = "Aineko plugins for running a FastAPI server"
 optional = false
 python-versions = ">=3.8,<3.12"
-files = []
-develop = false
+files = [
+    {file = "aineko_plugins_nodes_fastapi_server-0.0.1-py3-none-any.whl", hash = "sha256:cabe8b3b46ece2e4946ea25ca71a56e6b942110c08d4c20b799779c9f9f43bf0"},
+    {file = "aineko_plugins_nodes_fastapi_server-0.0.1.tar.gz", hash = "sha256:5d8fd844a9835185275216007941834bc53259896327e961e21a1e6934bb13a2"},
+]
 
 [package.dependencies]
-aineko = "^0.3.0"
-fastapi = "~0.109.2"
-uvicorn = {version = "^0.22", extras = ["standard"]}
-
-[package.source]
-type = "directory"
-url = "../aineko-plugins/aineko-plugins-nodes-fastapi-server"
+aineko = ">=0.3.1,<0.4.0"
+fastapi = ">=0.109.2,<0.110.0"
+uvicorn = {version = ">=0.22,<0.23", extras = ["standard"]}
 
 [[package]]
 name = "aineko-plugins-nodes-http-poller"
 version = "0.0.1"
-description = "Aineko plugin for running a HTTP poller."
+description = "Aineko plugin for running an HTTP poller."
 optional = false
 python-versions = ">=3.8,<3.12"
-files = []
-develop = false
+files = [
+    {file = "aineko_plugins_nodes_http_poller-0.0.1-py3-none-any.whl", hash = "sha256:16a4cb7f3436e7bfaaa6bf0fc0ef1feb459785ad2db84a6f68c1972417fb1263"},
+    {file = "aineko_plugins_nodes_http_poller-0.0.1.tar.gz", hash = "sha256:6c7ed77b790b2f7dff338cef18cdf9fb34642e096df12da4ef8d80787a1674a1"},
+]
 
 [package.dependencies]
-aineko = "^0.3.0"
-requests = "^2.31.0"
-
-[package.source]
-type = "directory"
-url = "../aineko-plugins/aineko-plugins-nodes-http-poller"
+aineko = ">=0.3.1,<0.4.0"
+requests = ">=2.31.0,<3.0.0"
 
 [[package]]
 name = "aineko-plugins-nodes-websocket-client"
@@ -41,17 +37,29 @@ version = "0.0.1"
 description = "Aineko plugin for running a WebSocket client"
 optional = false
 python-versions = ">=3.8,<3.12"
-files = []
-develop = false
+files = [
+    {file = "aineko_plugins_nodes_websocket_client-0.0.1-py3-none-any.whl", hash = "sha256:dca0a91199d4d7266c800b478f223400a1d67b289f33a8d6618d8cda94b5c7bd"},
+    {file = "aineko_plugins_nodes_websocket_client-0.0.1.tar.gz", hash = "sha256:506e6094cf265025f0a169f247eef35bae05e8189237253671c8154d19695341"},
+]
 
 [package.dependencies]
-aineko = "^0.3.0"
-websocket-client = "^1.7.0"
-websockets = "^12.0"
+aineko = ">=0.3.1,<0.4.0"
+websocket-client = ">=1.7.0,<2.0.0"
+websockets = ">=12.0,<13.0"
 
-[package.source]
-type = "directory"
-url = "../aineko-plugins/aineko-plugins-nodes-websocket-client"
+[[package]]
+name = "aineko-style"
+version = "0.0.2"
+description = "Custom pylint rules for aineko-dev codebases."
+optional = false
+python-versions = ">=3.8,<3.13"
+files = [
+    {file = "aineko_style-0.0.2-py3-none-any.whl", hash = "sha256:6c6d5d7681e3010c16ebb51d7e1aa659cc493cf4ea56b57dca28a09a0b5676cc"},
+    {file = "aineko_style-0.0.2.tar.gz", hash = "sha256:62dcd950d2b1819dffdc404d89174e486ebc79e16f46d82ec02ea94d124d0a29"},
+]
+
+[package.dependencies]
+pylint = ">=2.17.5,<3.0.0"
 
 [[package]]
 name = "aiohttp"
@@ -3766,4 +3774,4 @@ websocket-client = ["aineko-plugins-nodes-websocket-client"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "e5b846b255bd3e13707d186581f3ecb1f801a1b11e0d496d21eb277177e788e6"
+content-hash = "63c35ea333a8d45bbe212176d450c7759f3c8482f6b8cd5f78eb9e9254a077a8"
