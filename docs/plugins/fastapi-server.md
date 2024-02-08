@@ -7,7 +7,7 @@ The FastAPI plugin can be installed using poetry with the following command `poe
 :   
     ```yaml title="pyproject.toml" hl_lines="2"
     [tool.poetry.dependencies]
-    aineko = {version = "^0.3.0", extras=["fastapi"]}
+    aineko = {version = "^0.3.2", extras=["fastapi-server"]}
     ```
 
 ## API Reference

@@ -1,11 +1,11 @@
 # WebSocketClient Node
 
-The WebSocketClient extra node can be used by adding the following to `pyproject.toml`
+The WebSocketClient plugin can be installed using poetry with the following command `poetry add aineko[websocket-client]` or by adding the following to `pyproject.toml` and running `poetry install`:
 
 :   
     ```yaml title="pyproject.toml" hl_lines="2"
     [tool.poetry.dependencies]
-    aineko = {version = "^0.3.0", extras=["websocket_client"]}
+    aineko = {version = "^0.3.2", extras=["websocket-client"]}
     ```
 
 ## API Reference
