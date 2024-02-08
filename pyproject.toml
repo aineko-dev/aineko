@@ -12,8 +12,9 @@ description = "Aineko, a data integration framework."
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
 license = "Apache-2.0"
-homepage = "https://aineko.dev/"
+homepage = "https://aineko.dev"
 repository = "https://github.com/aineko-dev/aineko"
+documentation = "https://docs.aineko.dev"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Natural Language :: English",
@@ -34,6 +35,7 @@ pygithub = "~=2.1.1"
 aineko-plugins-nodes-fastapi-server = { version = "0.0.1", optional = true }
 aineko-plugins-nodes-http-poller = { version = "0.0.1", optional = true }
 aineko-plugins-nodes-websocket-client = { version = "0.0.1", optional = true }
+
 [tool.poetry.group.dev.dependencies]
 aineko_style = "^0.0.2"
 pylint = "^2.17.5"
@@ -55,9 +57,6 @@ mike = "^2.0.0"
 aineko-plugins-nodes-fastapi-server = { version = "0.0.1" }
 aineko-plugins-nodes-http-poller = { version = "0.0.1" }
 aineko-plugins-nodes-websocket-client = { version = "0.0.1" }
-# aineko-plugins-nodes-fastapi-server = { path = "../aineko-plugins/aineko-plugins-nodes-fastapi-server", develop = true }     #"0.0.1"
-# aineko-plugins-nodes-http-poller = { path = "../aineko-plugins/aineko-plugins-nodes-http-poller", develop = true }           #"0.0.1"
-# aineko-plugins-nodes-websocket-client = { path = "../aineko-plugins/aineko-plugins-nodes-websocket-client", develop = true } #"0.0.1"
 
 [tool.poetry.group.test]
 optional = true
