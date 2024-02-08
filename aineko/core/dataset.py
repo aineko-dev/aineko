@@ -211,3 +211,63 @@ class AbstractDataset(abc.ABC, Generic[T]):
     def exists(self, *args: T, **kwargs: T) -> bool:
         """Subclass implementation to check if the dataset exists."""
         raise NotImplementedError
+
+
+class AsyncAbstractDataset(abc.ABC):
+    """Abstract class for asynchronous datasets."""
+
+    name: str
+
+    def __str__(self) -> str:
+        """Return the string representation of the dataset."""
+        return f"{self.__class__.__name__}({self.name})"
+
+    @classmethod
+    def from_config(
+        cls, name: str, config: Dict[str, Any]
+    ) -> "AsyncAbstractDataset":
+        """Create a dataset from a configuration dictionary.
+
+        Args:
+            name: The name of the dataset.
+            config: The configuration dictionary.
+
+        Returns:
+            Instance of an `AsyncAbstractDataset` subclass.
+        """
+        dataset_config = AbstractDatasetConfig(**config)
+
+        class_obj = import_from_string(dataset_config.type, kind="class")
+        class_instance = class_obj(name, dict(dataset_config.params))
+        class_instance.name = name
+        return class_instance
+
+    @abc.abstractmethod
+    async def read(self, *args, **kwargs) -> Any:
+        """Subclass implementation to read the dataset."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    async def write(self, *args, **kwargs) -> Any:
+        """Subclass implementation to write the dataset."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    async def create(self, *args, **kwargs) -> None:
+        """Subclass implementation to create the dataset."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    async def delete(self, *args, **kwargs) -> None:
+        """Subclass implementation to delete the dataset."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def initialize(self, *args, **kwargs) -> Any:
+        """Subclass implementation to initialize the dataset query layer."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    async def exists(self, *args, **kwargs) -> bool:
+        """Subclass implementation to check if the dataset exists."""
+        raise NotImplementedError
