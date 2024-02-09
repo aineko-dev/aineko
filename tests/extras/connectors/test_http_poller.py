@@ -7,7 +7,9 @@ from typing import Dict, Optional
 import pytest
 import ray
 
-from aineko import AbstractNode, DatasetConsumer, Runner
+from aineko import AbstractDataset, AbstractNode, Runner
+from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.datasets.kafka import ConsumerParams
 
 
 class HTTPPollerChecker(AbstractNode):
@@ -17,9 +19,9 @@ class HTTPPollerChecker(AbstractNode):
         """Checks that the HTTPPoller is running."""
         results = {}
         for msg_num in range(5):
-            test_message = self.consumers["test_messages"].next()
+            test_message = self.inputs["test_messages"].next()
             results[f"message_{msg_num}"] = test_message["message"]
-        self.producers["test_result"].produce(results)
+        self.outputs["test_result"].write(results)
         self.activate_poison_pill()
         time.sleep(5)
 
@@ -38,14 +40,26 @@ def test_http_poller_node(start_service):
     try:
         runner.run()
     except ray.exceptions.RayActorError:
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="test_http_poller",
-            dataset_config={},
-            has_pipeline_prefix=True,
+        dataset_name = "test_result"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.Kafka",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "test_http_poller",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+            }
         )
-        test_results = consumer.next()
+        dataset.initialize(
+            create_consumer=True, connection_params=consumer_params
+        )
+        test_results = dataset.next()
         assert test_results["message"] == {
             "message_0": "Hello World!",
             "message_1": "Hello World!",

@@ -30,6 +30,9 @@ pipeline:
 
   datasets:
     test_messages:
-      type: kafka_stream
+      type: aineko.datasets.kafka.Kafka
+      location: localhost:9092
+
     test_result:
-      type: kafka_stream
+      type: aineko.datasets.kafka.Kafka
+      location: localhost:9092

@@ -79,4 +79,3 @@ def test_fastapi_node(start_service):
         assert test_results["message"]["next"]["message"] == 1
         assert test_results["message"]["last"]["message"] == 3
         assert test_results["message"]["health"] == 200
-

@@ -117,7 +117,9 @@ def test_write_read_to_kafka(start_service, subtests):
                     "pipeline_name": "integration_test_write",
                     "prefix": None,
                     "has_pipeline_prefix": True,
-                    "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
+                        "CONSUMER_CONFIG"
+                    ),
                 }
             )
             dataset.initialize(
@@ -147,7 +149,9 @@ def test_write_read_to_kafka(start_service, subtests):
                     "pipeline_name": "integration_test_read",
                     "prefix": None,
                     "has_pipeline_prefix": True,
-                    "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
+                        "CONSUMER_CONFIG"
+                    ),
                 }
             )
             dataset.initialize(
