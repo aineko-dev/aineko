@@ -91,31 +91,26 @@ plugins:
 
 nav:
   - Aineko Framework:
-      - 'index.md'
+      - index.md
       - Get Started:
-          - 'start/quickstart.md'
+          - start/quickstart.md
       - Developer Guide:
-          - 'developer_guide/concepts.md'
-          - 'developer_guide/aineko_project.md'
-          - 'developer_guide/pipeline_configuration.md'
-          - 'developer_guide/node_implementation.md'
-          - 'developer_guide/cli.md'
-          - 'developer_guide/config_kafka.md'
-      - Extras:
-          - extras/intro.md
-          - extras/fastapi.md
-          - extras/websocket_client.md
-          - extras/http_poller.md
+          - developer_guide/concepts.md
+          - developer_guide/aineko_project.md
+          - developer_guide/pipeline_configuration.md
+          - developer_guide/node_implementation.md
+          - developer_guide/cli.md
+          - developer_guide/config_kafka.md
       - API Documentation:
-          - 'api_reference/abstract_node.md'
-          - 'api_reference/dataset_consumer.md'
-          - 'api_reference/dataset_producer.md'
-          - 'api_reference/config.md'
-          - 'api_reference/config_loader.md'
-          - 'api_reference/runner.md'
+          - api_reference/abstract_node.md
+          - api_reference/dataset_consumer.md
+          - api_reference/dataset_producer.md
+          - api_reference/config.md
+          - api_reference/config_loader.md
+          - api_reference/runner.md
       - Example Pipelines:
           - examples/aineko_dream.md
       - Community:
           - community/index.md
-
-  - Aineko Cloud: 'https://cloud-docs.aineko.dev'
+  - Aineko Plugins: https://plugin-docs.aineko.dev
+  - Aineko Cloud: https://cloud-docs.aineko.dev
