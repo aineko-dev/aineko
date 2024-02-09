@@ -90,12 +90,9 @@ To unlock the true power of the framework, try [Aineko Cloud](https://cloud-docs
 
 ---
 
-## Extras
+## Plugins
 
-Supercharge your development by using pre-built nodes directly in your pipeline. Aineko `Extras` contains nodes that are production-ready out of the box.
-
-- [FastAPI node](./extras/fastapi.md)
-- [WebSocket node](./extras/websocket.md)
+Supercharge your development by using pre-built nodes directly in your pipeline. Aineko Plugins contains nodes that are production-ready out of the box. Visit the [Aineko Plugins](https://plugin-docs.aineko.dev) page to see the full list of available plugins.
 
 ---
 
