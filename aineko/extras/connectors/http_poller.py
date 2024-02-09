@@ -147,7 +147,7 @@ class HTTPPoller(AbstractNode):
 
         # Ensure only one output dataset is provided
         output_datasets = [
-            dataset for dataset in self.producers.keys() if dataset != "logging"
+            dataset for dataset in self.outputs.keys() if dataset != "logging"
         ]
         if len(output_datasets) > 1:
             raise ValueError(
@@ -177,7 +177,7 @@ class HTTPPoller(AbstractNode):
             parsed_data = self.parse_data(raw_data)
             if not parsed_data:
                 return
-            self.producers[self.output_dataset].produce(parsed_data)
+            self.outputs[self.output_dataset].write(parsed_data)
             self.retry_count = 0
         else:
             # If it is not time to poll, sleep

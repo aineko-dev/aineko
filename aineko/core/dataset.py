@@ -42,7 +42,7 @@ class AbstractDatasetConfig(BaseModel):
 
     type: str
     location: Optional[str]
-    params: Dict[str, Any] = {}
+    params: Optional[Dict[str, Any]] = {}
 
 
 class DatasetCreateStatus:
@@ -175,10 +175,10 @@ class AbstractDataset(abc.ABC, Generic[T]):
         Returns:
             Instance of an `AbstractDataset` subclass.
         """
-        dataset_config = AbstractDatasetConfig(**config)
+        dataset_config = AbstractDatasetConfig(**dict(config))
 
         class_obj = import_from_string(dataset_config.type, kind="class")
-        class_instance = class_obj(name, dataset_config.params)
+        class_instance = class_obj(name, dict(dataset_config))
         class_instance.name = name
         return class_instance
 

@@ -111,7 +111,7 @@ class AbstractNode(ABC):
 
     def setup_datasets(
         self,
-        datasets: Dict[str, dict],
+        datasets: Dict[str, Dict],
         inputs: Optional[List[str]] = None,
         outputs: Optional[List[str]] = None,
         prefix: Optional[str] = None,

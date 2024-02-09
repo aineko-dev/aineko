@@ -3,7 +3,7 @@
 """Submodule that handles the running of a pipeline from config."""
 import logging
 import time
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 import ray
 
@@ -16,6 +16,7 @@ from aineko.config import (
 from aineko.core.config_loader import ConfigLoader
 from aineko.core.node import PoisonPill
 from aineko.datasets.kafka import TopicParams
+from aineko.models.config_schema import Config
 from aineko.utils import imports
 
 logger = logging.getLogger(__name__)
