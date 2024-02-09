@@ -14,7 +14,7 @@ Example dataset configuration:
     ```
 """
 import abc
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
+from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 from pydantic import BaseModel
 
@@ -163,7 +163,9 @@ class AbstractDataset(abc.ABC, Generic[T]):
     name: str
 
     @classmethod
-    def from_config(cls: Type[A], name: str, config: Dict[str, Any]) -> A:
+    def from_config(
+        cls, name: str, config: Dict[str, Any]
+    ) -> "AbstractDataset":
         """Create a dataset from a configuration dictionary.
 
         Args:
