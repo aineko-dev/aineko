@@ -73,7 +73,10 @@ def test_load_config(
 
     # Test pipeline config containing single pipeline
     config = ConfigLoader(test_pipeline_config_file).load_config()
-    assert config == EXPECTED_TEST_PIPELINE
+    assert (
+        config.model_dump(exclude_none=True, by_alias=True)
+        == EXPECTED_TEST_PIPELINE
+    )
 
 
 def test_load_invalid_config(test_invalid_pipeline_config_file: str, caplog):

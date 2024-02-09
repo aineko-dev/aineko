@@ -7,7 +7,7 @@
 
 [tool.poetry]
 name = "aineko"
-version = "0.2.7"
+version = "0.3.1"
 description = "Aineko, a data integration framework."
 authors = ["Convex Labs <engineering-admins@convexlabs.xyz>"]
 readme = "README.md"
@@ -30,11 +30,13 @@ cookiecutter = "^2.4.0"
 click = "^8.1.7"
 pygithub = "~=2.1.1"
 # extras: fastapi
-fastapi = { version = ">0.101", optional = true }
+fastapi = { version = "~0.109.2", optional = true }
 uvicorn = { version = "^0.22", extras = ["standard"], optional = true }
 # extras: websocket_client
 websocket-client = { version = "^1.7.0", optional = true }
 websockets = { version = "^12.0", optional = true }
+# extras: rest_poller
+requests = { version = "^2.31.0", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 # aineko_style = "^0.0.1"
@@ -66,6 +68,7 @@ pytest-subtests = "^0.11.0"
 
 [tool.poetry.extras]
 fastapi = ["fastapi", "uvicorn"]
+rest_poller = ["requests"]
 websocket_client = ["websocket-client", "websockets"]
 
 [build-system]

@@ -16,3 +16,5 @@ CLI
 [Bb]lockchain
 GitHub
 github
+[Mm]iddleware
+HTTPPoller

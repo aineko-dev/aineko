@@ -83,7 +83,7 @@ class MessageReader(AbstractNode):
 
 
 @pytest.mark.integration
-def test_write_read_to_kafka(start_service):
+def test_write_read_to_kafka(start_service, subtests):
     """Integration test to check that nodes can write to kafka.
 
     First set up the integration test pipeline run it, making use
@@ -97,67 +97,70 @@ def test_write_read_to_kafka(start_service):
     that reads from the created dataset and checks that the messages
     are as expected.
     """
-    runner = Runner(
-        pipeline_config_file="tests/conf/integration_test_write.yml",
-    )
-    try:
-        runner.run()
-    except ray.exceptions.RayActorError:
-        dataset_name = "messages"
-        dataset_config = {
-            "type": "aineko.datasets.kafka.Kafka",
-            "location": "localhost:9092",
-        }
-        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
-        consumer_params = ConsumerParams(
-            **{
-                "dataset_name": dataset_name,
-                "node_name": "consumer",
-                "pipeline_name": "integration_test_write",
-                "prefix": None,
-                "has_pipeline_prefix": True,
-                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+    with subtests.test("Test writing to Kafka."):
+        runner = Runner(
+            pipeline_config_file="tests/conf/integration_test_write.yml",
+        )
+        try:
+            runner.run()
+        except ray.exceptions.RayActorError:
+            dataset_name = "messages"
+            dataset_config = {
+                "type": "aineko.datasets.kafka.Kafka",
+                "location": "localhost:9092",
             }
-        )
-        dataset.initialize(
-            create_consumer=True, connection_params=consumer_params
-        )
-        count_messages = dataset.consume_all(end_message="END")
-        count_values = [msg["message"] for msg in count_messages]
-        assert count_values == MESSAGES
+            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+            consumer_params = ConsumerParams(
+                **{
+                    "dataset_name": dataset_name,
+                    "node_name": "consumer",
+                    "pipeline_name": "integration_test_write",
+                    "prefix": None,
+                    "has_pipeline_prefix": True,
+                    "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+                }
+            )
+            dataset.initialize(
+                create_consumer=True, connection_params=consumer_params
+            )
+            count_messages = dataset.consume_all(end_message="END")
+            count_values = [msg["message"] for msg in count_messages]
+            assert count_values == MESSAGES
 
-    runner = Runner(
-        pipeline_config_file="tests/conf/integration_test_read.yml",
-    )
-    try:
-        runner.run()
-    except ray.exceptions.RayActorError:
-        dataset_name = "test_result"
-        dataset_config = {
-            "type": "aineko.datasets.kafka.Kafka",
-            "location": "localhost:9092",
-        }
-        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
-        consumer_params = ConsumerParams(
-            **{
-                "dataset_name": dataset_name,
-                "node_name": "consumer",
-                "pipeline_name": "integration_test_read",
-                "prefix": None,
-                "has_pipeline_prefix": True,
-                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+    with subtests.test("Test reading from Kafka"):
+        runner = Runner(
+            pipeline_config_file="tests/conf/integration_test_read.yml",
+        )
+        try:
+            runner.run()
+        except ray.exceptions.RayActorError:
+            dataset_name = "test_result"
+            dataset_config = {
+                "type": "aineko.datasets.kafka.Kafka",
+                "location": "localhost:9092",
             }
-        )
-        dataset.initialize(
-            create_consumer=True, connection_params=consumer_params
-        )
-        count_messages = dataset.consume_all(end_message="END")
-        print("count_messages are...")
-        print(count_messages)
-        print("...")
-        # assert count_messages[0]["source_pipeline"] == "integration_test_read"
-        assert count_messages[0]["message"] == "TEST PASSED"
+            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+            consumer_params = ConsumerParams(
+                **{
+                    "dataset_name": dataset_name,
+                    "node_name": "consumer",
+                    "pipeline_name": "integration_test_read",
+                    "prefix": None,
+                    "has_pipeline_prefix": True,
+                    "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+                }
+            )
+            dataset.initialize(
+                create_consumer=True, connection_params=consumer_params
+            )
+            count_messages = dataset.consume_all(end_message="END")
+            print("count_messages are...")
+            print(count_messages)
+            print("...")
+            # assert count_messages[0]["source_pipeline"] == "integration_test_read"
+            assert count_messages[0]["message"] == "TEST PASSED"
 
+    with subtests.test("Test the consume.last functionality"):
         # Test consume.last functionality
         last_message = dataset.last(timeout=10)
         assert last_message["message"] == "END"

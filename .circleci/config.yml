@@ -122,7 +122,7 @@ jobs:
       - run: poetry install --with test --no-interaction --all-extras --no-ansi
       - run: >
           poetry run pytest << parameters.test_dir >>
-          -m "<< parameters.markers >>"
+          -m "<< parameters.markers >>" -svv
 
   python-checks:
     parameters:
@@ -252,7 +252,7 @@ jobs:
           name: Run the tests from the newly created project
           command: |
             cd $original_cwd/my_awesome_pipeline
-            poetry run pytest
+            poetry run pytest -svv
       - run:
           name: Run `poetry run aineko --help` command from the newly created project
           command: |

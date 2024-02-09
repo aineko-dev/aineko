@@ -5,9 +5,10 @@ The WebSocketClient extra node can be used by adding the following to `pyproject
 :   
     ```yaml title="pyproject.toml" hl_lines="2"
     [tool.poetry.dependencies]
-    aineko = {version = "^0.2.7", extras=["websocket_client"]}
+    aineko = {version = "^0.3.1", extras=["websocket_client"]}
     ```
 
 ## API Reference
 
 ::: aineko.extras.connectors.websocket_client.WebSocketClient
+::: aineko.extras.connectors.websocket_client.ParamsWebSocketClient

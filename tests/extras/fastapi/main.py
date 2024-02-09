@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 from fastapi import FastAPI
 
-from aineko.extras.fastapi import inputs, outputs
+from aineko.extras.fastapi import health_router, inputs, outputs
 
 app = FastAPI()
+
+app.include_router(health_router)
 
 
 @app.get("/next", status_code=200)
