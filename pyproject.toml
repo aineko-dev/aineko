@@ -31,10 +31,6 @@ cookiecutter = "^2.4.0"
 click = "^8.1.7"
 pygithub = "~=2.1.1"
 
-# Optional Aineko Plugins
-aineko-plugins-nodes-fastapi-server = { version = "0.0.1", optional = true }
-aineko-plugins-nodes-http-poller = { version = "0.0.1", optional = true }
-aineko-plugins-nodes-websocket-client = { version = "0.0.1", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 aineko_style = "^0.0.2"
@@ -54,9 +50,6 @@ mkdocs-glightbox = "^0.3.4"
 mkdocstrings = { extras = ["python"], version = "^0.23.0" }
 mkdocs-click = "^0.8.1"
 mike = "^2.0.0"
-aineko-plugins-nodes-fastapi-server = { version = "0.0.1" }
-aineko-plugins-nodes-http-poller = { version = "0.0.1" }
-aineko-plugins-nodes-websocket-client = { version = "0.0.1" }
 
 [tool.poetry.group.test]
 optional = true
@@ -66,11 +59,6 @@ mypy = "^1.5.1"
 pytest = "^7.4.1"
 pytest-cov = "^4.1.0"
 pytest-subtests = "^0.11.0"
-
-[tool.poetry.extras]
-fastapi-server = ["aineko-plugins-nodes-fastapi-server"]
-http-poller = ["aineko-plugins-nodes-http-poller"]
-websocket-client = ["aineko-plugins-nodes-websocket-client"]
 
 [build-system]
 requires = ["poetry-core"]

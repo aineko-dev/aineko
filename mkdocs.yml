@@ -101,11 +101,6 @@ nav:
           - developer_guide/node_implementation.md
           - developer_guide/cli.md
           - developer_guide/config_kafka.md
-      - Plugins:
-          - plugins/intro.md
-          - plugins/fastapi-server.md
-          - plugins/websocket-client.md
-          - plugins/http-poller.md
       - API Documentation:
           - api_reference/abstract_node.md
           - api_reference/dataset_consumer.md
@@ -117,5 +112,5 @@ nav:
           - examples/aineko_dream.md
       - Community:
           - community/index.md
-
+  - Aineko Plugins: https://plugin-docs.aineko.dev
   - Aineko Cloud: https://cloud-docs.aineko.dev
