@@ -102,12 +102,12 @@ nav:
           - developer_guide/cli.md
           - developer_guide/config_kafka.md
       - API Documentation:
-          - 'api_reference/abstract_node.md'
-          - 'api_reference/abstract_dataset.md'
-          - 'api_reference/kafka_dataset.md'
-          - 'api_reference/config.md'
-          - 'api_reference/config_loader.md'
-          - 'api_reference/runner.md'
+          - api_reference/abstract_node.md
+          - api_reference/abstract_dataset.md
+          - api_reference/kafka_dataset.md
+          - api_reference/config.md
+          - api_reference/config_loader.md
+          - api_reference/runner.md
       - Example Pipelines:
           - examples/aineko_dream.md
       - Community:
