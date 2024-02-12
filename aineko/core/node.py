@@ -149,9 +149,6 @@ class AbstractNode(ABC):
                 for dataset_name in outputs
             }
         )
-        # topics have already been created from runner.
-
-        # now create the producers and consumers connections:
 
         for dataset_name in inputs:
             if self.inputs[dataset_name].type == "kafka":
@@ -249,9 +246,7 @@ class AbstractNode(ABC):
                 f"{', '.join(self.log_levels)}"
             )
         out_msg = {"log": message, "level": level}
-        # self.producers[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].produce(
-        #     out_msg
-        # )
+
         self.outputs[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].write(out_msg)
 
     def _log_traceback(self) -> None:
@@ -400,11 +395,6 @@ class AbstractNode(ABC):
                     continue
 
             # End loop if all consumers are empty
-            # if self.consumers and all(
-            #     consumer.empty for consumer in self.consumers.values()
-            # ):
-            #     run_loop = False
-
             if self.inputs and all(
                 input.empty for input in self.inputs.values()
             ):
