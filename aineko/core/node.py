@@ -69,8 +69,6 @@ class AbstractNode(ABC):
         name (str): name of the node
         pipeline_name (str): name of the pipeline
         params (dict): dict of parameters to be used by the node
-        consumers (dict): dict of DatasetConsumer objects for inputs to node
-        producers (dict): dict of DatasetProducer objects for outputs of node
         inputs (dict): dict of AbstractDataset objects for inputs that node
             can read / consume.
         outputs (dict): dict of AbstractDataset objects for outputs that node
