@@ -721,8 +721,6 @@ class Kafka(AbstractDataset):
         ] = self.location
 
 
-# pylint: enable=too-few-public-methods
-# pylint: disable=unused-argument
 class FakeDatasetInput:
     """Fake dataset Input (consumer) for testing purposes.
 
@@ -769,6 +767,7 @@ class FakeDatasetInput:
         Raises:
             ValueError: if how is not "next" or "last"
         """
+        del timeout  # unused because this is a fake dataset
         if how not in ["next", "last"]:
             raise ValueError(f"Invalid how: {how}. Expected 'next' or 'last'.")
 
