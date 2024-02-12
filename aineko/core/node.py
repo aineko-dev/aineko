@@ -175,6 +175,7 @@ class AbstractNode(ABC):
                 producer_params = ProducerParams(
                     **{
                         "dataset_name": dataset_name,
+                        "node_name": self.name,
                         "pipeline_name": self.pipeline_name,
                         "prefix": prefix,
                         "has_pipeline_prefix": has_pipeline_prefix,

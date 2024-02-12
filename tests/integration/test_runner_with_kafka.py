@@ -156,7 +156,9 @@ def test_write_read_to_kafka(start_service, subtests):
                 create_consumer=True, connection_params=consumer_params
             )
             count_messages = dataset.consume_all(end_message="END")
-            # assert count_messages[0]["source_pipeline"] == "integration_test_read"
+            assert (
+                count_messages[0]["source_pipeline"] == "integration_test_read"
+            )
             assert count_messages[0]["message"] == "TEST PASSED"
 
     with subtests.test("Test the consume.last functionality"):

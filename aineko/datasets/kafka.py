@@ -80,6 +80,7 @@ class ProducerParams(BaseModel):
     """
 
     dataset_name: str
+    node_name: str
     pipeline_name: str
     prefix: Optional[str] = None
     has_pipeline_prefix: bool
@@ -160,6 +161,8 @@ class Kafka(AbstractDataset):
         )
         self.dataset_config = params
         self.cached = False
+        self.source_node: str
+        self.source_pipeline: str
         self._consumer: Consumer
         self._producer: Producer
         self._create_admin_client()
@@ -332,8 +335,8 @@ class Kafka(AbstractDataset):
                 AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
             ),
             "dataset": self.name,
-            # "source_pipeline": self.source_pipeline,
-            # "source_node": self.source_node,
+            "source_pipeline": self.source_pipeline,
+            "source_node": self.source_node,
             "message": msg,
         }
         self._producer.poll(0)
@@ -636,11 +639,14 @@ class Kafka(AbstractDataset):
             status of dataset creation
         """
         has_pipeline_prefix = producer_params.has_pipeline_prefix
+        node_name = producer_params.node_name
         pipeline_name = producer_params.pipeline_name
         dataset_name = producer_params.dataset_name
         prefix = producer_params.prefix
         # create topic name here:
         topic_name = dataset_name
+        self.source_node = node_name
+        self.source_pipeline = pipeline_name
         if has_pipeline_prefix:
             topic_name = f"{pipeline_name}.{topic_name}"
         if prefix:
@@ -799,7 +805,7 @@ class FakeDatasetInput:
         return self.read(how="next")
 
     def last(self, timeout: float = 1) -> Optional[Dict]:
-        """Wraps `consume(how="last")`, blocks until available.
+        """Wraps `read(how="last")`, blocks until available.
 
         Returns:
             msg: message from the dataset
@@ -833,6 +839,6 @@ class FakeDatasetOutput:
         """Stores message in self.values.
 
         Args:
-            message: message to produce.
+            message: message to write.
         """
         self.values.append(message)
