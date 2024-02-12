@@ -58,8 +58,6 @@ class MessageReader(AbstractNode):
         """Read message"""
         msg = self.inputs["messages"].next()
         if time.time() - self.last_updated > self.timeout:
-            print(f"Received messages: {self.received}")
-            print(self.inputs["messages"].topic_name)
             raise TimeoutError("Timed out waiting for messages.")
 
         if not msg:
@@ -158,9 +156,6 @@ def test_write_read_to_kafka(start_service, subtests):
                 create_consumer=True, connection_params=consumer_params
             )
             count_messages = dataset.consume_all(end_message="END")
-            print("count_messages are...")
-            print(count_messages)
-            print("...")
             # assert count_messages[0]["source_pipeline"] == "integration_test_read"
             assert count_messages[0]["message"] == "TEST PASSED"
 

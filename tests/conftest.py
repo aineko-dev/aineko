@@ -74,8 +74,6 @@ def dummy_node():
 
         def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
             """Consumes message from input and outputs it to output."""
-            print(self.inputs)
-            print(self.outputs)
             msg = self.inputs["input"].read(how="next", timeout=0)
             self.outputs["output"].write(msg)
 
