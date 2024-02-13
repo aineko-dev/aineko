@@ -17,7 +17,7 @@ from typing import (
 
 import boto3
 from mypy_boto3_rds import RDSClient
-from psycopg import AsyncCursor, rows, sql
+from psycopg import AsyncCursor, errors, rows, sql
 from psycopg_pool import AsyncConnectionPool
 
 from aineko.core.dataset import AsyncAbstractDataset, DatasetError
@@ -156,11 +156,28 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         cursor = await self.execute_query(query=query)
         return await cursor.fetchall()
 
-    async def write(self, query):
-        raise NotImplementedError("Not yet implemented.")
+    async def write(
+        self,
+        query: Union[str, sql.SQL, sql.Composed],
+        parameters: Optional[Union[Sequence[Any], Mapping[str, Any]]] = None,
+    ) -> Optional[List]:
+        """Performs a write operation on the Postgres database.
 
-    #     await self.acur.execute(query)
-    #     await self.aconn.commit()
+        Args:
+            query: SQL query to execute.
+            parameters: Parameters to be passed to the query. Defaults to None.
+
+        Returns:
+            A list of rows returned by the query if the query produced results.
+            None otherwise.
+        """
+        cursor = await self.execute_query(query, parameters=parameters)
+        try:
+            return await cursor.fetchall()
+        except errors.ProgrammingError as e:
+            if "the last operation didn't produce a result" in str(e):
+                return None
+            raise e
 
     async def delete(self, if_exists: bool = False):
         """Drops the table from the Postgres database.
