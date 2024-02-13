@@ -1,7 +1,8 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Tests for the fake datasets inputs and outputs."""
-from aineko.datasets.kafka import FakeKafka
+from aineko.datasets.kafka import FakeKafka, Kafka
+import os
 
 
 def test_fake_kafka_input() -> None:
@@ -25,3 +26,21 @@ def test_fake_kafka_output() -> None:
     for i in range(3):
         output.write(i)
     assert output.output_values == [0, 1, 2]
+
+def test_update_location(subtests) -> None:
+    """Tests the update_location method."""
+    with subtests.test("Check that the location uses default value."):
+        dataset = Kafka("test", {})
+        assert dataset.location == "localhost:9092"
+
+    os.environ["KAFKA_CONFIG_BOOTSTRAP_SERVERS"] = "localhost:5678"
+
+    with subtests.test("Check that the location uses value from config first."):
+        dataset = Kafka("test", {"location": "localhost:1234"})
+        dataset._admin_client = None
+        assert dataset.location == "localhost:1234"
+
+    with subtests.test("Check that the location uses value from environment second."):
+        dataset = Kafka("test", {})
+        dataset._admin_client = None
+        assert dataset.location == "localhost:5678"

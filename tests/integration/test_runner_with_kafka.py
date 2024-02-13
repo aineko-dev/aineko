@@ -165,3 +165,41 @@ def test_write_read_to_kafka(start_service, subtests):
         # Test consume.last functionality
         last_message = dataset.last(timeout=10)
         assert last_message["message"] == "END"
+
+
+@pytest.mark.integration
+def test_missing_location(start_service, subtests):
+    """Integration test to check that `location` can be missing from config."""
+    with subtests.test(
+        "Test writing to Kafka with missing location in config."
+    ):
+        runner = Runner(
+            pipeline_config_file="tests/conf/integration_test_no_location_config.yml",
+        )
+        try:
+            runner.run()
+        except ray.exceptions.RayActorError:
+            dataset_name = "messages"
+            dataset_config = {
+                "type": "aineko.datasets.kafka.Kafka",
+                "location": "localhost:9092",
+            }
+            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+            consumer_params = ConsumerParams(
+                **{
+                    "dataset_name": dataset_name,
+                    "node_name": "consumer",
+                    "pipeline_name": "integration_test_write",
+                    "prefix": None,
+                    "has_pipeline_prefix": True,
+                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
+                        "CONSUMER_CONFIG"
+                    ),
+                }
+            )
+            dataset.initialize(
+                create_consumer=True, connection_params=consumer_params
+            )
+            count_messages = dataset.consume_all(end_message="END")
+            count_values = [msg["message"] for msg in count_messages]
+            assert count_values == MESSAGES

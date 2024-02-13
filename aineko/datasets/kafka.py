@@ -12,6 +12,7 @@ is a Kafka consumer and producer, respectively.
 import datetime
 import json
 import logging
+import os
 from typing import Any, Dict, List, Literal, Optional, Union
 
 from confluent_kafka import (  # type: ignore
@@ -151,22 +152,18 @@ class Kafka(AbstractDataset):
         self.topic_name = name
         self.params = params
         self.type = "kafka"
-        self.location = self.params.get(
-            "location",
-            DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG").get("bootstrap.servers"),
-        )
         self.consumer_name: Optional[str] = None
         self.credentials = KafkaCredentials(
             **params.get("kafka_credentials", {})
         )
         self.dataset_config = params
+        self.location = self._update_location()
         self.cached = False
         self.source_node: str
         self.source_pipeline: str
         self._consumer: Consumer
         self._producer: Producer
         self._create_admin_client()
-        self._update_location()
 
     def _create(
         self,
@@ -700,7 +697,7 @@ class Kafka(AbstractDataset):
         )
         return dataset_create_status
 
-    def _update_location(self) -> None:
+    def _update_location(self) -> str:
         """Updates the location of the dataset to `self.location`.
 
         Updates the location for the DEFAULT_KAFKA_CONFIG
@@ -717,14 +714,20 @@ class Kafka(AbstractDataset):
           2. environment variable >
           3. default value (localhost:9092)
         """
-        self.credentials.bootstrap_servers = self.location
-        DEFAULT_KAFKA_CONFIG.BROKER_CONFIG["bootstrap.servers"] = self.location
-        DEFAULT_KAFKA_CONFIG.CONSUMER_CONFIG[
-            "bootstrap.servers"
-        ] = self.location
-        DEFAULT_KAFKA_CONFIG.PRODUCER_CONFIG[
-            "bootstrap.servers"
-        ] = self.location
+        location: Optional[str] = self.params.get("location")
+        if not location:
+            location = os.getenv(
+                "KAFKA_CONFIG_BOOTSTRAP_SERVERS",
+                DEFAULT_KAFKA_CONFIG.BROKER_CONFIG.get(
+                    "bootstrap.servers", "localhost:9092"
+                ),
+            )
+
+        self.credentials.bootstrap_servers = location
+        DEFAULT_KAFKA_CONFIG.BROKER_CONFIG["bootstrap.servers"] = location
+        DEFAULT_KAFKA_CONFIG.CONSUMER_CONFIG["bootstrap.servers"] = location
+        DEFAULT_KAFKA_CONFIG.PRODUCER_CONFIG["bootstrap.servers"] = location
+        return location
 
 
 class FakeKafka:
