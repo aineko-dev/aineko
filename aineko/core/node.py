@@ -27,12 +27,7 @@ from aineko.config import (
     TESTING_NODE_CONFIG,
 )
 from aineko.core.dataset import AbstractDataset
-from aineko.datasets.kafka import (
-    ConsumerParams,
-    FakeDatasetInput,
-    FakeDatasetOutput,
-    ProducerParams,
-)
+from aineko.datasets.kafka import ConsumerParams, FakeKafka, ProducerParams
 
 
 class PoisonPill:
@@ -207,10 +202,10 @@ class AbstractNode(ABC):
         inputs = inputs or {}
 
         self.inputs = {
-            dataset_name: FakeDatasetInput(
+            dataset_name: FakeKafka(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
-                values=values,
+                input_values=values,
             )
             for dataset_name, values in inputs.items()
         }
@@ -218,7 +213,7 @@ class AbstractNode(ABC):
         outputs.extend(TESTING_NODE_CONFIG.get("DATASETS"))
 
         self.outputs = {
-            dataset_name: FakeDatasetOutput(
+            dataset_name: FakeKafka(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
             )
@@ -336,7 +331,7 @@ class AbstractNode(ABC):
         self._post_loop_hook(self.params)
 
         return {
-            dataset_name: output.values
+            dataset_name: output.output_values
             for dataset_name, output in self.outputs.items()
         }
 
@@ -379,8 +374,8 @@ class AbstractNode(ABC):
 
             # Capture last consumed values
             for dataset_name, input_dataset in self.inputs.items():
-                if input_dataset.values:
-                    last_value = input_dataset.values[0]
+                if input_dataset.input_values:
+                    last_value = input_dataset.input_values[0]
                     last_consumed_values[dataset_name] = last_value
 
             run_loop = self._execute(self.params)  # type: ignore
@@ -398,8 +393,8 @@ class AbstractNode(ABC):
 
             # Capture last produced values
             for dataset_name, output in self.outputs.items():
-                if output.values:
-                    last_value = output.values[-1]
+                if output.output_values:
+                    last_value = output.output_values[-1]
                     last_produced_values[dataset_name] = last_value
 
             yield (last_consumed_values, last_produced_values, self)

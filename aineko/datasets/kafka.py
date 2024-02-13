@@ -12,7 +12,7 @@ is a Kafka consumer and producer, respectively.
 import datetime
 import json
 import logging
-from typing import Any, Dict, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from confluent_kafka import (  # type: ignore
     OFFSET_INVALID,
@@ -727,30 +727,44 @@ class Kafka(AbstractDataset):
         ] = self.location
 
 
-class FakeDatasetInput:
-    """Fake dataset Input (consumer) for testing purposes.
+class FakeKafka:
+    """Fake Kafka dataset class for testing.
 
-    The class will store in its state the list of values to feed the node,
-    and pop each value everytime the consume method is called.
+    The class can be used as both a reader and a writer for testing
+    purposes.
+
+    As a reader (consumer), the class will store in its state the list
+    of values to feed the node, and pop each value everytime the read
+    method is called.
+
+    As a writer (producer), The class will store in its state the list
+    of values produced by the node.
 
     Args:
         dataset_name: name of the dataset
         node_name: name of the node that is consuming the dataset
-        values: list of values to feed the node
+        input_values: list of values to feed the node
 
     Attributes:
         dataset_name (str): name of the dataset
         node_name (str): name of the node that is consuming the dataset
-        values (list): list of mock data values to feed the node
+        input_values (list): list of mock data values to feed the node
         empty (bool): True if the list of values is empty, False otherwise
+        output_values (list): list of mock data values produced by the node
     """
 
-    def __init__(self, dataset_name: str, node_name: str, values: list):
-        """Initialize the consumer."""
+    def __init__(
+        self,
+        dataset_name: str,
+        node_name: str,
+        input_values: Optional[List] = None,
+    ):
+        """Initialize the fake dataset."""
         self.dataset_name = dataset_name
         self.node_name = node_name
-        self.values = values
+        self.input_values = input_values or []
         self.empty = False
+        self.output_values = []  # type: ignore
 
     def read(
         self,
@@ -768,7 +782,7 @@ class FakeDatasetInput:
                 If using how="last", set to bigger than 0.
 
         Returns:
-            next or last value in self.values
+            next or last value in self.input_values
 
         Raises:
             ValueError: if how is not "next" or "last"
@@ -778,7 +792,7 @@ class FakeDatasetInput:
             raise ValueError(f"Invalid how: {how}. Expected 'next' or 'last'.")
 
         if how == "next":
-            remaining = len(self.values)
+            remaining = len(self.input_values)
             if remaining > 0:
                 if remaining == 1:
                     self.empty = True
@@ -786,13 +800,13 @@ class FakeDatasetInput:
                     "timestamp": datetime.datetime.now().strftime(
                         AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
                     ),
-                    "message": self.values.pop(0),
+                    "message": self.input_values.pop(0),
                     "source_node": "test",
                     "source_pipeline": "test",
                 }
         if how == "last":
-            if self.values:
-                return self.values[-1]
+            if self.input_values:
+                return self.input_values[-1]
 
         return None
 
@@ -812,33 +826,10 @@ class FakeDatasetInput:
         """
         return self.read(how="last", timeout=timeout)
 
-
-class FakeDatasetOutput:
-    """Fake dataset Output (producer) for testing purposes.
-
-    The class will store in its state the list of values produced
-    by the node.
-
-    Args:
-        dataset_name: name of the dataset
-        node_name: name of the node that is producing the dataset
-
-    Attributes:
-        dataset_name (str): name of the dataset
-        node_name (str): name of the node that is producing the dataset
-        values (list): list of mock data values produced by the node
-    """
-
-    def __init__(self, dataset_name: str, node_name: str):
-        """Initialize the producer."""
-        self.dataset_name = dataset_name
-        self.node_name = node_name
-        self.values = []  # type: ignore
-
-    def write(self, message: Any) -> None:
-        """Stores message in self.values.
+    def write(self, message: Dict) -> None:
+        """Stores message in self.input_values.
 
         Args:
             message: message to write.
         """
-        self.values.append(message)
+        self.output_values.append(message)
