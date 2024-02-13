@@ -1,11 +1,11 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Dataset to connect to PostgreSQL databases."""
-
 import os
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 import boto3
+from mypy_boto3_rds import RDSClient
 from psycopg import sql
 from psycopg_pool import AsyncConnectionPool
 
@@ -17,9 +17,9 @@ class AWSDatasetHelper:
 
     def __init__(
         self,
-        aws_access_key_id: str = None,
-        aws_secret_access_key: str = None,
-        region_name: str = None,
+        aws_access_key_id: Optional[str] = None,
+        aws_secret_access_key: Optional[str] = None,
+        region_name: Optional[str] = None,
     ):
         """Initialize the AWSDatasetHelper.
 
@@ -44,13 +44,13 @@ class AWSDatasetHelper:
         )
         self.region_name = region_name or os.environ.get("AWS_DEFAULT_REGION")
 
-    def get_rds_endpoint(self, db_instance_identifier: str):
+    def get_rds_endpoint(self, db_instance_identifier: str) -> str:
         """Get the RDS endpoint for a given RDS instance.
 
         Args:
             db_instance_identifier: RDS instance identifier.
         """
-        rds_client = boto3.client(
+        rds_client: RDSClient = boto3.client(
             "rds",
             aws_access_key_id=self.aws_access_key_id,
             aws_secret_access_key=self.aws_secret_access_key,
