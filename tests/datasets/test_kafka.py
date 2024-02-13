@@ -3,7 +3,7 @@
 """Tests for the fake datasets inputs and outputs."""
 import os
 
-from aineko.datasets.kafka import FakeKafka, Kafka
+from aineko.datasets.kafka import FakeKafka, KafkaDataset
 
 
 def test_fake_kafka_input() -> None:
@@ -32,19 +32,19 @@ def test_fake_kafka_output() -> None:
 def test_update_location(subtests) -> None:
     """Tests the update_location method."""
     with subtests.test("Check that the location uses default value."):
-        dataset = Kafka("test", {})
+        dataset = KafkaDataset("test", {})
         assert dataset.location == "localhost:9092"
 
     os.environ["KAFKA_CONFIG_BOOTSTRAP_SERVERS"] = "localhost:5678"
 
     with subtests.test("Check that the location uses value from config first."):
-        dataset = Kafka("test", {"location": "localhost:1234"})
+        dataset = KafkaDataset("test", {"location": "localhost:1234"})
         dataset._admin_client = None
         assert dataset.location == "localhost:1234"
 
     with subtests.test(
         "Check that the location uses value from environment second."
     ):
-        dataset = Kafka("test", {})
+        dataset = KafkaDataset("test", {})
         dataset._admin_client = None
         assert dataset.location == "localhost:5678"

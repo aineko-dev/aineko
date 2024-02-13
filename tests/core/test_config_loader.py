@@ -38,16 +38,16 @@ EXPECTED_TEST_PIPELINE = {
         },
         "datasets": {
             "integer_sequence": {
-                "type": "aineko.datasets.kafka.Kafka",
+                "type": "aineko.datasets.kafka.KafkaDataset",
                 "location": "localhost:9092",
                 "params": {"retention.ms": 86400000},
             },
             "integer_doubles": {
-                "type": "aineko.datasets.kafka.Kafka",
+                "type": "aineko.datasets.kafka.KafkaDataset",
                 "location": "localhost:9092",
             },
             "env_var": {
-                "type": "aineko.datasets.kafka.Kafka",
+                "type": "aineko.datasets.kafka.KafkaDataset",
                 "location": "localhost:9092",
             },
         },

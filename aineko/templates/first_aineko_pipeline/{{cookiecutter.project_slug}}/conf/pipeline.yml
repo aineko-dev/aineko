@@ -28,9 +28,9 @@ pipeline:
 
   datasets:
     test_sequence:
-      type: aineko.datasets.kafka.Kafka
+      type: aineko.datasets.kafka.KafkaDataset
       location: localhost:9092
 
     test_sum:
-      type: aineko.datasets.kafka.Kafka
+      type: aineko.datasets.kafka.KafkaDataset
       location: localhost:9092

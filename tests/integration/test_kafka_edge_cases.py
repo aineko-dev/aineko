@@ -44,7 +44,7 @@ def test_consume_empty_datasets(start_service):
 
     dataset_name = "test_result"
     dataset_config = {
-        "type": "aineko.datasets.kafka.Kafka",
+        "type": "aineko.datasets.kafka.KafkaDataset",
         "location": "localhost:9092",
     }
     dataset = AbstractDataset.from_config(dataset_name, dataset_config)

@@ -104,7 +104,7 @@ def test_write_read_to_kafka(start_service, subtests):
         except ray.exceptions.RayActorError:
             dataset_name = "messages"
             dataset_config = {
-                "type": "aineko.datasets.kafka.Kafka",
+                "type": "aineko.datasets.kafka.KafkaDataset",
                 "location": "localhost:9092",
             }
             dataset = AbstractDataset.from_config(dataset_name, dataset_config)
@@ -136,7 +136,7 @@ def test_write_read_to_kafka(start_service, subtests):
         except ray.exceptions.RayActorError:
             dataset_name = "test_result"
             dataset_config = {
-                "type": "aineko.datasets.kafka.Kafka",
+                "type": "aineko.datasets.kafka.KafkaDataset",
                 "location": "localhost:9092",
             }
             dataset = AbstractDataset.from_config(dataset_name, dataset_config)
@@ -181,7 +181,7 @@ def test_missing_location(start_service, subtests):
         except ray.exceptions.RayActorError:
             dataset_name = "messages"
             dataset_config = {
-                "type": "aineko.datasets.kafka.Kafka",
+                "type": "aineko.datasets.kafka.KafkaDataset",
                 "location": "localhost:9092",
             }
             dataset = AbstractDataset.from_config(dataset_name, dataset_config)

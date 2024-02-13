@@ -14,4 +14,4 @@ pipeline:
 
   datasets:
     messages:
-      type: aineko.datasets.kafka.Kafka
+      type: aineko.datasets.kafka.KafkaDataset

@@ -14,5 +14,5 @@ pipeline:
 
   datasets:
     messages:
-      type: aineko.datasets.kafka.Kafka
+      type: aineko.datasets.kafka.KafkaDataset
       location: localhost:9092

@@ -103,7 +103,7 @@ class TopicParams(BaseModel):
     dataset_config: Optional[Dict[str, Any]] = {}
 
 
-class Kafka(AbstractDataset):
+class KafkaDataset(AbstractDataset):
     """Kafka dataset.
 
     Dataset Storage Layer is a Kafka topic.

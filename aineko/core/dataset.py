@@ -7,7 +7,7 @@ Example dataset configuration:
     ```yaml
     datasets:
         my_dataset:
-            type: aineko.datasets.kafka.Kafka
+            type: aineko.datasets.kafka.KafkaDataset
             location: localhost:9092
             params:
                 param_1: bar

@@ -125,7 +125,7 @@ class Runner:
                 ```python
                     {
                         "dataset_name": {
-                            "type": str ("aineko.datasets.kafka.Kafka"),
+                            "type": str ("aineko.datasets.kafka.KafkaDataset"),
                             "location": str ("localhost:9092"),
                             "params": dict
                     }
@@ -167,7 +167,7 @@ class Runner:
         # Create logging dataset
         logging_config = {
             "location": "localhost:9092",
-            "type": "aineko.datasets.kafka.Kafka",
+            "type": "aineko.datasets.kafka.KafkaDataset",
         }
         logging_dataset_name = DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
         logger.info(
@@ -281,7 +281,7 @@ class Runner:
                 outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
                 datasets={
                     logging_dataset_name: {
-                        "type": "aineko.datasets.kafka.Kafka",
+                        "type": "aineko.datasets.kafka.KafkaDataset",
                         "location": "localhost:9092",
                     }
                 },
