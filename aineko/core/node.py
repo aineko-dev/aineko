@@ -124,8 +124,6 @@ class AbstractNode(ABC):
             prefix: prefix for topic name (`<prefix>.<dataset_name>`)
             has_pipeline_prefix: whether the dataset name has pipeline name
                 prefix
-
-        TODO: update docstring
         """
         inputs = inputs or []
         # initialize the datasets:
