@@ -183,7 +183,11 @@ class AbstractDataset(abc.ABC, Generic[T]):
         return class_instance
 
     def read(self, *args: T, **kwargs: T) -> Any:
-        """Read the dataset via the query layer."""
+        """Read the dataset via the query layer.
+
+        Raises:
+            DatasetError: If the read operation fails.
+        """
         try:
             return self._read(*args, **kwargs)
         except DatasetError:
@@ -193,7 +197,11 @@ class AbstractDataset(abc.ABC, Generic[T]):
             raise DatasetError(message) from e
 
     def write(self, *args: T, **kwargs: T) -> Any:
-        """Write to the dataset via the query layer."""
+        """Write to the dataset via the query layer.
+
+        Raises:
+            DatasetError: If the write operation fails.
+        """
         try:
             return self._write(*args, **kwargs)
         except DatasetError:
@@ -203,7 +211,11 @@ class AbstractDataset(abc.ABC, Generic[T]):
             raise DatasetError(message) from e
 
     def create(self, *args: T, **kwargs: T) -> Any:
-        """Create the dataset storage layer."""
+        """Create the dataset storage layer.
+
+        Raises:
+            DatasetError: If the create operation fails.
+        """
         try:
             return self._create(*args, **kwargs)
         except DatasetError:
@@ -213,7 +225,11 @@ class AbstractDataset(abc.ABC, Generic[T]):
             raise DatasetError(message) from e
 
     def delete(self, *args: T, **kwargs: T) -> Any:
-        """Delete the dataset storage layer."""
+        """Delete the dataset storage layer.
+
+        Raises:
+            DatasetError: If the delete operation fails.
+        """
         try:
             return self._delete(*args, **kwargs)
         except DatasetError:
@@ -223,7 +239,11 @@ class AbstractDataset(abc.ABC, Generic[T]):
             raise DatasetError(message) from e
 
     def exists(self, *args: T, **kwargs: T) -> Any:
-        """Check if the dataset storage layer exists."""
+        """Check if the dataset storage layer exists.
+
+        Raises:
+            DatasetError: If the exists operation fails.
+        """
         try:
             return self._exists(*args, **kwargs)
         except DatasetError:
@@ -233,7 +253,11 @@ class AbstractDataset(abc.ABC, Generic[T]):
             raise DatasetError(message) from e
 
     def initialize(self, *args: T, **kwargs: T) -> Any:
-        """Initialize the dataset query layer."""
+        """Initialize the dataset query layer.
+
+        Raises:
+            DatasetError: If the initialize operation fails.
+        """
         try:
             return self._initialize(*args, **kwargs)
         except DatasetError:
