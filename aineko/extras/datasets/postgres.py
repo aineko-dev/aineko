@@ -63,7 +63,7 @@ class AWSDatasetHelper:
         return db_instance["Endpoint"]["Address"]
 
 
-class Postgres(AsyncAbstractDataset):
+class AsyncPostgresDataset(AsyncAbstractDataset):
     """Dataset to connect to a table in a PostgreSQL database."""
 
     def __init__(
