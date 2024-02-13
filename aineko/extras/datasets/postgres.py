@@ -3,11 +3,11 @@
 """Dataset to connect to PostgreSQL databases."""
 import os
 from types import TracebackType
-from typing import Dict, Optional, Type, Union
+from typing import Any, Dict, Mapping, Optional, Sequence, Type, Union
 
 import boto3
 from mypy_boto3_rds import RDSClient
-from psycopg import sql
+from psycopg import AsyncCursor, rows, sql
 from psycopg_pool import AsyncConnectionPool
 
 from aineko.core.dataset import AsyncAbstractDataset, DatasetError
@@ -178,27 +178,32 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
                 result = await cur.fetchone()
                 return result[0]
 
-    async def execute_query(self, query: Union[str, sql.SQL], *args, **kwargs):
+    async def execute_query(
+        self,
+        query: Union[str, sql.SQL, sql.Composed],
+        parameters: Optional[Union[Sequence[Any], Mapping[str, Any]]] = None,
+    ) -> AsyncCursor[rows.TupleRow]:
         """Handles execution of PostgreSQL queries.
 
         Args:
             query: SQL query to execute.
-            args: Arguments to pass to the query.
-            kwargs: Keyword arguments to pass to the query.
-        """
-        if args and kwargs:
-            raise DatasetError("Please use only args or kwargs, not both.")
-        async with self._pool.connection() as conn:
-            async with conn.cursor() as cur:
-                try:
-                    if args:
-                        await cur.execute(query, args)
-                    else:
-                        await cur.execute(query, kwargs)
-                    await conn.commit()  # TODO check if we want autocommit or not
+            parameters: Parameters to be passed to the query. Defaults to None.
 
-                except Exception as exc:
-                    await conn.rollback()
-                    raise DatasetError(
-                        f"Failed to execute query: {query}"
-                    ) from exc
+        Returns:
+            AsyncCursor: Cursor object for the executed query. Can be used to
+                         fetch results.
+
+        Raises:
+            DatasetError: If the query execution fails for any reason.
+        """
+        async with self._pool.connection() as conn:
+            try:
+                cursor: AsyncCursor = await conn.execute(
+                    query=query, params=parameters
+                )
+                await conn.commit()
+                return cursor
+
+            except Exception as exc:
+                await conn.rollback()
+                raise DatasetError(f"Failed to execute query: {query}") from exc
