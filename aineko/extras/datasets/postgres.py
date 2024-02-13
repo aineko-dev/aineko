@@ -115,7 +115,7 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         self,
         schema: Dict[str, str],
         extra_commands: str = "",
-    ):
+    ) -> None:
         """Create a new postgres table.
 
         Executes the SQL command:
@@ -179,7 +179,7 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
                 return None
             raise e
 
-    async def delete(self, if_exists: bool = False):
+    async def delete(self, if_exists: bool = False) -> None:
         """Drops the table from the Postgres database.
 
         Args:
@@ -194,6 +194,7 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         await self.execute_query(
             sql.SQL(query).format(name=sql.Identifier(self.name)),
         )
+
 
     async def exists(self) -> bool:
         """Queries the database to check if the table exists."""
