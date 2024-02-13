@@ -3,7 +3,7 @@
 """Dataset to connect to PostgreSQL databases."""
 import os
 from types import TracebackType
-from typing import Any, Dict, Mapping, Optional, Sequence, Type, Union
+from typing import Any, Dict, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import boto3
 from mypy_boto3_rds import RDSClient
@@ -163,19 +163,19 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
             sql.SQL(query).format(name=sql.Identifier(self.name)),
         )
 
-    async def exists(self):
+    async def exists(self) -> bool:
         """Queries the database to check if the table exists."""
         async with self._pool.connection() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    """
+                    query="""
                     SELECT EXISTS(
                         SELECT FROM information_schema.tables
                         WHERE table_name = %(name)s);
                     """,
-                    {"name": self.name},
+                    params={"name": self.name},
                 )
-                result = await cur.fetchone()
+                result: Tuple[bool, None] = await cur.fetchone()
                 return result[0]
 
     async def execute_query(
