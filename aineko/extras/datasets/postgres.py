@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Dataset to connect to PostgreSQL databases."""
 import os
-from typing import Dict, Optional, Union
+from types import TracebackType
+from typing import Dict, Optional, Type, Union
 
 import boto3
 from mypy_boto3_rds import RDSClient
@@ -80,16 +81,25 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         self.user = user
         self.password = password
 
-        self._pool = None
+        self._pool: AsyncConnectionPool
 
-    async def connect(self):
-        """Connect to the PostgreSQL database."""
+    async def __aenter__(self) -> "AsyncPostgresDataset":
         self._pool = AsyncConnectionPool(
             f"dbname={self.dbname} user={self.user} password={self.password}"
             f" host={self.host}",
             open=False,
         )
         await self._pool.open()
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
+    ) -> None:
+        if self._pool.closed is False:
+            await self._pool.close()
 
     async def create(
         self,
@@ -192,9 +202,3 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
                     raise DatasetError(
                         f"Failed to execute query: {query}"
                     ) from exc
-
-    async def close(self):
-        """Close the connection to the PostgreSQL database."""
-        if self._pool.closed is False:
-            await self._pool.close()
-            print(f"closed {self._pool.closed}")
