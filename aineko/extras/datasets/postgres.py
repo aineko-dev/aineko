@@ -3,7 +3,17 @@
 """Dataset to connect to PostgreSQL databases."""
 import os
 from types import TracebackType
-from typing import Any, Dict, Mapping, Optional, Sequence, Tuple, Type, Union
+from typing import (
+    Any,
+    Dict,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    Union,
+)
 
 import boto3
 from mypy_boto3_rds import RDSClient
@@ -134,12 +144,17 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         )
         await self.execute_query(query)
 
-    async def read(self, query):
-        raise NotImplementedError("Not yet implemented.")
+    async def read(self, query: Union[str, sql.SQL, sql.Composed]) -> List[Any]:
+        """Performs a read operation on the Postgres database.
 
-    #     # await self.execute_query
-    #     await self.acur.execute(query)
-    #     return self.acur.fetchall()
+        Args:
+            query: SQL query to execute.
+
+        Returns:
+            A list of rows returned by the query.
+        """
+        cursor = await self.execute_query(query=query)
+        return await cursor.fetchall()
 
     async def write(self, query):
         raise NotImplementedError("Not yet implemented.")
