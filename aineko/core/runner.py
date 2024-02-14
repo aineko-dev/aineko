@@ -7,13 +7,13 @@ from typing import Dict, List, Optional
 
 import ray
 
-from aineko import AbstractDataset
 from aineko.config import (
     AINEKO_CONFIG,
     DEFAULT_KAFKA_CONFIG,
     NODE_MANAGER_CONFIG,
 )
 from aineko.core.config_loader import ConfigLoader
+from aineko.core.dataset import AbstractDataset
 from aineko.core.node import PoisonPill
 from aineko.datasets.kafka import TopicParams
 from aineko.models.config_schema import Config

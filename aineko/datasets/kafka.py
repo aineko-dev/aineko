@@ -25,9 +25,12 @@ from confluent_kafka import (  # type: ignore
 from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
 from pydantic import BaseModel
 
-from aineko import AbstractDataset
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
-from aineko.core.dataset import DatasetCreateStatus, DatasetError
+from aineko.core.dataset import (
+    AbstractDataset,
+    DatasetCreateStatus,
+    DatasetError,
+)
 
 logger = logging.getLogger(__name__)
 
