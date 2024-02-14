@@ -122,8 +122,6 @@ class KafkaDataset(AbstractDataset):
 
     `_exists` method checks if the dataset topic exists.
 
-    `_describe` method describes the dataset metadata.
-
     Args:
         name: name of the dataset
         params: dataset configuration parameters
@@ -347,22 +345,6 @@ class KafkaDataset(AbstractDataset):
             callback=self._delivery_report,
         )
         self._producer.flush()
-
-    def _describe(self) -> str:
-        """Describe the dataset metadata.
-
-        Returns:
-            string with dataset metadata
-        """
-        describe_string = super()._describe()
-        kafka_describe = "\n".join(
-            [
-                f"Kafka topic: {self.topic_name}",
-                f"location: {self.location}",
-            ]
-        )
-        describe_string += f"\n{kafka_describe}"
-        return describe_string
 
     def _exists(self) -> bool:
         """Check if the dataset exists.

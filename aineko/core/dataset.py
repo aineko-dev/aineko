@@ -112,7 +112,6 @@ class AbstractDataset(abc.ABC, Generic[T]):
     - `_delete`
     - `_initialize`
     - `_exists`
-    - `_describe`
     ```
 
     Example:
@@ -134,9 +133,6 @@ class AbstractDataset(abc.ABC, Generic[T]):
             pass
 
         def _exists(self, **kwargs) -> bool:
-            pass
-
-        def _describe(self, **kwargs) -> str:
             pass
     ```
 
@@ -161,6 +157,10 @@ class AbstractDataset(abc.ABC, Generic[T]):
     """
 
     name: str
+
+    def __str__(self) -> str:
+        """Return the string representation of the dataset."""
+        return f"{self.__class__.__name__}({self.name})"
 
     @classmethod
     def from_config(
@@ -290,11 +290,6 @@ class AbstractDataset(abc.ABC, Generic[T]):
     def _initialize(self, *args: T, **kwargs: T) -> Any:
         """Subclass implementation to initialize the dataset query layer."""
         raise NotImplementedError
-
-    @abc.abstractmethod
-    def _describe(self, *args: T, **kwargs: T) -> str:
-        """Subclass implementation to describe the dataset metadata."""
-        return f"Dataset name: {self.name}"
 
     @abc.abstractmethod
     def _exists(self, *args: T, **kwargs: T) -> bool:
