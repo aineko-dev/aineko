@@ -10,7 +10,8 @@ import pytest
 import ray
 
 from aineko.config import DEFAULT_KAFKA_CONFIG
-from aineko.core.dataset import AbstractDataset, AbstractNode, Runner
+from aineko.core.dataset import AbstractDataset
+from aineko import AbstractNode, Runner
 from aineko.datasets.kafka import ConsumerParams
 
 MESSAGES = [
@@ -102,30 +103,31 @@ def test_write_read_to_kafka(start_service, subtests):
         try:
             runner.run()
         except ray.exceptions.RayActorError:
-            dataset_name = "messages"
-            dataset_config = {
-                "type": "aineko.datasets.kafka.KafkaDataset",
-                "location": "localhost:9092",
+            # This is expected because we activated the poison pill
+            pass
+
+        dataset_name = "messages"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.KafkaDataset",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_write",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
             }
-            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
-            consumer_params = ConsumerParams(
-                **{
-                    "dataset_name": dataset_name,
-                    "node_name": "consumer",
-                    "pipeline_name": "integration_test_write",
-                    "prefix": None,
-                    "has_pipeline_prefix": True,
-                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
-                        "CONSUMER_CONFIG"
-                    ),
-                }
-            )
-            dataset.initialize(
-                create_consumer=True, connection_params=consumer_params
-            )
-            count_messages = dataset.consume_all(end_message="END")
-            count_values = [msg["message"] for msg in count_messages]
-            assert count_values == MESSAGES
+        )
+        dataset.initialize(
+            create_consumer=True, connection_params=consumer_params
+        )
+        count_messages = dataset.consume_all(end_message="END")
+        count_values = [msg["message"] for msg in count_messages]
+        assert count_values == MESSAGES
 
     with subtests.test("Test reading from Kafka"):
         runner = Runner(
@@ -134,32 +136,31 @@ def test_write_read_to_kafka(start_service, subtests):
         try:
             runner.run()
         except ray.exceptions.RayActorError:
-            dataset_name = "test_result"
-            dataset_config = {
-                "type": "aineko.datasets.kafka.KafkaDataset",
-                "location": "localhost:9092",
+            # This is expected because we activated the poison pill
+            pass
+
+        dataset_name = "test_result"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.KafkaDataset",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_read",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
             }
-            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
-            consumer_params = ConsumerParams(
-                **{
-                    "dataset_name": dataset_name,
-                    "node_name": "consumer",
-                    "pipeline_name": "integration_test_read",
-                    "prefix": None,
-                    "has_pipeline_prefix": True,
-                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
-                        "CONSUMER_CONFIG"
-                    ),
-                }
-            )
-            dataset.initialize(
-                create_consumer=True, connection_params=consumer_params
-            )
-            count_messages = dataset.consume_all(end_message="END")
-            assert (
-                count_messages[0]["source_pipeline"] == "integration_test_read"
-            )
-            assert count_messages[0]["message"] == "TEST PASSED"
+        )
+        dataset.initialize(
+            create_consumer=True, connection_params=consumer_params
+        )
+        count_messages = dataset.consume_all(end_message="END")
+        assert count_messages[0]["source_pipeline"] == "integration_test_read"
+        assert count_messages[0]["message"] == "TEST PASSED"
 
     with subtests.test("Test the consume.last functionality"):
         # Test read last functionality
@@ -179,27 +180,27 @@ def test_missing_location(start_service, subtests):
         try:
             runner.run()
         except ray.exceptions.RayActorError:
-            dataset_name = "messages"
-            dataset_config = {
-                "type": "aineko.datasets.kafka.KafkaDataset",
-                "location": "localhost:9092",
+            # This is expected because we activated the poison pill
+            pass
+        dataset_name = "messages"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.KafkaDataset",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_write",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
             }
-            dataset = AbstractDataset.from_config(dataset_name, dataset_config)
-            consumer_params = ConsumerParams(
-                **{
-                    "dataset_name": dataset_name,
-                    "node_name": "consumer",
-                    "pipeline_name": "integration_test_write",
-                    "prefix": None,
-                    "has_pipeline_prefix": True,
-                    "consumer_config": DEFAULT_KAFKA_CONFIG.get(
-                        "CONSUMER_CONFIG"
-                    ),
-                }
-            )
-            dataset.initialize(
-                create_consumer=True, connection_params=consumer_params
-            )
-            count_messages = dataset.consume_all(end_message="END")
-            count_values = [msg["message"] for msg in count_messages]
-            assert count_values == MESSAGES
+        )
+        dataset.initialize(
+            create_consumer=True, connection_params=consumer_params
+        )
+        count_messages = dataset.consume_all(end_message="END")
+        count_values = [msg["message"] for msg in count_messages]
+        assert count_values == MESSAGES
