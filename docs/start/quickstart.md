@@ -102,7 +102,7 @@ To view messages running in one of the user-defined datasets:
 
 :   
     ```
-    poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
+    poetry run aineko stream test-aineko-pipeline.test_sequence --from-beginning
     ```
     ```{: .optional-language-as-class .no-copy title="Expected output"}
     {"timestamp": "2023-11-10 17:27:20", "dataset": "sequence", "source_pipeline": "test-aineko-pipeline", "source_node": "sequence", "message": 1}
@@ -113,7 +113,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
 
 :   
     ```
-    poetry run aineko stream --dataset logging --from-beginning
+    poetry run aineko stream logging --from-beginning
     ```
     ```{: .optional-language-as-class .no-copy title="Expected output"}
     {"timestamp": "2023-11-10 17:46:15", "dataset": "logging", "source_pipeline": "test-aineko-pipeline", "source_node": "sum", "message": {"log": "Received input: 1. Adding 1...", "level": "info"}}

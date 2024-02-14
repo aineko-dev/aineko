@@ -26,13 +26,13 @@ aineko run ./conf/pipeline.yml
 To view the data flowing in the datasets
 
 ```
-aineko stream --dataset test_sequence
+aineko stream test_sequence
 ```
 
 To view all data in the dataset, from the start
 
 ```
-aineko stream --dataset test_sequence --from-beginning
+aineko stream test_sequence --from-beginning
 ```
 
 
