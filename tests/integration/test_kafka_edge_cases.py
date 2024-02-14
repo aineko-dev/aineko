@@ -14,10 +14,10 @@ from aineko.datasets.kafka import ConsumerParams
 
 
 class ConsumerNode(AbstractNode):
-    """Node that consumes message using different consume methods."""
+    """Node that reads message using different read methods."""
 
     def _execute(self, params: Optional[dict] = None) -> None:
-        """Consumes message."""
+        """Reads message."""
         self.inputs["messages"].read(how="next", block=False)
         self.inputs["messages"].read(how="last", block=False)
         self.outputs["test_result"].write("OK")
@@ -31,7 +31,7 @@ class ConsumerNode(AbstractNode):
 def test_consume_empty_datasets(start_service):
     """Integration test that checks that empty datasets do not cause errors.
 
-    If a dataset is empty, dataset consumer methods should not error out.
+    If a dataset is empty, dataset read methods should not error out.
     """
     runner = Runner(
         pipeline_config_file="tests/conf/integration_test_empty_dataset.yml",

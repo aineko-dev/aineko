@@ -73,7 +73,7 @@ def dummy_node():
         """Dummy node that passes through messages."""
 
         def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
-            """Consumes message from input and outputs it to output."""
+            """Reads message from input and writes it to output."""
             msg = self.inputs["input"].read(how="next", timeout=0)
             self.outputs["output"].write(msg)
 
@@ -115,7 +115,7 @@ def test_sequencer_node():
             if self.num_messages >= params.get("num_messages", 25):
                 return False
 
-            # Write message to producer
+            # Write message to outputs
             self.outputs["integer_sequence"].write(self.cur_integer)
             self.log(f"Produced {self.cur_integer}", level="info")
             self.log("Just a red herring", level="error")
@@ -154,7 +154,7 @@ def test_doubler_node():
             if time.time() - self.cur_time > params.get("duration", 30):
                 return False
 
-            # Read message from consumer
+            # Read message from inputs
             cur_integer = self.inputs["integer_sequence"].next()
 
             # Calculate latency
@@ -176,7 +176,7 @@ def test_doubler_node():
             cur_integer = int(cur_integer["message"])
             self.cur_integer = cur_integer
 
-            # Write message to producer
+            # Write message to outputs
             self.outputs["integer_doubles"].write(cur_integer * 2)
             self.log(f"Produced {cur_integer * 2}", level="info")
 
@@ -196,9 +196,9 @@ def test_internal_value_setter_node():
             self.num_messages = 0
 
         def _execute(self, params: Optional[dict] = None) -> None:
-            """Consumes message from input and sets content to internal value."""
+            """Reads message from input and sets content to internal value."""
 
-            # Read message from consumer
+            # Read message from inputs
             cur_integer = self.inputs["integer_sequence"].read(
                 how="next", timeout=0
             )

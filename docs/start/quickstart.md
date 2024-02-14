@@ -137,7 +137,7 @@ Alternatively, to view logs stored in the built-in `logging` dataset:
     An aineko pipeline is made up of **Dataset(s)** and **Node(s).**
     A Dataset can be thought of as a mailbox. Nodes pass messages to this mailbox, that can be read by many other Nodes.
 
-    A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a producer and/or a consumer of a **Dataset**. (mailbox)
+    A **Node** is an abstraction for some computation, a function if you will. At the same time a **Node** can be a reader and/or a writer of a **Dataset**. (mailbox)
 
     The output means that we have successfully created three datasets - **test\_sequence,** **test\_sum** and **logging**, and that we have created two nodes - **sum** and **sequence**.
 

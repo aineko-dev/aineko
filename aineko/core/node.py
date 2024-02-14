@@ -56,9 +56,10 @@ class AbstractNode(ABC):
     Nodes are the building blocks of the pipeline and are responsible for
     executing the pipeline. Nodes are designed to be modular and can be
     combined to create a pipeline. The node base class provides helper methods
-    for setting up the consumer and producer for a node. The execute method is
-    a wrapper for the _execute method which is to be implemented by subclasses.
-    The _execute method is where the node logic is implemented by the user.
+    for setting up the dataset inputs and outputs for a node. The
+    execute method is a wrapper for the _execute method which is to be
+    implemented by subclasses. The _execute method is where the node logic
+    is implemented by the user.
 
     Attributes:
         name (str): name of the node
@@ -75,7 +76,7 @@ class AbstractNode(ABC):
             pipeline communication without dataset dependency.
 
     Methods:
-        setup_datasets: setup the consumers and producers for a node
+        setup_datasets: setup the dataset query layer for a node
         execute: execute the node, wrapper for _execute method
         _execute: execute the node, to be implemented by subclasses
     """
@@ -110,7 +111,7 @@ class AbstractNode(ABC):
         prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ) -> None:
-        """Setup the consumer and producer for a node.
+        """Setup the dataset inputs and outputs for a node.
 
         Args:
             datasets: dataset configuration
@@ -341,8 +342,8 @@ class AbstractNode(ABC):
         """Execute the node in testing mode, yielding at each iteration.
 
         This method is an alternative to `run_test`. Instead of returning the
-        aggregated output, it yields the most recently consumed value, the
-        produced value and the current node instance at each iteration. This is
+        aggregated output, it yields the most recently read value, the
+        written value and the current node instance at each iteration. This is
         useful for testing nodes that either don't produce any output or if you
         need to test intermediate outputs. Testing state modifications is also
         possible using this method.
@@ -372,7 +373,7 @@ class AbstractNode(ABC):
             last_produced_values = {}
             last_consumed_values = {}
 
-            # Capture last consumed values
+            # Capture last read values
             for dataset_name, input_dataset in self.inputs.items():
                 if input_dataset.input_values:
                     last_value = input_dataset.input_values[0]
@@ -385,7 +386,7 @@ class AbstractNode(ABC):
                 if time.time() - start_time < runtime:
                     continue
 
-            # End loop if all consumers are empty
+            # End loop if all inputs are empty
             if self.inputs and all(
                 input.empty for input in self.inputs.values()
             ):

@@ -4,7 +4,7 @@ Nodes are essentially units of compute that encapsulate any event-driven logic y
 
 ## Implementing a node
 
-To illustrate how a node should be constructed, we will go through an example of a simple node that consumes a number from an input dataset, increments it by 1, then produces it to an output dataset.
+To illustrate how a node should be constructed, we will go through an example of a simple node that reads a number from an input dataset, increments it by 1, then writes it to an output dataset.
 
 ```python title="sum_node.py"
 from aineko.core.node import AbstractNode
@@ -17,12 +17,12 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].next()
+        msg = self.inputs["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )
         self.state = int(msg["message"]) + int(params["increment"])
-        self.producers["test_sum"].produce(self.state)
+        self.outputs["test_sum"].write(self.state)
 ```
 
 ### `_pre_loop_hook`
@@ -40,12 +40,12 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].next()
+        msg = self.inputs["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )
         self.state = int(msg["message"]) + int(params["increment"])
-        self.producers["test_sum"].produce(self.state)
+        self.outputs["test_sum"].write(self.state)
 ```
 
 ### `_execute`
@@ -63,20 +63,20 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].next()
+        msg = self.inputs["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )
         self.state = int(msg["message"]) + int(params["increment"])
-        self.producers["test_sum"].produce(self.state)
+        self.outputs["test_sum"].write(self.state)
 ```
 
 A node will only terminate when the entire pipeline goes down or when the [poison pill](#poison-pill) is activated. 
 
 
-### Producers & consumers
+### Inputs & Outputs
 
-Node classes inherit attributes named `self.producers` and `self.consumers` that are each a dictionary, with keys being the dataset name and values being `DatasetProducer` and `DatasetConsumer` objects respectively. These objects allow you to produce/consume data to/from a dataset.
+Node classes inherit attributes named `self.inputs` and `self.outputs` that are each a dictionary, with keys being the dataset name and values being subclasses of `AbstractDataset`. These objects allow you to read/write data to/from a dataset.
 
 This is an example of typical usage within a node:
 
@@ -91,78 +91,78 @@ class MySumNode(AbstractNode):
 
     def _execute(self, params=None):
         """Required; function repeatedly executes."""
-        msg = self.consumers["test_sequence"].next()
+        msg = self.inputs["test_sequence"].next()
         self.log(
             f"Received input: {msg['message']}. Adding {params['increment']}..."
         )
         self.state = int(msg["message"]) + int(params["increment"])
-        self.producers["test_sum"].produce(self.state)
+        self.outputs["test_sum"].write(self.state)
 ```
 
 
-!!! warning "Producers and Consumers must be included in the pipeline configuration"
+!!! warning "Inputs and Outputs must be included in the pipeline configuration"
     They must be defined in the `outputs` and `inputs` list respectively to be available to the node. If a dataset is not available in a Node's catalog, a `KeyError` will be raised.
 
-A node can produce to a dataset, consume from a dataset, or both. Nodes that consume are triggered to action by the arrival of new data in the dataset they consume from.
+A node can write to a dataset, read from a dataset, or both. Nodes that read are triggered to action by the arrival of new data in the dataset they read from.
 
 !!! info "Examples on possible ways to connect nodes with datasets"
 
-    === "Produce only"
+    === "Write only"
 
-        This node only produces to two datasets, and acts like a source for datasets:
+        This node only writes to two datasets, and acts like a source for datasets:
 
         ```mermaid
         flowchart LR
         classDef datasetClass fill:#87CEEB
         classDef nodeClass fill:#eba487
-        N_node_producer_only((node_producer_only)):::nodeClass -->  T_produced_dataset_1[produced_dataset_1]:::datasetClass
-        N_node_producer_only((node_producer_only)):::nodeClass -->  T_produced_dataset_2[produced_dataset_2]:::datasetClass
+        N_node_producer_only((node_writer_only)):::nodeClass -->  T_produced_dataset_1[written_dataset_1]:::datasetClass
+        N_node_producer_only((node_writer_only)):::nodeClass -->  T_produced_dataset_2[written_dataset_2]:::datasetClass
         ```
 
-    === "Consume only"
+    === "Read only"
 
-        This node only consumes from two datasets, and acts like a sink for datasets:
+        This node only reads from two datasets, and acts like a sink for datasets:
         ```mermaid
         flowchart LR
         classDef datasetClass fill:#87CEEB
         classDef nodeClass fill:#eba487
-        T_consumed_dataset_1[consumed_dataset_1]:::datasetClass -->  N_node_consumer_only((node_consumer_only)):::nodeClass
-        T_consumed_dataset_2[consumed_dataset_2]:::datasetClass -->  N_node_consumer_only((node_consumer_only)):::nodeClass
+        T_read_dataset_1[read_dataset_1]:::datasetClass -->  N_node_consumer_only((node_reader_only)):::nodeClass
+        T_consumed_dataset_2[read_dataset_2]:::datasetClass -->  N_node_consumer_only((node_reader_only)):::nodeClass
         ```
 
-    === "Consume and Produce"
+    === "Read and Write"
 
-        A node that both consumes and produces datasets acts like a transformer for datasets. The consumed datasets are the inputs to the transformer, and the produced datasets are the outputs of the transformer:
+        A node that both reads and writes datasets acts like a transformer for datasets. The read datasets are the inputs to the transformer, and the written datasets are the outputs of the transformer:
         ```mermaid
         flowchart LR
         classDef datasetClass fill:#87CEEB
         classDef nodeClass fill:#eba487
-        T_consumed_dataset[consumed_dataset]:::datasetClass -->  N_node_transformer((node_transformer)):::nodeClass
-        N_node_transformer((node_transformer)):::nodeClass -->  T_produced_dataset[produced_dataset]:::datasetClass
+        T_consumed_dataset[read_dataset]:::datasetClass -->  N_node_transformer((node_transformer)):::nodeClass
+        N_node_transformer((node_transformer)):::nodeClass -->  T_produced_dataset[written_dataset]:::datasetClass
         ```
         
-#### Consume Methods
+#### Read Methods for Kafka Dataset
 
-Depending on the architecture of the node, there are several methods of consuming from a consumer. The available methods are listed below.
+Depending on the architecture of the node, there are several methods of reading from a dataset. The available methods are listed below.
 
-The most common case is to wait till a new message arrives, then consume it immediately. The best way to do this is:
+The most common case is to wait till a new message arrives, then read it immediately. The best way to do this is:
 :   
     ```python title="Waiting for the next available message"
-    self.consumers["dataset"].next()
+    self.inputs["dataset"].next()
     ```
 
-In some cases, data is being produced faster than it can be consumed, and we just want the freshest, most recent message each time. To do this:
+In some cases, data is being written faster than it can be read, and we just want the freshest, most recent message each time. To do this:
 
 :   
     ```python title="Getting the most recent message"
-    self.consumers["dataset"].last(timeout=1)
+    self.inputs["dataset"].last(timeout=1)
     ```
 
-In cases where you might require more low-level control over consumption patterns, such as consuming from multiple datasets in the same node, the low-level `consume` method can be used.
+In cases where you might require more low-level control over reading patterns, such as reading from multiple datasets in the same node, the low-level `read` method can be used for the Kafka Dataset.
 
 :   
     ```python title="More fine-tune control"
-    self.consumers["dataset"].consume(how="next", timeout=1)
+    self.inputs["dataset"].read(how="next", timeout=1)
     ```
 
 The timeout argument in these methods signify the duration in which the method has to return a message otherwise it will re-poll for a new one.

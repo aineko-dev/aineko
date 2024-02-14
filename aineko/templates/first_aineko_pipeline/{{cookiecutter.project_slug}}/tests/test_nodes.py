@@ -16,8 +16,8 @@ def test_mynode():
     mynode.setup_test(
         inputs={
             "test_sequence": [1, 2, 3]
-        },  # input a list of elements to be consumed
-        outputs=["test_sum"],  # list of dataset names that are produced to
+        },  # input a list of elements to be read
+        outputs=["test_sum"],  # list of dataset names that are written to
         params={"initial_state": 0, "increment": 1},
     )
     outputs = mynode.run_test()

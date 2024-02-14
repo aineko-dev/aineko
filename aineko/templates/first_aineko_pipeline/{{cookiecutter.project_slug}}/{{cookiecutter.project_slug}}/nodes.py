@@ -18,8 +18,8 @@ class MySequencerNode(AbstractNode):
     def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
         """Required; function repeatedly executes.
 
-        Accesses inputs via `self.consumer`, and outputs via
-        `self.producer`.
+        Accesses inputs via `self.inputs`, and outputs via
+        `self.outputs`.
         Logs can be sent via the `self.log` method.
         """
         self.current_val += params.get("increment", 1)
@@ -50,8 +50,8 @@ class MySumNode(AbstractNode):
     def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
         """Required; function repeatedly executes.
 
-        Accesses inputs via `self.consumer`, and outputs via
-        `self.producer`.
+        Accesses inputs via `self.inputs`, and outputs via
+        `self.outputs`.
         Logs can be sent via the `self.log` method.
         """
         msg = self.inputs["test_sequence"].read(how="next")

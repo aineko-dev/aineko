@@ -25,7 +25,7 @@ MESSAGES = [
 
 
 class MessageWriter(AbstractNode):
-    """Node that produces messages every 0.1 second."""
+    """Node that writes messages every 0.1 second."""
 
     def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
         self.messages = MESSAGES
@@ -88,8 +88,8 @@ def test_write_read_to_kafka(start_service, subtests):
     of the poison pill function take down the pipeline once
     all messages are sent.
 
-    Next, create a consumer to read all messages directly from the
-    kafka topic and check that the messages match what was sent.
+    Next, create a dataset query layer to read all messages directly
+    from the kafka topic and check that the messages match what was sent.
 
     Then test node reading functionality by setting up a new pipeline
     that reads from the created dataset and checks that the messages
@@ -162,7 +162,7 @@ def test_write_read_to_kafka(start_service, subtests):
             assert count_messages[0]["message"] == "TEST PASSED"
 
     with subtests.test("Test the consume.last functionality"):
-        # Test consume.last functionality
+        # Test read last functionality
         last_message = dataset.last(timeout=10)
         assert last_message["message"] == "END"
 

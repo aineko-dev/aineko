@@ -47,14 +47,14 @@ A node requires:
 
 **`_pre_loop_hook` (optional)** is used to initialize the node's state before it starts to process data from the dataset.
 
-**`_execute`** is the main logic that run recurrently. As of writing, user should explicitly produce and consume within this method like so:
+**`_execute`** is the main logic that run recurrently. As of writing, user should explicitly read and write within this method like so:
 
 ```python
 def _execute(self, params: Optional[dict] = None):
     """This node takes an input number and increments it by 1."""
-    input_number = self.consumers["my_input_dataset"].next()
+    input_number = self.inputs["my_input_dataset"].next()
     # if we want the most recent message, we can use .last()
     output_number = input_number + 1
-    self.producers["my_output_dataset"].produce(output_number)
+    self.outputs["my_output_dataset"].write(output_number)
     
 ```
