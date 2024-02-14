@@ -115,7 +115,7 @@ Here we add 2 evaluation steps and an evaluation model:
 
 * The `PythonEvaluation` node validates that the LLM proposes valid Python code.
 * The `SecurityEvaluation` node runs checks using Bandit to ensure that the Python code that is proposed doesn’t contain any known security concerns.
-* The `EvaluationModel` node consumes evaluation results and decides wether to generate another prompt or submit the final result to the API server. It keeps track of the evaluation results and the number of times we query the LLM.
+* The `EvaluationModel` node reads evaluation results and decides whether to generate another prompt or submit the final result to the API server. It keeps track of the evaluation results and the number of times we query the LLM.
 
 ## Pipeline configuration
 
@@ -231,7 +231,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
             def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
                 """Update document in response to commit events."""
                 # Check for new commit events from GitHub
-                message = self.consumers["github_event"].consume()
+                message = self.inputs["github_event"].read()
                 if message is None:
                     return
 
@@ -244,7 +244,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
                 repo = self.github_client.get_repo(f"{self.organization}/{self.repo}")
                 contents = repo.get_contents(self.file_path, ref=self.branch)
                 github_contents = {f.path: f.decoded_content.decode("utf-8") for f in contents}
-                self.producers["document"].produce(github_contents)
+                self.outputs["document"].write(github_contents)
                 self.log(
                     f"Fetched documents for {self.organization}/{self.repo} branch {self.branch}"
                 )
@@ -265,7 +265,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
 
             def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
                 """Query OpenAI LLM."""
-                message = self.consumers["generated_prompt"].consume()
+                message = self.inputs["generated_prompt"].read()
                 if message is None:
                     return
                 messages = message["message"]["chat_messages"]
@@ -284,7 +284,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
                         "content": response.choices[0].message.content,
                     }
                 )
-                self.producers["llm_response"].produce(
+                self.outputs["llm_response"].write(
                     message["message"]["chat_messages"]
                 )
         ```
@@ -297,7 +297,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
 
             def _execute(self, params: Optional[dict] = None) -> None:
                 """Evaluate Python code."""
-                message = self.consumers["llm_response"].consume()
+                message = self.inputs["llm_response"].read()
                 if message is None:
                     return
 
@@ -323,7 +323,7 @@ The `SecurityEvaluation` node takes the LLM response and creates a temporary fil
                 os.remove(tmpfile.name)
 
                 if results:
-                    self.producers["evaluation_result"].produce(results)
+                    self.output["evaluation_result"].write(results)
         ```
 
 
