@@ -182,116 +182,32 @@ class AbstractDataset(abc.ABC, Generic[T]):
         class_instance.name = name
         return class_instance
 
-    def read(self, *args: T, **kwargs: T) -> Any:
-        """Read the dataset via the query layer.
-
-        Raises:
-            DatasetError: If the read operation fails.
-        """
-        try:
-            return self._read(*args, **kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to read dataset {self.name}."
-            raise DatasetError(message) from e
-
-    def write(self, *args: T, **kwargs: T) -> Any:
-        """Write to the dataset via the query layer.
-
-        Raises:
-            DatasetError: If the write operation fails.
-        """
-        try:
-            return self._write(*args, **kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to write dataset {self.name}."
-            raise DatasetError(message) from e
-
-    def create(self, *args: T, **kwargs: T) -> Any:
-        """Create the dataset storage layer.
-
-        Raises:
-            DatasetError: If the create operation fails.
-        """
-        try:
-            return self._create(*args, **kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to create dataset {self.name}."
-            raise DatasetError(message) from e
-
-    def delete(self, *args: T, **kwargs: T) -> Any:
-        """Delete the dataset storage layer.
-
-        Raises:
-            DatasetError: If the delete operation fails.
-        """
-        try:
-            return self._delete(*args, **kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to delete dataset {self.name}."
-            raise DatasetError(message) from e
-
-    def exists(self, *args: T, **kwargs: T) -> Any:
-        """Check if the dataset storage layer exists.
-
-        Raises:
-            DatasetError: If the exists operation fails.
-        """
-        try:
-            return self._exists(*args, **kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to check if dataset {self.name} exists."
-            raise DatasetError(message) from e
-
-    def initialize(self, *args: T, **kwargs: T) -> Any:
-        """Initialize the dataset query layer.
-
-        Raises:
-            DatasetError: If the initialize operation fails.
-        """
-        try:
-            return self._initialize(*args, **kwargs)
-        except DatasetError:
-            raise
-        except Exception as e:
-            message = f"Failed to initialize dataset {self.name}."
-            raise DatasetError(message) from e
-
     @abc.abstractmethod
-    def _read(self, *args: T, **kwargs: T) -> Any:
+    def read(self, *args: T, **kwargs: T) -> Any:
         """Subclass implementation to read the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _write(self, *args: T, **kwargs: T) -> Any:
+    def write(self, *args: T, **kwargs: T) -> Any:
         """Subclass implementation to write the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _create(self, *args: T, **kwargs: T) -> Any:
+    def create(self, *args: T, **kwargs: T) -> Any:
         """Subclass implementation to create the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _delete(self, *args: T, **kwargs: T) -> Any:
+    def delete(self, *args: T, **kwargs: T) -> Any:
         """Subclass implementation to delete the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _initialize(self, *args: T, **kwargs: T) -> Any:
+    def initialize(self, *args: T, **kwargs: T) -> Any:
         """Subclass implementation to initialize the dataset query layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _exists(self, *args: T, **kwargs: T) -> bool:
+    def exists(self, *args: T, **kwargs: T) -> bool:
         """Subclass implementation to check if the dataset exists."""
         raise NotImplementedError

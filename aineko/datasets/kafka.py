@@ -166,7 +166,7 @@ class KafkaDataset(AbstractDataset):
         self._producer: Producer
         self._create_admin_client()
 
-    def _create(
+    def create(
         self,
         topic_params: TopicParams = TopicParams(),
     ) -> DatasetCreateStatus:
@@ -182,7 +182,7 @@ class KafkaDataset(AbstractDataset):
             dataset_name=self.name, topic_params=topic_params
         )
 
-    def _initialize(
+    def initialize(
         self,
         connection_params: Union[ConsumerParams, ProducerParams],
         create_consumer: bool = False,
@@ -250,7 +250,7 @@ class KafkaDataset(AbstractDataset):
             "to True in `_initialize` method."
         )
 
-    def _delete(self) -> None:
+    def delete(self) -> None:
         """Delete the dataset topic from the Kafka cluster.
 
         Raises:
@@ -263,7 +263,7 @@ class KafkaDataset(AbstractDataset):
                 f"Error deleting topic {self.topic_name}: {str(err)}"
             ) from err
 
-    def _read(
+    def read(
         self,
         how: Literal["next", "last"],
         timeout: Optional[float] = None,
@@ -316,7 +316,7 @@ class KafkaDataset(AbstractDataset):
                     f"Error occurred while reading topic: {str(err)}"
                 ) from err
 
-    def _write(self, msg: Dict, key: Optional[str] = None) -> None:
+    def write(self, msg: Dict, key: Optional[str] = None) -> None:
         """Produce a message to the dataset.
 
         Args:
@@ -349,7 +349,7 @@ class KafkaDataset(AbstractDataset):
         )
         self._producer.flush()
 
-    def _exists(self) -> bool:
+    def exists(self) -> bool:
         """Check if the dataset exists.
 
         Returns:
