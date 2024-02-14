@@ -100,7 +100,7 @@ Supercharge your development by using pre-built nodes directly in your pipeline.
 
 - [`AbstractNode`](./api_reference/abstract_node.md)
 - [`AbstractDataset`](./api_reference/abstract_dataset.md)
-- [`Kafka`](./api_reference/kafka_dataset.md)
+- [`KafkaDataset`](./api_reference/kafka_dataset.md)
 - [`Config`](./api_reference/config.md)
 - [`ConfigLoader`](./api_reference/config_loader.md)
 - [`Runner`](./api_reference/runner.md)

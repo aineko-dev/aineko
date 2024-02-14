@@ -76,7 +76,7 @@ A node will only terminate when the entire pipeline goes down or when the [poiso
 
 ### Inputs & Outputs
 
-Node classes inherit attributes named `self.inputs` and `self.outputs` that are each a dictionary, with keys being the dataset name and values being subclasses of `AbstractDataset`. These objects allow you to read/write data to/from a dataset.
+Node classes inherit attributes named `self.inputs` and `self.outputs` that are each a dictionary, with keys being the dataset name and values being subclasses of `AbstractDataset`. These objects allow you to read/write data from/to a dataset.
 
 This is an example of typical usage within a node:
 
@@ -101,7 +101,7 @@ class MySumNode(AbstractNode):
 
 
 !!! warning "Inputs and Outputs must be included in the pipeline configuration"
-    They must be defined in the `outputs` and `inputs` list respectively to be available to the node. If a dataset is not available in a Node's catalog, a `KeyError` will be raised.
+    They must be defined in the `inputs` and `outputs` list respectively to be available to the node. If a dataset is not available in a Node's catalog, a `KeyError` will be raised.
 
 A node can write to a dataset, read from a dataset, or both. Nodes that read are triggered to action by the arrival of new data in the dataset they read from.
 
