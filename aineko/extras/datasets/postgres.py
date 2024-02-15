@@ -3,21 +3,12 @@
 """Dataset to connect to PostgreSQL databases."""
 import os
 from types import TracebackType
-from typing import (
-    Any,
-    Dict,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    Union,
-)
+from typing import Any, Dict, List, Optional, Tuple, Type
 
 import boto3
 from mypy_boto3_rds import RDSClient
 from psycopg import AsyncCursor, errors, rows, sql
+from psycopg.abc import Params, Query
 from psycopg_pool import AsyncConnectionPool
 
 from aineko.core.dataset import AsyncAbstractDataset, DatasetError
@@ -163,7 +154,7 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         )
         await self.execute_query(query)
 
-    async def read(self, query: Union[str, sql.SQL, sql.Composed]) -> List[Any]:
+    async def read(self, query: Query) -> List[Any]:
         """Performs a read operation on the Postgres database.
 
         Args:
@@ -177,8 +168,8 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
 
     async def write(
         self,
-        query: Union[str, sql.SQL, sql.Composed],
-        parameters: Optional[Union[Sequence[Any], Mapping[str, Any]]] = None,
+        query: Query,
+        parameters: Optional[Params] = None,
     ) -> Optional[List]:
         """Performs a write operation on the Postgres database.
 
@@ -231,8 +222,8 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
 
     async def execute_query(
         self,
-        query: Union[str, sql.SQL, sql.Composed],
-        parameters: Optional[Union[Sequence[Any], Mapping[str, Any]]] = None,
+        query: Query,
+        parameters: Optional[Params] = None,
     ) -> AsyncCursor[rows.TupleRow]:
         """Handles execution of PostgreSQL queries.
 
@@ -254,7 +245,6 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
                 )
                 await conn.commit()
                 return cursor
-
             except Exception as exc:
                 await conn.rollback()
                 raise DatasetError(f"Failed to execute query: {query}") from exc
