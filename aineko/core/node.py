@@ -157,7 +157,7 @@ class AbstractNode(ABC):
                     }
                 )
                 self.inputs[dataset_name].initialize(
-                    create_consumer=True, connection_params=consumer_params
+                    create="consumer", connection_params=consumer_params
                 )
         for dataset_name in outputs:
             if self.outputs[dataset_name].type == "kafka":
@@ -174,7 +174,7 @@ class AbstractNode(ABC):
                     }
                 )
                 self.outputs[dataset_name].initialize(
-                    create_producer=True, connection_params=producer_params
+                    create="producer", connection_params=producer_params
                 )
 
     def setup_test(

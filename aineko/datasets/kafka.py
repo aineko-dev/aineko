@@ -53,14 +53,10 @@ class KafkaCredentials(BaseModel):
     sasl_plain_password: Optional[str] = None
 
 
-class ConsumerParams(BaseModel):
-    """Parameters for initializing a Kafka Consumer.
+class KafkaParams(BaseModel):
+    """Base class for query layer params for KafkaDataset.
 
-    Passed in as connection_params when calling
-        ```python
-        self.initialize(create_consumer=True,
-                      connection_params=ConsumerParams(...))
-        ```
+    Used to initialize a Kafka Consumer or Producer.
     """
 
     dataset_name: str
@@ -68,26 +64,33 @@ class ConsumerParams(BaseModel):
     pipeline_name: str
     prefix: Optional[str] = None
     has_pipeline_prefix: bool
+
+
+class ConsumerParams(KafkaParams):
+    """Parameters for initializing a Kafka Consumer.
+
+    Passed in as connection_params when calling
+        ```python
+        self.initialize(create="consumer",
+                      connection_params=ConsumerParams(...))
+        ```
+    """
+
     consumer_config: Dict[str, Any] = DEFAULT_KAFKA_CONFIG.get(
         "CONSUMER_CONFIG"
     )
 
 
-class ProducerParams(BaseModel):
+class ProducerParams(KafkaParams):
     """Parameters for initializing a Kafka Producer.
 
     Passed in as conection_params when calling
         ```python
-        self.initialize(create_producer=True,
+        self.initialize(create="producer",
                       connection_params=ProducerParams(...))
         ```
     """
 
-    dataset_name: str
-    node_name: str
-    pipeline_name: str
-    prefix: Optional[str] = None
-    has_pipeline_prefix: bool
     producer_config: Dict[str, Any] = DEFAULT_KAFKA_CONFIG.get(
         "PRODUCER_CONFIG"
     )
@@ -185,41 +188,32 @@ class KafkaDataset(AbstractDataset):
     def initialize(
         self,
         connection_params: Union[ConsumerParams, ProducerParams],
-        create_consumer: bool = False,
-        create_producer: bool = False,
+        create: Literal["consumer", "producer"],
     ) -> None:
         """Create query layer reader or writer for the dataset.
 
         This method can be called in 2 different ways:
 
-            1. `self.initialize(create_consumer=True,
+            1. `self.initialize(create="consumer",
             connection_params=ConsumerParams(...))`:
                 creates a Kafka Consumer and subscribes to the
                 dataset topic.
 
-            2. `self.initialize(create_producer=True,
+            2. `self.initialize(create="producer",
             connection_params=ProducerParams(...)`:
                 creates a Kafka Producer.
 
-        Only one of the two create_ options can be set to True at a time.
-        Each option also uses a different set of connection_params.
-
         Args:
-            create_consumer: create a Kafka Consumer and subscribe to the
-                dataset topic
-            create_producer: create a Kafka Producer
+            create: if "consumer", create a Kafka Consumer and
+                subscribe to the dataset topic. If "producer",
+                create a Kafka Producer
             connection_params: connection parameters for the dataset
 
         Raises:
             KafkaDatasetError: if an error occurs while creating the consumer
                 or producer
         """
-        if create_consumer and create_producer:
-            raise KafkaDatasetError(
-                "Cannot set both `create_consumer` and `create_producer`"
-                "to True in `initialize` method."
-            )
-        if create_consumer:
+        if create == "consumer":
             try:
                 if not isinstance(connection_params, ConsumerParams):
                     raise KafkaDatasetError(
@@ -232,7 +226,7 @@ class KafkaDataset(AbstractDataset):
                     f"Error creating consumer for {self.topic_name}: {str(err)}"
                 ) from err
             return
-        if create_producer:
+        elif create == "producer":
             try:
                 if not isinstance(connection_params, ProducerParams):
                     raise KafkaDatasetError(
@@ -245,10 +239,6 @@ class KafkaDataset(AbstractDataset):
                     f"Error creating producer for {self.topic_name}: {str(err)}"
                 ) from err
             return
-        raise KafkaDatasetError(
-            "Must set either `create_consumer` or `create_producer`"
-            "to True in `initialize` method."
-        )
 
     def delete(self) -> None:
         """Delete the dataset topic from the Kafka cluster.

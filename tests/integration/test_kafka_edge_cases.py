@@ -59,6 +59,6 @@ def test_consume_empty_datasets(start_service):
             "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
         }
     )
-    dataset.initialize(create_consumer=True, connection_params=consumer_params)
+    dataset.initialize(create="consumer", connection_params=consumer_params)
     count_messages = dataset.consume_all(end_message="END")
     assert count_messages[0]["message"] == "OK"
