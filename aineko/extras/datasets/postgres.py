@@ -94,6 +94,16 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         self._pool: AsyncConnectionPool
 
     async def __aenter__(self) -> "AsyncPostgresDataset":
+        """Asynchronous context manager entry point for AsyncPostgresDataset.
+
+        This method is automatically called when the 'async with' statement is
+        used with an instance of AsyncPostgresDataset. It initializes an
+        asynchronous connection pool to the PostgreSQL database and opens the
+        connection.
+
+        Returns:
+            An instance of AsyncPostgresDataset with an open connection pool.
+        """
         self._pool = AsyncConnectionPool(
             f"dbname={self.dbname} user={self.user} password={self.password}"
             f" host={self.host}",
@@ -108,6 +118,11 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         exc_value: Optional[BaseException] = None,
         traceback: Optional[TracebackType] = None,
     ) -> None:
+        """Asynchronous context manager exit point for AsyncPostgresDataset.
+
+        This method is automatically called when the 'async with' statement is
+        exited. It closes the connection pool to the PostgreSQL database.
+        """
         if self._pool.closed is False:
             await self._pool.close()
 
