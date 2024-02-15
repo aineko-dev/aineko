@@ -251,4 +251,6 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
                 return cursor
             except Exception as exc:
                 await conn.rollback()
-                raise DatasetError(f"Failed to execute query: {query}") from exc
+                raise DatasetError(
+                    f"Failed to execute query: {query!r}"
+                ) from exc
