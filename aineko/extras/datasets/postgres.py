@@ -206,19 +206,23 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         )
 
     async def exists(self) -> bool:
-        """Queries the database to check if the table exists."""
-        async with self._pool.connection() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(
-                    query="""
+        """Queries the database to check if the table exists.
+
+        Returns:
+            True if the table exists, False otherwise.
+        """
+        cursor = await self.execute_query(
+            query="""
                     SELECT EXISTS(
                         SELECT FROM information_schema.tables
                         WHERE table_name = %(name)s);
                     """,
-                    params={"name": self.name},
-                )
-                result: Tuple[bool, None] = await cur.fetchone()
-                return result[0]
+            parameters={"name": self.name},
+        )
+        result = await cursor.fetchone()
+        if result:
+            return bool(result[0])
+        return False
 
     async def execute_query(
         self,
