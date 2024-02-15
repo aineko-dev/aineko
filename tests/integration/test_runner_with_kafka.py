@@ -9,7 +9,10 @@ from typing import Optional
 import pytest
 import ray
 
-from aineko import AbstractNode, DatasetConsumer, Runner
+from aineko import AbstractNode, Runner
+from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.core.dataset import AbstractDataset
+from aineko.datasets.kafka import ConsumerParams
 
 MESSAGES = [
     0,
@@ -23,7 +26,7 @@ MESSAGES = [
 
 
 class MessageWriter(AbstractNode):
-    """Node that produces messages every 0.1 second."""
+    """Node that writes messages every 0.1 second."""
 
     def _pre_loop_hook(self, params: Optional[dict] = None) -> None:
         self.messages = MESSAGES
@@ -31,10 +34,10 @@ class MessageWriter(AbstractNode):
     def _execute(self, params: Optional[dict] = None) -> None:
         """Sends message."""
         if len(self.messages) > 0:
-            self.producers["messages"].produce(self.messages.pop(0))
+            self.outputs["messages"].write(self.messages.pop(0))
             time.sleep(0.1)
         else:
-            self.producers["messages"].produce("END")
+            self.outputs["messages"].write("END")
             return False
 
     def _post_loop_hook(self, params: Optional[dict] = None) -> None:
@@ -54,10 +57,8 @@ class MessageReader(AbstractNode):
 
     def _execute(self, params: Optional[dict] = None) -> None:
         """Read message"""
-        msg = self.consumers["messages"].next()
+        msg = self.inputs["messages"].next()
         if time.time() - self.last_updated > self.timeout:
-            print(f"Received messages: {self.received}")
-            print(self.consumers["messages"].topic_name)
             raise TimeoutError("Timed out waiting for messages.")
 
         if not msg:
@@ -75,8 +76,8 @@ class MessageReader(AbstractNode):
                 "Failed to read expected messages."
                 f"Expected: {self.messages}, Received: {self.received}"
             )
-        self.producers["test_result"].produce("TEST PASSED")
-        self.producers["test_result"].produce("END")
+        self.outputs["test_result"].write("TEST PASSED")
+        self.outputs["test_result"].write("END")
         self.activate_poison_pill()
 
 
@@ -88,8 +89,8 @@ def test_write_read_to_kafka(start_service, subtests):
     of the poison pill function take down the pipeline once
     all messages are sent.
 
-    Next, create a consumer to read all messages directly from the
-    kafka topic and check that the messages match what was sent.
+    Next, create a dataset query layer to read all messages directly
+    from the kafka topic and check that the messages match what was sent.
 
     Then test node reading functionality by setting up a new pipeline
     that reads from the created dataset and checks that the messages
@@ -105,14 +106,24 @@ def test_write_read_to_kafka(start_service, subtests):
             # This is expected because we activated the poison pill
             pass
 
-        consumer = DatasetConsumer(
-            dataset_name="messages",
-            node_name="consumer",
-            pipeline_name="integration_test_write",
-            dataset_config={},
-            has_pipeline_prefix=True,
+        dataset_name = "messages"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.KafkaDataset",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_write",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+            }
         )
-        count_messages = consumer.consume_all(end_message="END")
+        dataset.initialize(create="consumer", connection_params=consumer_params)
+        count_messages = dataset.consume_all(end_message="END")
         count_values = [msg["message"] for msg in count_messages]
         assert count_values == MESSAGES
 
@@ -126,18 +137,64 @@ def test_write_read_to_kafka(start_service, subtests):
             # This is expected because we activated the poison pill
             pass
 
-        consumer = DatasetConsumer(
-            dataset_name="test_result",
-            node_name="consumer",
-            pipeline_name="integration_test_read",
-            dataset_config={},
-            has_pipeline_prefix=True,
+        dataset_name = "test_result"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.KafkaDataset",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_read",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+            }
         )
-        count_messages = consumer.consume_all(end_message="END")
+        dataset.initialize(create="consumer", connection_params=consumer_params)
+        count_messages = dataset.consume_all(end_message="END")
         assert count_messages[0]["source_pipeline"] == "integration_test_read"
         assert count_messages[0]["message"] == "TEST PASSED"
 
     with subtests.test("Test the consume.last functionality"):
-        # Test consume.last functionality
-        last_message = consumer.last(timeout=10)
+        # Test read last functionality
+        last_message = dataset.last(timeout=10)
         assert last_message["message"] == "END"
+
+
+@pytest.mark.integration
+def test_missing_location(start_service, subtests):
+    """Integration test to check that `location` can be missing from config."""
+    with subtests.test(
+        "Test writing to Kafka with missing location in config."
+    ):
+        runner = Runner(
+            pipeline_config_file="tests/conf/integration_test_no_location_config.yml",
+        )
+        try:
+            runner.run()
+        except ray.exceptions.RayActorError:
+            # This is expected because we activated the poison pill
+            pass
+        dataset_name = "messages"
+        dataset_config = {
+            "type": "aineko.datasets.kafka.KafkaDataset",
+            "location": "localhost:9092",
+        }
+        dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+        consumer_params = ConsumerParams(
+            **{
+                "dataset_name": dataset_name,
+                "node_name": "consumer",
+                "pipeline_name": "integration_test_write",
+                "prefix": None,
+                "has_pipeline_prefix": True,
+                "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+            }
+        )
+        dataset.initialize(create="consumer", connection_params=consumer_params)
+        count_messages = dataset.consume_all(end_message="END")
+        count_values = [msg["message"] for msg in count_messages]
+        assert count_values == MESSAGES

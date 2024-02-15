@@ -1,7 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 pipeline:
-  name: integration_test_read
+  name: integration_test_write
 
   default_node_settings:
     num_cpus: 0.5
@@ -11,17 +11,7 @@ pipeline:
       class: tests.integration.test_runner_with_kafka.MessageWriter
       outputs:
         - messages
-    read:
-      class: tests.integration.test_runner_with_kafka.MessageReader
-      inputs:
-        - messages
-      outputs:
-        - test_result
 
   datasets:
     messages:
       type: aineko.datasets.kafka.KafkaDataset
-      location: localhost:9092
-    test_result:
-      type: aineko.datasets.kafka.KafkaDataset
-      location: localhost:9092

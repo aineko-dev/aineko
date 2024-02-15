@@ -8,18 +8,21 @@ from typing import Optional
 import pytest
 import ray
 
-from aineko import AbstractNode, DatasetConsumer, Runner
+from aineko import AbstractNode, Runner
+from aineko.config import DEFAULT_KAFKA_CONFIG
+from aineko.core.dataset import AbstractDataset
+from aineko.datasets.kafka import ConsumerParams
 
 
 class ConsumerNode(AbstractNode):
-    """Node that consumes message using different consume methods."""
+    """Node that reads message using different read methods."""
 
     def _execute(self, params: Optional[dict] = None) -> None:
-        """Consumes message."""
-        self.consumers["messages"].consume(how="next")
-        self.consumers["messages"].consume(how="last", timeout=1)
-        self.producers["test_result"].produce("OK")
-        self.producers["test_result"].produce("END")
+        """Reads message."""
+        self.inputs["messages"].read(how="next", block=False)
+        self.inputs["messages"].read(how="last", block=False)
+        self.outputs["test_result"].write("OK")
+        self.outputs["test_result"].write("END")
         time.sleep(1)
         self.activate_poison_pill()
         return False
@@ -29,7 +32,7 @@ class ConsumerNode(AbstractNode):
 def test_consume_empty_datasets(start_service):
     """Integration test that checks that empty datasets do not cause errors.
 
-    If a dataset is empty, dataset consumer methods should not error out.
+    If a dataset is empty, dataset read methods should not error out.
     """
     runner = Runner(
         pipeline_config_file="tests/conf/integration_test_empty_dataset.yml",
@@ -40,12 +43,22 @@ def test_consume_empty_datasets(start_service):
         # This is expected because we activated the poison pill
         pass
 
-    consumer = DatasetConsumer(
-        dataset_name="test_result",
-        node_name="consumer",
-        pipeline_name="integration_test_kafka_edge_cases",
-        dataset_config={},
-        has_pipeline_prefix=True,
+    dataset_name = "test_result"
+    dataset_config = {
+        "type": "aineko.datasets.kafka.KafkaDataset",
+        "location": "localhost:9092",
+    }
+    dataset = AbstractDataset.from_config(dataset_name, dataset_config)
+    consumer_params = ConsumerParams(
+        **{
+            "dataset_name": dataset_name,
+            "node_name": "consumer",
+            "pipeline_name": "integration_test_kafka_edge_cases",
+            "prefix": None,
+            "has_pipeline_prefix": True,
+            "consumer_config": DEFAULT_KAFKA_CONFIG.get("CONSUMER_CONFIG"),
+        }
     )
-    count_messages = consumer.consume_all(end_message="END")
+    dataset.initialize(create="consumer", connection_params=consumer_params)
+    count_messages = dataset.consume_all(end_message="END")
     assert count_messages[0]["message"] == "OK"

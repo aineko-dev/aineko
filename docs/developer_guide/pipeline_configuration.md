@@ -82,8 +82,8 @@ A particular node instance in the pipeline, defined by a unique name. Any parame
 | Key           | Required | Type            | Description                                                                                                                                                           |
 | ------------- | -------- | --------------- |---------------------------------------------------------------------------------------- |
 | `class`       | Y        | string          | Python module to run for the node. This should exist within the python module in the same repository . |
-| `inputs`      | N        | list of strings | Defines which datasets to consume from if applicable. |
-| `outputs`     | N        | list of strings | Defines which datasets to produce to if applicable. |
+| `inputs`      | N        | list of strings | Defines which datasets to read from if applicable. |
+| `outputs`     | N        | list of strings | Defines which datasets to write to if applicable. |
 | `node_params` | N        | map             | Defines any arbitrary parameters relevant for node's application logic. In the example above, we defined `initial_state` and `increment` parameters, which are both integers. Environment variables can be injected into `node_params` by passing in strings that match the pattern `{$ENV_VAR}` where ENV_VAR is the environment variable to inject. |
 | `num_cpus`    | Y        | float           | Number of CPUs allocated to a node. Required either for each node definition or at `default_node_settings` level.  |
 

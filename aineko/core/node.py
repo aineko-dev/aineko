@@ -26,12 +26,8 @@ from aineko.config import (
     DEFAULT_KAFKA_CONFIG,
     TESTING_NODE_CONFIG,
 )
-from aineko.core.dataset import (
-    DatasetConsumer,
-    DatasetProducer,
-    FakeDatasetConsumer,
-    FakeDatasetProducer,
-)
+from aineko.core.dataset import AbstractDataset
+from aineko.datasets.kafka import ConsumerParams, FakeKafka, ProducerParams
 
 
 class PoisonPill:
@@ -60,13 +56,19 @@ class AbstractNode(ABC):
     Nodes are the building blocks of the pipeline and are responsible for
     executing the pipeline. Nodes are designed to be modular and can be
     combined to create a pipeline. The node base class provides helper methods
-    for setting up the consumer and producer for a node. The execute method is
-    a wrapper for the _execute method which is to be implemented by subclasses.
-    The _execute method is where the node logic is implemented by the user.
+    for setting up the dataset inputs and outputs for a node. The
+    execute method is a wrapper for the _execute method which is to be
+    implemented by subclasses. The _execute method is where the node logic
+    is implemented by the user.
 
     Attributes:
-        consumers (dict): dict of DatasetConsumer objects for inputs to node
-        producers (dict): dict of DatasetProducer objects for outputs of node
+        name (str): name of the node
+        pipeline_name (str): name of the pipeline
+        params (dict): dict of parameters to be used by the node
+        inputs (dict): dict of AbstractDataset objects for inputs that node
+            can read / consume.
+        outputs (dict): dict of AbstractDataset objects for outputs that node
+            can write / produce.
         last_hearbeat (float): timestamp of the last heartbeat
         test (bool): True if node is in test mode else False
         log_levels (tuple): tuple of allowed log levels
@@ -74,7 +76,7 @@ class AbstractNode(ABC):
             pipeline communication without dataset dependency.
 
     Methods:
-        setup_datasets: setup the consumers and producers for a node
+        setup_datasets: setup the dataset query layer for a node
         execute: execute the node, wrapper for _execute method
         _execute: execute the node, to be implemented by subclasses
     """
@@ -90,8 +92,8 @@ class AbstractNode(ABC):
         self.name = node_name or self.__class__.__name__
         self.pipeline_name = pipeline_name
         self.last_heartbeat = time.time()
-        self.consumers: Dict = {}
-        self.producers: Dict = {}
+        self.inputs: dict = {}
+        self.outputs: dict = {}
         self.params: Dict = {}
         self.test = test
         self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")
@@ -103,13 +105,13 @@ class AbstractNode(ABC):
 
     def setup_datasets(
         self,
-        datasets: Dict[str, dict],
+        datasets: Dict[str, Dict],
         inputs: Optional[List[str]] = None,
         outputs: Optional[List[str]] = None,
         prefix: Optional[str] = None,
         has_pipeline_prefix: bool = False,
     ) -> None:
-        """Setup the consumer and producer for a node.
+        """Setup the dataset inputs and outputs for a node.
 
         Args:
             datasets: dataset configuration
@@ -120,34 +122,60 @@ class AbstractNode(ABC):
                 prefix
         """
         inputs = inputs or []
-        self.consumers.update(
+        # initialize the datasets:
+        self.inputs.update(
             {
-                dataset_name: DatasetConsumer(
-                    dataset_name=dataset_name,
-                    node_name=self.name,
-                    pipeline_name=self.pipeline_name,
-                    dataset_config=datasets.get(dataset_name, {}),
-                    prefix=prefix,
-                    has_pipeline_prefix=has_pipeline_prefix,
+                dataset_name: AbstractDataset.from_config(
+                    name=dataset_name, config=datasets.get(dataset_name, {})
                 )
                 for dataset_name in inputs
             }
         )
 
         outputs = outputs or []
-        self.producers.update(
+        self.outputs.update(
             {
-                dataset_name: DatasetProducer(
-                    dataset_name=dataset_name,
-                    node_name=self.name,
-                    pipeline_name=self.pipeline_name,
-                    dataset_config=datasets.get(dataset_name, {}),
-                    prefix=prefix,
-                    has_pipeline_prefix=has_pipeline_prefix,
+                dataset_name: AbstractDataset.from_config(
+                    name=dataset_name, config=datasets.get(dataset_name, {})
                 )
                 for dataset_name in outputs
             }
         )
+
+        for dataset_name in inputs:
+            if self.inputs[dataset_name].type == "kafka":
+                consumer_params = ConsumerParams(
+                    **{
+                        "dataset_name": dataset_name,
+                        "node_name": self.name,
+                        "pipeline_name": self.pipeline_name,
+                        "prefix": prefix,
+                        "has_pipeline_prefix": has_pipeline_prefix,
+                        "consumer_config": DEFAULT_KAFKA_CONFIG.get(
+                            "CONSUMER_CONFIG"
+                        ),
+                    }
+                )
+                self.inputs[dataset_name].initialize(
+                    create="consumer", connection_params=consumer_params
+                )
+        for dataset_name in outputs:
+            if self.outputs[dataset_name].type == "kafka":
+                producer_params = ProducerParams(
+                    **{
+                        "dataset_name": dataset_name,
+                        "node_name": self.name,
+                        "pipeline_name": self.pipeline_name,
+                        "prefix": prefix,
+                        "has_pipeline_prefix": has_pipeline_prefix,
+                        "producer_config": DEFAULT_KAFKA_CONFIG.get(
+                            "PRODUCER_CONFIG"
+                        ),
+                    }
+                )
+                self.outputs[dataset_name].initialize(
+                    create="producer", connection_params=producer_params
+                )
 
     def setup_test(
         self,
@@ -173,18 +201,20 @@ class AbstractNode(ABC):
             )
 
         inputs = inputs or {}
-        self.consumers = {
-            dataset_name: FakeDatasetConsumer(
+
+        self.inputs = {
+            dataset_name: FakeKafka(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
-                values=values,
+                input_values=values,
             )
             for dataset_name, values in inputs.items()
         }
         outputs = outputs or []
         outputs.extend(TESTING_NODE_CONFIG.get("DATASETS"))
-        self.producers = {
-            dataset_name: FakeDatasetProducer(
+
+        self.outputs = {
+            dataset_name: FakeKafka(
                 dataset_name=dataset_name,
                 node_name=self.__class__.__name__,
             )
@@ -208,9 +238,8 @@ class AbstractNode(ABC):
                 f"{', '.join(self.log_levels)}"
             )
         out_msg = {"log": message, "level": level}
-        self.producers[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].produce(
-            out_msg
-        )
+
+        self.outputs[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].write(out_msg)
 
     def _log_traceback(self) -> None:
         """Logs the traceback of an exception."""
@@ -294,17 +323,17 @@ class AbstractNode(ABC):
                 if time.time() - start_time < runtime:
                     continue
 
-            # End loop if all consumers are empty
-            if self.consumers and all(
-                consumer.empty for consumer in self.consumers.values()
+            # End loop if all inputs are empty
+            if self.inputs and all(
+                input.empty for input in self.inputs.values()
             ):
                 run_loop = False
 
         self._post_loop_hook(self.params)
 
         return {
-            dataset_name: producer.values
-            for dataset_name, producer in self.producers.items()
+            dataset_name: output.output_values
+            for dataset_name, output in self.outputs.items()
         }
 
     def run_test_yield(
@@ -313,8 +342,8 @@ class AbstractNode(ABC):
         """Execute the node in testing mode, yielding at each iteration.
 
         This method is an alternative to `run_test`. Instead of returning the
-        aggregated output, it yields the most recently consumed value, the
-        produced value and the current node instance at each iteration. This is
+        aggregated output, it yields the most recently read value, the
+        written value and the current node instance at each iteration. This is
         useful for testing nodes that either don't produce any output or if you
         need to test intermediate outputs. Testing state modifications is also
         possible using this method.
@@ -344,10 +373,10 @@ class AbstractNode(ABC):
             last_produced_values = {}
             last_consumed_values = {}
 
-            # Capture last consumed values
-            for dataset_name, consumer in self.consumers.items():
-                if consumer.values:
-                    last_value = consumer.values[0]
+            # Capture last read values
+            for dataset_name, input_dataset in self.inputs.items():
+                if input_dataset.input_values:
+                    last_value = input_dataset.input_values[0]
                     last_consumed_values[dataset_name] = last_value
 
             run_loop = self._execute(self.params)  # type: ignore
@@ -357,16 +386,16 @@ class AbstractNode(ABC):
                 if time.time() - start_time < runtime:
                     continue
 
-            # End loop if all consumers are empty
-            if self.consumers and all(
-                consumer.empty for consumer in self.consumers.values()
+            # End loop if all inputs are empty
+            if self.inputs and all(
+                input.empty for input in self.inputs.values()
             ):
                 run_loop = False
 
             # Capture last produced values
-            for dataset_name, producer in self.producers.items():
-                if producer.values:
-                    last_value = producer.values[-1]
+            for dataset_name, output in self.outputs.items():
+                if output.output_values:
+                    last_value = output.output_values[-1]
                     last_produced_values[dataset_name] = last_value
 
             yield (last_consumed_values, last_produced_values, self)

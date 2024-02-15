@@ -16,6 +16,7 @@ class Config(BaseModel):
             """Dataset model."""
 
             type: str
+            location: Optional[str] = None
             params: Optional[dict] = None
 
         class Node(BaseModel):
