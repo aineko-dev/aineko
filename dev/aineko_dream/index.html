@@ -1187,6 +1187,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#checking-on-the-status-of-your-aineko-dream-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checking on the status of your Aineko Dream request
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1221,7 +1232,7 @@
 <p>Aineko Dream leverages the power of generative AI to create a starter Aineko pipeline based on your use case. </p>
 <h2 id="generating-a-project">Generating a Project</h2>
 <p>To generate a project, invoke the Aineko Dream CLI with a prompt with:</p>
-<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>dream<span class="w"> </span><span class="s2">&quot;create a pipeline that scrapes twitter and analyses the results to identify trends&quot;</span><span class="w"> </span><span class="s2">&quot;API-KEY&quot;</span>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>dream<span class="w"> </span>create<span class="w"> </span>--api-key<span class="w"> </span>API_KEY<span class="w"> </span><span class="s2">&quot;create a pipeline that scrapes twitter and analyses the results to identify trends&quot;</span>
 </code></pre></div>
 <p>replacing <code>API-KEY</code> with a valid Aineko Dream API key. Contact support@aineko.dev to get an API key to try this feature.</p>
 <p>Aineko Dream goes on to create a complete aineko project, including node code, pipeline configuration and more using OpenAI's GPT-4 models. Upon completion, Aineko Dream publishes the project in the public GitHub repository <a href="https://github.com/Convex-Labs/dream-catcher">dream-catcher</a>.</p>
@@ -1230,6 +1241,10 @@
 <div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>create<span class="w"> </span>--repo<span class="w"> </span>Convex-Labs/dream-catcher#12345
 </code></pre></div>
 <p>where the argument after <code>--repo</code> should be the unique ID associated to your generated project. This will be output in the result of the previous section.</p>
+<h2 id="checking-on-the-status-of-your-aineko-dream-request">Checking on the status of your Aineko Dream request</h2>
+<p>After sending a request to the Aineko Dream CLI, you will be provided with a request ID that looks like <code>2c8341b7-9cb4-41f1-87ad-f363925fd2fa</code>. To check on the status of the request, use the following Aineko Dream CLI command:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>aineko<span class="w"> </span>dream<span class="w"> </span>check<span class="w"> </span>2c8341b7-9cb4-41f1-87ad-f363925fd2fa
+</code></pre></div>
 
 
 
