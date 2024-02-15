@@ -111,6 +111,10 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         if self._pool.closed is False:
             await self._pool.close()
 
+    def initialize(self) -> None:
+        # TODO: figure out how to handle this
+        raise NotImplementedError("Use async context manager instead.")
+
     async def create(
         self,
         schema: Dict[str, str],
@@ -194,7 +198,6 @@ class AsyncPostgresDataset(AsyncAbstractDataset):
         await self.execute_query(
             sql.SQL(query).format(name=sql.Identifier(self.name)),
         )
-
 
     async def exists(self) -> bool:
         """Queries the database to check if the table exists."""
