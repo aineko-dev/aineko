@@ -106,33 +106,33 @@ class AbstractDataset(abc.ABC, Generic[T]):
     When defining a new dataset, the following methods must be implemented:
 
     ```
-    - `_read`
-    - `_write`
-    - `_create`
-    - `_delete`
-    - `_initialize`
-    - `_exists`
+    - `read`
+    - `write`
+    - `create`
+    - `delete`
+    - `initialize`
+    - `exists`
     ```
 
     Example:
     ```python
     class MyDataset(AbstractDataset):
-        def _read(self, **kwargs) -> Any:
+        def read(self, **kwargs) -> Any:
             pass
 
-        def _write(self, **kwargs) -> Any:
+        def write(self, **kwargs) -> Any:
             pass
 
-        def _create(self, **kwargs) -> Any:
+        def create(self, **kwargs) -> Any:
             pass
 
-        def _delete(self, **kwargs) -> Any:
+        def delete(self, **kwargs) -> Any:
             pass
 
-        def _initialize(self, **kwargs) -> Any:
+        def initialize(self, **kwargs) -> Any:
             pass
 
-        def _exists(self, **kwargs) -> bool:
+        def exists(self, **kwargs) -> bool:
             pass
     ```
 

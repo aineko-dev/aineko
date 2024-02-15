@@ -58,7 +58,7 @@ class ConsumerParams(BaseModel):
 
     Passed in as connection_params when calling
         ```python
-        self._initialize(create_consumer=True,
+        self.initialize(create_consumer=True,
                       connection_params=ConsumerParams(...))
         ```
     """
@@ -78,7 +78,7 @@ class ProducerParams(BaseModel):
 
     Passed in as conection_params when calling
         ```python
-        self._initialize(create_producer=True,
+        self.initialize(create_producer=True,
                       connection_params=ProducerParams(...))
         ```
     """
@@ -98,7 +98,7 @@ class TopicParams(BaseModel):
 
     Passed in as connection_params when calling
         ```python
-        self._create(topic_params=TopicParams(...))
+        self.create(topic_params=TopicParams(...))
         ```
     """
 
@@ -113,17 +113,17 @@ class KafkaDataset(AbstractDataset):
 
     Dataset Query Layer is a Kafka Consumer and Producer.
 
-    `_read` method consumes from a Kakfa topic.
+    `read` method consumes from a Kakfa topic.
 
-    `_write` method produces to a Kafka topic.
+    `write` method produces to a Kafka topic.
 
-    `_create` method creates the dataset topic in the Kafka cluster.
+    `create` method creates the dataset topic in the Kafka cluster.
 
-    `_initialize` method can be used to create a consumer or producer.
+    `initialize` method can be used to create a consumer or producer.
 
-    `_delete` method deletes the dataset topic in the Kafka cluster.
+    `delete` method deletes the dataset topic in the Kafka cluster.
 
-    `_exists` method checks if the dataset topic exists.
+    `exists` method checks if the dataset topic exists.
 
     Args:
         name: name of the dataset
@@ -192,12 +192,12 @@ class KafkaDataset(AbstractDataset):
 
         This method can be called in 2 different ways:
 
-            1. `self._initialize(create_consumer=True,
+            1. `self.initialize(create_consumer=True,
             connection_params=ConsumerParams(...))`:
                 creates a Kafka Consumer and subscribes to the
                 dataset topic.
 
-            2. `self._initialize(create_producer=True,
+            2. `self.initialize(create_producer=True,
             connection_params=ProducerParams(...)`:
                 creates a Kafka Producer.
 
@@ -217,7 +217,7 @@ class KafkaDataset(AbstractDataset):
         if create_consumer and create_producer:
             raise KafkaDatasetError(
                 "Cannot set both `create_consumer` and `create_producer`"
-                "to True in `_initialize` method."
+                "to True in `initialize` method."
             )
         if create_consumer:
             try:
@@ -247,7 +247,7 @@ class KafkaDataset(AbstractDataset):
             return
         raise KafkaDatasetError(
             "Must set either `create_consumer` or `create_producer`"
-            "to True in `_initialize` method."
+            "to True in `initialize` method."
         )
 
     def delete(self) -> None:
