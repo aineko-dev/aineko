@@ -11,6 +11,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.aineko.dev/dev/api_reference/abstract_dataset/</loc>
+         <lastmod>2024-02-15</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.aineko.dev/dev/api_reference/abstract_node/</loc>
          <lastmod>2024-02-15</lastmod>
          <changefreq>daily</changefreq>
@@ -26,12 +31,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/dev/api_reference/dataset_consumer/</loc>
-         <lastmod>2024-02-15</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://docs.aineko.dev/dev/api_reference/dataset_producer/</loc>
+         <loc>https://docs.aineko.dev/dev/api_reference/kafka_dataset/</loc>
          <lastmod>2024-02-15</lastmod>
          <changefreq>daily</changefreq>
     </url>

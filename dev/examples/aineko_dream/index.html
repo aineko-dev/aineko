@@ -802,13 +802,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
+      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    DatasetConsumer
+    AbstractDataset
   
 
     
@@ -829,13 +829,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
+      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    DatasetProducer
+    KafkaDataset
   
 
     
@@ -1506,7 +1506,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
 <ul>
 <li>The <code>PythonEvaluation</code> node validates that the LLM proposes valid Python code.</li>
 <li>The <code>SecurityEvaluation</code> node runs checks using Bandit to ensure that the Python code that is proposed doesn’t contain any known security concerns.</li>
-<li>The <code>EvaluationModel</code> node consumes evaluation results and decides wether to generate another prompt or submit the final result to the API server. It keeps track of the evaluation results and the number of times we query the LLM.</li>
+<li>The <code>EvaluationModel</code> node reads evaluation results and decides whether to generate another prompt or submit the final result to the API server. It keeps track of the evaluation results and the number of times we query the LLM.</li>
 </ul>
 <h2 id="pipeline-configuration">Pipeline configuration</h2>
 <p>Here is the pipeline configuration used to generate this example. We could even configure and run three separate pipelines that use different models and expose different endpoints for each of them.</p>
@@ -1615,7 +1615,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
     <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update document in response to commit events.&quot;&quot;&quot;</span>
         <span class="c1"># Check for new commit events from GitHub</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;github_event&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">consume</span><span class="p">()</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;github_event&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -1628,7 +1628,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
         <span class="n">repo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">github_client</span><span class="o">.</span><span class="n">get_repo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">organization</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">contents</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">get_contents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">branch</span><span class="p">)</span>
         <span class="n">github_contents</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">path</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">decoded_content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;document&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="n">github_contents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;document&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">github_contents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Fetched documents for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">organization</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="si">}</span><span class="s2"> branch </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">branch</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
@@ -1647,7 +1647,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
 
     <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Query OpenAI LLM.&quot;&quot;&quot;</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;generated_prompt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">consume</span><span class="p">()</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;generated_prompt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="n">messages</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;chat_messages&quot;</span><span class="p">]</span>
@@ -1666,7 +1666,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
                 <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;llm_response&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;llm_response&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
             <span class="n">message</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;chat_messages&quot;</span><span class="p">]</span>
         <span class="p">)</span>
 </code></pre></div>
@@ -1677,7 +1677,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
 
     <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate Python code.&quot;&quot;&quot;</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;llm_response&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">consume</span><span class="p">()</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;llm_response&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -1703,7 +1703,7 @@ N_APIServer((APIServer)):::nodeClass --&gt;  T_github_event[github_event]:::data
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmpfile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">results</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;evaluation_result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="s2">&quot;evaluation_result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
 </code></pre></div>
 </div>
 </div>

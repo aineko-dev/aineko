@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/dev/api_reference/dataset_producer/">
+        <link rel="canonical" href="https://docs.aineko.dev/dev/api_reference/abstract_dataset/">
       
       
-        <link rel="prev" href="../dataset_consumer/">
+        <link rel="prev" href="../abstract_node/">
       
       
-        <link rel="next" href="../config/">
+        <link rel="next" href="../kafka_dataset/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>DatasetProducer - Aineko</title>
+        <title>AbstractDataset - Aineko</title>
       
     
     
@@ -97,7 +97,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#datasetproducer" class="md-skip">
+        <a href="#abstractdataset" class="md-skip">
           Skip to content
         </a>
       
@@ -134,7 +134,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              DatasetProducer
+              AbstractDataset
             
           </span>
         </div>
@@ -799,33 +799,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../dataset_consumer/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    DatasetConsumer
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -844,7 +817,7 @@
   <span class="md-ellipsis">
     
   
-    DatasetProducer
+    AbstractDataset
   
 
     
@@ -861,7 +834,7 @@
   <span class="md-ellipsis">
     
   
-    DatasetProducer
+    AbstractDataset
   
 
     
@@ -887,22 +860,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DatasetProducer
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;AbstractDataset
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" DatasetProducer">
+    <nav class="md-nav" aria-label=" AbstractDataset">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.dataset" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.name" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;dataset
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;name
       
     </span>
   </a>
@@ -910,10 +883,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.has_pipeline_prefix" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.__str__" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;has_pipeline_prefix
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__str__
       
     </span>
   </a>
@@ -921,10 +894,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.kafka_config" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.create" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;kafka_config
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;create
       
     </span>
   </a>
@@ -932,10 +905,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.prefix" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.delete" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;prefix
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;delete
       
     </span>
   </a>
@@ -943,10 +916,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.producer" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.exists" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;producer
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;exists
       
     </span>
   </a>
@@ -954,10 +927,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.source_node" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.from_config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;source_node
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;from_config
       
     </span>
   </a>
@@ -965,10 +938,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.source_pipeline" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.initialize" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;source_pipeline
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;initialize
       
     </span>
   </a>
@@ -976,10 +949,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.topic_name" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.read" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;topic_name
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;read
       
     </span>
   </a>
@@ -987,10 +960,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.produce" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.write" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;produce
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;write
       
     </span>
   </a>
@@ -1006,6 +979,33 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka_dataset/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    KafkaDataset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1338,22 +1338,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DatasetProducer
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;AbstractDataset
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" DatasetProducer">
+    <nav class="md-nav" aria-label=" AbstractDataset">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.dataset" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.name" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;dataset
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;name
       
     </span>
   </a>
@@ -1361,10 +1361,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.has_pipeline_prefix" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.__str__" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;has_pipeline_prefix
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__str__
       
     </span>
   </a>
@@ -1372,10 +1372,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.kafka_config" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.create" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;kafka_config
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;create
       
     </span>
   </a>
@@ -1383,10 +1383,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.prefix" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.delete" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;prefix
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;delete
       
     </span>
   </a>
@@ -1394,10 +1394,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.producer" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.exists" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;producer
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;exists
       
     </span>
   </a>
@@ -1405,10 +1405,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.source_node" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.from_config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;source_node
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;from_config
       
     </span>
   </a>
@@ -1416,10 +1416,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.source_pipeline" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.initialize" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;source_pipeline
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;initialize
       
     </span>
   </a>
@@ -1427,10 +1427,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.topic_name" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.read" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;topic_name
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;read
       
     </span>
   </a>
@@ -1438,10 +1438,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.DatasetProducer.produce" class="md-nav__link">
+  <a href="#aineko.core.dataset.AbstractDataset.write" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;produce
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;write
       
     </span>
   </a>
@@ -1516,7 +1516,7 @@
                   
 
   
-    <a href="https://github.com/aineko-dev/aineko/edit/develop/docs/api_reference/dataset_producer.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/aineko-dev/aineko/edit/develop/docs/api_reference/abstract_dataset.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
     </a>
@@ -1524,263 +1524,73 @@
   
 
 
-<h1 id="datasetproducer"><code>DatasetProducer</code></h1>
-<p>The <code>DatasetProducer</code> class is used to produce to <code>kafka</code> topics.</p>
+<h1 id="abstractdataset"><code>AbstractDataset</code></h1>
+<p>The <code>AbstractDataset</code> class is the base class for defining synchronous datasets.</p>
 
 
 <div class="doc doc-object doc-class">
 
 
 
-<h2 id="aineko.DatasetProducer" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">aineko.DatasetProducer</span>
+<h2 id="aineko.core.dataset.AbstractDataset" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">aineko.core.dataset.AbstractDataset</span>
 
 
 </h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">DatasetProducer</span><span class="p">(</span>
-    <span class="n">dataset_name</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span>
-    <span class="n">node_name</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span>
-    <span class="n">pipeline_name</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span>
-    <span class="n">dataset_config</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">],</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">has_pipeline_prefix</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+
 
   <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="abc.ABC">ABC</span></code>, <code><span title="typing.Generic">Generic</span>[<span title="aineko.core.dataset.T">T</span>]</code></p>
 
   
-      <p>Wrapper class for Kafka producer object.</p>
-<p>See DatasetConsumer for prefix rules.</p>
+      <p>Base class for defining new synchronous Aineko datasets.</p>
+<p>Subclass implementations can be instantiated using
+the <code>from_config</code> method.</p>
+<p>When defining a new dataset, the following methods must be implemented:</p>
+<div class="highlight"><pre><span></span><code>- `read`
+- `write`
+- `create`
+- `delete`
+- `initialize`
+- `exists`
+</code></pre></div>
+<p>Example:
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyDataset</span><span class="p">(</span><span class="n">AbstractDataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">pass</span>
 
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">pass</span>
 
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">pass</span>
 
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>dataset_name</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>dataset name</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>node_name</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>name of the node that is producing the message</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>pipeline_name</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>name of the pipeline</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>dataset_config</code></td>
-          <td>
-                <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>dataset config</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>prefix</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[str]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>prefix for topic name (<prefix>.<dataset_name>)</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>has_pipeline_prefix</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>whether the dataset name has pipeline name prefix</p>
-            </div>
-          </td>
-          <td>
-                <code>False</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">pass</span>
 
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">pass</span>
 
+    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span>
+</code></pre></div></p>
+<p>If <code>MyDataset</code> was defined in the file
+<code>./aineko/datasets/mydataset.py</code>, a new dataset
+can be created using the <code>from_config</code> method:</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">AbstractDataset</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my_dataset_instance&quot;</span><span class="p">,</span>
+    <span class="n">config</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;aineko.datasets.mydataset.MyDataset&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;param_1&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></p>
 
-  <p><strong>Attributes:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.DatasetProducer.producer" href="#aineko.DatasetProducer.producer">producer</a></code></td>
-          <td>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Kafka producer object</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <p><strong>Methods:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-          <tr>
-            <td><code><a class="autorefs autorefs-internal" title="aineko.DatasetProducer.produce" href="#aineko.DatasetProducer.produce">produce</a></code></td>
-            <td>
-              <div class="doc-md-description">
-                <p>produce a message to the dataset</p>
-              </div>
-            </td>
-          </tr>
-    </tbody>
-  </table>
-  
-      <p>Initialize the producer.</p>
-
-                <details class="quote">
-                  <summary>Source code in <code>aineko/core/dataset.py</code></summary>
-                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">336</span>
-<span class="normal">337</span>
-<span class="normal">338</span>
-<span class="normal">339</span>
-<span class="normal">340</span>
-<span class="normal">341</span>
-<span class="normal">342</span>
-<span class="normal">343</span>
-<span class="normal">344</span>
-<span class="normal">345</span>
-<span class="normal">346</span>
-<span class="normal">347</span>
-<span class="normal">348</span>
-<span class="normal">349</span>
-<span class="normal">350</span>
-<span class="normal">351</span>
-<span class="normal">352</span>
-<span class="normal">353</span>
-<span class="normal">354</span>
-<span class="normal">355</span>
-<span class="normal">356</span>
-<span class="normal">357</span>
-<span class="normal">358</span>
-<span class="normal">359</span>
-<span class="normal">360</span>
-<span class="normal">361</span>
-<span class="normal">362</span>
-<span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span>
-<span class="normal">369</span>
-<span class="normal">370</span>
-<span class="normal">371</span>
-<span class="normal">372</span>
-<span class="normal">373</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">pipeline_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">dataset_config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">has_pipeline_prefix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the producer.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">source_pipeline</span> <span class="o">=</span> <span class="n">pipeline_name</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset_name</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">source_node</span> <span class="o">=</span> <span class="n">node_name</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">has_pipeline_prefix</span> <span class="o">=</span> <span class="n">has_pipeline_prefix</span>
-
-    <span class="c1"># Create topic name based on prefix rules</span>
-    <span class="n">topic_name</span> <span class="o">=</span> <span class="n">dataset_name</span>
-    <span class="k">if</span> <span class="n">has_pipeline_prefix</span><span class="p">:</span>
-        <span class="n">topic_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pipeline_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">topic_name</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
-        <span class="n">topic_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">topic_name</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="n">topic_name</span>
-
-    <span class="c1"># Assign kafka config</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">kafka_config</span> <span class="o">=</span> <span class="n">DEFAULT_KAFKA_CONFIG</span>
-
-    <span class="c1"># Set producer parameters</span>
-    <span class="n">producer_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kafka_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PRODUCER_CONFIG&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Override default config with dataset specific config</span>
-    <span class="k">if</span> <span class="s2">&quot;params&quot;</span> <span class="ow">in</span> <span class="n">dataset_config</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kafka_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PRODUCER_OVERRIDABLES&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">dataset_config</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]:</span>
-                <span class="n">producer_config</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset_config</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">]</span>
-
-    <span class="c1"># Create producer</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">producer</span> <span class="o">=</span> <span class="n">Producer</span><span class="p">(</span><span class="n">producer_config</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-                </details>
 
   
 
@@ -1796,8 +1606,8 @@
 
 
 
-<h3 id="aineko.DatasetProducer.dataset" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">dataset</span>
+<h3 id="aineko.core.dataset.AbstractDataset.name" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">name</span>
 
   
   <span class="doc doc-labels">
@@ -1805,154 +1615,7 @@
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset_name</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.DatasetProducer.has_pipeline_prefix" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">has_pipeline_prefix</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">has_pipeline_prefix</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.core.dataset.DatasetProducer.has_pipeline_prefix" href="#aineko.DatasetProducer.has_pipeline_prefix">has_pipeline_prefix</a></span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.DatasetProducer.kafka_config" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">kafka_config</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">kafka_config</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.config.DEFAULT_KAFKA_CONFIG" href="../../developer_guide/config_kafka/#aineko.config.DEFAULT_KAFKA_CONFIG">DEFAULT_KAFKA_CONFIG</a></span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.DatasetProducer.prefix" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">prefix</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">prefix</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.core.dataset.DatasetProducer.prefix" href="#aineko.DatasetProducer.prefix">prefix</a></span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.DatasetProducer.producer" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">producer</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">producer</span> <span class="o">=</span> <span class="n"><span title="confluent_kafka.Producer">Producer</span></span><span class="p">(</span><span class="n">producer_config</span><span class="p">)</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.DatasetProducer.source_node" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">source_node</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">source_node</span> <span class="o">=</span> <span class="n">node_name</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.DatasetProducer.source_pipeline" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">source_pipeline</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">source_pipeline</span> <span class="o">=</span> <span class="n">pipeline_name</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.DatasetProducer.topic_name" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">topic_name</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">topic_name</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.core.dataset.DatasetProducer.topic_name" href="#aineko.DatasetProducer.topic_name">topic_name</a></span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">name</span><span class="p">:</span> <span class="n">str</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1967,17 +1630,161 @@
 
 
 
-<h3 id="aineko.DatasetProducer.produce" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">produce</span>
+<h3 id="aineko.core.dataset.AbstractDataset.__str__" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">__str__</span>
 
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">produce</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="n">dict</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__str__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">str</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Produce a message to the dataset.</p>
+      <p>Return the string representation of the dataset.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/dataset.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the string representation of the dataset.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">)&quot;</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.core.dataset.AbstractDataset.create" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">create</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">create</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="typing.Any">Any</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Subclass implementation to create the dataset.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/dataset.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass implementation to create the dataset.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.core.dataset.AbstractDataset.delete" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">delete</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">delete</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="typing.Any">Any</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Subclass implementation to delete the dataset.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/dataset.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass implementation to delete the dataset.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.core.dataset.AbstractDataset.exists" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">exists</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">exists</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bool</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Subclass implementation to check if the dataset exists.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/dataset.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass implementation to check if the dataset exists.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.core.dataset.AbstractDataset.from_config" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">from_config</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">from_config</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.core.dataset.AbstractDataset" href="#aineko.core.dataset.AbstractDataset">AbstractDataset</a></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Create a dataset from a configuration dictionary.</p>
 
 
 
@@ -1993,13 +1800,13 @@
     </thead>
     <tbody>
         <tr>
-          <td><code>message</code></td>
+          <td><code>name</code></td>
           <td>
-                <code>dict</code>
+                <code>str</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>message to produce to the dataset</p>
+              <p>The name of the dataset.</p>
             </div>
           </td>
           <td>
@@ -2007,17 +1814,41 @@
           </td>
         </tr>
         <tr>
-          <td><code>key</code></td>
+          <td><code>config</code></td>
           <td>
-                <code><span title="typing.Optional">Optional</span>[str]</code>
+                <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>key to use for the message</p>
+              <p>The configuration dictionary.</p>
             </div>
           </td>
           <td>
-                <code>None</code>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="aineko.core.dataset.AbstractDataset" href="#aineko.core.dataset.AbstractDataset">AbstractDataset</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Instance of an <code>AbstractDataset</code> subclass.</p>
+            </div>
           </td>
         </tr>
     </tbody>
@@ -2025,59 +1856,151 @@
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/dataset.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">388</span>
-<span class="normal">389</span>
-<span class="normal">390</span>
-<span class="normal">391</span>
-<span class="normal">392</span>
-<span class="normal">393</span>
-<span class="normal">394</span>
-<span class="normal">395</span>
-<span class="normal">396</span>
-<span class="normal">397</span>
-<span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span>
-<span class="normal">409</span>
-<span class="normal">410</span>
-<span class="normal">411</span>
-<span class="normal">412</span>
-<span class="normal">413</span>
-<span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">produce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Produce a message to the dataset.</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;AbstractDataset&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a dataset from a configuration dictionary.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        message: message to produce to the dataset</span>
-<span class="sd">        key: key to use for the message</span>
+<span class="sd">        name: The name of the dataset.</span>
+<span class="sd">        config: The configuration dictionary.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Instance of an `AbstractDataset` subclass.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-            <span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MSG_TIMESTAMP_FORMAT&quot;</span><span class="p">)</span>
-        <span class="p">),</span>
-        <span class="s2">&quot;dataset&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span>
-        <span class="s2">&quot;source_pipeline&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_pipeline</span><span class="p">,</span>
-        <span class="s2">&quot;source_node&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_node</span><span class="p">,</span>
-        <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">producer</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dataset_config</span> <span class="o">=</span> <span class="n">AbstractDatasetConfig</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">))</span>
 
-    <span class="n">key_bytes</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">class_obj</span> <span class="o">=</span> <span class="n">import_from_string</span><span class="p">(</span><span class="n">dataset_config</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="n">class_instance</span> <span class="o">=</span> <span class="n">class_obj</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">dataset_config</span><span class="p">))</span>
+    <span class="n">class_instance</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="k">return</span> <span class="n">class_instance</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">producer</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span>
-        <span class="n">topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span><span class="p">,</span>
-        <span class="n">key</span><span class="o">=</span><span class="n">key_bytes</span><span class="p">,</span>
-        <span class="n">value</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
-        <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_delivery_report</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">producer</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.core.dataset.AbstractDataset.initialize" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">initialize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">initialize</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="typing.Any">Any</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Subclass implementation to initialize the dataset query layer.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/dataset.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass implementation to initialize the dataset query layer.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.core.dataset.AbstractDataset.read" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">read</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">read</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="typing.Any">Any</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Subclass implementation to read the dataset.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/dataset.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass implementation to read the dataset.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="aineko.core.dataset.AbstractDataset.write" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">write</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n"><span title="aineko.core.dataset.T">T</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="typing.Any">Any</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Subclass implementation to write the dataset.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>aineko/core/dataset.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass implementation to write the dataset.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -2129,7 +2052,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../dataset_consumer/" class="md-footer__link md-footer__link--prev" aria-label="Previous: DatasetConsumer">
+          <a href="../abstract_node/" class="md-footer__link md-footer__link--prev" aria-label="Previous: AbstractNode">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -2139,20 +2062,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                DatasetConsumer
+                AbstractNode
               </div>
             </div>
           </a>
         
         
           
-          <a href="../config/" class="md-footer__link md-footer__link--next" aria-label="Next: Pipeline Config">
+          <a href="../kafka_dataset/" class="md-footer__link md-footer__link--next" aria-label="Next: KafkaDataset">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Pipeline Config
+                KafkaDataset
               </div>
             </div>
             <div class="md-footer__button md-icon">

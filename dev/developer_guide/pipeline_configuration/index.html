@@ -977,13 +977,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
+      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    DatasetConsumer
+    AbstractDataset
   
 
     
@@ -1004,13 +1004,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
+      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    DatasetProducer
+    KafkaDataset
   
 
     
@@ -1691,13 +1691,13 @@ For the sake of simplicity, we reference a truncated version of the pipeline def
 <td><code>inputs</code></td>
 <td>N</td>
 <td>list of strings</td>
-<td>Defines which datasets to consume from if applicable.</td>
+<td>Defines which datasets to read from if applicable.</td>
 </tr>
 <tr>
 <td><code>outputs</code></td>
 <td>N</td>
 <td>list of strings</td>
-<td>Defines which datasets to produce to if applicable.</td>
+<td>Defines which datasets to write to if applicable.</td>
 </tr>
 <tr>
 <td><code>node_params</code></td>

@@ -949,13 +949,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
+      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    DatasetConsumer
+    AbstractDataset
   
 
     
@@ -976,13 +976,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
+      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    DatasetProducer
+    KafkaDataset
   
 
     
@@ -1602,7 +1602,7 @@ INFO worker.py:1664 -- Started a local Ray instance.
 <summary>What does the above output mean?</summary>
 <p>An aineko pipeline is made up of <strong>Dataset(s)</strong> and <strong>Node(s).</strong>
 A Dataset can be thought of as a mailbox. Nodes pass messages to this mailbox, that can be read by many other Nodes.</p>
-<p>A <strong>Node</strong> is an abstraction for some computation, a function if you will. At the same time a <strong>Node</strong> can be a producer and/or a consumer of a <strong>Dataset</strong>. (mailbox)</p>
+<p>A <strong>Node</strong> is an abstraction for some computation, a function if you will. At the same time a <strong>Node</strong> can be a reader and/or a writer of a <strong>Dataset</strong>. (mailbox)</p>
 <p>The output means that we have successfully created three datasets - <strong>test_sequence,</strong> <strong>test_sum</strong> and <strong>logging</strong>, and that we have created two nodes - <strong>sum</strong> and <strong>sequence</strong>.</p>
 </details>
 <p>To learn more about Pipeline, Datasets and Nodes, see <a href="../../developer_guide/concepts/">concepts</a>.</p>
