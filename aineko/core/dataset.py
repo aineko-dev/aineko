@@ -41,7 +41,7 @@ class AbstractDatasetConfig(BaseModel):
     """Dataset configuration model."""
 
     type: str
-    location: Optional[str]
+    location: Optional[str] = None
     params: Optional[Dict[str, Any]] = {}
 
 
