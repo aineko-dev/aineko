@@ -42,7 +42,7 @@ class AbstractDatasetConfig(BaseModel):
 
     type: str
     location: Optional[str] = None
-    params: Optional[Dict[str, Any]] = {}
+    params: Optional[Dict[str, Any]] = None
 
 
 class DatasetCreateStatus:

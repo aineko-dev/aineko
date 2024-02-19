@@ -106,7 +106,7 @@ class TopicParams(BaseModel):
     """
 
     dataset_prefix: Optional[str] = None
-    dataset_config: Optional[Dict[str, Any]] = {}
+    dataset_config: Dict[str, Any] = {}
 
 
 class KafkaDataset(AbstractDataset):
