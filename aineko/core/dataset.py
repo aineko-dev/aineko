@@ -20,7 +20,6 @@ from pydantic import BaseModel
 
 from aineko.utils.imports import import_from_string
 
-A = TypeVar("A", bound="AbstractDataset")
 T = TypeVar("T")
 
 
