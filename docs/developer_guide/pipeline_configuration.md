@@ -104,9 +104,11 @@ This section defines the datasets for a pipeline.
 
 A particular dataset instance in the pipeline, defined by a unique name. Each dataset is defined by a type.
 
-| Key    | Required | Type   | Description                                  |
-| ------ | -------- | ------ | -------------------------------------------- |
-| `type` | Y        | string | Defines which dataset implementation to use. |
+| Key        | Required | Type   | Description                                                                |
+| ---------- | -------- | ------ | -------------------------------------------------------------------------- |
+| `type`     | Y        | string | Defines which dataset implementation to use.                               |
+| `location` | N        | string | Defines the location of the dataset.                                       |
+| `params`   | N        | map    | Defines any arbitrary parameters relevant for dataset's application logic. |
 
 !!! note
     Aineko is currently in the Beta release stage and is constantly improving.
