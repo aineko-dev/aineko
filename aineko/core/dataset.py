@@ -16,8 +16,7 @@ Example dataset configuration:
 import abc
 from typing import Any, Dict, Generic, List, Optional, TypeVar
 
-from pydantic import BaseModel, Field
-
+from aineko.models.dataset_config_schema import DatasetConfig
 from aineko.utils.imports import import_from_string
 
 T = TypeVar("T")
@@ -34,32 +33,6 @@ class DatasetError(Exception):
     """
 
     pass
-
-
-class DatasetConfig(BaseModel):
-    """Dataset configuration model."""
-
-    type: str = Field(
-        ...,
-        description="A dotted path to the dataset class implementation.",
-        examples=[
-            "aineko.datasets.kafka.KafkaDataset",
-            "foo.bar.baz.BazDataset",
-        ],
-    )
-    location: Optional[str] = Field(
-        None,
-        description=(
-            "Location of the dataset storage layer. For example, a kafka "
-            "broker address.",
-        ),
-        examples=["localhost:9092"],
-    )
-    params: Optional[Dict[str, Any]] = Field(
-        None,
-        description="The initialization parameters for the dataset.",
-        examples={"param_1": "bar"},
-    )
 
 
 class DatasetCreateStatus:
