@@ -257,20 +257,10 @@ class Runner:
                 poison_pill=poison_pill,
             )
 
-            if node_config.outputs:
-                outputs = node_config.outputs
-            else:
-                outputs = []
-
-            if node_config.inputs:
-                inputs = node_config.inputs
-            else:
-                inputs = None
             # Setup input and output datasets
-
             actor_handle.setup_datasets.remote(
-                inputs=inputs,
-                outputs=outputs,
+                inputs=node_config.inputs,
+                outputs=node_config.outputs,
                 datasets=pipeline_config.datasets,
                 has_pipeline_prefix=True,
             )
