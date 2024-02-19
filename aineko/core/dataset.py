@@ -36,7 +36,7 @@ class DatasetError(Exception):
     pass
 
 
-class AbstractDatasetConfig(BaseModel):
+class DatasetConfig(BaseModel):
     """Dataset configuration model."""
 
     type: str
@@ -174,7 +174,7 @@ class AbstractDataset(abc.ABC, Generic[T]):
         Returns:
             Instance of an `AbstractDataset` subclass.
         """
-        dataset_config = AbstractDatasetConfig(**dict(config))
+        dataset_config = DatasetConfig(**dict(config))
 
         class_obj = import_from_string(dataset_config.type, kind="class")
         class_instance = class_obj(name, dict(dataset_config))
