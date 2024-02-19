@@ -91,7 +91,7 @@ You will see the following prompts as `aineko` tries to create a project directo
     ```
     ```{: .optional-language-as-class .no-copy title="Expected output"}
     INFO - Application is starting.
-    INFO - Creating dataset: aineko-pipeline.sequence: {'type': 'kafka_stream'}
+    INFO - Creating dataset: aineko-pipeline.sequence: {'type': 'aineko.datasets.kafka.KafkaDataset'}
     INFO - All datasets created.
     INFO worker.py:1664 -- Started a local Ray instance.
     ```

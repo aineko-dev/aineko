@@ -34,8 +34,7 @@ For the sake of simplicity, we reference a truncated version of the pipeline def
 
       datasets:
         test_sequence:
-          type: kafka_stream
-
+          type: aineko.datasets.kafka.KafkaDataset
     ```
 
 A pipeline definition should have the following attributes:
@@ -105,9 +104,9 @@ This section defines the datasets for a pipeline.
 
 A particular dataset instance in the pipeline, defined by a unique name. Each dataset is defined by a type.
 
-| Key    | Required | Type   | Description                                                                        |
-| ------ | -------- | ------ | ---------------------------------------------------------------------------------- |
-| `type` | Y        | string | Defines which type of dataset to use. Currently, only `kafka_stream` is supported. |
+| Key    | Required | Type   | Description                                  |
+| ------ | -------- | ------ | -------------------------------------------- |
+| `type` | Y        | string | Defines which dataset implementation to use. |
 
 !!! note
     Aineko is currently in the Beta release stage and is constantly improving.
