@@ -219,17 +219,7 @@ class Runner:
         """
         # Collect all  actor futures
         results = []
-        if pipeline_config.default_node_settings:
-            default_node_config = pipeline_config.default_node_settings
-        else:
-            default_node_config = {}
-
         for node_name, node_config in pipeline_config.nodes.items():
-            if node_config.node_settings:
-                node_settings = node_config.node_settings
-            else:
-                node_settings = {}
-            # Initialize actor from specified class in config
             try:
                 target_class = imports.import_from_string(
                     attr=node_config.class_name, kind="class"
@@ -243,11 +233,21 @@ class Runner:
                 ) from None
 
             actor_params = {
-                **default_node_config,
-                **node_settings,
                 "name": node_name,
                 "namespace": self.pipeline_name,
             }
+            if pipeline_config.default_node_settings:
+                actor_params.update(
+                    pipeline_config.default_node_settings.model_dump(
+                        exclude_none=True
+                    )
+                )
+            # Update actor params with node specific settings to override
+            # default settings
+            if node_config.node_settings:
+                actor_params.update(
+                    node_config.node_settings.model_dump(exclude_none=True)
+                )
 
             wrapped_class = ray.remote(target_class)
             wrapped_class.options(**actor_params)
