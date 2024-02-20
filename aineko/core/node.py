@@ -122,7 +122,6 @@ class AbstractNode(ABC):
                 prefix
         """
         inputs = inputs or []
-        # initialize the datasets:
         self.inputs.update(
             {
                 dataset_name: AbstractDataset.from_config(

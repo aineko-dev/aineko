@@ -106,7 +106,7 @@ class TopicParams(BaseModel):
     """
 
     dataset_prefix: Optional[str] = None
-    dataset_config: Optional[Dict[str, Any]] = {}
+    dataset_config: Dict[str, Any] = {}
 
 
 class KafkaDataset(AbstractDataset):
@@ -398,7 +398,7 @@ class KafkaDataset(AbstractDataset):
         """Polls a message from the dataset.
 
         If the consume method is last but the method encounters
-        an error trying to udpdate the offset to latest, it will
+        an error trying to update the offset to latest, it will
         poll and return None.
 
         Args:

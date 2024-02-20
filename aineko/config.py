@@ -128,7 +128,6 @@ class AINEKO_CONFIG(BaseConfig):
         )
     )
     MSG_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
-    KAFKA_STREAM_TYPE = "kafka_stream"
 
     # Default cpu for each node
     DEFAULT_NUM_CPUS = 0.5

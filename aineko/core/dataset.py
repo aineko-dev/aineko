@@ -16,11 +16,9 @@ Example dataset configuration:
 import abc
 from typing import Any, Dict, Generic, List, Optional, TypeVar
 
-from pydantic import BaseModel
-
+from aineko.models.dataset_config_schema import DatasetConfig
 from aineko.utils.imports import import_from_string
 
-A = TypeVar("A", bound="AbstractDataset")
 T = TypeVar("T")
 
 
@@ -35,14 +33,6 @@ class DatasetError(Exception):
     """
 
     pass
-
-
-class AbstractDatasetConfig(BaseModel):
-    """Dataset configuration model."""
-
-    type: str
-    location: Optional[str]
-    params: Optional[Dict[str, Any]] = {}
 
 
 class DatasetCreateStatus:
@@ -175,7 +165,7 @@ class AbstractDataset(abc.ABC, Generic[T]):
         Returns:
             Instance of an `AbstractDataset` subclass.
         """
-        dataset_config = AbstractDatasetConfig(**dict(config))
+        dataset_config = DatasetConfig(**dict(config))
 
         class_obj = import_from_string(dataset_config.type, kind="class")
         class_instance = class_obj(name, dict(dataset_config))
@@ -184,12 +174,12 @@ class AbstractDataset(abc.ABC, Generic[T]):
 
     @abc.abstractmethod
     def read(self, *args: T, **kwargs: T) -> Any:
-        """Subclass implementation to read the dataset."""
+        """Subclass implementation to read an entry from the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
     def write(self, *args: T, **kwargs: T) -> Any:
-        """Subclass implementation to write the dataset."""
+        """Subclass implementation to write an entry to the dataset."""
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -209,5 +199,8 @@ class AbstractDataset(abc.ABC, Generic[T]):
 
     @abc.abstractmethod
     def exists(self, *args: T, **kwargs: T) -> bool:
-        """Subclass implementation to check if the dataset exists."""
+        """Subclass implementation to check if the dataset exists.
+
+        This method should return True if the dataset exists, otherwise False.
+        """
         raise NotImplementedError
