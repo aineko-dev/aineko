@@ -9,7 +9,11 @@ from aineko.models.dataset_config_schema import DatasetConfig
 
 
 class Config(BaseModel):
-    """Config model."""
+    """Pipeline configuration model.
+
+    Pipeline configurations are defined by the user in a YAML file. This model
+    is a representation of a serialized pipeline configuration.
+    """
 
     class Pipeline(BaseModel):
         """Pipeline model."""
