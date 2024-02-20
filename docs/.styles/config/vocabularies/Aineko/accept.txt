@@ -18,3 +18,4 @@ GitHub
 github
 [Mm]iddleware
 HTTPPoller
+deserialize
