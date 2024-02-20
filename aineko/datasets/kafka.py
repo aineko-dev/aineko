@@ -481,7 +481,7 @@ class KafkaDataset(AbstractDataset):
         Returns:
             message from the dataset
         """
-        return self._consume_message(how="next")
+        return self._consume_message(how="next", timeout=-1)
 
     def last(self, timeout: int = 1) -> Dict:
         """Consumes the last message from the dataset.
