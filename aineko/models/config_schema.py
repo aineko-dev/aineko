@@ -1,7 +1,7 @@
 # Copyright 2023 Aineko Authors
 # SPDX-License-Identifier: Apache-2.0
 """Internal models for pipeline config validation."""
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -24,8 +24,8 @@ class Config(BaseModel):
             class_name: str = Field(..., alias="class")
             node_params: Optional[dict] = None
             node_settings: Optional[dict] = None
-            inputs: Optional[list] = None
-            outputs: Optional[list] = None
+            inputs: Optional[List[str]] = None
+            outputs: Optional[List[str]] = None
 
         name: str
         default_node_settings: Optional[dict] = None
