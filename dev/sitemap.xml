@@ -36,6 +36,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.aineko.dev/dev/api_reference/models/</loc>
+         <lastmod>2024-02-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.aineko.dev/dev/api_reference/runner/</loc>
          <lastmod>2024-02-20</lastmod>
          <changefreq>daily</changefreq>

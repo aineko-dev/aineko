@@ -14,7 +14,7 @@
         <link rel="prev" href="../config_loader/">
       
       
-        <link rel="next" href="../../examples/aineko_dream/">
+        <link rel="next" href="../models/">
       
       
         
@@ -728,6 +728,8 @@
       
         
       
+        
+      
     
     
     
@@ -1087,6 +1089,33 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    Internal Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1859,7 +1888,7 @@ Kafka topics will be called <code>&lt;prefix&gt;.&lt;pipeline&gt;.&lt;dataset_na
 
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">load_pipeline_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../config/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">load_pipeline_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../models/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1879,7 +1908,7 @@ Kafka topics will be called <code>&lt;prefix&gt;.&lt;pipeline&gt;.&lt;dataset_na
     <tbody>
         <tr>
           <td>
-                <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../config/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></code>
+                <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../models/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2235,7 +2264,7 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
 
 </h3>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">prepare_nodes</span><span class="p">(</span>
-    <span class="n">pipeline_config</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../config/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></span><span class="p">,</span> <span class="n">poison_pill</span><span class="p">:</span> <span class="n"><span title="ray.actor.ActorHandle">ActorHandle</span></span>
+    <span class="n">pipeline_config</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../models/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></span><span class="p">,</span> <span class="n">poison_pill</span><span class="p">:</span> <span class="n"><span title="ray.actor.ActorHandle">ActorHandle</span></span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">list</span>
 </code></pre></div>
 
@@ -2259,7 +2288,7 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
         <tr>
           <td><code>pipeline_config</code></td>
           <td>
-                <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../config/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></code>
+                <code><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../models/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2433,17 +2462,7 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Collect all  actor futures</span>
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">pipeline_config</span><span class="o">.</span><span class="n">default_node_settings</span><span class="p">:</span>
-        <span class="n">default_node_config</span> <span class="o">=</span> <span class="n">pipeline_config</span><span class="o">.</span><span class="n">default_node_settings</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">default_node_config</span> <span class="o">=</span> <span class="p">{}</span>
-
     <span class="k">for</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">node_config</span> <span class="ow">in</span> <span class="n">pipeline_config</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">node_config</span><span class="o">.</span><span class="n">node_settings</span><span class="p">:</span>
-            <span class="n">node_settings</span> <span class="o">=</span> <span class="n">node_config</span><span class="o">.</span><span class="n">node_settings</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">node_settings</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1"># Initialize actor from specified class in config</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">target_class</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">import_from_string</span><span class="p">(</span>
                 <span class="n">attr</span><span class="o">=</span><span class="n">node_config</span><span class="o">.</span><span class="n">class_name</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;class&quot;</span>
@@ -2457,11 +2476,21 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
             <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 
         <span class="n">actor_params</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="o">**</span><span class="n">default_node_config</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">node_settings</span><span class="p">,</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">node_name</span><span class="p">,</span>
             <span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span><span class="p">,</span>
         <span class="p">}</span>
+        <span class="k">if</span> <span class="n">pipeline_config</span><span class="o">.</span><span class="n">default_node_settings</span><span class="p">:</span>
+            <span class="n">actor_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">pipeline_config</span><span class="o">.</span><span class="n">default_node_settings</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span>
+                    <span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="c1"># Update actor params with node specific settings to override</span>
+        <span class="c1"># default settings</span>
+        <span class="k">if</span> <span class="n">node_config</span><span class="o">.</span><span class="n">node_settings</span><span class="p">:</span>
+            <span class="n">actor_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">node_config</span><span class="o">.</span><span class="n">node_settings</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="n">wrapped_class</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">target_class</span><span class="p">)</span>
         <span class="n">wrapped_class</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="o">**</span><span class="n">actor_params</span><span class="p">)</span>
@@ -2678,13 +2707,13 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
         
         
           
-          <a href="../../examples/aineko_dream/" class="md-footer__link md-footer__link--next" aria-label="Next: Aineko Dream: code generation with ChatGPT">
+          <a href="../models/" class="md-footer__link md-footer__link--next" aria-label="Next: Internal Models">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Aineko Dream: code generation with ChatGPT
+                Internal Models
               </div>
             </div>
             <div class="md-footer__button md-icon">

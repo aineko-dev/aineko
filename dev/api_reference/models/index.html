@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/dev/api_reference/config/">
+        <link rel="canonical" href="https://docs.aineko.dev/dev/api_reference/models/">
       
       
-        <link rel="prev" href="../kafka_dataset/">
+        <link rel="prev" href="../runner/">
       
       
-        <link rel="next" href="../config_loader/">
+        <link rel="next" href="../../examples/aineko_dream/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Pipeline Config - Aineko</title>
+        <title>Internal Models - Aineko</title>
       
     
     
@@ -97,7 +97,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pipeline-config" class="md-skip">
+        <a href="#internal-models" class="md-skip">
           Skip to content
         </a>
       
@@ -134,7 +134,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Pipeline Config
+              Internal Models
             
           </span>
         </div>
@@ -855,6 +855,87 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipeline Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config_loader/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    ConfigLoader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    Runner
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -873,7 +954,7 @@
   <span class="md-ellipsis">
     
   
-    Pipeline Config
+    Internal Models
   
 
     
@@ -890,7 +971,7 @@
   <span class="md-ellipsis">
     
   
-    Pipeline Config
+    Internal Models
   
 
     
@@ -914,6 +995,17 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Configuration
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#aineko.models.config_schema.Config" class="md-nav__link">
@@ -1076,91 +1168,121 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#node-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aineko.models.config_schema.NodeSettings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;NodeSettings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" NodeSettings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.config_schema.NodeSettings.model_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;model_config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.config_schema.NodeSettings.num_cpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;num_cpus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dataset-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DatasetConfig
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" DatasetConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig.location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig.params" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;params
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig.type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;type
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../config_loader/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    ConfigLoader
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../runner/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Runner
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Internal Models
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1412,6 +1534,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pipeline-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#aineko.models.config_schema.Config" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1572,6 +1705,117 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#node-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aineko.models.config_schema.NodeSettings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;NodeSettings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" NodeSettings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.config_schema.NodeSettings.model_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;model_config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.config_schema.NodeSettings.num_cpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;num_cpus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dataset-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DatasetConfig
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" DatasetConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig.location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig.params" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;params
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.models.dataset_config_schema.DatasetConfig.type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;type
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1635,7 +1879,7 @@
                   
 
   
-    <a href="https://github.com/aineko-dev/aineko/edit/develop/docs/api_reference/config.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/aineko-dev/aineko/edit/develop/docs/api_reference/models.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
     </a>
@@ -1643,9 +1887,9 @@
   
 
 
-<h1 id="pipeline-config">Pipeline <code>Config</code></h1>
-<p>The following <a href="https://docs.pydantic.dev/latest/">Pydantic</a> schema shows the format of a pipeline configuration file.
-Expand the following source code blocks to view the keys at each level.</p>
+<h1 id="internal-models">Internal Models</h1>
+<p>This section describes the models used internally by Aineko to serialize and deserialize user configurations.</p>
+<h2 id="pipeline-configuration">Pipeline Configuration</h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1743,7 +1987,7 @@ is a representation of a serialized pipeline configuration.</p>
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">pipeline</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="../models/#aineko.models.config_schema.Config.Pipeline">Pipeline</a></span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">pipeline</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline" href="#aineko.models.config_schema.Config.Pipeline">Pipeline</a></span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1827,7 +2071,7 @@ is a representation of a serialized pipeline configuration.</p>
   </span>
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">datasets</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.dataset_config_schema.DatasetConfig" href="../models/#aineko.models.dataset_config_schema.DatasetConfig">DatasetConfig</a></span><span class="p">]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">datasets</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.dataset_config_schema.DatasetConfig" href="#aineko.models.dataset_config_schema.DatasetConfig">DatasetConfig</a></span><span class="p">]</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1849,7 +2093,7 @@ is a representation of a serialized pipeline configuration.</p>
   </span>
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">default_node_settings</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.NodeSettings" href="../models/#aineko.models.config_schema.NodeSettings">NodeSettings</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">default_node_settings</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.NodeSettings" href="#aineko.models.config_schema.NodeSettings">NodeSettings</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1891,7 +2135,7 @@ is a representation of a serialized pipeline configuration.</p>
   </span>
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">nodes</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline.Node" href="../models/#aineko.models.config_schema.Config.Pipeline.Node">Node</a></span><span class="p">]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">nodes</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline.Node" href="#aineko.models.config_schema.Config.Pipeline.Node">Node</a></span><span class="p">]</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2026,7 +2270,7 @@ is a representation of a serialized pipeline configuration.</p>
   </span>
 
 </h5>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">node_settings</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.NodeSettings" href="../models/#aineko.models.config_schema.NodeSettings">NodeSettings</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">node_settings</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.NodeSettings" href="#aineko.models.config_schema.NodeSettings">NodeSettings</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2085,6 +2329,305 @@ is a representation of a serialized pipeline configuration.</p>
   </div>
 
 
+</div><h2 id="node-configuration">Node Configuration</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="aineko.models.config_schema.NodeSettings" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">aineko.models.config_schema.NodeSettings</span>
+
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+
+  
+      <p>Node settings model.</p>
+<p target="_blank">This model is used to define settings for a node. The main use case is to
+define the number of CPUs to use for a node. However, it can be extended to
+include all Ray remote parameters as described in the <a href="https://docs.ray.io/en/latest/ray-core/api/doc/ray.remote.html#ray.remote/">Ray documentation.</a></p>
+
+            <details class="quote">
+              <summary>Source code in <code>aineko/models/config_schema.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">NodeSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Node settings model.</span>
+
+<span class="sd">    This model is used to define settings for a node. The main use case is to</span>
+<span class="sd">    define the number of CPUs to use for a node. However, it can be extended to</span>
+<span class="sd">    include all Ray remote parameters as described in the [Ray documentation.](</span>
+<span class="sd">    https://docs.ray.io/en/latest/ray-core/api/doc/ray.remote.html#ray.remote/)</span>
+<span class="sd">    {:target=&quot;_blank&quot;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">num_cpus</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The number of CPUs to use for a node.&quot;</span><span class="p">,</span>
+        <span class="n">gt</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.models.config_schema.NodeSettings.model_config" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">model_config</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;extra&#39;</span><span class="p">:</span> <span class="s1">&#39;allow&#39;</span><span class="p">}</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.models.config_schema.NodeSettings.num_cpus" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">num_cpus</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">num_cpus</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">float</span><span class="p">]</span> <span class="o">=</span> <span class="n"><span title="pydantic.Field">Field</span></span><span class="p">(</span>
+    <span class="kc">None</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The number of CPUs to use for a node.&quot;</span><span class="p">,</span>
+    <span class="n">gt</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div><h2 id="dataset-configuration">Dataset Configuration</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="aineko.models.dataset_config_schema.DatasetConfig" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">aineko.models.dataset_config_schema.DatasetConfig</span>
+
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+
+  
+      <p>Dataset configuration model.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>aineko/models/dataset_config_schema.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">DatasetConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataset configuration model.&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A dotted path to the dataset class implementation.&quot;</span><span class="p">,</span>
+        <span class="n">examples</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;aineko.datasets.kafka.KafkaDataset&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;foo.bar.baz.BazDataset&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Location of the dataset storage layer. For example, a kafka &quot;</span>
+            <span class="s2">&quot;broker address.&quot;</span>
+        <span class="p">),</span>
+        <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;localhost:9092&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The initialization parameters for the dataset.&quot;</span><span class="p">,</span>
+        <span class="n">examples</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;param_1&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}],</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.models.dataset_config_schema.DatasetConfig.location" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">location</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">location</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="n"><span title="pydantic.Field">Field</span></span><span class="p">(</span>
+    <span class="kc">None</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Location of the dataset storage layer. For example, a kafka broker address.&quot;</span><span class="p">,</span>
+    <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;localhost:9092&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.models.dataset_config_schema.DatasetConfig.params" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">params</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">]]</span> <span class="o">=</span> <span class="n"><span title="pydantic.Field">Field</span></span><span class="p">(</span>
+    <span class="kc">None</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The initialization parameters for the dataset.&quot;</span><span class="p">,</span>
+    <span class="n">examples</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;param_1&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}],</span>
+<span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="aineko.models.dataset_config_schema.DatasetConfig.type" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">type</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nb">type</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="n"><span title="pydantic.Field">Field</span></span><span class="p">(</span>
+    <span class="o">...</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A dotted path to the dataset class implementation.&quot;</span><span class="p">,</span>
+    <span class="n">examples</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;aineko.datasets.kafka.KafkaDataset&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;foo.bar.baz.BazDataset&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
 </div>
 
 
@@ -2123,7 +2666,7 @@ is a representation of a serialized pipeline configuration.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../kafka_dataset/" class="md-footer__link md-footer__link--prev" aria-label="Previous: KafkaDataset">
+          <a href="../runner/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Runner">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -2133,20 +2676,20 @@ is a representation of a serialized pipeline configuration.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                KafkaDataset
+                Runner
               </div>
             </div>
           </a>
         
         
           
-          <a href="../config_loader/" class="md-footer__link md-footer__link--next" aria-label="Next: ConfigLoader">
+          <a href="../../examples/aineko_dream/" class="md-footer__link md-footer__link--next" aria-label="Next: Aineko Dream: code generation with ChatGPT">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                ConfigLoader
+                Aineko Dream: code generation with ChatGPT
               </div>
             </div>
             <div class="md-footer__button md-icon">
