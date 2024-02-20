@@ -993,56 +993,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Dataset
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label=" Dataset">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset.location" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;location
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset.params" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;params
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset.type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;type
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aineko.models.config_schema.Config.Pipeline.Node" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1512,56 +1462,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Dataset
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label=" Dataset">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset.location" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;location
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset.params" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;params
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.models.config_schema.Config.Pipeline.Dataset.type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;type
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aineko.models.config_schema.Config.Pipeline.Node" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1737,9 +1637,7 @@ Expand the following source code blocks to view the keys at each level.</p>
 
             <details class="quote">
               <summary>Source code in <code>aineko/models/config_schema.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -1759,23 +1657,11 @@ Expand the following source code blocks to view the keys at each level.</p>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Config model.&quot;&quot;&quot;</span>
 
     <span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Pipeline model.&quot;&quot;&quot;</span>
-
-        <span class="k">class</span> <span class="nc">Dataset</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Dataset model.&quot;&quot;&quot;</span>
-
-            <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-            <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Node model.&quot;&quot;&quot;</span>
@@ -1789,7 +1675,7 @@ Expand the following source code blocks to view the keys at each level.</p>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
         <span class="n">default_node_settings</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">nodes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Node</span><span class="p">]</span>
-        <span class="n">datasets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">]</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DatasetConfig</span><span class="p">]</span>
 
     <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span>
 </code></pre></div></td></tr></table></div>
@@ -1845,9 +1731,7 @@ Expand the following source code blocks to view the keys at each level.</p>
 
             <details class="quote">
               <summary>Source code in <code>aineko/models/config_schema.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
@@ -1862,20 +1746,8 @@ Expand the following source code blocks to view the keys at each level.</p>
 <span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pipeline model.&quot;&quot;&quot;</span>
-
-    <span class="k">class</span> <span class="nc">Dataset</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dataset model.&quot;&quot;&quot;</span>
-
-        <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-        <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Node model.&quot;&quot;&quot;</span>
@@ -1889,7 +1761,7 @@ Expand the following source code blocks to view the keys at each level.</p>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">default_node_settings</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">nodes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Node</span><span class="p">]</span>
-    <span class="n">datasets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">]</span>
+    <span class="n">datasets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DatasetConfig</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
             </details>
 
@@ -1916,7 +1788,7 @@ Expand the following source code blocks to view the keys at each level.</p>
   </span>
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">datasets</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="aineko.models.config_schema.Config.Pipeline.Dataset" href="#aineko.models.config_schema.Config.Pipeline.Dataset">Dataset</a></span><span class="p">]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">datasets</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="aineko.models.dataset_config_schema.DatasetConfig">DatasetConfig</span></span><span class="p">]</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1993,124 +1865,6 @@ Expand the following source code blocks to view the keys at each level.</p>
 
 
 
-<h4 id="aineko.models.config_schema.Config.Pipeline.Dataset" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">Dataset</span>
-
-
-</h4>
-
-
-  <div class="doc doc-contents ">
-
-  
-      <p>Dataset model.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>aineko/models/config_schema.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Dataset</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataset model.&quot;&quot;&quot;</span>
-
-    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h5 id="aineko.models.config_schema.Config.Pipeline.Dataset.location" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">location</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h5>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">location</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h5 id="aineko.models.config_schema.Config.Pipeline.Dataset.params" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">params</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h5>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h5 id="aineko.models.config_schema.Config.Pipeline.Dataset.type" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">type</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h5>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nb">type</span><span class="p">:</span> <span class="n">str</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-
-
-
-
-  </div>
-
-  </div>
-
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
 <h4 id="aineko.models.config_schema.Config.Pipeline.Node" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>          <span class="doc doc-object-name doc-class-name">Node</span>
 
@@ -2125,14 +1879,14 @@ Expand the following source code blocks to view the keys at each level.</p>
 
             <details class="quote">
               <summary>Source code in <code>aineko/models/config_schema.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
 <span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Node model.&quot;&quot;&quot;</span>
 
     <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>

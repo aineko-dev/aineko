@@ -2414,17 +2414,7 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
 <span class="normal">281</span>
 <span class="normal">282</span>
 <span class="normal">283</span>
-<span class="normal">284</span>
-<span class="normal">285</span>
-<span class="normal">286</span>
-<span class="normal">287</span>
-<span class="normal">288</span>
-<span class="normal">289</span>
-<span class="normal">290</span>
-<span class="normal">291</span>
-<span class="normal">292</span>
-<span class="normal">293</span>
-<span class="normal">294</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_nodes</span><span class="p">(</span>
+<span class="normal">284</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_nodes</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">pipeline_config</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">,</span>
     <span class="n">poison_pill</span><span class="p">:</span> <span class="n">ray</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">ActorHandle</span><span class="p">,</span>
@@ -2481,20 +2471,10 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
             <span class="n">poison_pill</span><span class="o">=</span><span class="n">poison_pill</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">node_config</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-            <span class="n">outputs</span> <span class="o">=</span> <span class="n">node_config</span><span class="o">.</span><span class="n">outputs</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">if</span> <span class="n">node_config</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
-            <span class="n">inputs</span> <span class="o">=</span> <span class="n">node_config</span><span class="o">.</span><span class="n">inputs</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">inputs</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># Setup input and output datasets</span>
-
         <span class="n">actor_handle</span><span class="o">.</span><span class="n">setup_datasets</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
-            <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="n">node_config</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+            <span class="n">outputs</span><span class="o">=</span><span class="n">node_config</span><span class="o">.</span><span class="n">outputs</span><span class="p">,</span>
             <span class="n">datasets</span><span class="o">=</span><span class="n">pipeline_config</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span>
             <span class="n">has_pipeline_prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
