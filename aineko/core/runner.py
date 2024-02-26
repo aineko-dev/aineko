@@ -25,7 +25,6 @@ class Runner:
         pipeline_config_file (str): Path to pipeline config file
         pipeline_name (str): Name of the pipeline
         dataset_prefix (Optional[str]): Prefix for dataset names.
-            Kafka topics will be called `<prefix>.<pipeline>.<dataset_name>`.
 
     Attributes:
         pipeline_config_file (str): Path to pipeline config file
@@ -107,9 +106,6 @@ class Runner:
         self, config: Dict, user_dataset_prefix: Optional[str] = None
     ) -> List[AbstractDataset]:
         """Creates the required datasets for a given pipeline.
-
-        Datasets can be configured using the `params` key, using config keys
-        found in: https://kafka.apache.org/documentation.html#topicconfigs
 
         Args:
             config: dataset configuration found in pipeline config

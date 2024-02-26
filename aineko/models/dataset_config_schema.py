@@ -27,6 +27,11 @@ class DatasetConfig(BaseModel):
     )
     params: Optional[Dict[str, Any]] = Field(
         None,
-        description="The initialization parameters for the dataset.",
+        description=(
+            "The initialization parameters for the dataset. These are mainly "
+            "used by power users to fine-tune the dataset behavior. For "
+            "example, Kafka topics can be configured with a number of options "
+            "found in: https://kafka.apache.org/documentation.html#topicconfigs"
+        ),
         examples=[{"param_1": "bar"}],
     )
