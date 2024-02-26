@@ -24,6 +24,8 @@ import json
 import os
 from typing import Any, Dict
 
+from aineko.models.dataset_config_schema import DatasetConfig
+
 
 # pylint: disable=too-few-public-methods
 # pylint: disable=invalid-name
@@ -99,16 +101,6 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     # Empty list means no overridable settings
     PRODUCER_OVERRIDABLES = []  # type: ignore
 
-    # Default datasets to create for every pipeline
-    LOGGING_DATASET = "logging"
-    DATASETS = [LOGGING_DATASET]
-
-
-class TESTING_NODE_CONFIG(BaseConfig):
-    """Testing node configuration."""
-
-    DATASETS = DEFAULT_KAFKA_CONFIG.get("DATASETS")
-
 
 class AINEKO_CONFIG(BaseConfig):
     """Aineko configuration."""
@@ -135,6 +127,15 @@ class AINEKO_CONFIG(BaseConfig):
     # Valid log levels
     LOG_LEVELS = ("info", "debug", "warning", "error", "critical")
 
+    LOGGING_DATASET = {
+        "name": "logging",
+        "params": DatasetConfig(
+            type="aineko.datasets.kafka.KafkaDataset",
+            location="localhost:9092",
+        ),
+    }
+    INTERNAL_DATASETS = [LOGGING_DATASET]
+
 
 class NODE_MANAGER_CONFIG(BaseConfig):
     """Node Manager configuration."""
@@ -151,3 +152,9 @@ class NODE_MANAGER_CONFIG(BaseConfig):
     NODE_CONFIG = {
         "class": "aineko.core.node_manager.NodeManager",
     }
+
+
+class TESTING_NODE_CONFIG(BaseConfig):
+    """Testing node configuration."""
+
+    DATASETS = AINEKO_CONFIG.get("INTERNAL_DATASETS")

@@ -21,11 +21,7 @@ from typing import Dict, Generator, List, Optional, Tuple
 
 import ray
 
-from aineko.config import (
-    AINEKO_CONFIG,
-    DEFAULT_KAFKA_CONFIG,
-    TESTING_NODE_CONFIG,
-)
+from aineko.config import AINEKO_CONFIG, TESTING_NODE_CONFIG
 from aineko.core.dataset import AbstractDataset
 from aineko.datasets.kafka import FakeKafka
 
@@ -72,6 +68,7 @@ class AbstractNode(ABC):
         last_hearbeat (float): timestamp of the last heartbeat
         test (bool): True if node is in test mode else False
         log_levels (tuple): tuple of allowed log levels
+        logging_dataset (str): name of the logging dataset
         local_state (dict): shared local state between nodes. Used for intra-
             pipeline communication without dataset dependency.
 
@@ -97,6 +94,7 @@ class AbstractNode(ABC):
         self.params: Dict = {}
         self.test = test
         self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")
+        self.logging_dataset: str = AINEKO_CONFIG.get("LOGGING_DATASET")["name"]
         self.poison_pill = poison_pill
 
     def enable_test_mode(self) -> None:
@@ -193,7 +191,10 @@ class AbstractNode(ABC):
             for dataset_name, values in inputs.items()
         }
         outputs = outputs or []
-        outputs.extend(TESTING_NODE_CONFIG.get("DATASETS"))
+        internal_dataset_names = [
+            dataset["name"] for dataset in TESTING_NODE_CONFIG.get("DATASETS")
+        ]
+        outputs.extend(internal_dataset_names)
 
         self.outputs = {
             dataset_name: FakeKafka(
@@ -221,7 +222,7 @@ class AbstractNode(ABC):
             )
         out_msg = {"log": message, "level": level}
 
-        self.outputs[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].write(out_msg)
+        self.outputs[self.logging_dataset].write(out_msg)
 
     def _log_traceback(self) -> None:
         """Logs the traceback of an exception."""

@@ -7,16 +7,13 @@ from typing import Dict, List, Optional
 
 import ray
 
-from aineko.config import (
-    AINEKO_CONFIG,
-    DEFAULT_KAFKA_CONFIG,
-    NODE_MANAGER_CONFIG,
-)
+from aineko.config import AINEKO_CONFIG, NODE_MANAGER_CONFIG
 from aineko.core.config_loader import ConfigLoader
 from aineko.core.dataset import AbstractDataset
 from aineko.core.node import PoisonPill
 from aineko.datasets.kafka import TopicParams
 from aineko.models.config_schema import Config
+from aineko.models.dataset_config_schema import DatasetConfig
 from aineko.utils import imports
 
 logger = logging.getLogger(__name__)
@@ -143,7 +140,11 @@ class Runner:
                 for dataset_name, dataset_config in config.items()
             }
 
-        for reserved_dataset in DEFAULT_KAFKA_CONFIG.get("DATASETS"):
+        internal_dataset_names = [
+            dataset["name"]
+            for dataset in AINEKO_CONFIG.get("INTERNAL_DATASETS")
+        ]
+        for reserved_dataset in internal_dataset_names:
             if reserved_dataset in config:
                 raise ValueError(
                     f"Unable to create dataset `{reserved_dataset}`. "
@@ -161,16 +162,17 @@ class Runner:
             datasets.append(dataset)
 
         # Create logging dataset
-        logging_config = {
-            "location": "localhost:9092",
-            "type": "aineko.datasets.kafka.KafkaDataset",
-        }
-        logging_dataset_name = DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
+        logging_dataset_config = AINEKO_CONFIG.get("LOGGING_DATASET")
+
+        logging_dataset_name = logging_dataset_config["name"]
+        logging_config: DatasetConfig = logging_dataset_config["params"]
+
         logger.info(
             "Creating dataset: %s: %s", logging_dataset_name, logging_config
         )
         logging_dataset: AbstractDataset = AbstractDataset.from_config(
-            logging_dataset_name, logging_config
+            logging_dataset_name,
+            logging_config.model_dump(exclude_none=True),
         )
         # Create all datasets
         dataset_create_status = [
@@ -262,14 +264,20 @@ class Runner:
             )
 
             # Setup internal datasets like logging, without pipeline prefix
-            logging_dataset_name = DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")
+            logging_dataset_config = AINEKO_CONFIG.get("LOGGING_DATASET")
+
+            logging_dataset_name = logging_dataset_config["name"]
+            logging_config: DatasetConfig = logging_dataset_config["params"]
+
             actor_handle.setup_datasets.remote(
-                outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
+                outputs=[
+                    dataset["name"]
+                    for dataset in AINEKO_CONFIG.get("INTERNAL_DATASETS")
+                ],
                 datasets={
-                    logging_dataset_name: {
-                        "type": "aineko.datasets.kafka.KafkaDataset",
-                        "location": "localhost:9092",
-                    }
+                    logging_dataset_name: logging_config.model_dump(
+                        exclude_none=True
+                    )
                 },
             )
 
