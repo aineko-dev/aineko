@@ -589,18 +589,13 @@ class KafkaDataset(AbstractDataset):
                 f"Error creating Kafka AdminClient: {str(err)}"
             ) from err
 
-    def _create_consumer(
-        self, consumer_params: ConsumerParams
-    ) -> DatasetCreateStatus:
+    def _create_consumer(self, consumer_params: ConsumerParams) -> None:
         """Creates Kafka Consumer and subscribes to the dataset topic.
 
         Used to read (consume) messages from the dataset topic.
 
         Args:
             consumer_params: parameters for initializing the consumer
-
-        Returns:
-            status of dataset creation
         """
         dataset_name = consumer_params.dataset_name
         node_name = consumer_params.node_name
@@ -626,23 +621,13 @@ class KafkaDataset(AbstractDataset):
         self._consumer = Consumer(consumer_config)
         self._consumer.subscribe([consumer_topic])
 
-        dataset_create_status = DatasetCreateStatus(
-            dataset_name=f"{self.topic_name}_consumer"
-        )
-        return dataset_create_status
-
-    def _create_producer(
-        self, producer_params: ProducerParams
-    ) -> DatasetCreateStatus:
+    def _create_producer(self, producer_params: ProducerParams) -> None:
         """Creates Kafka Producer.
 
         Used to write (produce) messages to the dataset topic.
 
         Args:
             producer_params: parameters for initializing the producer
-
-        Returns:
-            status of dataset creation
         """
         has_pipeline_prefix = producer_params.has_pipeline_prefix
         node_name = producer_params.node_name
@@ -662,10 +647,6 @@ class KafkaDataset(AbstractDataset):
         self._producer = Producer(
             **producer_config,
         )
-        dataset_create_status = DatasetCreateStatus(
-            dataset_name=f"{self.topic_name}_producer"
-        )
-        return dataset_create_status
 
     def _create_topic(
         self,
