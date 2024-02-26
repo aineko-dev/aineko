@@ -96,19 +96,6 @@ class ProducerParams(KafkaParams):
     )
 
 
-class TopicParams(BaseModel):
-    """Parameters for initializing a Kafka Topic.
-
-    Passed in as connection_params when calling
-        ```python
-        self.create(topic_params=TopicParams(...))
-        ```
-    """
-
-    dataset_prefix: Optional[str] = None
-    dataset_config: Dict[str, Any] = {}
-
-
 class KafkaDataset(AbstractDataset):
     """Kafka dataset.
 
@@ -171,18 +158,18 @@ class KafkaDataset(AbstractDataset):
 
     def create(
         self,
-        topic_params: TopicParams = TopicParams(),
+        dataset_prefix: Optional[str] = None,
     ) -> DatasetCreateStatus:
         """Create the dataset storage layer kafka topic.
 
         Args:
-            topic_params: initialization parameters for the dataset topic
+            dataset_prefix: Optional prefix for dataset name.
 
         Returns:
           status of dataset creation.
         """
         return self._create_topic(
-            dataset_name=self.name, topic_params=topic_params
+            dataset_name=self.name, dataset_prefix=dataset_prefix
         )
 
     def initialize(
@@ -644,24 +631,22 @@ class KafkaDataset(AbstractDataset):
         return dataset_create_status
 
     def _create_topic(
-        self, dataset_name: str, topic_params: TopicParams
+        self,
+        dataset_name: str,
+        dataset_prefix: Optional[str] = None,
     ) -> DatasetCreateStatus:
         """Creates Kafka topic for the dataset storage layer.
 
         Args:
             dataset_name: name of the dataset
-            topic_params: initialization parameters for the dataset topic
+            dataset_prefix: Optional prefix for dataset name.
 
         Returns:
             status of dataset creation
         """
-        dataset_prefix = topic_params.dataset_prefix
-        dataset_config = topic_params.dataset_config
-        if not dataset_config:
-            dataset_config = self.dataset_config
         dataset_params = {
             **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            **dataset_config,
+            **self.dataset_config,
         }
 
         # Configure dataset
