@@ -28,14 +28,12 @@ class Runner:
     Args:
         pipeline_config_file (str): Path to pipeline config file
         pipeline_name (str): Name of the pipeline
-        kafka_config (dict): Config for kafka broker
         dataset_prefix (Optional[str]): Prefix for dataset names.
             Kafka topics will be called `<prefix>.<pipeline>.<dataset_name>`.
 
     Attributes:
         pipeline_config_file (str): Path to pipeline config file
         pipeline_name (str): Name of the pipeline, overrides pipeline config
-        kafka_config (dict): Config for kafka broker
         pipeline_name (str): Name of the pipeline, loaded from config
         dataset_prefix (Optional[str]): Prefix for dataset names
     """
@@ -44,13 +42,11 @@ class Runner:
         self,
         pipeline_config_file: str,
         pipeline_name: Optional[str] = None,
-        kafka_config: dict = DEFAULT_KAFKA_CONFIG.get("BROKER_CONFIG"),
         metrics_export_port: int = AINEKO_CONFIG.get("RAY_METRICS_PORT"),
         dataset_prefix: Optional[str] = None,
     ):
         """Initializes the runner class."""
         self.pipeline_config_file = pipeline_config_file
-        self.kafka_config = kafka_config
         self.metrics_export_port = metrics_export_port
         self.pipeline_name = pipeline_name
         self.dataset_prefix = dataset_prefix or ""
