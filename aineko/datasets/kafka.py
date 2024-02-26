@@ -187,27 +187,23 @@ class KafkaDataset(AbstractDataset):
 
     def initialize(
         self,
-        connection_params: Union[ConsumerParams, ProducerParams],
         create: Literal["consumer", "producer"],
+        node_name: str,
+        pipeline_name: str,
+        prefix: Optional[str] = None,
+        has_pipeline_prefix: bool = False,
     ) -> None:
         """Create query layer reader or writer for the dataset.
 
-        This method can be called in 2 different ways:
-
-            1. `self.initialize(create="consumer",
-            connection_params=ConsumerParams(...))`:
-                creates a Kafka Consumer and subscribes to the
-                dataset topic.
-
-            2. `self.initialize(create="producer",
-            connection_params=ProducerParams(...)`:
-                creates a Kafka Producer.
+        This method initializes a producer or consumer for the Kafka dataset,
+        depending on the value of the `create` parameter.
 
         Args:
-            create: if "consumer", create a Kafka Consumer and
-                subscribe to the dataset topic. If "producer",
-                create a Kafka Producer
-            connection_params: connection parameters for the dataset
+            create: whether to create a consumer or producer for the dataset
+            node_name: name of the node
+            pipeline_name: name of the pipeline that the node belongs to
+            prefix: prefix for the dataset topic
+            has_pipeline_prefix: Whether the dataset topic has a pipeline prefix
 
         Raises:
             KafkaDatasetError: if an error occurs while creating the consumer
@@ -215,11 +211,18 @@ class KafkaDataset(AbstractDataset):
         """
         if create == "consumer":
             try:
-                if not isinstance(connection_params, ConsumerParams):
-                    raise KafkaDatasetError(
-                        "Invalid connection_params for creating consumer."
+                self._create_consumer(
+                    consumer_params=ConsumerParams(
+                        dataset_name=self.name,
+                        node_name=node_name,
+                        pipeline_name=pipeline_name,
+                        prefix=prefix,
+                        has_pipeline_prefix=has_pipeline_prefix,
+                        consumer_config=DEFAULT_KAFKA_CONFIG.get(
+                            "CONSUMER_CONFIG"
+                        ),
                     )
-                self._create_consumer(consumer_params=connection_params)
+                )
                 logger.info("Consumer for %s created.", self.topic_name)
             except KafkaError as err:
                 raise KafkaDatasetError(
@@ -228,11 +231,18 @@ class KafkaDataset(AbstractDataset):
             return
         elif create == "producer":
             try:
-                if not isinstance(connection_params, ProducerParams):
-                    raise KafkaDatasetError(
-                        "Invalid connection_params for creating producer."
+                self._create_producer(
+                    producer_params=ProducerParams(
+                        dataset_name=self.name,
+                        node_name=node_name,
+                        pipeline_name=pipeline_name,
+                        prefix=prefix,
+                        has_pipeline_prefix=has_pipeline_prefix,
+                        producer_config=DEFAULT_KAFKA_CONFIG.get(
+                            "PRODUCER_CONFIG"
+                        ),
                     )
-                self._create_producer(producer_params=connection_params)
+                )
                 logger.info("Producer for %s created.", self.topic_name)
             except KafkaError as err:
                 raise KafkaDatasetError(

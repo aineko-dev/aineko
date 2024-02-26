@@ -27,7 +27,7 @@ from aineko.config import (
     TESTING_NODE_CONFIG,
 )
 from aineko.core.dataset import AbstractDataset
-from aineko.datasets.kafka import ConsumerParams, FakeKafka, ProducerParams
+from aineko.datasets.kafka import FakeKafka
 
 
 class PoisonPill:
@@ -142,39 +142,22 @@ class AbstractNode(ABC):
         )
 
         for dataset_name in inputs:
-            if self.inputs[dataset_name].type == "kafka":
-                consumer_params = ConsumerParams(
-                    **{
-                        "dataset_name": dataset_name,
-                        "node_name": self.name,
-                        "pipeline_name": self.pipeline_name,
-                        "prefix": prefix,
-                        "has_pipeline_prefix": has_pipeline_prefix,
-                        "consumer_config": DEFAULT_KAFKA_CONFIG.get(
-                            "CONSUMER_CONFIG"
-                        ),
-                    }
-                )
-                self.inputs[dataset_name].initialize(
-                    create="consumer", connection_params=consumer_params
-                )
+            self.inputs[dataset_name].initialize(
+                create="consumer",
+                node_name=self.name,
+                pipeline_name=self.pipeline_name,
+                prefix=prefix,
+                has_pipeline_prefix=has_pipeline_prefix,
+            )
+
         for dataset_name in outputs:
-            if self.outputs[dataset_name].type == "kafka":
-                producer_params = ProducerParams(
-                    **{
-                        "dataset_name": dataset_name,
-                        "node_name": self.name,
-                        "pipeline_name": self.pipeline_name,
-                        "prefix": prefix,
-                        "has_pipeline_prefix": has_pipeline_prefix,
-                        "producer_config": DEFAULT_KAFKA_CONFIG.get(
-                            "PRODUCER_CONFIG"
-                        ),
-                    }
-                )
-                self.outputs[dataset_name].initialize(
-                    create="producer", connection_params=producer_params
-                )
+            self.outputs[dataset_name].initialize(
+                create="producer",
+                node_name=self.name,
+                pipeline_name=self.pipeline_name,
+                prefix=prefix,
+                has_pipeline_prefix=has_pipeline_prefix,
+            )
 
     def setup_test(
         self,
