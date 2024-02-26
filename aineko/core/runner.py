@@ -170,17 +170,20 @@ class Runner:
             logging_config.model_dump(exclude_none=True),
         )
         # Create all datasets
-        dataset_create_status = [
+        dataset_creation_statuses = [
             dataset.create(dataset_prefix=self.dataset_prefix)
             for dataset in datasets
         ]
         logging_create_status = logging_dataset.create()
         datasets.append(logging_dataset)
 
-        dataset_create_status.append(logging_create_status)
+        dataset_creation_statuses.append(logging_create_status)
         cur_time = time.time()
         while True:
-            if all(future.done() for future in dataset_create_status):
+            if all(
+                dataset_creation.done()
+                for dataset_creation in dataset_creation_statuses
+            ):
                 logger.info("All datasets created.")
                 break
             if time.time() - cur_time > AINEKO_CONFIG.get(
