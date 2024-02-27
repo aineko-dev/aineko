@@ -26,7 +26,11 @@ from confluent_kafka.admin import AdminClient, NewTopic  # type: ignore
 from pydantic import BaseModel
 
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
-from aineko.core.dataset import AbstractDataset, DatasetError
+from aineko.core.dataset import (
+    AbstractDataset,
+    DatasetCreationStatus,
+    DatasetError,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -92,47 +96,6 @@ class ProducerParams(KafkaParams):
     )
 
 
-class DatasetCreateStatus:
-    """Object representing status of dataset creation.
-
-    Represents creation status of dataset (such as a kafka topic).
-
-    Can be used to ensure all datasets have been created.
-
-    Attributes:
-        dataset_name: Name of the dataset.
-        kafka_topic_to_future: Dictionary of kafka topics to futures.
-
-    Args:
-        dataset_name: Name of the dataset.
-        kafka_topic_to_future: Dictionary of kafka topics to futures.
-    """
-
-    def __init__(
-        self,
-        dataset_name: str,
-        kafka_topic_to_future: Optional[Dict[str, Any]] = None,
-    ):
-        """Creation status of dataset or its components."""
-        self.dataset_name = dataset_name
-        self.kafka_topic_to_future = kafka_topic_to_future
-
-    def done(self) -> bool:
-        """Return status of dataset creation.
-
-        Kafka topic creation status is represented by a dictionary
-        of kafka topics to futures.
-
-        Returns:
-            True if all futures are done, otherwise False.
-        """
-        if self.kafka_topic_to_future:
-            return all(
-                future.done() for future in self.kafka_topic_to_future.values()
-            )
-        return False
-
-
 class KafkaDataset(AbstractDataset):
     """Kafka dataset.
 
@@ -196,7 +159,7 @@ class KafkaDataset(AbstractDataset):
     def create(
         self,
         dataset_prefix: Optional[str] = None,
-    ) -> DatasetCreateStatus:
+    ) -> DatasetCreationStatus:
         """Create the dataset storage layer kafka topic.
 
         Args:
@@ -652,7 +615,7 @@ class KafkaDataset(AbstractDataset):
         self,
         dataset_name: str,
         dataset_prefix: Optional[str] = None,
-    ) -> DatasetCreateStatus:
+    ) -> DatasetCreationStatus:
         """Creates Kafka topic for the dataset storage layer.
 
         Args:
@@ -680,8 +643,10 @@ class KafkaDataset(AbstractDataset):
             config=dataset_params.get("config"),
         )
         topic_to_future_map = self._admin_client.create_topics([new_dataset])
-        dataset_create_status = DatasetCreateStatus(
-            dataset_name, kafka_topic_to_future=topic_to_future_map
+
+        dataset_create_status = DatasetCreationStatus(
+            dataset_name,
+            future=topic_to_future_map[dataset_name],
         )
         return dataset_create_status
 

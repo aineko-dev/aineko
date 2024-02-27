@@ -14,7 +14,8 @@ Example dataset configuration:
     ```
 """
 import abc
-from typing import Any, Dict, Generic, TypeVar
+from concurrent.futures import Future
+from typing import Any, Dict, Generic, Optional, TypeVar
 
 from aineko.models.dataset_config_schema import DatasetConfig
 from aineko.utils.imports import import_from_string
@@ -33,6 +34,40 @@ class DatasetError(Exception):
     """
 
     pass
+
+
+class DatasetCreationStatus:
+    """Status of dataset creation.
+
+    Attributes:
+        dataset_name: Name of the dataset.
+        _future: Future representing the creation status of the dataset.
+
+    Usage:
+        ```python
+        dataset = MyDataset("my_dataset")
+        creation_status = dataset.create()
+        if creation_status.done():
+            print(f"Dataset {creation_status.dataset_name} has been created.")
+        else:
+            print(f"Dataset {creation_status.dataset_name} is being created.")
+        ```
+    """
+
+    def __init__(self, dataset_name: str, future: Optional[Future] = None):
+        """Initialize the dataset creation status."""
+        self.dataset_name = dataset_name
+        self._future = future
+
+    def done(self) -> bool:
+        """Check if the dataset has been created.
+
+        Returns:
+            True if the dataset has been created, otherwise False.
+        """
+        if self._future:
+            return self._future.done()
+        return True
 
 
 class AbstractDataset(abc.ABC, Generic[T]):
@@ -61,7 +96,7 @@ class AbstractDataset(abc.ABC, Generic[T]):
         def write(self, **kwargs) -> Any:
             pass
 
-        def create(self, **kwargs) -> Any:
+        def create(self, **kwargs) -> DatasetCreationStatus:
             pass
 
         def delete(self, **kwargs) -> Any:
@@ -131,7 +166,7 @@ class AbstractDataset(abc.ABC, Generic[T]):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def create(self, *args: T, **kwargs: T) -> Any:
+    def create(self, *args: T, **kwargs: T) -> DatasetCreationStatus:
         """Subclass implementation to create the dataset."""
         raise NotImplementedError
 
