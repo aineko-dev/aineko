@@ -15,7 +15,7 @@ Example dataset configuration:
 """
 import abc
 from concurrent.futures import Future
-from typing import Any, Dict, Generic, Optional, TypeVar
+from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 from aineko.models.dataset_config_schema import DatasetConfig
 from aineko.utils.imports import import_from_string
@@ -137,13 +137,14 @@ class AbstractDataset(abc.ABC, Generic[T]):
 
     @classmethod
     def from_config(
-        cls, name: str, config: Dict[str, Any]
+        cls, name: str, config: Dict[str, Any], test: bool = False
     ) -> "AbstractDataset":
         """Create a dataset from a configuration dictionary.
 
         Args:
             name: The name of the dataset.
             config: The configuration dictionary.
+            test: Whether the dataset should be initialized in test mode.
 
         Returns:
             Instance of an `AbstractDataset` subclass.
@@ -151,7 +152,7 @@ class AbstractDataset(abc.ABC, Generic[T]):
         dataset_config = DatasetConfig(**dict(config))
 
         class_obj = import_from_string(dataset_config.type, kind="class")
-        class_instance = class_obj(name, dict(dataset_config))
+        class_instance = class_obj(name, dict(dataset_config), test=test)
         class_instance.name = name
         return class_instance
 
@@ -186,4 +187,14 @@ class AbstractDataset(abc.ABC, Generic[T]):
 
         This method should return True if the dataset exists, otherwise False.
         """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def setup_test_mode(
+        self,
+        source_node: str,
+        source_pipeline: str,
+        input_values: Optional[List[dict]] = None,
+    ) -> None:
+        """Subclass implementation to set up the dataset for testing."""
         raise NotImplementedError
