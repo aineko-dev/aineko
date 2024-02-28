@@ -118,6 +118,7 @@ class KafkaDataset(AbstractDataset):
     Args:
         name: name of the dataset
         params: dataset configuration parameters
+        test: whether the dataset should be initialized in test mode
 
     Attributes:
         name (str): name of the dataset
@@ -730,7 +731,21 @@ class KafkaDataset(AbstractDataset):
         source_pipeline: str,
         input_values: Optional[List[dict]] = None,
     ) -> None:
-        """Sets up the dataset for testing."""
+        """Sets up the dataset for testing.
+
+        The dataset is set up to return the input values when any reading
+        method is called. Input values should be a list of dicts where the dict
+        is the actual message payload. The dataset will handle the metadata for
+        the messages. (timestamp, source_node, source_pipeline, etc.)
+
+        Args:
+            source_node: name of the source node
+            source_pipeline: name of the source pipeline
+            input_values: list of input values to be used for testing
+
+        Raises:
+            DatasetError: if the dataset is not initialized with the test flag
+        """
         if self._test is False:
             raise DatasetError(
                 "Cannot set up test mode if the dataset is not initialized "
