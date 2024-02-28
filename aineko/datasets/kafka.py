@@ -137,7 +137,12 @@ class KafkaDataset(AbstractDataset):
         KafkaDatasetError: if an error occurs while creating the dataset
     """
 
-    def __init__(self, name: str, params: Dict[str, Any]):
+    def __init__(
+        self,
+        name: str,
+        params: Dict[str, Any],
+        test: bool = False,
+    ):
         """Initialize the dataset."""
         self.name = name
         self.topic_name = name
@@ -148,13 +153,19 @@ class KafkaDataset(AbstractDataset):
             **params.get("kafka_credentials", {})
         )
         self.dataset_config = params
-        self.location = self._update_location()
         self.cached = False
         self.source_node: str
         self.source_pipeline: str
         self._consumer: Consumer
         self._producer: Producer
-        self._create_admin_client()
+        self._test = test
+        self._empty = True
+        self._input_values: List[Dict] = []
+        self._output_values: List[Dict] = []
+
+        if self._test is False:
+            self.location = self._update_location()
+            self._create_admin_client()
 
     def create(
         self,
@@ -291,6 +302,21 @@ class KafkaDataset(AbstractDataset):
         Raises:
             KafkaDatasetError: if an error occurs while reading the topic
         """
+        if how not in ["next", "last"]:
+            raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
+
+        if self._test:
+            if how == "next":
+                remaining = len(self._input_values)
+                if remaining > 0:
+                    if remaining == 1:
+                        self._empty = True
+                    return self._input_values.pop(0)
+
+            if how == "last":
+                if self._input_values:
+                    return self._input_values[-1]
+
         while True:
             try:
                 message = self._consume(how=how, timeout=timeout)
@@ -324,6 +350,12 @@ class KafkaDataset(AbstractDataset):
             "source_node": self.source_node,
             "message": msg,
         }
+
+        if self._test:
+            if msg is not None:
+                self._output_values.append(message)
+            return None
+
         self._producer.poll(0)
 
         key_bytes = str(key).encode("utf-8") if key is not None else None
@@ -413,6 +445,20 @@ class KafkaDataset(AbstractDataset):
         """
         if how not in ["next", "last"]:
             raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
+
+        if self._test:
+            if how == "next":
+                remaining = len(self._input_values)
+                if remaining > 0:
+                    if remaining == 1:
+                        self._empty = True
+                    return self._input_values.pop(0)
+
+            if how == "last":
+                if self._input_values:
+                    return self._input_values[-1]
+
+            return None
 
         timeout = timeout or DEFAULT_KAFKA_CONFIG.get("CONSUMER_TIMEOUT")
         if how == "next":
@@ -681,6 +727,35 @@ class KafkaDataset(AbstractDataset):
         DEFAULT_KAFKA_CONFIG.CONSUMER_CONFIG["bootstrap.servers"] = location
         DEFAULT_KAFKA_CONFIG.PRODUCER_CONFIG["bootstrap.servers"] = location
         return location
+
+    def setup_test_mode(
+        self,
+        source_node: str,
+        source_pipeline: str,
+        input_values: Optional[List[dict]] = None,
+    ) -> None:
+        """Sets up the dataset for testing."""
+        if self._test is False:
+            raise DatasetError(
+                "Cannot set up test mode if the dataset is not initialized "
+                "with the test flag."
+            )
+
+        self.source_node = source_node
+        self.source_pipeline = source_pipeline
+        if input_values is not None:
+            for input_value in input_values.copy():
+                self._input_values.append(
+                    {
+                        "timestamp": datetime.datetime.now().strftime(
+                            AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
+                        ),
+                        "message": input_value,
+                        "source_node": self.source_node,
+                        "source_pipeline": self.source_pipeline,
+                    }
+                )
+            self._empty = False
 
 
 class FakeKafka:
