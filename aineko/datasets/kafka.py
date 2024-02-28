@@ -123,9 +123,7 @@ class KafkaDataset(AbstractDataset):
         name (str): name of the dataset
         topic_name (str): name of the Kafka topic
         params (dict): dataset configuration parameters
-        type (str): type of the dataset
         credentials (KafkaCredentials): Kafka credentials
-        dataset_config (dict): dataset configuration
         _consumer (Consumer): Kafka consumer
         _producer (Producer): Kafka producer
         _admin_client (AdminClient): Kafka AdminClient
@@ -147,12 +145,10 @@ class KafkaDataset(AbstractDataset):
         self.name = name
         self.topic_name = name
         self.params = params
-        self.type = "kafka"
         self.consumer_name: Optional[str] = None
         self.credentials = KafkaCredentials(
             **params.get("kafka_credentials", {})
         )
-        self.dataset_config = params
         self.cached = False
         self.source_node: str
         self.source_pipeline: str
@@ -673,7 +669,7 @@ class KafkaDataset(AbstractDataset):
         """
         dataset_params = {
             **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            **self.dataset_config,
+            **self.params,
         }
 
         # Configure dataset
