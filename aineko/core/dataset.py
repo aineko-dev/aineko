@@ -135,6 +135,29 @@ class AbstractDataset(abc.ABC, Generic[T]):
     _input_values: List[Dict]
     _output_values: List[Dict]
 
+    @abc.abstractmethod
+    def __init__(
+        self,
+        name: str,
+        params: Dict[str, Any],
+        test: bool = False,
+    ) -> None:
+        """Subclass implementation to initialize the dataset object.
+
+        All dataset implementations must implement the `__init__` method.
+        A dataset object should be initialized with the following attributes:
+
+        * `self.name`: The name of the dataset.
+        * `self.params`: A dictionary of parameters.
+        * `self._test`: Whether the dataset is in test mode.
+
+        Args:
+            name: The name of the dataset.
+            params: A dictionary of parameters.
+            test: Whether the dataset should be initialized in test mode.
+        """
+        raise NotImplementedError
+
     def __str__(self) -> str:
         """Return the string representation of the dataset."""
         return f"{self.__class__.__name__}({self.name})"
