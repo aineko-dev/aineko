@@ -131,6 +131,10 @@ class AbstractDataset(abc.ABC, Generic[T]):
 
     name: str
 
+    _test: bool
+    _input_values: List[Dict]
+    _output_values: List[Dict]
+
     def __str__(self) -> str:
         """Return the string representation of the dataset."""
         return f"{self.__class__.__name__}({self.name})"
@@ -198,3 +202,47 @@ class AbstractDataset(abc.ABC, Generic[T]):
     ) -> None:
         """Subclass implementation to set up the dataset for testing."""
         raise NotImplementedError
+
+    def get_test_input_values(self) -> List[Dict]:
+        """Return the input values used for testing.
+
+        Returns:
+            A list of input values.
+
+        Raises:
+            DatasetError: If the dataset is not in test mode.
+        """
+        if self._test:
+            return self._input_values
+
+        raise DatasetError("Dataset is not in test mode.")
+
+    def get_test_output_values(self) -> List[Dict]:
+        """Return the output values used for testing.
+
+        Returns:
+            A list of output values.
+
+        Raises:
+            DatasetError: If the dataset is not in test mode.
+        """
+        if self._test:
+            return self._output_values
+
+        raise DatasetError("Dataset is not in test mode.")
+
+    def test_is_empty(self) -> bool:
+        """Return whether the dataset is empty.
+
+        Returns:
+            True if the dataset is empty, otherwise False.
+
+        Raises:
+            DatasetError: If the dataset is not in test mode.
+        """
+        if self._test:
+            if len(self._input_values) == 0:
+                return True
+            return False
+
+        raise DatasetError("Dataset is not in test mode.")

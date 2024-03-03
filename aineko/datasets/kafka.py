@@ -306,8 +306,6 @@ class KafkaDataset(AbstractDataset):
             if how == "next":
                 remaining = len(self._input_values)
                 if remaining > 0:
-                    if remaining == 1:
-                        self._empty = True
                     return self._input_values.pop(0)
 
             if how == "last":
@@ -447,8 +445,6 @@ class KafkaDataset(AbstractDataset):
             if how == "next":
                 remaining = len(self._input_values)
                 if remaining > 0:
-                    if remaining == 1:
-                        self._empty = True
                     return self._input_values.pop(0)
 
             if how == "last":
@@ -766,4 +762,3 @@ class KafkaDataset(AbstractDataset):
                         "source_pipeline": self.source_pipeline,
                     }
                 )
-            self._empty = False

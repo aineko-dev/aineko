@@ -324,14 +324,14 @@ class AbstractNode(ABC):
 
             # End loop if all inputs are empty
             if self.inputs and all(
-                input._empty for input in self.inputs.values()
+                input.test_is_empty() for input in self.inputs.values()
             ):
                 run_loop = False
 
         self._post_loop_hook(self.params)
 
         return {
-            dataset_name: output._output_values
+            dataset_name: output.get_test_output_values()
             for dataset_name, output in self.outputs.items()
         }
         # pylint: enable=protected-access
@@ -376,8 +376,9 @@ class AbstractNode(ABC):
             # pylint: disable=protected-access
             # Capture last read values
             for dataset_name, input_dataset in self.inputs.items():
-                if input_dataset._input_values:
-                    last_value = input_dataset._input_values[0]
+                test_input_values = input_dataset.get_test_input_values()
+                if test_input_values:
+                    last_value = test_input_values[0]
                     last_consumed_values[dataset_name] = last_value
 
             run_loop = self._execute(self.params)  # type: ignore
@@ -389,14 +390,15 @@ class AbstractNode(ABC):
 
             # End loop if all inputs are empty
             if self.inputs and all(
-                input._empty for input in self.inputs.values()
+                input.test_is_empty() for input in self.inputs.values()
             ):
                 run_loop = False
 
             # Capture last produced values
             for dataset_name, output in self.outputs.items():
-                if output._output_values:
-                    last_value = output._output_values[-1]
+                test_output_values = output.get_test_output_values()
+                if test_output_values:
+                    last_value = test_output_values[-1]
                     last_produced_values[dataset_name] = last_value
 
             yield (last_consumed_values, last_produced_values, self)
