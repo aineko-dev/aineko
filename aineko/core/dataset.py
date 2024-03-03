@@ -73,60 +73,8 @@ class DatasetCreationStatus:
 class AbstractDataset(abc.ABC, Generic[T]):
     """Base class for defining new synchronous Aineko datasets.
 
-    Subclass implementations can be instantiated using
-    the `from_config` method.
-
-    When defining a new dataset, the following methods must be implemented:
-
-    ```
-    - `read`
-    - `write`
-    - `create`
-    - `delete`
-    - `initialize`
-    - `exists`
-    ```
-
-    Example:
-    ```python
-    class MyDataset(AbstractDataset):
-        def read(self, **kwargs) -> Any:
-            pass
-
-        def write(self, **kwargs) -> Any:
-            pass
-
-        def create(self, **kwargs) -> DatasetCreationStatus:
-            pass
-
-        def delete(self, **kwargs) -> Any:
-            pass
-
-        def initialize(self, **kwargs) -> Any:
-            pass
-
-        def exists(self, **kwargs) -> bool:
-            pass
-    ```
-
-    If `MyDataset` was defined in the file
-    `./aineko/datasets/mydataset.py`, a new dataset
-    can be created using the `from_config` method:
-
-    Example:
-    ```python
-
-    dataset = AbstractDataset.from_config(
-        name="my_dataset_instance",
-        config={
-            "type": "aineko.datasets.mydataset.MyDataset",
-            "location": "foo",
-            "params": {
-                "param_1": "bar"
-            }
-        }
-    )
-    ```
+    Subclass implementations must implement all abstract methods. Please
+    refer to the documentation of each method for more information.
     """
 
     name: str
@@ -175,6 +123,23 @@ class AbstractDataset(abc.ABC, Generic[T]):
 
         Returns:
             Instance of an `AbstractDataset` subclass.
+
+        Example:
+            In some cases, it is necessary to dynamically create a dataset from
+            a configuration dictionary. Since the dataset type could be any
+            dataset implementation, the `from_config` method provides a way to
+            properly initialize the dataset object.
+
+            ```python
+            config = {
+                "type": "aineo.datasets.kafka.KafkaDataset",
+                "location": "localhost:9092",
+                "params": {
+                    "param_1": "bar"
+                }
+            }
+            dataset = AbstractDataset.from_config("my_dataset", config)
+            ```
         """
         dataset_config = DatasetConfig(**dict(config))
 
@@ -223,7 +188,22 @@ class AbstractDataset(abc.ABC, Generic[T]):
         source_pipeline: str,
         input_values: Optional[List[dict]] = None,
     ) -> None:
-        """Subclass implementation to set up the dataset for testing."""
+        """Subclass implementation to set up the dataset for testing.
+
+        Nodes have the ability to run in test mode, which allows them to run
+        without setting up the actual dataset storage layer. All dataset
+        implementations must implement this method. A dataset in test mode
+        should never interact with the real storage layer. Instead, it should
+        use the class attributes as the storage layer:
+
+        * `_input_values` for input values
+        * `_output_values` for output values
+
+        Args:
+            source_node: The name of the source node.
+            source_pipeline: The name of the source pipeline.
+            input_values: A list of input values.
+        """
         raise NotImplementedError
 
     def get_test_input_values(self) -> List[Dict]:
