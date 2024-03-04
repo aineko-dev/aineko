@@ -73,8 +73,26 @@ class DatasetCreationStatus:
 class AbstractDataset(abc.ABC, Generic[T]):
     """Base class for defining new synchronous Aineko datasets.
 
-    Subclass implementations must implement all abstract methods. Please
-    refer to the documentation of each method for more information.
+    A dataset comprises 2 subcomponents, the query layer and the storage layer.
+    The storage layer refers to the actual storage infrastructure that holds the
+    data, and the query layer is an API layer that allows for the interaction
+    with the storage layer.
+
+    The `AbstractDataset` class provides a common interface for all dataset
+    implementations. All dataset implementations must subclass the
+    `AbstractDataset` class and must implement the following methods:
+
+    * `__init__`: Initialize the dataset object.
+    * `create`: Creation of the actual storage layer.
+    * `delete`: Delete the storage layer.
+    * `exists`: Check if the storage layer exists.
+    * `initialize`: Initialize the query layer.
+    * `read`: Read an entry from the dataset by querying the storage layer.
+    * `write`: Write an entry to the dataset by querying the storage layer.
+    * `setup_test_mode`: Set up the dataset for testing.
+
+    Please refer to the method docstrings for more information on the
+    implementation details of each method.
     """
 
     name: str
@@ -160,12 +178,12 @@ class AbstractDataset(abc.ABC, Generic[T]):
 
     @abc.abstractmethod
     def create(self, *args: T, **kwargs: T) -> DatasetCreationStatus:
-        """Subclass implementation to create the dataset."""
+        """Subclass implementation to create the dataset storage layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
     def delete(self, *args: T, **kwargs: T) -> Any:
-        """Subclass implementation to delete the dataset."""
+        """Subclass implementation to delete the dataset storage layer."""
         raise NotImplementedError
 
     @abc.abstractmethod
