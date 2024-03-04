@@ -2501,7 +2501,12 @@ include all Ray remote parameters as described in the <a href="https://docs.ray.
 <span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
-<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">DatasetConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">DatasetConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataset configuration model.&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
@@ -2522,7 +2527,12 @@ include all Ray remote parameters as described in the <a href="https://docs.ray.
     <span class="p">)</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="kc">None</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The initialization parameters for the dataset.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;The initialization parameters for the dataset. These are mainly &quot;</span>
+            <span class="s2">&quot;used by power users to fine-tune the dataset behavior. For &quot;</span>
+            <span class="s2">&quot;example, Kafka topics can be configured with a number of options &quot;</span>
+            <span class="s2">&quot;found in: https://kafka.apache.org/documentation.html#topicconfigs&quot;</span>
+        <span class="p">),</span>
         <span class="n">examples</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;param_1&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}],</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2580,7 +2590,7 @@ include all Ray remote parameters as described in the <a href="https://docs.ray.
 </h3>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Dict">Dict</span></span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="n"><span title="typing.Any">Any</span></span><span class="p">]]</span> <span class="o">=</span> <span class="n"><span title="pydantic.Field">Field</span></span><span class="p">(</span>
     <span class="kc">None</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The initialization parameters for the dataset.&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The initialization parameters for the dataset. These are mainly used by power users to fine-tune the dataset behavior. For example, Kafka topics can be configured with a number of options found in: https://kafka.apache.org/documentation.html#topicconfigs&quot;</span><span class="p">,</span>
     <span class="n">examples</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;param_1&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}],</span>
 <span class="p">)</span>
 </code></pre></div>
