@@ -28,7 +28,7 @@ from pydantic import BaseModel
 from aineko.config import AINEKO_CONFIG, DEFAULT_KAFKA_CONFIG
 from aineko.core.dataset import (
     AbstractDataset,
-    DatasetCreateStatus,
+    DatasetCreationStatus,
     DatasetError,
 )
 
@@ -96,19 +96,6 @@ class ProducerParams(KafkaParams):
     )
 
 
-class TopicParams(BaseModel):
-    """Parameters for initializing a Kafka Topic.
-
-    Passed in as connection_params when calling
-        ```python
-        self.create(topic_params=TopicParams(...))
-        ```
-    """
-
-    dataset_prefix: Optional[str] = None
-    dataset_config: Dict[str, Any] = {}
-
-
 class KafkaDataset(AbstractDataset):
     """Kafka dataset.
 
@@ -131,14 +118,13 @@ class KafkaDataset(AbstractDataset):
     Args:
         name: name of the dataset
         params: dataset configuration parameters
+        test: whether the dataset should be initialized in test mode
 
     Attributes:
         name (str): name of the dataset
         topic_name (str): name of the Kafka topic
         params (dict): dataset configuration parameters
-        type (str): type of the dataset
         credentials (KafkaCredentials): Kafka credentials
-        dataset_config (dict): dataset configuration
         _consumer (Consumer): Kafka consumer
         _producer (Producer): Kafka producer
         _admin_client (AdminClient): Kafka AdminClient
@@ -150,64 +136,69 @@ class KafkaDataset(AbstractDataset):
         KafkaDatasetError: if an error occurs while creating the dataset
     """
 
-    def __init__(self, name: str, params: Dict[str, Any]):
+    def __init__(
+        self,
+        name: str,
+        params: Dict[str, Any],
+        test: bool = False,
+    ):
         """Initialize the dataset."""
         self.name = name
         self.topic_name = name
         self.params = params
-        self.type = "kafka"
         self.consumer_name: Optional[str] = None
         self.credentials = KafkaCredentials(
             **params.get("kafka_credentials", {})
         )
-        self.dataset_config = params
-        self.location = self._update_location()
         self.cached = False
         self.source_node: str
         self.source_pipeline: str
         self._consumer: Consumer
         self._producer: Producer
-        self._create_admin_client()
+        self._test = test
+        self._empty = True
+        self._input_values: List[Dict] = []
+        self._output_values: List[Dict] = []
+
+        if self._test is False:
+            self.location = self._update_location()
+            self._create_admin_client()
 
     def create(
         self,
-        topic_params: TopicParams = TopicParams(),
-    ) -> DatasetCreateStatus:
+        dataset_prefix: Optional[str] = None,
+    ) -> DatasetCreationStatus:
         """Create the dataset storage layer kafka topic.
 
         Args:
-            topic_params: initialization parameters for the dataset topic
+            dataset_prefix: Optional prefix for dataset name.
 
         Returns:
           status of dataset creation.
         """
         return self._create_topic(
-            dataset_name=self.name, topic_params=topic_params
+            dataset_name=self.name, dataset_prefix=dataset_prefix
         )
 
     def initialize(
         self,
-        connection_params: Union[ConsumerParams, ProducerParams],
         create: Literal["consumer", "producer"],
+        node_name: str,
+        pipeline_name: str,
+        prefix: Optional[str] = None,
+        has_pipeline_prefix: bool = False,
     ) -> None:
         """Create query layer reader or writer for the dataset.
 
-        This method can be called in 2 different ways:
-
-            1. `self.initialize(create="consumer",
-            connection_params=ConsumerParams(...))`:
-                creates a Kafka Consumer and subscribes to the
-                dataset topic.
-
-            2. `self.initialize(create="producer",
-            connection_params=ProducerParams(...)`:
-                creates a Kafka Producer.
+        This method initializes a producer or consumer for the Kafka dataset,
+        depending on the value of the `create` parameter.
 
         Args:
-            create: if "consumer", create a Kafka Consumer and
-                subscribe to the dataset topic. If "producer",
-                create a Kafka Producer
-            connection_params: connection parameters for the dataset
+            create: whether to create a consumer or producer for the dataset
+            node_name: name of the node
+            pipeline_name: name of the pipeline that the node belongs to
+            prefix: prefix for the dataset topic
+            has_pipeline_prefix: Whether the dataset topic has a pipeline prefix
 
         Raises:
             KafkaDatasetError: if an error occurs while creating the consumer
@@ -215,11 +206,18 @@ class KafkaDataset(AbstractDataset):
         """
         if create == "consumer":
             try:
-                if not isinstance(connection_params, ConsumerParams):
-                    raise KafkaDatasetError(
-                        "Invalid connection_params for creating consumer."
+                self._create_consumer(
+                    consumer_params=ConsumerParams(
+                        dataset_name=self.name,
+                        node_name=node_name,
+                        pipeline_name=pipeline_name,
+                        prefix=prefix,
+                        has_pipeline_prefix=has_pipeline_prefix,
+                        consumer_config=DEFAULT_KAFKA_CONFIG.get(
+                            "CONSUMER_CONFIG"
+                        ),
                     )
-                self._create_consumer(consumer_params=connection_params)
+                )
                 logger.info("Consumer for %s created.", self.topic_name)
             except KafkaError as err:
                 raise KafkaDatasetError(
@@ -228,11 +226,18 @@ class KafkaDataset(AbstractDataset):
             return
         elif create == "producer":
             try:
-                if not isinstance(connection_params, ProducerParams):
-                    raise KafkaDatasetError(
-                        "Invalid connection_params for creating producer."
+                self._create_producer(
+                    producer_params=ProducerParams(
+                        dataset_name=self.name,
+                        node_name=node_name,
+                        pipeline_name=pipeline_name,
+                        prefix=prefix,
+                        has_pipeline_prefix=has_pipeline_prefix,
+                        producer_config=DEFAULT_KAFKA_CONFIG.get(
+                            "PRODUCER_CONFIG"
+                        ),
                     )
-                self._create_producer(producer_params=connection_params)
+                )
                 logger.info("Producer for %s created.", self.topic_name)
             except KafkaError as err:
                 raise KafkaDatasetError(
@@ -294,6 +299,19 @@ class KafkaDataset(AbstractDataset):
         Raises:
             KafkaDatasetError: if an error occurs while reading the topic
         """
+        if how not in ["next", "last"]:
+            raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
+
+        if self._test:
+            if how == "next":
+                remaining = len(self._input_values)
+                if remaining > 0:
+                    return self._input_values.pop(0)
+
+            if how == "last":
+                if self._input_values:
+                    return self._input_values[-1]
+
         while True:
             try:
                 message = self._consume(how=how, timeout=timeout)
@@ -327,6 +345,12 @@ class KafkaDataset(AbstractDataset):
             "source_node": self.source_node,
             "message": msg,
         }
+
+        if self._test:
+            if msg is not None:
+                self._output_values.append(message)
+            return None
+
         self._producer.poll(0)
 
         key_bytes = str(key).encode("utf-8") if key is not None else None
@@ -416,6 +440,18 @@ class KafkaDataset(AbstractDataset):
         """
         if how not in ["next", "last"]:
             raise ValueError(f"Invalid how: {how}. Expected `next` or `last`.")
+
+        if self._test:
+            if how == "next":
+                remaining = len(self._input_values)
+                if remaining > 0:
+                    return self._input_values.pop(0)
+
+            if how == "last":
+                if self._input_values:
+                    return self._input_values[-1]
+
+            return None
 
         timeout = timeout or DEFAULT_KAFKA_CONFIG.get("CONSUMER_TIMEOUT")
         if how == "next":
@@ -555,18 +591,13 @@ class KafkaDataset(AbstractDataset):
                 f"Error creating Kafka AdminClient: {str(err)}"
             ) from err
 
-    def _create_consumer(
-        self, consumer_params: ConsumerParams
-    ) -> DatasetCreateStatus:
+    def _create_consumer(self, consumer_params: ConsumerParams) -> None:
         """Creates Kafka Consumer and subscribes to the dataset topic.
 
         Used to read (consume) messages from the dataset topic.
 
         Args:
             consumer_params: parameters for initializing the consumer
-
-        Returns:
-            status of dataset creation
         """
         dataset_name = consumer_params.dataset_name
         node_name = consumer_params.node_name
@@ -592,23 +623,13 @@ class KafkaDataset(AbstractDataset):
         self._consumer = Consumer(consumer_config)
         self._consumer.subscribe([consumer_topic])
 
-        dataset_create_status = DatasetCreateStatus(
-            dataset_name=f"{self.topic_name}_consumer"
-        )
-        return dataset_create_status
-
-    def _create_producer(
-        self, producer_params: ProducerParams
-    ) -> DatasetCreateStatus:
+    def _create_producer(self, producer_params: ProducerParams) -> None:
         """Creates Kafka Producer.
 
         Used to write (produce) messages to the dataset topic.
 
         Args:
             producer_params: parameters for initializing the producer
-
-        Returns:
-            status of dataset creation
         """
         has_pipeline_prefix = producer_params.has_pipeline_prefix
         node_name = producer_params.node_name
@@ -628,30 +649,24 @@ class KafkaDataset(AbstractDataset):
         self._producer = Producer(
             **producer_config,
         )
-        dataset_create_status = DatasetCreateStatus(
-            dataset_name=f"{self.topic_name}_producer"
-        )
-        return dataset_create_status
 
     def _create_topic(
-        self, dataset_name: str, topic_params: TopicParams
-    ) -> DatasetCreateStatus:
+        self,
+        dataset_name: str,
+        dataset_prefix: Optional[str] = None,
+    ) -> DatasetCreationStatus:
         """Creates Kafka topic for the dataset storage layer.
 
         Args:
             dataset_name: name of the dataset
-            topic_params: initialization parameters for the dataset topic
+            dataset_prefix: Optional prefix for dataset name.
 
         Returns:
             status of dataset creation
         """
-        dataset_prefix = topic_params.dataset_prefix
-        dataset_config = topic_params.dataset_config
-        if not dataset_config:
-            dataset_config = self.dataset_config
         dataset_params = {
             **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            **dataset_config,
+            **self.params,
         }
 
         # Configure dataset
@@ -667,8 +682,10 @@ class KafkaDataset(AbstractDataset):
             config=dataset_params.get("config"),
         )
         topic_to_future_map = self._admin_client.create_topics([new_dataset])
-        dataset_create_status = DatasetCreateStatus(
-            dataset_name, kafka_topic_to_future=topic_to_future_map
+
+        dataset_create_status = DatasetCreationStatus(
+            dataset_name,
+            future=topic_to_future_map[dataset_name],
         )
         return dataset_create_status
 
@@ -704,110 +721,44 @@ class KafkaDataset(AbstractDataset):
         DEFAULT_KAFKA_CONFIG.PRODUCER_CONFIG["bootstrap.servers"] = location
         return location
 
-
-class FakeKafka:
-    """Fake Kafka dataset class for testing.
-
-    The class can be used as both a reader and a writer for testing
-    purposes.
-
-    As a reader (consumer), the class will store in its state the list
-    of values to feed the node, and pop each value everytime the read
-    method is called.
-
-    As a writer (producer), The class will store in its state the list
-    of values produced by the node.
-
-    Args:
-        dataset_name: name of the dataset
-        node_name: name of the node that is consuming the dataset
-        input_values: list of values to feed the node
-
-    Attributes:
-        dataset_name (str): name of the dataset
-        node_name (str): name of the node that is consuming the dataset
-        input_values (list): list of mock data values to feed the node
-        empty (bool): True if the list of values is empty, False otherwise
-        output_values (list): list of mock data values produced by the node
-    """
-
-    def __init__(
+    def setup_test_mode(
         self,
-        dataset_name: str,
-        node_name: str,
-        input_values: Optional[List] = None,
-    ):
-        """Initialize the fake dataset."""
-        self.dataset_name = dataset_name
-        self.node_name = node_name
-        self.input_values = input_values or []
-        self.empty = False
-        self.output_values = []  # type: ignore
+        source_node: str,
+        source_pipeline: str,
+        input_values: Optional[List[dict]] = None,
+    ) -> None:
+        """Sets up the dataset for testing.
 
-    def read(
-        self,
-        how: str = "next",
-        timeout: Optional[float] = None,
-    ) -> Optional[Dict]:
-        """Reads a message from the dataset.
+        The dataset is set up to return the input values when any reading
+        method is called. Input values should be a list of dicts where the dict
+        is the actual message payload. The dataset will handle the metadata for
+        the messages. (timestamp, source_node, source_pipeline, etc.)
 
         Args:
-            how: how to read the message
-                "next": read the next message in the queue
-                "last": read the last message in the queue
-
-            timeout: seconds to poll for a response from kafka broker.
-                If using how="last", set to bigger than 0.
-
-        Returns:
-            next or last value in self.input_values
+            source_node: name of the source node
+            source_pipeline: name of the source pipeline
+            input_values: list of input values to be used for testing
 
         Raises:
-            ValueError: if how is not "next" or "last"
+            DatasetError: if the dataset is not initialized with the test flag
         """
-        del timeout  # unused because this is a fake dataset
-        if how not in ["next", "last"]:
-            raise ValueError(f"Invalid how: {how}. Expected 'next' or 'last'.")
+        if self._test is False:
+            raise DatasetError(
+                "Cannot set up test mode if the dataset is not initialized "
+                "with the test flag."
+            )
 
-        if how == "next":
-            remaining = len(self.input_values)
-            if remaining > 0:
-                if remaining == 1:
-                    self.empty = True
-                return {
-                    "timestamp": datetime.datetime.now().strftime(
-                        AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
-                    ),
-                    "message": self.input_values.pop(0),
-                    "source_node": "test",
-                    "source_pipeline": "test",
-                }
-        if how == "last":
-            if self.input_values:
-                return self.input_values[-1]
-
-        return None
-
-    def next(self) -> Optional[Dict]:
-        """Wraps `read(how="next")`, blocks until available.
-
-        Returns:
-            msg: message from the dataset
-        """
-        return self.read(how="next")
-
-    def last(self, timeout: float = 1) -> Optional[Dict]:
-        """Wraps `read(how="last")`, blocks until available.
-
-        Returns:
-            msg: message from the dataset
-        """
-        return self.read(how="last", timeout=timeout)
-
-    def write(self, message: Dict) -> None:
-        """Stores message in self.input_values.
-
-        Args:
-            message: message to write.
-        """
-        self.output_values.append(message)
+        self.source_node = source_node
+        self.source_pipeline = source_pipeline
+        if input_values is not None:
+            for input_value in input_values.copy():
+                self._input_values.append(
+                    {
+                        "timestamp": datetime.datetime.now().strftime(
+                            AINEKO_CONFIG.get("MSG_TIMESTAMP_FORMAT")
+                        ),
+                        "message": input_value,
+                        "source_node": self.source_node,
+                        "source_pipeline": self.source_pipeline,
+                    }
+                )

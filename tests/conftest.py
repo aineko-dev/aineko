@@ -4,13 +4,59 @@
 import datetime
 import os
 import time
-from typing import Optional
+from typing import Any, Dict, List, Optional, Union
 
 import pytest
 from click.testing import CliRunner
 
 from aineko import AbstractNode, ConfigLoader, Runner
 from aineko.__main__ import cli
+
+
+@pytest.fixture
+def message_helper():
+    """Fixture to help with output message validation."""
+
+    def _message_helper(
+        messages: Union[List[Dict], Dict]
+    ) -> Union[List[Any], Any]:
+        """Helper method to return the message payload from a list of messages.
+
+        Example usage:
+            ```python
+            messages = [
+                    {
+                        "message": 1,
+                        "source_node": "foo",
+                        "source_pipeline": "bar",
+                    },
+                    {
+                        "message": 2,
+                        "source_node": "foo",
+                        "source_pipeline": "bar",
+                    },
+                    {
+                        "message": 3,
+                        "source_node": "foo",
+                        "source_pipeline": "bar",
+                    },
+            ]
+            message_helper(messages)
+            # Returns: [1, 2, 3]
+            ```
+
+        Args:
+            messages: List of messages or a single message
+
+        Returns:
+            List of message payloads or a single message payload
+        """
+        if isinstance(messages, dict):
+            return messages["message"]
+
+        return [message["message"] for message in messages]
+
+    return _message_helper
 
 
 @pytest.fixture(scope="module")
@@ -75,7 +121,9 @@ def dummy_node():
         def _execute(self, params: Optional[dict] = None) -> Optional[bool]:
             """Reads message from input and writes it to output."""
             msg = self.inputs["input"].read(how="next", timeout=0)
-            self.outputs["output"].write(msg)
+            if msg is None:
+                return False
+            self.outputs["output"].write(msg["message"])
 
     return DummyNode
 
@@ -92,7 +140,7 @@ def start_service():
 # Test nodes.
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_sequencer_node():
     """Returns a sample sequencer node."""
 
@@ -128,7 +176,7 @@ def test_sequencer_node():
     return TestSequencer
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_doubler_node():
     """Returns a sample doubler node."""
 
@@ -155,30 +203,32 @@ def test_doubler_node():
                 return False
 
             # Read message from inputs
-            cur_integer = self.inputs["integer_sequence"].next()
+            message = self.inputs["integer_sequence"].next()
+
+            print(message)
 
             # Calculate latency
             latency = (
                 time.time()
                 - datetime.datetime.strptime(
-                    cur_integer["timestamp"], "%Y-%m-%d %H:%M:%S.%f"
+                    message["timestamp"], "%Y-%m-%d %H:%M:%S.%f"
                 ).timestamp()
             )
 
             # Log message
             self.log(
-                f"Consumed: {cur_integer} - "
+                f"Consumed: {message} - "
                 f"Latency (ms): {round(latency*1000, 2)}",
                 level="info",
             )
 
             # Convert message to integer
-            cur_integer = int(cur_integer["message"])
-            self.cur_integer = cur_integer
+            message = int(message["message"])
+            self.cur_integer = message
 
             # Write message to outputs
-            self.outputs["integer_doubles"].write(cur_integer * 2)
-            self.log(f"Produced {cur_integer * 2}", level="info")
+            self.outputs["integer_doubles"].write(message * 2)
+            self.log(f"Produced {message * 2}", level="info")
 
     return TestDoubler
 

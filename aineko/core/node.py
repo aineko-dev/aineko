@@ -21,13 +21,8 @@ from typing import Dict, Generator, List, Optional, Tuple
 
 import ray
 
-from aineko.config import (
-    AINEKO_CONFIG,
-    DEFAULT_KAFKA_CONFIG,
-    TESTING_NODE_CONFIG,
-)
+from aineko.config import AINEKO_CONFIG, TESTING_NODE_CONFIG
 from aineko.core.dataset import AbstractDataset
-from aineko.datasets.kafka import ConsumerParams, FakeKafka, ProducerParams
 
 
 class PoisonPill:
@@ -72,6 +67,7 @@ class AbstractNode(ABC):
         last_hearbeat (float): timestamp of the last heartbeat
         test (bool): True if node is in test mode else False
         log_levels (tuple): tuple of allowed log levels
+        logging_dataset (str): name of the logging dataset
         local_state (dict): shared local state between nodes. Used for intra-
             pipeline communication without dataset dependency.
 
@@ -97,6 +93,7 @@ class AbstractNode(ABC):
         self.params: Dict = {}
         self.test = test
         self.log_levels = AINEKO_CONFIG.get("LOG_LEVELS")
+        self.logging_dataset: str = AINEKO_CONFIG.get("LOGGING_DATASET")["name"]
         self.poison_pill = poison_pill
 
     def enable_test_mode(self) -> None:
@@ -142,49 +139,35 @@ class AbstractNode(ABC):
         )
 
         for dataset_name in inputs:
-            if self.inputs[dataset_name].type == "kafka":
-                consumer_params = ConsumerParams(
-                    **{
-                        "dataset_name": dataset_name,
-                        "node_name": self.name,
-                        "pipeline_name": self.pipeline_name,
-                        "prefix": prefix,
-                        "has_pipeline_prefix": has_pipeline_prefix,
-                        "consumer_config": DEFAULT_KAFKA_CONFIG.get(
-                            "CONSUMER_CONFIG"
-                        ),
-                    }
-                )
-                self.inputs[dataset_name].initialize(
-                    create="consumer", connection_params=consumer_params
-                )
+            self.inputs[dataset_name].initialize(
+                create="consumer",
+                node_name=self.name,
+                pipeline_name=self.pipeline_name,
+                prefix=prefix,
+                has_pipeline_prefix=has_pipeline_prefix,
+            )
+
         for dataset_name in outputs:
-            if self.outputs[dataset_name].type == "kafka":
-                producer_params = ProducerParams(
-                    **{
-                        "dataset_name": dataset_name,
-                        "node_name": self.name,
-                        "pipeline_name": self.pipeline_name,
-                        "prefix": prefix,
-                        "has_pipeline_prefix": has_pipeline_prefix,
-                        "producer_config": DEFAULT_KAFKA_CONFIG.get(
-                            "PRODUCER_CONFIG"
-                        ),
-                    }
-                )
-                self.outputs[dataset_name].initialize(
-                    create="producer", connection_params=producer_params
-                )
+            self.outputs[dataset_name].initialize(
+                create="producer",
+                node_name=self.name,
+                pipeline_name=self.pipeline_name,
+                prefix=prefix,
+                has_pipeline_prefix=has_pipeline_prefix,
+            )
 
     def setup_test(
         self,
+        dataset_type: str,
         inputs: Optional[dict] = None,
-        outputs: Optional[list] = None,
+        outputs: Optional[List[str]] = None,
         params: Optional[dict] = None,
     ) -> None:
         """Setup the node for testing.
 
         Args:
+            dataset_type: type of dataset to use for testing (e.g.
+                aineko.datasets.kafka.KafkaDataset)
             inputs: inputs to the node, format should be {"dataset": [1, 2, 3]}
             outputs: outputs of the node, format should be ["dataset_1",
                 "dataset_2", ...]
@@ -202,23 +185,39 @@ class AbstractNode(ABC):
         inputs = inputs or {}
 
         self.inputs = {
-            dataset_name: FakeKafka(
-                dataset_name=dataset_name,
-                node_name=self.__class__.__name__,
-                input_values=values,
+            dataset_name: AbstractDataset.from_config(
+                name=dataset_name,
+                config={"type": dataset_type},
+                test=True,
             )
-            for dataset_name, values in inputs.items()
+            for dataset_name in inputs.keys()
         }
+        for dataset_name, input_values in inputs.items():
+            self.inputs[dataset_name].setup_test_mode(
+                source_node=self.name,
+                source_pipeline=self.pipeline_name,
+                input_values=input_values,
+            )
+
         outputs = outputs or []
-        outputs.extend(TESTING_NODE_CONFIG.get("DATASETS"))
+        internal_dataset_names = [
+            dataset["name"] for dataset in TESTING_NODE_CONFIG.get("DATASETS")
+        ]
+        outputs.extend(internal_dataset_names)
 
         self.outputs = {
-            dataset_name: FakeKafka(
-                dataset_name=dataset_name,
-                node_name=self.__class__.__name__,
+            dataset_name: AbstractDataset.from_config(
+                name=dataset_name,
+                config={"type": dataset_type},
+                test=True,
             )
             for dataset_name in outputs
         }
+        for dataset_name in outputs:
+            self.outputs[dataset_name].setup_test_mode(
+                source_node=self.name,
+                source_pipeline=self.pipeline_name,
+            )
         self.params = params or {}
 
     def log(self, message: str, level: str = "info") -> None:
@@ -238,7 +237,7 @@ class AbstractNode(ABC):
             )
         out_msg = {"log": message, "level": level}
 
-        self.outputs[DEFAULT_KAFKA_CONFIG.get("LOGGING_DATASET")].write(out_msg)
+        self.outputs[self.logging_dataset].write(out_msg)
 
     def _log_traceback(self) -> None:
         """Logs the traceback of an exception."""
@@ -305,6 +304,7 @@ class AbstractNode(ABC):
         Returns:
             dict: dataset names and values produced by the node.
         """
+        # pylint: disable=protected-access
         if self.test is False:
             raise RuntimeError(
                 "Node is not in test mode. "
@@ -324,16 +324,17 @@ class AbstractNode(ABC):
 
             # End loop if all inputs are empty
             if self.inputs and all(
-                input.empty for input in self.inputs.values()
+                input.test_is_empty() for input in self.inputs.values()
             ):
                 run_loop = False
 
         self._post_loop_hook(self.params)
 
         return {
-            dataset_name: output.output_values
+            dataset_name: output.get_test_output_values()
             for dataset_name, output in self.outputs.items()
         }
+        # pylint: enable=protected-access
 
     def run_test_yield(
         self, runtime: Optional[int] = None
@@ -372,10 +373,12 @@ class AbstractNode(ABC):
             last_produced_values = {}
             last_consumed_values = {}
 
+            # pylint: disable=protected-access
             # Capture last read values
             for dataset_name, input_dataset in self.inputs.items():
-                if input_dataset.input_values:
-                    last_value = input_dataset.input_values[0]
+                test_input_values = input_dataset.get_test_input_values()
+                if test_input_values:
+                    last_value = test_input_values[0]
                     last_consumed_values[dataset_name] = last_value
 
             run_loop = self._execute(self.params)  # type: ignore
@@ -387,17 +390,19 @@ class AbstractNode(ABC):
 
             # End loop if all inputs are empty
             if self.inputs and all(
-                input.empty for input in self.inputs.values()
+                input.test_is_empty() for input in self.inputs.values()
             ):
                 run_loop = False
 
             # Capture last produced values
             for dataset_name, output in self.outputs.items():
-                if output.output_values:
-                    last_value = output.output_values[-1]
+                test_output_values = output.get_test_output_values()
+                if test_output_values:
+                    last_value = test_output_values[-1]
                     last_produced_values[dataset_name] = last_value
 
             yield (last_consumed_values, last_produced_values, self)
+        # pylint: enable=protected-access
 
         self._post_loop_hook(self.params)
 
