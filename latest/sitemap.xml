@@ -1,88 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://docs.aineko.dev/0.3/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/aineko_dream/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/aineko_dream/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/api_reference/abstract_node/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/api_reference/abstract_dataset/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/api_reference/config/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/api_reference/abstract_node/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/api_reference/config_loader/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/api_reference/config/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/api_reference/dataset_consumer/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/api_reference/config_loader/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/api_reference/dataset_producer/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/api_reference/kafka_dataset/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/api_reference/runner/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/api_reference/models/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/community/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/api_reference/runner/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/developer_guide/aineko_project/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/community/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/developer_guide/cli/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/developer_guide/aineko_project/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/developer_guide/concepts/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/developer_guide/cli/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/developer_guide/config_kafka/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/developer_guide/concepts/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/developer_guide/node_implementation/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/developer_guide/config_kafka/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/developer_guide/pipeline_configuration/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/developer_guide/node_implementation/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/examples/aineko_dream/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/developer_guide/pipeline_configuration/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.aineko.dev/0.3/start/quickstart/</loc>
-         <lastmod>2024-02-13</lastmod>
+         <loc>https://docs.aineko.dev/0.4/examples/aineko_dream/</loc>
+         <lastmod>2024-03-05</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.aineko.dev/0.4/start/quickstart/</loc>
+         <lastmod>2024-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
