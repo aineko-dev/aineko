@@ -98,7 +98,9 @@ class DatasetConsumer:
 
         # Override default config with dataset specific config
         for param, value in dataset_config.get("params", {}).items():
-            consumer_config[param] = value
+            # max.message.bytes is not a valid consumer parameter
+            if param != "max.message.bytes":
+                consumer_config[param] = value
 
         topic_name = dataset_name
         if has_pipeline_prefix:
