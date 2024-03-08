@@ -657,10 +657,9 @@ class KafkaDataset(AbstractDataset):
         Returns:
             status of dataset creation
         """
-        dataset_params = {
-            **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-            **self.params,
-        }
+        dataset_params = dict(DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"))
+        if self.params.get("params") is not None:
+            dataset_params["config"].update(self.params.get("params", {}))
 
         # Configure dataset
         if dataset_prefix:
