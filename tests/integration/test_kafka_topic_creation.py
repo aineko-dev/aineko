@@ -56,7 +56,7 @@ def generate_dict_of_bytesize(approx_size_bytes: int) -> dict:
 class CustomMessageWriter(AbstractNode):
     def _execute(self, params: Optional[dict] = None) -> None:
         """Sends message."""
-        self.producers["messages"].produce(
+        self.producers["message_dataset"].produce(
             generate_dict_of_bytesize(params["message_size"])
         )
 
@@ -91,10 +91,10 @@ pipeline:
       node_params:
         message_size: 1024
       outputs:
-        - messages
+        - message_dataset
 
   datasets:
-    messages:
+    message_dataset:
       type: kafka_stream
     """
     custom_yaml_file = tmp_path / "custom_pipeline_config.yml"
@@ -137,10 +137,10 @@ pipeline:
       node_params:
         message_size: 2097152
       outputs:
-        - messages
+        - message_dataset
 
   datasets:
-    messages:
+    message_dataset:
       type: kafka_stream
     """
     custom_yaml_file = tmp_path / "custom_pipeline_config.yml"
@@ -182,10 +182,10 @@ pipeline:
       node_params:
         message_size: 2097152
       outputs:
-        - messages
+        - message_dataset
 
   datasets:
-    messages:
+    message_dataset:
       type: kafka_stream
       params:
         max.message.bytes: 20971520
