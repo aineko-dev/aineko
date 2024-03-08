@@ -626,28 +626,21 @@ class KafkaDataset(AbstractDataset):
     def _create_producer(self, producer_params: ProducerParams) -> None:
         """Creates Kafka Producer.
 
-        Used to write (produce) messages to the dataset topic.
-
         Args:
             producer_params: parameters for initializing the producer
         """
-        has_pipeline_prefix = producer_params.has_pipeline_prefix
-        node_name = producer_params.node_name
-        pipeline_name = producer_params.pipeline_name
-        dataset_name = producer_params.dataset_name
-        prefix = producer_params.prefix
-        # create topic name here:
-        topic_name = dataset_name
-        self.source_node = node_name
-        self.source_pipeline = pipeline_name
-        if has_pipeline_prefix:
-            topic_name = f"{pipeline_name}.{topic_name}"
-        if prefix:
-            topic_name = f"{prefix}.{topic_name}"
+        topic_name = producer_params.dataset_name
+        self.source_node = producer_params.node_name
+        self.source_pipeline = producer_params.pipeline_name
+
+        if producer_params.has_pipeline_prefix:
+            topic_name = f"{producer_params.pipeline_name}.{topic_name}"
+        if producer_params.prefix:
+            topic_name = f"{producer_params.prefix}.{topic_name}"
         self.topic_name = topic_name
-        producer_config = producer_params.producer_config
+
         self._producer = Producer(
-            **producer_config,
+            **producer_params.producer_config,
         )
 
     def _create_topic(
