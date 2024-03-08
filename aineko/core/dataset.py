@@ -365,7 +365,13 @@ class DatasetProducer:
 
         # Override default config with dataset specific config
         if "params" in dataset_config:
-            producer_config.update(dataset_config["params"])
+            for key, value in dataset_config["params"].items():
+                if key == "max.message.bytes":
+                    # max.message.bytes is a special case and should be set
+                    # as message.max.bytes in the producer config
+                    producer_config["message.max.bytes"] = value
+                else:
+                    producer_config[key] = value
 
         # Create producer
         self.producer = Producer(producer_config)

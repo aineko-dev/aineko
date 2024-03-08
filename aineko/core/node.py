@@ -17,7 +17,7 @@ that users should override with their own implementation.
 import time
 import traceback
 from abc import ABC, abstractmethod
-from typing import Dict, Generator, List, Optional, Tuple
+from typing import Dict, Generator, List, Optional, Tuple, Union
 
 import ray
 
@@ -32,6 +32,7 @@ from aineko.core.dataset import (
     FakeDatasetConsumer,
     FakeDatasetProducer,
 )
+from aineko.models.config_schema import Config
 
 
 class PoisonPill:
@@ -103,7 +104,10 @@ class AbstractNode(ABC):
 
     def setup_datasets(
         self,
-        datasets: Dict[str, dict],
+        datasets: Dict[
+            str,
+            Union[dict, Config.Pipeline.Dataset],
+        ],
         inputs: Optional[List[str]] = None,
         outputs: Optional[List[str]] = None,
         prefix: Optional[str] = None,
@@ -119,6 +123,11 @@ class AbstractNode(ABC):
             has_pipeline_prefix: whether the dataset name has pipeline name
                 prefix
         """
+        # Convert all dataset objects to dict if they are not already
+        for dataset_name, dataset_config in datasets.items():
+            if isinstance(dataset_config, Config.Pipeline.Dataset):
+                datasets[dataset_name] = dataset_config.model_dump()
+
         inputs = inputs or []
         self.consumers.update(
             {
