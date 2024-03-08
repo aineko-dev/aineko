@@ -365,9 +365,7 @@ class DatasetProducer:
 
         # Override default config with dataset specific config
         if "params" in dataset_config:
-            for param in self.kafka_config.get("PRODUCER_OVERRIDABLES"):
-                if param in dataset_config["params"]:
-                    producer_config[param] = dataset_config["params"][param]
+            producer_config.update(dataset_config["params"])
 
         # Create producer
         self.producer = Producer(producer_config)

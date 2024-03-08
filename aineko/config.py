@@ -93,12 +93,6 @@ class DEFAULT_KAFKA_CONFIG(BaseConfig):
     # Max number of messages to retreive when getting the last message
     CONSUMER_MAX_MESSAGES = 1000000
 
-    # Default Kafka producer settings
-    # Producer overridables
-    # See: https://kafka.apache.org/documentation/#producerconfigs
-    # Empty list means no overridable settings
-    PRODUCER_OVERRIDABLES = []  # type: ignore
-
     # Default datasets to create for every pipeline
     LOGGING_DATASET = "logging"
     DATASETS = [LOGGING_DATASET]
