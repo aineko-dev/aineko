@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/0.4/developer_guide/concepts/">
+        <link rel="canonical" href="https://docs.aineko.dev/0.3/developer_guide/concepts/">
       
       
         <link rel="prev" href="../../start/quickstart/">
@@ -831,8 +831,6 @@
       
         
       
-        
-      
     
     
     
@@ -907,13 +905,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    AbstractDataset
+    DatasetConsumer
   
 
     
@@ -934,13 +932,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    KafkaDataset
+    DatasetProducer
   
 
     
@@ -1022,33 +1020,6 @@
     
   
     Runner
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api_reference/models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Internal Models
   
 
     
@@ -1438,18 +1409,18 @@
 <summary>What is an Aineko Pipeline?</summary>
 <p>In day-to-day conversations, the term <em>pipeline</em> frequently denotes either a Pipeline definition or a Pipeline execution. Aineko documentation aims to differentiate them explicitly.</p>
 <p>An Aineko pipeline is a streaming workflow. This means that data is continuously being transmitted and sent over to different components in a way that allows for real-time processing of the data.</p>
-<p>In a pipeline, you may implement arbitrary computation units (<strong>Nodes</strong>), and specify where they read data from, and where they send that data to (<strong>Datasets</strong>). An Aineko Pipeline allows you to construct complex processing graphs that processes streaming data.</p>
+<p>In a pipeline, you may implement arbitrary computation units (<strong>Nodes</strong>), and specify where they consume data from, and where they send that data to (<strong>Datasets</strong>). An Aineko Pipeline allows you to construct complex processing graphs that processes streaming data.</p>
 </details>
 <h2 id="pipeline-definition">Pipeline definition</h2>
-<p>A pipeline definition is a specialised Program that you write - to tell Aineko what a pipeline comprises. A Pipeline definition is defined in YAML and essentially allows Aineko to compose computation nodes together by specifying the input and output buffers that they read data from and write data to.</p>
+<p>A pipeline definition is a specialised Program that you write - to tell Aineko what a pipeline comprises. A Pipeline definition is defined in YAML and essentially allows Aineko to compose computation nodes together by specifying the input and output buffers that they consume data from and produce data to.</p>
 <p>See <a href="../pipeline_configuration/">here</a> to learn about writing a pipeline definition.</p>
 <h2 id="pipeline-execution">Pipeline execution</h2>
 <p>If a pipeline definition is a program, then a pipeline execution is a process. You can run multiple pipeline executions for a single pipeline definition.</p>
 <h2 id="dataset">Dataset</h2>
-<p>A Dataset is an abstraction for a buffer for data that you can define inputs and outputs for. Outputs write data to a dataset, while inputs read data from the dataset. It's analogous to a <strong>pub-sub topic or channel</strong>. In the current version of aineko, it's a <strong>Kafka Topic,</strong> but in future, other implementations of message channels could be pluggable too.</p>
+<p>A Dataset is an abstraction for a buffer for data that you can define producers and consumers for. Producers write data to a dataset, while consumers read data from the dataset. It's analogous to a <strong>pub-sub topic or channel</strong>. In the current version of aineko, it's a <strong>Kafka Topic,</strong> but in future, other implementations of message channels could be pluggable too.</p>
 <h2 id="node">Node</h2>
-<p>A <strong>Node</strong> is an abstraction for some computation, akin to a function. At the same time a <strong>Node</strong> can be a writer and/or a reader of a <strong>Dataset</strong>.</p>
-<p>A node can optionally read from topics, process that data and write the output to another buffer that you can chain other Node readers on.</p>
+<p>A <strong>Node</strong> is an abstraction for some computation, akin to a function. At the same time a <strong>Node</strong> can be a producer and/or a consumer of a <strong>Dataset</strong>.</p>
+<p>A node can optionally consume from topics, process that data and produce the output to another buffer that you can chain other Node consumers on.</p>
 <h2 id="workflow">Workflow</h2>
 <p>A <strong>workflow</strong> is a series of steps that occur as part of the CI/CD process. For example, a <strong>continuous integration workflow</strong> contains steps that checks the validity of your deployment configuration. A <strong>continuous deployment workflow</strong>, on the other hand, orchestrates the necessary changes in the cloud to deploy the most recent version of your code.</p>
 

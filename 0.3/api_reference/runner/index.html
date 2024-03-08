@@ -2221,10 +2221,10 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
             <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset_config</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
                 <span class="n">dataset_config</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
 
-            <span class="n">dataset_params</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="o">**</span><span class="n">DEFAULT_KAFKA_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DATASET_PARAMS&quot;</span><span class="p">),</span>
-                <span class="o">**</span><span class="n">dataset_config</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
-            <span class="p">}</span>
+            <span class="n">dataset_params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">DEFAULT_KAFKA_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DATASET_PARAMS&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">dataset_params</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset_config</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 
             <span class="c1"># Configure dataset</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_prefix</span><span class="p">:</span>
@@ -2467,7 +2467,16 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
 <span class="normal">309</span>
 <span class="normal">310</span>
 <span class="normal">311</span>
-<span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_nodes</span><span class="p">(</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_nodes</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">pipeline_config</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">,</span>
     <span class="n">poison_pill</span><span class="p">:</span> <span class="n">ray</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">ActorHandle</span><span class="p">,</span>
@@ -2533,19 +2542,28 @@ i.e. <code>&lt;prefix&gt;.&lt;user_dataset_prefix&gt;.&lt;dataset_name&gt;</code
             <span class="n">inputs</span> <span class="o">=</span> <span class="n">node_config</span><span class="o">.</span><span class="n">inputs</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">inputs</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># Setup input and output datasets</span>
 
+        <span class="n">datasets</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="p">(</span>
+            <span class="n">dataset_name</span><span class="p">,</span>
+            <span class="n">dataset_config</span><span class="p">,</span>
+        <span class="p">)</span> <span class="ow">in</span> <span class="n">pipeline_config</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">datasets</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset_config</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span>
+                <span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Setup input and output datasets</span>
         <span class="n">actor_handle</span><span class="o">.</span><span class="n">setup_datasets</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span>
             <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
             <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
-            <span class="n">datasets</span><span class="o">=</span><span class="n">pipeline_config</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span>
+            <span class="n">datasets</span><span class="o">=</span><span class="n">datasets</span><span class="p">,</span>
             <span class="n">has_pipeline_prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Setup internal datasets like logging, without pipeline prefix</span>
         <span class="n">actor_handle</span><span class="o">.</span><span class="n">setup_datasets</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span>
             <span class="n">outputs</span><span class="o">=</span><span class="n">DEFAULT_KAFKA_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DATASETS&quot;</span><span class="p">),</span>
-            <span class="n">datasets</span><span class="o">=</span><span class="n">pipeline_config</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span>
+            <span class="n">datasets</span><span class="o">=</span><span class="n">datasets</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Create actor future (for execute method)</span>

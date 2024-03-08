@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/0.4/developer_guide/cli/">
+        <link rel="canonical" href="https://docs.aineko.dev/0.3/developer_guide/cli/">
       
       
         <link rel="prev" href="../node_implementation/">
@@ -741,34 +741,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="dream">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#aineko-dream-check" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        check
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko-dream-create" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        create
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -946,8 +918,6 @@
       
         
       
-        
-      
     
     
     
@@ -1022,13 +992,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    AbstractDataset
+    DatasetConsumer
   
 
     
@@ -1049,13 +1019,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    KafkaDataset
+    DatasetProducer
   
 
     
@@ -1137,33 +1107,6 @@
     
   
     Runner
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api_reference/models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Internal Models
   
 
     
@@ -1454,34 +1397,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="dream">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#aineko-dream-check" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        check
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko-dream-create" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        create
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -1733,52 +1648,18 @@ The following files are required:</p>
                            exit.
 </code></pre></div>
 <h3 id="aineko-dream">aineko dream</h3>
-<p>Aineko Dream CLI.</p>
-<p><strong>Usage:</strong></p>
-<div class="highlight"><pre><span></span><code>aineko dream [OPTIONS] COMMAND [ARGS]...
-</code></pre></div>
-<p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  --help  Show this message and exit.
-</code></pre></div>
-<h4 id="aineko-dream-check">aineko dream check</h4>
-<p>Check the status of a project generation request.</p>
-<p>Args:
-    request_id: Request ID to check status for.
-    api_key: API key to use for the Aineko Dream API.
-    url: URL to use for the Aineko Dream API.
-    timeout: Seconds to wait for successful project
-        generation before timing out.</p>
-<p><strong>Usage:</strong></p>
-<div class="highlight"><pre><span></span><code>aineko dream check [OPTIONS] REQUEST_ID
-</code></pre></div>
-<p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  -k, --api-key TEXT     API key to use for the
-                         Aineko Dream API.
-  -u, --url TEXT         API url to use for the
-                         Aineko Dream API.
-  -t, --timeout INTEGER  Seconds to wait for
-                         successful project
-                         generation before timing
-                         out. Will poll status
-                         every 10 seconds.
-  --help                 Show this message and
-                         exit.
-</code></pre></div>
-<h4 id="aineko-dream-create">aineko dream create</h4>
-<p>Command to generate an aineko project using Aineko Dream.</p>
+<p>Main function to generate an aineko project using Aineko Dream.</p>
 <p>Args:
     prompt: Prompt to generate a project from.
     api_key: API key to use for the Aineko Dream API.
     url: URL to use for the Aineko Dream API.</p>
 <p><strong>Usage:</strong></p>
-<div class="highlight"><pre><span></span><code>aineko dream create [OPTIONS] PROMPT
+<div class="highlight"><pre><span></span><code>aineko dream [OPTIONS] PROMPT API_KEY
 </code></pre></div>
 <p><strong>Options:</strong></p>
-<div class="highlight"><pre><span></span><code>  -k, --api-key TEXT  API key to use for the
-                      Aineko Dream API.
-  -u, --url TEXT      API url to use for the
-                      Aineko Dream API.
-  --help              Show this message and exit.
+<div class="highlight"><pre><span></span><code>  -u, --url TEXT  API url to use for the Aineko
+                  Dream API.
+  --help          Show this message and exit.
 </code></pre></div>
 <h3 id="aineko-run">aineko run</h3>
 <p>Main function to run a pipeline from the command line.</p>

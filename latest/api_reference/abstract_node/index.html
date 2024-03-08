@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/0.4/api_reference/abstract_node/">
+        <link rel="canonical" href="https://docs.aineko.dev/0.3/api_reference/abstract_node/">
       
       
         <link rel="prev" href="../../developer_guide/config_kafka/">
       
       
-        <link rel="next" href="../abstract_dataset/">
+        <link rel="next" href="../dataset_consumer/">
       
       
         
@@ -728,8 +728,6 @@
       
         
       
-        
-      
     
     
     
@@ -847,10 +845,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.AbstractNode.inputs" class="md-nav__link">
+  <a href="#aineko.AbstractNode.consumers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;inputs
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;consumers
       
     </span>
   </a>
@@ -880,32 +878,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.AbstractNode.logging_dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;logging_dataset
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aineko.AbstractNode.name" class="md-nav__link">
     <span class="md-ellipsis">
       
         <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;name
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.AbstractNode.outputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;outputs
       
     </span>
   </a>
@@ -939,6 +915,17 @@
     <span class="md-ellipsis">
       
         <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;poison_pill
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.AbstractNode.producers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;producers
       
     </span>
   </a>
@@ -1065,13 +1052,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../abstract_dataset/" class="md-nav__link">
+      <a href="../dataset_consumer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    AbstractDataset
+    DatasetConsumer
   
 
     
@@ -1092,13 +1079,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../kafka_dataset/" class="md-nav__link">
+      <a href="../dataset_producer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    KafkaDataset
+    DatasetProducer
   
 
     
@@ -1180,33 +1167,6 @@
     
   
     Runner
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Internal Models
   
 
     
@@ -1478,10 +1438,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#aineko.AbstractNode.inputs" class="md-nav__link">
+  <a href="#aineko.AbstractNode.consumers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;inputs
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;consumers
       
     </span>
   </a>
@@ -1511,32 +1471,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aineko.AbstractNode.logging_dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;logging_dataset
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aineko.AbstractNode.name" class="md-nav__link">
     <span class="md-ellipsis">
       
         <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;name
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aineko.AbstractNode.outputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;outputs
       
     </span>
   </a>
@@ -1570,6 +1508,17 @@
     <span class="md-ellipsis">
       
         <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;poison_pill
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aineko.AbstractNode.producers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;producers
       
     </span>
   </a>
@@ -1781,10 +1730,9 @@
 <p>Nodes are the building blocks of the pipeline and are responsible for
 executing the pipeline. Nodes are designed to be modular and can be
 combined to create a pipeline. The node base class provides helper methods
-for setting up the dataset inputs and outputs for a node. The
-execute method is a wrapper for the _execute method which is to be
-implemented by subclasses. The _execute method is where the node logic
-is implemented by the user.</p>
+for setting up the consumer and producer for a node. The execute method is
+a wrapper for the _execute method which is to be implemented by subclasses.
+The _execute method is where the node logic is implemented by the user.</p>
 
 
 
@@ -1799,59 +1747,24 @@ is implemented by the user.</p>
     </thead>
     <tbody>
         <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.name" href="#aineko.AbstractNode.name">name</a></code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>name of the node</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.pipeline_name" href="#aineko.AbstractNode.pipeline_name">pipeline_name</a></code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>name of the pipeline</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.params" href="#aineko.AbstractNode.params">params</a></code></td>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.consumers" href="#aineko.AbstractNode.consumers">consumers</a></code></td>
           <td>
                 <code>dict</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>dict of parameters to be used by the node</p>
+              <p>dict of DatasetConsumer objects for inputs to node</p>
             </div>
           </td>
         </tr>
         <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.inputs" href="#aineko.AbstractNode.inputs">inputs</a></code></td>
+          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.producers" href="#aineko.AbstractNode.producers">producers</a></code></td>
           <td>
                 <code>dict</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>dict of AbstractDataset objects for inputs that node
-can read / consume.</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.outputs" href="#aineko.AbstractNode.outputs">outputs</a></code></td>
-          <td>
-                <code>dict</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>dict of AbstractDataset objects for outputs that node
-can write / produce.</p>
+              <p>dict of DatasetProducer objects for outputs of node</p>
             </div>
           </td>
         </tr>
@@ -1889,17 +1802,6 @@ can write / produce.</p>
           </td>
         </tr>
         <tr>
-          <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.logging_dataset" href="#aineko.AbstractNode.logging_dataset">logging_dataset</a></code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>name of the logging dataset</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
           <td><code><span title="aineko.AbstractNode.local_state">local_state</span></code></td>
           <td>
                 <code>dict</code>
@@ -1929,7 +1831,7 @@ pipeline communication without dataset dependency.</p>
             <td><code><a class="autorefs autorefs-internal" title="aineko.AbstractNode.setup_datasets" href="#aineko.AbstractNode.setup_datasets">setup_datasets</a></code></td>
             <td>
               <div class="doc-md-description">
-                <p>setup the dataset query layer for a node</p>
+                <p>setup the consumers and producers for a node</p>
               </div>
             </td>
           </tr>
@@ -1956,9 +1858,7 @@ pipeline communication without dataset dependency.</p>
 
                 <details class="quote">
                   <summary>Source code in <code>aineko/core/node.py</code></summary>
-                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">82</span>
 <span class="normal">83</span>
 <span class="normal">84</span>
 <span class="normal">85</span>
@@ -1973,7 +1873,8 @@ pipeline communication without dataset dependency.</p>
 <span class="normal">94</span>
 <span class="normal">95</span>
 <span class="normal">96</span>
-<span class="normal">97</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">97</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">pipeline_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">node_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1984,12 +1885,11 @@ pipeline communication without dataset dependency.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">node_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span> <span class="o">=</span> <span class="n">pipeline_name</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">last_heartbeat</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">test</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">log_levels</span> <span class="o">=</span> <span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOG_LEVELS&quot;</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">logging_dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">AINEKO_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGGING_DATASET&quot;</span><span class="p">)[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">poison_pill</span> <span class="o">=</span> <span class="n">poison_pill</span>
 </code></pre></div></td></tr></table></div>
                 </details>
@@ -2008,8 +1908,8 @@ pipeline communication without dataset dependency.</p>
 
 
 
-<h3 id="aineko.AbstractNode.inputs" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">inputs</span>
+<h3 id="aineko.AbstractNode.consumers" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">consumers</span>
 
   
   <span class="doc doc-labels">
@@ -2017,7 +1917,7 @@ pipeline communication without dataset dependency.</p>
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">inputs</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">consumers</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span> <span class="o">=</span> <span class="p">{}</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2071,27 +1971,6 @@ pipeline communication without dataset dependency.</p>
 
 
 
-<h3 id="aineko.AbstractNode.logging_dataset" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">logging_dataset</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">logging_dataset</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="n"><span title="aineko.config.AINEKO_CONFIG.get">get</span></span><span class="p">(</span><span class="s1">&#39;LOGGING_DATASET&#39;</span><span class="p">)[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
 <h3 id="aineko.AbstractNode.name" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">name</span>
 
@@ -2102,27 +1981,6 @@ pipeline communication without dataset dependency.</p>
 
 </h3>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="n">node_name</span> <span class="ow">or</span> <span class="n"><span title="self.__class__.__name__">__name__</span></span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="aineko.AbstractNode.outputs" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">outputs</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">outputs</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="p">{}</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2197,6 +2055,27 @@ pipeline communication without dataset dependency.</p>
 
 
 
+<h3 id="aineko.AbstractNode.producers" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">producers</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">producers</span><span class="p">:</span> <span class="n"><span title="typing.Dict">Dict</span></span> <span class="o">=</span> <span class="p">{}</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
 <h3 id="aineko.AbstractNode.test" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>          <span class="doc doc-object-name doc-attribute-name">test</span>
 
@@ -2235,10 +2114,10 @@ pipeline communication without dataset dependency.</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">275</span>
-<span class="normal">276</span>
-<span class="normal">277</span>
-<span class="normal">278</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">activate_poison_pill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">activate_poison_pill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Activates poison pill, shutting down entire pipeline.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">poison_pill</span><span class="p">:</span>
         <span class="n">ray</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poison_pill</span><span class="o">.</span><span class="n">activate</span><span class="o">.</span><span class="n">remote</span><span class="p">())</span>
@@ -2267,9 +2146,9 @@ pipeline communication without dataset dependency.</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">enable_test_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">enable_test_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable test mode.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
@@ -2328,33 +2207,33 @@ pipeline communication without dataset dependency.</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
-<span class="normal">248</span>
-<span class="normal">249</span>
-<span class="normal">250</span>
-<span class="normal">251</span>
-<span class="normal">252</span>
-<span class="normal">253</span>
-<span class="normal">254</span>
-<span class="normal">255</span>
-<span class="normal">256</span>
-<span class="normal">257</span>
-<span class="normal">258</span>
-<span class="normal">259</span>
-<span class="normal">260</span>
-<span class="normal">261</span>
-<span class="normal">262</span>
-<span class="normal">263</span>
-<span class="normal">264</span>
-<span class="normal">265</span>
-<span class="normal">266</span>
-<span class="normal">267</span>
-<span class="normal">268</span>
-<span class="normal">269</span>
-<span class="normal">270</span>
-<span class="normal">271</span>
-<span class="normal">272</span>
-<span class="normal">273</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute the node.</span>
 
 <span class="sd">    Wrapper for _execute method to be implemented by subclasses.</span>
@@ -2453,24 +2332,25 @@ pipeline communication without dataset dependency.</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">223</span>
-<span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span>
-<span class="normal">234</span>
-<span class="normal">235</span>
-<span class="normal">236</span>
-<span class="normal">237</span>
-<span class="normal">238</span>
-<span class="normal">239</span>
-<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Log a message to the logging dataset.</span>
 
 <span class="sd">    Args:</span>
@@ -2486,8 +2366,9 @@ pipeline communication without dataset dependency.</p>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_levels</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
     <span class="n">out_msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;log&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span> <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">level</span><span class="p">}</span>
-
-    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">logging_dataset</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_msg</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="n">DEFAULT_KAFKA_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGGING_DATASET&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span>
+        <span class="n">out_msg</span>
+    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -2569,7 +2450,34 @@ Includes pre_loop_hook, _execute, and post_loop_hook.</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">295</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
 <span class="normal">296</span>
 <span class="normal">297</span>
 <span class="normal">298</span>
@@ -2582,35 +2490,7 @@ Includes pre_loop_hook, _execute, and post_loop_hook.</p>
 <span class="normal">305</span>
 <span class="normal">306</span>
 <span class="normal">307</span>
-<span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
-<span class="normal">314</span>
-<span class="normal">315</span>
-<span class="normal">316</span>
-<span class="normal">317</span>
-<span class="normal">318</span>
-<span class="normal">319</span>
-<span class="normal">320</span>
-<span class="normal">321</span>
-<span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span>
-<span class="normal">326</span>
-<span class="normal">327</span>
-<span class="normal">328</span>
-<span class="normal">329</span>
-<span class="normal">330</span>
-<span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="normal">308</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute the node in testing mode.</span>
 
 <span class="sd">    Runs the steps in execute that involves the user defined methods.</span>
@@ -2622,7 +2502,6 @@ Includes pre_loop_hook, _execute, and post_loop_hook.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        dict: dataset names and values produced by the node.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># pylint: disable=protected-access</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
             <span class="s2">&quot;Node is not in test mode. &quot;</span>
@@ -2640,17 +2519,17 @@ Includes pre_loop_hook, _execute, and post_loop_hook.</p>
             <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="n">runtime</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-        <span class="c1"># End loop if all inputs are empty</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
-            <span class="nb">input</span><span class="o">.</span><span class="n">test_is_empty</span><span class="p">()</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="c1"># End loop if all consumers are empty</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">consumer</span><span class="o">.</span><span class="n">empty</span> <span class="k">for</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="p">):</span>
             <span class="n">run_loop</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">_post_loop_hook</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
-        <span class="n">dataset_name</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">get_test_output_values</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="n">dataset_name</span><span class="p">:</span> <span class="n">producer</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">producer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
           </details>
@@ -2677,8 +2556,8 @@ Includes pre_loop_hook, _execute, and post_loop_hook.</p>
   
       <p>Execute the node in testing mode, yielding at each iteration.</p>
 <p>This method is an alternative to <code>run_test</code>. Instead of returning the
-aggregated output, it yields the most recently read value, the
-written value and the current node instance at each iteration. This is
+aggregated output, it yields the most recently consumed value, the
+produced value and the current node instance at each iteration. This is
 useful for testing nodes that either don't produce any output or if you
 need to test intermediate outputs. Testing state modifications is also
 possible using this method.</p>
@@ -2761,7 +2640,36 @@ possible using this method.</p>
 </details>
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">339</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
 <span class="normal">340</span>
 <span class="normal">341</span>
 <span class="normal">342</span>
@@ -2796,47 +2704,14 @@ possible using this method.</p>
 <span class="normal">371</span>
 <span class="normal">372</span>
 <span class="normal">373</span>
-<span class="normal">374</span>
-<span class="normal">375</span>
-<span class="normal">376</span>
-<span class="normal">377</span>
-<span class="normal">378</span>
-<span class="normal">379</span>
-<span class="normal">380</span>
-<span class="normal">381</span>
-<span class="normal">382</span>
-<span class="normal">383</span>
-<span class="normal">384</span>
-<span class="normal">385</span>
-<span class="normal">386</span>
-<span class="normal">387</span>
-<span class="normal">388</span>
-<span class="normal">389</span>
-<span class="normal">390</span>
-<span class="normal">391</span>
-<span class="normal">392</span>
-<span class="normal">393</span>
-<span class="normal">394</span>
-<span class="normal">395</span>
-<span class="normal">396</span>
-<span class="normal">397</span>
-<span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_test_yield</span><span class="p">(</span>
+<span class="normal">374</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_test_yield</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">&quot;AbstractNode&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute the node in testing mode, yielding at each iteration.</span>
 
 <span class="sd">    This method is an alternative to `run_test`. Instead of returning the</span>
-<span class="sd">    aggregated output, it yields the most recently read value, the</span>
-<span class="sd">    written value and the current node instance at each iteration. This is</span>
+<span class="sd">    aggregated output, it yields the most recently consumed value, the</span>
+<span class="sd">    produced value and the current node instance at each iteration. This is</span>
 <span class="sd">    useful for testing nodes that either don&#39;t produce any output or if you</span>
 <span class="sd">    need to test intermediate outputs. Testing state modifications is also</span>
 <span class="sd">    possible using this method.</span>
@@ -2866,12 +2741,10 @@ possible using this method.</p>
         <span class="n">last_produced_values</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">last_consumed_values</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c1"># pylint: disable=protected-access</span>
-        <span class="c1"># Capture last read values</span>
-        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">input_dataset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">test_input_values</span> <span class="o">=</span> <span class="n">input_dataset</span><span class="o">.</span><span class="n">get_test_input_values</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">test_input_values</span><span class="p">:</span>
-                <span class="n">last_value</span> <span class="o">=</span> <span class="n">test_input_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Capture last consumed values</span>
+        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                <span class="n">last_value</span> <span class="o">=</span> <span class="n">consumer</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">last_consumed_values</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_value</span>
 
         <span class="n">run_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
@@ -2881,21 +2754,19 @@ possible using this method.</p>
             <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="n">runtime</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-        <span class="c1"># End loop if all inputs are empty</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
-            <span class="nb">input</span><span class="o">.</span><span class="n">test_is_empty</span><span class="p">()</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="c1"># End loop if all consumers are empty</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">consumer</span><span class="o">.</span><span class="n">empty</span> <span class="k">for</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="p">):</span>
             <span class="n">run_loop</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Capture last produced values</span>
-        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">test_output_values</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">get_test_output_values</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">test_output_values</span><span class="p">:</span>
-                <span class="n">last_value</span> <span class="o">=</span> <span class="n">test_output_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">producer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">producer</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                <span class="n">last_value</span> <span class="o">=</span> <span class="n">producer</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">last_produced_values</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_value</span>
 
         <span class="k">yield</span> <span class="p">(</span><span class="n">last_consumed_values</span><span class="p">,</span> <span class="n">last_produced_values</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-    <span class="c1"># pylint: enable=protected-access</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">_post_loop_hook</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2925,7 +2796,7 @@ possible using this method.</p>
 
   <div class="doc doc-contents ">
   
-      <p>Setup the dataset inputs and outputs for a node.</p>
+      <p>Setup the consumer and producer for a node.</p>
 
 
 
@@ -3016,8 +2887,7 @@ prefix</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
-<span class="normal">104</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
 <span class="normal">107</span>
@@ -3063,14 +2933,7 @@ prefix</p>
 <span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setup_datasets</span><span class="p">(</span>
+<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setup_datasets</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">datasets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">],</span>
     <span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -3078,7 +2941,7 @@ prefix</p>
     <span class="n">prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">has_pipeline_prefix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Setup the dataset inputs and outputs for a node.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Setup the consumer and producer for a node.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        datasets: dataset configuration</span>
@@ -3089,42 +2952,34 @@ prefix</p>
 <span class="sd">            prefix</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="ow">or</span> <span class="p">[]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
         <span class="p">{</span>
-            <span class="n">dataset_name</span><span class="p">:</span> <span class="n">AbstractDataset</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">datasets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">dataset_name</span><span class="p">:</span> <span class="n">DatasetConsumer</span><span class="p">(</span>
+                <span class="n">dataset_name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span>
+                <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">pipeline_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span><span class="p">,</span>
+                <span class="n">dataset_config</span><span class="o">=</span><span class="n">datasets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">,</span> <span class="p">{}),</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
+                <span class="n">has_pipeline_prefix</span><span class="o">=</span><span class="n">has_pipeline_prefix</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">inputs</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
     <span class="n">outputs</span> <span class="o">=</span> <span class="n">outputs</span> <span class="ow">or</span> <span class="p">[]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
         <span class="p">{</span>
-            <span class="n">dataset_name</span><span class="p">:</span> <span class="n">AbstractDataset</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">datasets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">dataset_name</span><span class="p">:</span> <span class="n">DatasetProducer</span><span class="p">(</span>
+                <span class="n">dataset_name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span>
+                <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">pipeline_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span><span class="p">,</span>
+                <span class="n">dataset_config</span><span class="o">=</span><span class="n">datasets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">,</span> <span class="p">{}),</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
+                <span class="n">has_pipeline_prefix</span><span class="o">=</span><span class="n">has_pipeline_prefix</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">outputs</span>
         <span class="p">}</span>
     <span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span>
-            <span class="n">create</span><span class="o">=</span><span class="s2">&quot;consumer&quot;</span><span class="p">,</span>
-            <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">pipeline_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span><span class="p">,</span>
-            <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
-            <span class="n">has_pipeline_prefix</span><span class="o">=</span><span class="n">has_pipeline_prefix</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span>
-            <span class="n">create</span><span class="o">=</span><span class="s2">&quot;producer&quot;</span><span class="p">,</span>
-            <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">pipeline_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span><span class="p">,</span>
-            <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
-            <span class="n">has_pipeline_prefix</span><span class="o">=</span><span class="n">has_pipeline_prefix</span><span class="p">,</span>
-        <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -3142,9 +2997,8 @@ prefix</p>
 
 </h3>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">setup_test</span><span class="p">(</span>
-    <span class="n">dataset_type</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span>
     <span class="n">inputs</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">outputs</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.List">List</span></span><span class="p">[</span><span class="n">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">outputs</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">params</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
@@ -3167,21 +3021,6 @@ prefix</p>
     </thead>
     <tbody>
         <tr>
-          <td><code>dataset_type</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>type of dataset to use for testing (e.g.
-aineko.datasets.kafka.KafkaDataset)</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
           <td><code>inputs</code></td>
           <td>
                 <code><span title="typing.Optional">Optional</span>[dict]</code>
@@ -3198,7 +3037,7 @@ aineko.datasets.kafka.KafkaDataset)</p>
         <tr>
           <td><code>outputs</code></td>
           <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="typing.List">List</span>[str]]</code>
+                <code><span title="typing.Optional">Optional</span>[list]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3253,7 +3092,14 @@ aineko.datasets.kafka.KafkaDataset)</p>
 
           <details class="quote">
             <summary>Source code in <code>aineko/core/node.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">159</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
 <span class="normal">160</span>
 <span class="normal">161</span>
 <span class="normal">162</span>
@@ -3287,46 +3133,15 @@ aineko.datasets.kafka.KafkaDataset)</p>
 <span class="normal">190</span>
 <span class="normal">191</span>
 <span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span>
-<span class="normal">209</span>
-<span class="normal">210</span>
-<span class="normal">211</span>
-<span class="normal">212</span>
-<span class="normal">213</span>
-<span class="normal">214</span>
-<span class="normal">215</span>
-<span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
-<span class="normal">219</span>
-<span class="normal">220</span>
-<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setup_test</span><span class="p">(</span>
+<span class="normal">193</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setup_test</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">dataset_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">outputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">outputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Setup the node for testing.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        dataset_type: type of dataset to use for testing (e.g.</span>
-<span class="sd">            aineko.datasets.kafka.KafkaDataset)</span>
 <span class="sd">        inputs: inputs to the node, format should be {&quot;dataset&quot;: [1, 2, 3]}</span>
 <span class="sd">        outputs: outputs of the node, format should be [&quot;dataset_1&quot;,</span>
 <span class="sd">            &quot;dataset_2&quot;, ...]</span>
@@ -3342,41 +3157,23 @@ aineko.datasets.kafka.KafkaDataset)</p>
         <span class="p">)</span>
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="ow">or</span> <span class="p">{}</span>
-
-    <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">dataset_name</span><span class="p">:</span> <span class="n">AbstractDataset</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span>
-            <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">dataset_type</span><span class="p">},</span>
-            <span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dataset_name</span><span class="p">:</span> <span class="n">FakeDatasetConsumer</span><span class="p">(</span>
+            <span class="n">dataset_name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span>
+            <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
-    <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">input_values</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span><span class="o">.</span><span class="n">setup_test_mode</span><span class="p">(</span>
-            <span class="n">source_node</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">source_pipeline</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span><span class="p">,</span>
-            <span class="n">input_values</span><span class="o">=</span><span class="n">input_values</span><span class="p">,</span>
-        <span class="p">)</span>
-
     <span class="n">outputs</span> <span class="o">=</span> <span class="n">outputs</span> <span class="ow">or</span> <span class="p">[]</span>
-    <span class="n">internal_dataset_names</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">TESTING_NODE_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DATASETS&quot;</span><span class="p">)</span>
-    <span class="p">]</span>
-    <span class="n">outputs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">internal_dataset_names</span><span class="p">)</span>
-
-    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">dataset_name</span><span class="p">:</span> <span class="n">AbstractDataset</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span>
-            <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">dataset_type</span><span class="p">},</span>
-            <span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">TESTING_NODE_CONFIG</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DATASETS&quot;</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">producers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dataset_name</span><span class="p">:</span> <span class="n">FakeDatasetProducer</span><span class="p">(</span>
+            <span class="n">dataset_name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span>
+            <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">outputs</span>
     <span class="p">}</span>
-    <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span><span class="o">.</span><span class="n">setup_test_mode</span><span class="p">(</span>
-            <span class="n">source_node</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">source_pipeline</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span><span class="p">,</span>
-        <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span> <span class="ow">or</span> <span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
           </details>
@@ -3446,13 +3243,13 @@ aineko.datasets.kafka.KafkaDataset)</p>
         
         
           
-          <a href="../abstract_dataset/" class="md-footer__link md-footer__link--next" aria-label="Next: AbstractDataset">
+          <a href="../dataset_consumer/" class="md-footer__link md-footer__link--next" aria-label="Next: DatasetConsumer">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                AbstractDataset
+                DatasetConsumer
               </div>
             </div>
             <div class="md-footer__button md-icon">

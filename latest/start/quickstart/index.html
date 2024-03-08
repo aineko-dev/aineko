@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/0.4/start/quickstart/">
+        <link rel="canonical" href="https://docs.aineko.dev/0.3/start/quickstart/">
       
       
         <link rel="prev" href="../..">
@@ -875,8 +875,6 @@
       
         
       
-        
-      
     
     
     
@@ -951,13 +949,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    AbstractDataset
+    DatasetConsumer
   
 
     
@@ -978,13 +976,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    KafkaDataset
+    DatasetProducer
   
 
     
@@ -1066,33 +1064,6 @@
     
   
     Runner
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api_reference/models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Internal Models
   
 
     
@@ -1594,7 +1565,7 @@ Container broker  Started
 <dd><div class="highlight"><pre><span></span><code>poetry run aineko run ./conf/pipeline.yml
 </code></pre></div>
 <div class="no-copy highlight"><span class="filename">Expected output</span><pre><span></span><code>INFO - Application is starting.
-INFO - Creating dataset: aineko-pipeline.sequence: {&#39;type&#39;: &#39;aineko.datasets.kafka.KafkaDataset&#39;}
+INFO - Creating dataset: aineko-pipeline.sequence: {&#39;type&#39;: &#39;kafka_stream&#39;}
 INFO - All datasets created.
 INFO worker.py:1664 -- Started a local Ray instance.
 </code></pre></div></dd>
@@ -1603,7 +1574,7 @@ INFO worker.py:1664 -- Started a local Ray instance.
 <dl>
 <dt>To view messages running in one of the user-defined datasets:</dt>
 <dd>
-<p><div class="highlight"><pre><span></span><code>poetry run aineko stream test-aineko-pipeline.test_sequence --from-beginning
+<p><div class="highlight"><pre><span></span><code>poetry run aineko stream --dataset test-aineko-pipeline.test_sequence --from-beginning
 </code></pre></div>
 <div class="no-copy highlight"><span class="filename">Expected output</span><pre><span></span><code>{&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 1}
 {&quot;timestamp&quot;: &quot;2023-11-10 17:27:20&quot;, &quot;dataset&quot;: &quot;sequence&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sequence&quot;, &quot;message&quot;: 2}
@@ -1611,7 +1582,7 @@ INFO worker.py:1664 -- Started a local Ray instance.
 </dd>
 <dt>Alternatively, to view logs stored in the built-in <code>logging</code> dataset:</dt>
 <dd>
-<p><div class="highlight"><pre><span></span><code>poetry run aineko stream logging --from-beginning
+<p><div class="highlight"><pre><span></span><code>poetry run aineko stream --dataset logging --from-beginning
 </code></pre></div>
 <div class="no-copy highlight"><span class="filename">Expected output</span><pre><span></span><code>{&quot;timestamp&quot;: &quot;2023-11-10 17:46:15&quot;, &quot;dataset&quot;: &quot;logging&quot;, &quot;source_pipeline&quot;: &quot;test-aineko-pipeline&quot;, &quot;source_node&quot;: &quot;sum&quot;, &quot;message&quot;: {&quot;log&quot;: &quot;Received input: 1. Adding 1...&quot;, &quot;level&quot;: &quot;info&quot;}}
 </code></pre></div></p>
@@ -1631,7 +1602,7 @@ INFO worker.py:1664 -- Started a local Ray instance.
 <summary>What does the above output mean?</summary>
 <p>An aineko pipeline is made up of <strong>Dataset(s)</strong> and <strong>Node(s).</strong>
 A Dataset can be thought of as a mailbox. Nodes pass messages to this mailbox, that can be read by many other Nodes.</p>
-<p>A <strong>Node</strong> is an abstraction for some computation, a function if you will. At the same time a <strong>Node</strong> can be a reader and/or a writer of a <strong>Dataset</strong>. (mailbox)</p>
+<p>A <strong>Node</strong> is an abstraction for some computation, a function if you will. At the same time a <strong>Node</strong> can be a producer and/or a consumer of a <strong>Dataset</strong>. (mailbox)</p>
 <p>The output means that we have successfully created three datasets - <strong>test_sequence,</strong> <strong>test_sum</strong> and <strong>logging</strong>, and that we have created two nodes - <strong>sum</strong> and <strong>sequence</strong>.</p>
 </details>
 <p>To learn more about Pipeline, Datasets and Nodes, see <a href="../../developer_guide/concepts/">concepts</a>.</p>

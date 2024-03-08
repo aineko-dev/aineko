@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/0.4/developer_guide/pipeline_configuration/">
+        <link rel="canonical" href="https://docs.aineko.dev/0.3/developer_guide/pipeline_configuration/">
       
       
         <link rel="prev" href="../aineko_project/">
@@ -903,8 +903,6 @@
       
         
       
-        
-      
     
     
     
@@ -979,13 +977,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    AbstractDataset
+    DatasetConsumer
   
 
     
@@ -1006,13 +1004,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    KafkaDataset
+    DatasetProducer
   
 
     
@@ -1094,33 +1092,6 @@
     
   
     Runner
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api_reference/models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Internal Models
   
 
     
@@ -1608,7 +1579,7 @@ For the sake of simplicity, we reference a truncated version of the pipeline def
 
 <span class="w">  </span><span class="nt">datasets</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">test_sequence</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aineko.datasets.kafka.KafkaDataset</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka_stream</span>
 </code></pre></div>
 </details>
 <p>A pipeline definition should have the following attributes:</p>
@@ -1677,7 +1648,7 @@ For the sake of simplicity, we reference a truncated version of the pipeline def
 </tr>
 </tbody>
 </table>
-<p>These can be overridden at the node level. More details on the node settings can be found <a href="../../api_reference/models/#node-configuration">here</a>.</p>
+<p>These can be overridden at the node level.</p>
 <h4 id="nodes"><code>nodes</code></h4>
 <p>This section defines the compute nodes for a pipeline.</p>
 <table>
@@ -1720,13 +1691,13 @@ For the sake of simplicity, we reference a truncated version of the pipeline def
 <td><code>inputs</code></td>
 <td>N</td>
 <td>list of strings</td>
-<td>Defines which datasets to read from if applicable.</td>
+<td>Defines which datasets to consume from if applicable.</td>
 </tr>
 <tr>
 <td><code>outputs</code></td>
 <td>N</td>
 <td>list of strings</td>
-<td>Defines which datasets to write to if applicable.</td>
+<td>Defines which datasets to produce to if applicable.</td>
 </tr>
 <tr>
 <td><code>node_params</code></td>
@@ -2003,23 +1974,10 @@ $ export SECRET2=secret2
 <td><code>type</code></td>
 <td>Y</td>
 <td>string</td>
-<td>Defines which dataset implementation to use.</td>
-</tr>
-<tr>
-<td><code>location</code></td>
-<td>N</td>
-<td>string</td>
-<td>Defines the location of the dataset.</td>
-</tr>
-<tr>
-<td><code>params</code></td>
-<td>N</td>
-<td>map</td>
-<td>Defines any arbitrary parameters relevant for dataset's application logic.</td>
+<td>Defines which type of dataset to use. Currently, only <code>kafka_stream</code> is supported.</td>
 </tr>
 </tbody>
 </table>
-<p>More details on the dataset configuration can be found <a href="../../api_reference/models/#dataset-configuration">here</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Aineko is currently in the Beta release stage and is constantly improving.</p>

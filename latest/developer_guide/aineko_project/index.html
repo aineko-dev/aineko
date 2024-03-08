@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://docs.aineko.dev/0.4/developer_guide/aineko_project/">
+        <link rel="canonical" href="https://docs.aineko.dev/0.3/developer_guide/aineko_project/">
       
       
         <link rel="prev" href="../concepts/">
@@ -809,8 +809,6 @@
       
         
       
-        
-      
     
     
     
@@ -885,13 +883,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/abstract_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_consumer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    AbstractDataset
+    DatasetConsumer
   
 
     
@@ -912,13 +910,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/kafka_dataset/" class="md-nav__link">
+      <a href="../../api_reference/dataset_producer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     
   
-    KafkaDataset
+    DatasetProducer
   
 
     
@@ -1000,33 +998,6 @@
     
   
     Runner
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api_reference/models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    
-  
-    Internal Models
   
 
     
@@ -1425,13 +1396,13 @@
 <li>Implementing at least the abstract method <strong><code>_execute</code></strong> and optionally <strong><code>_pre_loop_hook</code></strong> .</li>
 </ul>
 <p><strong><code>_pre_loop_hook</code> (optional)</strong> is used to initialize the node's state before it starts to process data from the dataset.</p>
-<p><strong><code>_execute</code></strong> is the main logic that run recurrently. As of writing, user should explicitly read and write within this method like so:</p>
+<p><strong><code>_execute</code></strong> is the main logic that run recurrently. As of writing, user should explicitly produce and consume within this method like so:</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This node takes an input number and increments it by 1.&quot;&quot;&quot;</span>
-    <span class="n">input_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;my_input_dataset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="n">input_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumers</span><span class="p">[</span><span class="s2">&quot;my_input_dataset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
     <span class="c1"># if we want the most recent message, we can use .last()</span>
     <span class="n">output_number</span> <span class="o">=</span> <span class="n">input_number</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;my_output_dataset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_number</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">producers</span><span class="p">[</span><span class="s2">&quot;my_output_dataset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">produce</span><span class="p">(</span><span class="n">output_number</span><span class="p">)</span>
 </code></pre></div>
 
 
