@@ -639,6 +639,16 @@ class KafkaDataset(AbstractDataset):
             topic_name = f"{producer_params.prefix}.{topic_name}"
         self.topic_name = topic_name
 
+        # Override default config with dataset specific config
+        if self.params.get("params") is not None:
+            for key, value in self.params["params"].items():
+                if key == "max.message.bytes":
+                    # max.message.bytes is a special case and should be set
+                    # as message.max.bytes in the producer config
+                    producer_params.producer_config["message.max.bytes"] = value
+                else:
+                    producer_params.producer_config[key] = value
+
         self._producer = Producer(
             **producer_params.producer_config,
         )
