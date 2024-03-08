@@ -289,19 +289,28 @@ class Runner:
                 inputs = node_config.inputs
             else:
                 inputs = None
-            # Setup input and output datasets
 
+            datasets = {}
+            for (
+                dataset_name,
+                dataset_config,
+            ) in pipeline_config.datasets.items():
+                datasets[dataset_name] = dataset_config.model_dump(
+                    exclude_none=True
+                )
+
+            # Setup input and output datasets
             actor_handle.setup_datasets.remote(
                 inputs=inputs,
                 outputs=outputs,
-                datasets=pipeline_config.datasets,
+                datasets=datasets,
                 has_pipeline_prefix=True,
             )
 
             # Setup internal datasets like logging, without pipeline prefix
             actor_handle.setup_datasets.remote(
                 outputs=DEFAULT_KAFKA_CONFIG.get("DATASETS"),
-                datasets=pipeline_config.datasets,
+                datasets=datasets,
             )
 
             # Create actor future (for execute method)
