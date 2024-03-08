@@ -177,10 +177,10 @@ class Runner:
                 if not dataset_config.params:
                     dataset_config.params = {}
 
-                dataset_params = {
-                    **DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS"),
-                    **dataset_config.params,
-                }
+                dataset_params = dict(
+                    DEFAULT_KAFKA_CONFIG.get("DATASET_PARAMS")
+                )
+                dataset_params["config"].update(dataset_config.params)
 
                 # Configure dataset
                 if self.dataset_prefix:
