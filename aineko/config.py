@@ -5,7 +5,7 @@
 Kafka configuration can be set using the following environment variables:
 
 KAFKA_CONFIG: JSON string with kafka configuration
-(see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+(see https://github.com/confluentinc/librdkafka/blob/v2.2.0/CONFIGURATION.md
 for all options)
 
 Additionally, the following environment variables can be used to specify certain
