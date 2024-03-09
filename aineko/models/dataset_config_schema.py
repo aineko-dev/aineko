@@ -31,7 +31,8 @@ class DatasetConfig(BaseModel):
             "The initialization parameters for the dataset. These are mainly "
             "used by power users to fine-tune the dataset behavior. For "
             "example, Kafka topics can be configured with a number of options "
-            "found in: https://kafka.apache.org/documentation.html#topicconfigs"
+            "found in: https://github.com/confluentinc/librdkafka/blob/v2.2.0/"
+            "CONFIGURATION.md#topic-configuration-properties"
         ),
         examples=[{"param_1": "bar"}],
     )
