@@ -620,6 +620,14 @@ class KafkaDataset(AbstractDataset):
             consumer_topic = self.topic_name
 
         consumer_config["group.id"] = self.consumer_name
+
+        # Override default config with dataset specific config
+        if self.params.get("params") is not None:
+            for key, value in self.params["params"].items():
+                # max.message.bytes is not a valid consumer parameter
+                if key != "max.message.bytes":
+                    consumer_config[key] = value
+
         self._consumer = Consumer(consumer_config)
         self._consumer.subscribe([consumer_topic])
 
