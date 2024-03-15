@@ -61,17 +61,17 @@ class Runner:
         pipeline_config = self.load_pipeline_config()
         self.pipeline_name = self.pipeline_name or pipeline_config.name
 
-        # Create the necessary datasets
-        self.prepare_datasets(
-            config=pipeline_config.datasets,
-            user_dataset_prefix=self.pipeline_name,
-        )
-
         # Initialize ray cluster
         ray.shutdown()
         ray.init(
             namespace=self.pipeline_name,
             _metrics_export_port=self.metrics_export_port,
+        )
+
+        # Create the necessary datasets
+        self.prepare_datasets(
+            config=pipeline_config.datasets,
+            user_dataset_prefix=self.pipeline_name,
         )
 
         # Create poison pill actor
