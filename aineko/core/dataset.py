@@ -177,8 +177,19 @@ class AbstractDataset(abc.ABC, Generic[T]):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def create(self, *args: T, **kwargs: T) -> DatasetCreationStatus:
-        """Subclass implementation to create the dataset storage layer."""
+    def create(
+        self,
+        dataset_prefix: Optional[str] = None,
+    ) -> DatasetCreationStatus:
+        """Subclass implementation to create the dataset storage layer.
+
+        Args:
+            dataset_prefix: Optional prefix for dataset name.
+
+        Returns:
+            A `DatasetCreationStatus` object representing the creation status
+            of the dataset.
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
