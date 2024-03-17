@@ -15,7 +15,7 @@ Example dataset configuration:
 """
 import abc
 from concurrent.futures import Future
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Dict, Generic, List, Literal, Optional, TypeVar
 
 from aineko.models.dataset_config_schema import DatasetConfig
 from aineko.utils.imports import import_from_string
@@ -198,8 +198,30 @@ class AbstractDataset(abc.ABC, Generic[T]):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def initialize(self, *args: T, **kwargs: T) -> Any:
-        """Subclass implementation to initialize the dataset query layer."""
+    def initialize(
+        self,
+        create: Literal["consumer", "producer"],
+        node_name: str,
+        pipeline_name: str,
+        prefix: Optional[str] = None,
+        has_pipeline_prefix: bool = False,
+    ) -> Any:
+        """Subclass implementation to initialize the dataset query layer.
+
+        The  `initialize` method should initialize a consumer or producer forÒ
+        the dataset, depending on the value of the `create` parameter.
+
+        Args:
+            create: whether to create a consumer or producer for the dataset
+            node_name: name of the node
+            pipeline_name: name of the pipeline that the node belongs to
+            prefix: prefix for the dataset topic
+            has_pipeline_prefix: Whether the dataset topic has a pipeline prefix
+
+        Raises:
+            DatasetError: If an error occurs while creating the consumer or
+                producer.
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
