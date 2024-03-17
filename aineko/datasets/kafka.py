@@ -174,7 +174,8 @@ class KafkaDataset(AbstractDataset):
             dataset_prefix: Optional prefix for dataset name.
 
         Returns:
-          status of dataset creation.
+            A `DatasetCreationStatus` object representing the creation status
+            of the dataset.
         """
         return self._create_topic(
             dataset_name=self.name, dataset_prefix=dataset_prefix
